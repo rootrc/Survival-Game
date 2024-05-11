@@ -1,0 +1,15 @@
+0 - Roof
+1 - Layer 1 Wall
+2 - Stairs
+3 - Layer 2 Wall
+4 - One Way Ice Slide
+5 - Layer 1 Floor
+6 - Layer 2 Floor
+
+1 - 19 Special Rooms
+20 - 29 Carver
+30 - 39 Cheese
+40 - 49 Noodle
+50 - 59 Contains Secret Room
+60 - 69 Corriders
+70 - 79 Dead Ends
