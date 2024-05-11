@@ -20,6 +20,7 @@ public class Player extends Entity {
     private InventoryManager inventory;
     private int lightStrength;
     private Ladder ladder;
+    private RoomObject interactable;
 
     public Player(InventoryManager inventory) {
         // TEMP
@@ -112,12 +113,24 @@ public class Player extends Entity {
         }
     }
 
+    public final Action interact = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (interactable != null) {
+                interactable.interaction(Player.this);
+            }
+        }
+    };
+
     public void collide(RoomObject o) {
         // TODO
     }
 
     public void interaction(Player player) {
 
+    }
+
+    public void setInteractable(RoomObject interactable) {
+        this.interactable = interactable;
     }
 
     public void getItem(Item item, int cnt) {

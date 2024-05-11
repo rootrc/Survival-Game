@@ -17,14 +17,9 @@ public class Dungeon extends GamePanel {
         room = new RoomManager(dungeonData, inventory);
         add(room.get());
     }
-
+    
     public void update() {
         room.update();
         // inventory.update();
-    }
-
-    public void draw(Graphics2D g2d) {
-        room.draw(g2d);
-        // inventory.draw(g2d);
     }
 }

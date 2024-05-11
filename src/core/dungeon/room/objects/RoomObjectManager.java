@@ -13,13 +13,21 @@ public class RoomObjectManager extends Manager.List<RoomObject>{
 
     public void update() {
         super.update();
+        objectInteractions();
         for (RoomObject object : get()) {
-            if (player.interacts(object)) {
-                object.interaction(player);
-            }
             if (player.collides(object)) {
                 player.collide(object);
             }
         }
+    }
+
+    public void objectInteractions() {
+        for (RoomObject object : get()) {
+            if (player.interacts(object)) {
+                player.setInteractable(object);
+                return;
+            }
+        }
+        player.setInteractable(null);
     }
 }

@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import core.dungeon.room.objects.entity.Player;
+import core.game.Game;
 import core.utilities.Drawable;
 import core.utilities.Updatable;
 import core.window.GamePanel;
@@ -51,6 +52,9 @@ public class LightingEngine implements Drawable, Updatable {
     }
 
     public void draw(Graphics2D g2d) {
+        if (Game.DEBUG) {
+            return;
+        }
         BufferedImage image = getDarknessFilter(player.getLightStrength());
         g2d.drawImage(image, (int) player.getX() - image.getWidth() / 2, (int) player.getY() - image.getHeight() / 2, null);
     }

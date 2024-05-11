@@ -2,6 +2,8 @@ package core.dungeon.room.roomfactory;
 
 import java.util.HashMap;
 
+import javax.swing.KeyStroke;
+
 import core.dungeon.DungeonData;
 import core.dungeon.DungeonLayoutGenerator;
 import core.dungeon.mechanics.LightingEngine;
@@ -43,7 +45,8 @@ public class RoomFactory extends Factory<Room>{
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         player.set(200, 300, collision);
         rooms.put(id, new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(player, file)));
+        objectManagerFactory.getRoomObjectManager(player, file)));
+        setKeyBinds(rooms.get(id));
         return rooms.get(id);
     }
 
@@ -62,6 +65,7 @@ public class RoomFactory extends Factory<Room>{
             return rooms.get(file.getId());
         }
         Room nextRoom = createRoom(file, file.getId());
+        setKeyBinds(nextRoom);
         rooms.put(file.getId(), nextRoom);
         createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
@@ -74,6 +78,17 @@ public class RoomFactory extends Factory<Room>{
         Room room = new Room(id, player, lighting, tileGrid, collision,
                 objectManagerFactory.getRoomObjectManager(player, file));
         return room;
+    }
+
+    private void setKeyBinds(Room room) {
+        for (char c : "WASD".toCharArray()) {
+            room.getInputMap(2).put(KeyStroke.getKeyStroke("pressed " + c), "acc " + c);
+            room.getInputMap(2).put(KeyStroke.getKeyStroke("released " + c), "decel " + c);
+            room.getActionMap().put("acc " + c, player.accelerate);
+            room.getActionMap().put("decel " + c, player.decelerate); 
+        }
+        room.getInputMap(2).put(KeyStroke.getKeyStroke("E"), "interact");
+        room.getActionMap().put("interact", player.interact);
     }
 
     private void createLadderConnection(Ladder ladder0, Room previousRoom, Room nextRoom, RoomFileData file) {

@@ -16,8 +16,8 @@ public class RoomManager extends Manager.SubScreen<Room> {
     public RoomManager(DungeonData dungeonData, InventoryManager inventory) {
         player = new Player(inventory);
         roomFactory = new RoomFactory(dungeonData, player, new LightingEngine(player));
-        // set(roomFactory.getStartingRoom(1));
-        set(roomFactory.createRandomRoom(58, 32));
+        set(roomFactory.getStartingRoom(1));
+        // set(roomFactory.createRandomRoom(58, 32));
     }
 
     public void update() {
@@ -25,6 +25,8 @@ public class RoomManager extends Manager.SubScreen<Room> {
         if (!Game.DEBUG) {
             get().setLocation(GamePanel.screenWidth / 2 - (int) Math.round(player.getX()),
                     GamePanel.screenHeight / 2 - (int) Math.round(player.getY()));
+        } else {
+            get().setLocation(0, 0);
         }
         if (player.getLadder() != null) {
             set(roomFactory.getNextRoom(get()));

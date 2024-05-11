@@ -1,6 +1,5 @@
 package core.window;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;

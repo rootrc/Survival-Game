@@ -3,8 +3,6 @@ package core.dungeon.room;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import javax.swing.KeyStroke;
-
 import core.dungeon.RoomConnecter;
 import core.dungeon.mechanics.LightingEngine;
 import core.dungeon.mechanics.collision.CollisionChecker;
@@ -38,13 +36,6 @@ public class Room extends SubScreen {
         addObject(player);
         addObject(lighting);
         addMouseListener(new RoomMouseListener());
-
-        for (char c : "WASD".toCharArray()) {
-            getInputMap(2).put(KeyStroke.getKeyStroke("pressed " + c), "acc " + c);
-            getActionMap().put("acc " + c, player.accelerate);
-            getInputMap(2).put(KeyStroke.getKeyStroke("released " + c), "decel " + c);
-            getActionMap().put("decel " + c, player.decelerate); 
-        }
     }
 
     // TEMP

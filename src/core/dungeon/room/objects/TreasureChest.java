@@ -6,7 +6,6 @@ import core.dungeon.room.objects.entity.Player;
 import core.dungeon.room.objects.objectUtilities.CollisionBox;
 import core.dungeon.room.objects.objectUtilities.RoomObject;
 import core.utilities.ImageUtilities;
-import core.window.GamePanel;
 
 class TreasureChest extends RoomObject {
     private int id;
@@ -22,12 +21,9 @@ class TreasureChest extends RoomObject {
     }
 
     public void interaction(Player player) {
-        // if (GamePanel.keyH.keyPressed("e")) {
-        //     setImage(chestClosed);
-        //     // TODO
-        //     // Add loot tables and giving player items
-        //     id = id - 0;
-        // }
+        setImage(chestClosed);
+        // TODO
+        // Add loot tables and giving player items
+        id = id - 0;
     }
-
 }
