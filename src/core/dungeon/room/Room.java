@@ -3,18 +3,17 @@ package core.dungeon.room;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import core.dungeon.RoomConnecter;
 import core.dungeon.mechanics.LightingEngine;
 import core.dungeon.mechanics.collision.CollisionChecker;
 import core.dungeon.room.objects.Ladder;
-import core.dungeon.room.objects.RoomObjectManager;
 import core.dungeon.room.objects.entity.Player;
-import core.dungeon.room.objects.objectUtilities.RoomObject;
+import core.dungeon.room.objects.object_utilities.RoomObject;
+import core.dungeon.room.objects.object_utilities.RoomObjectManager;
 import core.dungeon.room.tile.TileGrid;
-import core.window.RoomMouseListener;
-import core.window.SubScreen;
+import core.dungeon.room_connection.RoomConnecter;
+import core.window.GameComponent;
 
-public class Room extends SubScreen {
+public class Room extends GameComponent {
     private int id;
     private Player player;
     // private TileGrid tileGrid;
@@ -35,7 +34,7 @@ public class Room extends SubScreen {
         addObject(objectManager);
         addObject(player);
         addObject(lighting);
-        addMouseListener(new RoomMouseListener());
+        // addMouseListener(new RoomMouseListener());
     }
 
     // TEMP
@@ -46,13 +45,14 @@ public class Room extends SubScreen {
         this.objectManager = objectManager;
         addObject(tileGrid);
         addObject(objectManager);
-        addMouseListener(new RoomMouseListener());
+        // addMouseListener(new RoomMouseListener());
     }
 
     public void setPlayer(Ladder ladder) {
         player.set((int) ladder.getPlayerPlacementX(), (int) ladder.getPlayerPlacementY(), collision);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;

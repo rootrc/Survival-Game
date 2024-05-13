@@ -10,8 +10,8 @@ import core.dungeon.mechanics.collision.CollisionChecker;
 import core.dungeon.mechanics.inventory.InventoryManager;
 import core.dungeon.mechanics.inventory.items.Item;
 import core.dungeon.room.objects.Ladder;
-import core.dungeon.room.objects.objectUtilities.CollisionBox;
-import core.dungeon.room.objects.objectUtilities.RoomObject;
+import core.dungeon.room.objects.object_utilities.CollisionBox;
+import core.dungeon.room.objects.object_utilities.RoomObject;
 import core.utilities.ImageUtilities;
 import core.window.GamePanel;
 

@@ -10,9 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import core.dungeon.room.objects.entity.Player;
-import core.game.Game;
 import core.utilities.Drawable;
 import core.utilities.Updatable;
+import core.window.Game;
 import core.window.GamePanel;
 
 public class LightingEngine implements Drawable, Updatable {

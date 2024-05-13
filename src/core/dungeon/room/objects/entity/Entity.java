@@ -3,8 +3,8 @@ package core.dungeon.room.objects.entity;
 import java.awt.image.BufferedImage;
 
 import core.dungeon.mechanics.collision.CollisionChecker;
-import core.dungeon.room.objects.objectUtilities.CollisionBox;
-import core.dungeon.room.objects.objectUtilities.RoomObject;
+import core.dungeon.room.objects.object_utilities.CollisionBox;
+import core.dungeon.room.objects.object_utilities.RoomObject;
 
 public abstract class Entity extends RoomObject {
     protected int maxSpeed;

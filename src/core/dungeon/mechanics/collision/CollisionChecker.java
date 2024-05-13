@@ -10,17 +10,6 @@ public class CollisionChecker {
 
     public CollisionChecker(boolean collision[][]) {
         this.collision = collision;
-        // for (int r = 0; r < N; r++) {
-        //     for (int c = 0; c < M; c++) {
-        //         if (collision[r][c]) {
-        //             System.out.print(1);
-        //         } else {
-        //             System.out.print(0);
-        //         }
-        //     }
-        //     System.out.println();
-        // }
-        
     }
 
     public boolean checkTile(Entity entity, double x, double y) {

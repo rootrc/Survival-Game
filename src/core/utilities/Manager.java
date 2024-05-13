@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public abstract class Manager<T> implements Drawable, Updatable{
-    public static abstract class SubScreen<T extends core.window.SubScreen> extends Manager<T> {
+    public static abstract class SubScreen<T extends core.window.GameComponent> extends Manager<T> {
         private T subScreen;
         public void update() {
             subScreen.update();
