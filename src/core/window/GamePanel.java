@@ -6,9 +6,9 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 public abstract class GamePanel extends JPanel {
-    public final static int TILESIZE = 32;
-    public final static int maxScreenRow = 48 /2;
-    public final static int maxScreenCol = 64 /2;
+    public final static int TILESIZE = 16;
+    public final static int maxScreenRow = 48;
+    public final static int maxScreenCol = 64;
     public final static int screenWidth = TILESIZE * maxScreenCol; // 1024 pixels
     public final static int screenHeight = TILESIZE * maxScreenRow; // 768 pixels
 
@@ -17,6 +17,7 @@ public abstract class GamePanel extends JPanel {
         if (!Game.DEBUG) {
             setBackground(Color.black);
         }
+        setLayout(null);
         setDoubleBuffered(true);
         setFocusable(true);
     }

@@ -35,8 +35,6 @@ public class RoomManager extends Manager.SubScreen<Room> {
         if (!Game.DEBUG) {
             get().setLocation(GamePanel.screenWidth / 2 - (int) Math.round(player.getX()),
                     GamePanel.screenHeight / 2 - (int) Math.round(player.getY()));
-        } else {
-            get().setLocation(0, 0);
         }
         if (player.getLadder() != null) {
             dungeon.remove(get());
@@ -44,7 +42,7 @@ public class RoomManager extends Manager.SubScreen<Room> {
             dungeon.add(get());
             dungeon.revalidate();
             stop();
-            Timer timer = new Timer(30, new ActionListener() {
+            Timer timer = new Timer(100, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     RoomManager.this.show();

@@ -10,13 +10,13 @@ public class InventoryManager extends Manager.SubScreen<Inventory> {
 
     public InventoryManager() {
         set(new Inventory());
+        get().setLocation(GamePanel.screenWidth / 2 - getWidth() / 2, GamePanel.screenHeight - getHeight());
         itemFactory = new ItemFactory();
     }
 
     @Override
     public void update() {
        super.update();
-       get().setLocation(GamePanel.screenWidth / 2 - getWidth() / 2, GamePanel.screenHeight - getHeight());
     }
 
     public void addItem(Item item, int cnt) {
