@@ -1,5 +1,6 @@
 package core.dungeon.room;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -11,6 +12,7 @@ import core.dungeon.room.objects.object_utilities.RoomObject;
 import core.dungeon.room.objects.object_utilities.RoomObjectManager;
 import core.dungeon.room.tile.TileGrid;
 import core.dungeon.room_connection.RoomConnecter;
+import core.window.Game;
 import core.window.GameComponent;
 
 public class Room extends GameComponent {
@@ -56,7 +58,11 @@ public class Room extends GameComponent {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        draw(g2d);
+        draw(g2d); 
+        if (Game.DEBUG) {
+            g2d.setColor(Color.white);
+            g2d.drawString(String.valueOf(getId()), 0, 10);
+        }
     }
 
     public int getId() {
