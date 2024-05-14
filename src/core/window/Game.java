@@ -6,7 +6,7 @@ public class Game implements Runnable {
     public final int FPS = 60;
     public final int UPS = 60;
 
-    public final static boolean DEBUG = true;
+    public final static boolean DEBUG = false;
 
     private GamePanel gamePanel;
     private Thread gameThread;

@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class InventoryMouseListener implements MouseListener {
+public class HotbarMouseListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         System.out.println("The Inventroy Is Being Clicked");

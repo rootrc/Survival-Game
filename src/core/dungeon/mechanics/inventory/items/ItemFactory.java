@@ -1,6 +1,5 @@
 package core.dungeon.mechanics.inventory.items;
 
-import core.dungeon.room.tile.Tile;
 import core.utilities.Factory;
 import core.utilities.ImageUtilities;
 
@@ -14,13 +13,13 @@ public class ItemFactory extends Factory<Item> {
     public ItemFactory() {
         data = new ItemFileData();
         // for (int r = 0; r < tileN; r++) {
-        //     for (int c = 0; c < tileM; c++) {
-        //         items[r][c] = getTile(r, c);
-        //     }
+        // for (int c = 0; c < tileM; c++) {
+        // items[r][c] = getTile(r, c);
+        // }
         // }
     }
 
-    public Item getImage(int r, int c) {
-        return new Item(ImageUtilities.getImage("tiles", name, r, c));
+    public Item getItem(int r, int c) {
+        return new Item(ImageUtilities.getImage("items", name, 2 * r, 2 * c, 2));
     }
 }

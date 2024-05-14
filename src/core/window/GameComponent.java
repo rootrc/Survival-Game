@@ -1,6 +1,7 @@
 package core.window;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -15,7 +16,6 @@ import core.utilities.Drawable;
 import core.utilities.Updatable;
 
 public abstract class GameComponent extends JComponent {
-    private final GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
     private final ArrayList<Drawable> drawables = new ArrayList<>();
     private final ArrayList<Updatable> updatables = new ArrayList<>();
     private boolean draw;
@@ -36,7 +36,14 @@ public abstract class GameComponent extends JComponent {
             updatable.update();
         }
     }
-    
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        draw(g2d);
+    }
+
     public void draw(Graphics2D g2d) {
         if (!draw) {
             return;
@@ -51,12 +58,11 @@ public abstract class GameComponent extends JComponent {
         // RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         // g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
         // RenderingHints.VALUE_RENDER_QUALITY);
-
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.OPAQUE);
-                // System.out.println(getWidth() + " " + getHeight());
         Graphics2D g = image.createGraphics();
-        // draw(g);
+        g.fillRect(0, 0, getWidth(), getHeight());
         for (Drawable drawable : drawables) {
             drawable.draw(g);
         }

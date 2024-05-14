@@ -69,10 +69,13 @@ public class LightingEngine implements Drawable, Updatable {
         int y = (int) player.getY() + player.getHeight() / 2 - image.getHeight() / 2;
 
         g2d.setColor(Color.black);
-        Area a = new Area(new Rectangle((int) player.getX() - GamePanel.screenWidth/2, (int) player.getY() - GamePanel.screenHeight/2, GamePanel.screenWidth, GamePanel.screenHeight));
+        int buffer = 32;
+        Area a = new Area(new Rectangle((int) player.getX() - GamePanel.screenWidth / 2 - buffer,
+                (int) player.getY() - GamePanel.screenHeight / 2 - buffer, GamePanel.screenWidth + 2 * buffer,
+                GamePanel.screenHeight + 2 * buffer));
         a.subtract(new Area(new Rectangle(x, y, image.getWidth(), image.getHeight())));
         g2d.fill(a);
-        
+
         g2d.drawImage(image, x, y, null);
     }
 }

@@ -3,6 +3,7 @@ package core.window;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public abstract class GamePanel extends JPanel {

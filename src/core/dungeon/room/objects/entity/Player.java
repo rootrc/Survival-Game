@@ -7,7 +7,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import core.dungeon.mechanics.collision.CollisionChecker;
-import core.dungeon.mechanics.inventory.InventoryManager;
+import core.dungeon.mechanics.inventory.HotbarManager;
 import core.dungeon.mechanics.inventory.items.Item;
 import core.dungeon.room.objects.Ladder;
 import core.dungeon.room.objects.object_utilities.CollisionBox;
@@ -17,12 +17,12 @@ import core.window.GamePanel;
 
 public class Player extends Entity {
     // private final KeyHandler key = GamePanel.keyH;
-    private InventoryManager inventory;
+    private HotbarManager inventory;
     private int lightStrength;
     private Ladder ladder;
     private RoomObject interactable;
 
-    public Player(InventoryManager inventory) {
+    public Player(HotbarManager inventory) {
         // TEMP
         super(ImageUtilities.getImage("entities", "player"),
                 new CollisionBox(0, 0, 1, 1),

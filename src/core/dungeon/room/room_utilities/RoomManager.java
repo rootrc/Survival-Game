@@ -7,7 +7,7 @@ import javax.swing.Timer;
 
 import core.dungeon.Dungeon;
 import core.dungeon.mechanics.LightingEngine;
-import core.dungeon.mechanics.inventory.InventoryManager;
+import core.dungeon.mechanics.inventory.HotbarManager;
 import core.dungeon.room.Room;
 import core.dungeon.room.objects.entity.Player;
 import core.dungeon.room.room_utilities.roomfactory.RoomFactory;
@@ -21,7 +21,7 @@ public class RoomManager extends Manager.SubScreen<Room> {
     private RoomFactory roomFactory;
     private Player player;
 
-    public RoomManager(Dungeon dungeon, DungeonData dungeonData, InventoryManager inventory) {
+    public RoomManager(Dungeon dungeon, DungeonData dungeonData, HotbarManager inventory) {
         this.dungeon = dungeon;
         player = new Player(inventory);
         roomFactory = new RoomFactory(dungeonData, player, new LightingEngine(player));

@@ -15,8 +15,8 @@ public class Item implements Drawable {
         this.image = image;
     }
 
-    public int getPriority() {
-        return inventoryPriority;
+    public BufferedImage getImage() {
+        return image;
     }
 
     public void draw(Graphics2D g2d) {

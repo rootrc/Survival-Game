@@ -38,12 +38,12 @@ public class ImageUtilities {
     }
 
     public static BufferedImage getImage(String folder, String name, int r, int c) {
-        return getImage(folder, name, r, c, 1, 1);
+        return getImage(folder, name, r, c, 1);
     }
 
-    public static BufferedImage getImage(String folder, String name, int r, int c, int width, int height) {
+    public static BufferedImage getImage(String folder, String name, int r, int c, int scale) {
         return getImage(folder, name).getSubimage(GamePanel.TILESIZE * c, GamePanel.TILESIZE * r,
-                width * GamePanel.TILESIZE, height * GamePanel.TILESIZE);
+                scale * GamePanel.TILESIZE, scale * GamePanel.TILESIZE);
     }
 
     private static BufferedImage resize(BufferedImage img, int newW, int newH) {
