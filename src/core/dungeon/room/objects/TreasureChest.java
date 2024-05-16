@@ -12,9 +12,9 @@ public class TreasureChest extends RoomObject {
     private BufferedImage chestClosed;
 
     public TreasureChest(int x, int y, CollisionBox hitbox, CollisionBox interactbox, int id) {
-        super(ImageUtilities.getImage("objects", "chests", 0, 2 * id, 2), x, y, hitbox, interactbox);
+        super(ImageUtilities.getImage("objects", "chests", 0, id, 2), x, y, hitbox, interactbox);
         this.id = id;
-        chestClosed = ImageUtilities.getImage("objects", "chests", 2, 2 * id, 2);
+        chestClosed = ImageUtilities.getImage("objects", "chests", 1, id, 2);
     }
 
     public void update() {

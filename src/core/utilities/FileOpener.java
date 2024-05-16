@@ -15,8 +15,7 @@ public abstract class FileOpener {
         }
     }
 
-    protected void open(String str) {
-        closeFile();
+    protected void openFile(String str) {
         try {
             sc = new Scanner(new FileReader(new StringBuilder().append("res/").append(str).append(".txt").toString()));
         } catch (FileNotFoundException e) {

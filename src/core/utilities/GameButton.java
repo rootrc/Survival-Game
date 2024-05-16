@@ -29,21 +29,20 @@ public class GameButton extends JButton {
         // setRolloverIcon();
         // setPressedIcon();
         // setDisabledIcon();
+
+        // getModel().addChangeListener(new ChangeListener() {
+        //     @Override
+        //     public void stateChanged(ChangeEvent e) {
+        //         ButtonModel model = (ButtonModel) e.getSource();
+        //         if (model.isRollover()) {
+        //             setIcon(getRolloverIcon());
+        //         } else if (model.isPressed()) {
+        //             setIcon(getPressedIcon());
+        //         } else {
+        //             setIcon(getIcon());
+        //         }
+        //     }
+        // });
     }
 
-    protected void setIcon(BufferedImage image) {
-        setIcon(new ImageIcon(image));
-    }
-
-    //     JButton.getModel().addChangeListener(new ChangeListener() {
-    //     @Override
-    //     public void stateChanged(ChangeEvent e) {
-    //         ButtonModel model = (ButtonModel) e.getSource();
-    //         if (model.isRollover()) {
-    //             button.setIcon(icon());
-    //         } else {
-    //             button.setIcon(iconA());
-    //         } etc ...//  if (model.isPressed()) {
-    //      }
-    // });
 }

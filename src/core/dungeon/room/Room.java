@@ -12,7 +12,6 @@ import core.dungeon.room.objects.object_utilities.RoomObject;
 import core.dungeon.room.objects.object_utilities.RoomObjectManager;
 import core.dungeon.room.tile.TileGrid;
 import core.dungeon.room_connection.RoomConnecter;
-import core.utilities.GameButton;
 import core.window.Game;
 import core.window.GameComponent;
 

@@ -4,28 +4,31 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.Transparency;
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
+import javax.swing.KeyStroke;
 
-import core.dungeon.mechanics.inventory.items.Item;
 import core.utilities.ImageUtilities;
-import core.utilities.Pair;
 import core.window.GameComponent;
 
 public class Hotbar extends GameComponent {
     private BufferedImage background;
-    private int size;
-    private final ArrayList<Pair<Item, Integer>> items = new ArrayList<>();
+    // private int size;
+    public ItemSlot[] inventorySlots;
 
     public Hotbar(int size) {
         super(48 + 50 + 42 * (size - 2), 56);
-        this.size = size;
+        // this.size = size;
+        inventorySlots = new ItemSlot[size + 1];
+        for (int i = 1; i <= size; i++) {
+            inventorySlots[i] = new ItemSlot(new Rectangle(42 * i - 34, 8, 40, 40));
+            add(inventorySlots[i]);
+            getInputMap(2).put(KeyStroke.getKeyStroke("pressed " + String.valueOf(i % 10)),i);
+        }
         buildImage();
+
     }
 
     private void buildImage() {
@@ -33,11 +36,11 @@ public class Hotbar extends GameComponent {
         background = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.BITMASK);
         Graphics2D g2d = background.createGraphics();
-        g2d.drawImage(ImageUtilities.getImage("items", "HotbarLeft"), 0, 0, null);
+        g2d.drawImage(ImageUtilities.getImage("item_UI", "HotbarLeft"), 0, 0, null);
         for (int i = 48; i < getWidth() - 50; i += 42) {
-            g2d.drawImage(ImageUtilities.getImage("items", "HotbarMiddle"), i, 0, null);
+            g2d.drawImage(ImageUtilities.getImage("item_UI", "HotbarMiddle"), i, 0, null);
         }
-        g2d.drawImage(ImageUtilities.getImage("items", "HotbarRight"), getWidth() - 50, 0, null);
+        g2d.drawImage(ImageUtilities.getImage("item_UI", "HotbarRight"), getWidth() - 50, 0, null);
         g2d.dispose();
     }
 
@@ -54,13 +57,7 @@ public class Hotbar extends GameComponent {
         // super.draw(g2d);
     }
 
-    public void addItem(Item item, int cnt) {
-        items.add(new Pair<Item, Integer>(item, cnt));
-    }
-
-    public final Action selectItem = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            System.out.println(e.getActionCommand());
-        }
-    };
+    // public void addItem(Item item, int cnt) {
+    //     items.add(new Pair<Item, Integer>(item, cnt));
+    // }
 }

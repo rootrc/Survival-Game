@@ -46,7 +46,7 @@ public class Player extends Entity {
             movementKeys.add(e.getActionCommand());
         }
     };
-    
+
     public final Action decelerate = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             movementKeys.remove(e.getActionCommand());
@@ -131,14 +131,6 @@ public class Player extends Entity {
 
     public void setInteractable(RoomObject interactable) {
         this.interactable = interactable;
-    }
-
-    public void getItem(Item item, int cnt) {
-        inventory.addItem(item, cnt);
-    }
-
-    public void getItem(Item item) {
-        inventory.addItem(item, 1);
     }
 
     public Ladder getLadder() {

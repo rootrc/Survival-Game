@@ -52,7 +52,8 @@ public class LightingEngine implements Drawable, Updatable {
 
     public void update() {
     }
-
+    
+    private int randomFactor;
     public void draw(Graphics2D g2d) {
         if (Game.DEBUG) {
             return;
@@ -63,8 +64,16 @@ public class LightingEngine implements Drawable, Updatable {
         // gd.getDefaultConfiguration().createCompatibleImage(GamePanel.screenWidth,
         // GamePanel.screenHeight, Transparency.TRANSLUCENT);
         // g2d.drawImage(image0, 0, 0, null);
-
-        BufferedImage image = getDarknessFilter(player.getLightStrength());
+        if (randomFactor >= 5) {
+            randomFactor--;
+        } else if (randomFactor <= -5) {
+            randomFactor++;
+        } else if (Math.random() > 0.5) {
+            randomFactor++;
+        } else {
+            randomFactor--;
+        }
+        BufferedImage image = getDarknessFilter(player.getLightStrength() + randomFactor);
         int x = (int) player.getX() + player.getWidth() / 2 - image.getWidth() / 2;
         int y = (int) player.getY() + player.getHeight() / 2 - image.getHeight() / 2;
 

@@ -1,9 +1,9 @@
 package core.dungeon.room.room_utilities;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+// import java.awt.event.ActionEvent;
+// import java.awt.event.ActionListener;
 
-import javax.swing.Timer;
+// import javax.swing.Timer;
 
 import core.dungeon.Dungeon;
 import core.dungeon.mechanics.LightingEngine;
@@ -41,16 +41,16 @@ public class RoomManager extends Manager.SubScreen<Room> {
             set(roomFactory.getNextRoom(get()));
             dungeon.add(get());
             dungeon.revalidate();
-            stop();
-            Timer timer = new Timer(100, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    RoomManager.this.show();
-                    RoomManager.this.unpause();
-                }
-            });
-            timer.setRepeats(false);
-            timer.start();
+            // stop();
+            // Timer timer = new Timer(100, new ActionListener() {
+            //     @Override
+            //     public void actionPerformed(ActionEvent e) {
+            //         RoomManager.this.show();
+            //         RoomManager.this.unpause();
+            //     }
+            // });
+            // timer.setRepeats(false);
+            // timer.start();
         }
     }
 }

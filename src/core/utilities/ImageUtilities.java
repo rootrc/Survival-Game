@@ -42,7 +42,7 @@ public class ImageUtilities {
     }
 
     public static BufferedImage getImage(String folder, String name, int r, int c, int scale) {
-        return getImage(folder, name).getSubimage(GamePanel.TILESIZE * c, GamePanel.TILESIZE * r,
+        return getImage(folder, name).getSubimage(scale * GamePanel.TILESIZE * c, scale * GamePanel.TILESIZE * r,
                 scale * GamePanel.TILESIZE, scale * GamePanel.TILESIZE);
     }
 
