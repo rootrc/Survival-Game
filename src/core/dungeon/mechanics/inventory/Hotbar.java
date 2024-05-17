@@ -25,7 +25,8 @@ public class Hotbar extends GameComponent {
         for (int i = 1; i <= size; i++) {
             inventorySlots[i] = new ItemSlot(new Rectangle(42 * i - 34, 8, 40, 40));
             add(inventorySlots[i]);
-            getInputMap(2).put(KeyStroke.getKeyStroke("pressed " + String.valueOf(i % 10)),i);
+            getInputMap(2).put(
+                    KeyStroke.getKeyStroke((new StringBuilder("pressed ").append(i % 10)).toString()), i);
         }
         buildImage();
 
@@ -36,11 +37,11 @@ public class Hotbar extends GameComponent {
         background = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.BITMASK);
         Graphics2D g2d = background.createGraphics();
-        g2d.drawImage(ImageUtilities.getImage("item_UI", "HotbarLeft"), 0, 0, null);
+        g2d.drawImage(ImageUtilities.getImage("item_images", "HotbarLeft"), 0, 0, null);
         for (int i = 48; i < getWidth() - 50; i += 42) {
-            g2d.drawImage(ImageUtilities.getImage("item_UI", "HotbarMiddle"), i, 0, null);
+            g2d.drawImage(ImageUtilities.getImage("item_images", "HotbarMiddle"), i, 0, null);
         }
-        g2d.drawImage(ImageUtilities.getImage("item_UI", "HotbarRight"), getWidth() - 50, 0, null);
+        g2d.drawImage(ImageUtilities.getImage("item_images", "HotbarRight"), getWidth() - 50, 0, null);
         g2d.dispose();
     }
 
@@ -58,6 +59,6 @@ public class Hotbar extends GameComponent {
     }
 
     // public void addItem(Item item, int cnt) {
-    //     items.add(new Pair<Item, Integer>(item, cnt));
+    // items.add(new Pair<Item, Integer>(item, cnt));
     // }
 }

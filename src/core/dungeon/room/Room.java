@@ -36,8 +36,6 @@ public class Room extends GameComponent {
         addObject(objectManager);
         addObject(player);
         addObject(lighting);
-        // Test
-        // add(new GameButton(player.interact, 500, 500, 100, 100));
     }
 
     // TEMP
@@ -48,7 +46,6 @@ public class Room extends GameComponent {
         this.objectManager = objectManager;
         addObject(tileGrid);
         addObject(objectManager);
-        // addMouseListener(new RoomMouseListener());
     }
 
     public void setPlayer(Ladder ladder) {

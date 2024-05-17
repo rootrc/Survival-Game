@@ -10,19 +10,19 @@ public class ItemFileData extends FileOpener {
     private final String description[][] = new String[N][M];
 
     public ItemFileData() {
-        super("items/type");
+        super("item_data/type");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 type[i][j] = nextStr();
             }
         }
-        openFile("items/names");
+        openFile("item_data/names");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 names[i][j] = nextStr();
             }
         }
-        openFile("items/descriptions");
+        openFile("item_data/descriptions");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 description[i][j] = nextStr();

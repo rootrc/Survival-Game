@@ -15,7 +15,7 @@ import core.dungeon.room_connection.DungeonData;
 import core.dungeon.room_connection.DungeonLayoutGenerator;
 import core.utilities.Factory;
 
-public class RoomFactory extends Factory<Room>{
+public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
     private TileGridFactory tileFactory;
     private CollisionCheckerFactory collisionFactory;
@@ -45,7 +45,7 @@ public class RoomFactory extends Factory<Room>{
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         player.set(200, 300, collision);
         rooms.put(id, new Room(id, player, lighting, tileGrid, collision,
-        objectManagerFactory.getRoomObjectManager(player, file)));
+                objectManagerFactory.getRoomObjectManager(player, file)));
         setKeyBinds(rooms.get(id));
         return rooms.get(id);
     }
@@ -53,7 +53,8 @@ public class RoomFactory extends Factory<Room>{
     public Room getNextRoom(Room previousRoom) {
         dungeonData.changeDepth(player.getLadder());
         if (previousRoom.getConnectedRoomId(player.getLadder()) == -1) {
-            previousRoom.addLadderConnection(player.getLadder(), dungeonGenerator.getGeneratedId(player.getLadder(), previousRoom, dungeonData));
+            previousRoom.addLadderConnection(player.getLadder(),
+                    dungeonGenerator.getGeneratedId(player.getLadder(), previousRoom, dungeonData));
         }
         RoomFileData file = new RoomFileData(previousRoom.getConnectedRoomId(player.getLadder()));
         if (rooms.containsKey(file.getId())) {
@@ -82,10 +83,14 @@ public class RoomFactory extends Factory<Room>{
 
     private void setKeyBinds(Room room) {
         for (char c : "WASD".toCharArray()) {
-            room.getInputMap(2).put(KeyStroke.getKeyStroke("pressed " + c), "acc " + c);
-            room.getInputMap(2).put(KeyStroke.getKeyStroke("released " + c), "decel " + c);
-            room.getActionMap().put("acc " + c, player.accelerate);
-            room.getActionMap().put("decel " + c, player.decelerate); 
+            room.getInputMap(2).put(KeyStroke.getKeyStroke(
+                    new StringBuilder("pressed ").append(c).toString()),
+                    new StringBuilder("acc ").append(c).toString());
+            room.getInputMap(2).put(KeyStroke.getKeyStroke(
+                    new StringBuilder("released ").append(c).toString()),
+                    new StringBuilder("decel ").append(c).toString());
+            room.getActionMap().put(new StringBuilder("acc ").append(c).toString(), player.accelerate);
+            room.getActionMap().put(new StringBuilder("decel ").append(c).toString(), player.decelerate);
         }
         room.getInputMap(2).put(KeyStroke.getKeyStroke("E"), "interact");
         room.getActionMap().put("interact", player.interact);

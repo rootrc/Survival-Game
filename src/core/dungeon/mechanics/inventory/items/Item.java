@@ -1,9 +1,7 @@
 package core.dungeon.mechanics.inventory.items;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import java.awt.event.ActionEvent;
+import java.awt.Graphics2D;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -19,8 +17,8 @@ public class Item implements Drawable {
     private String description;
 
     public Item(int r, int c, String name, String description) {
-        imageIcon = new ImageIcon(ImageUtilities.getImage("item_UI", "itemTileSet", r, c, 2));
-        rolloverIcon = new ImageIcon(ImageUtilities.getImage("item_UI", "itemTileSet1", r, c, 2));
+        imageIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet", r, c, 2));
+        rolloverIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet1", r, c, 2));
         this.name = name;
         this.description = description;
     }

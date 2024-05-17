@@ -2,11 +2,9 @@ package core.utilities;
 
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 import javax.swing.Action;
 import javax.swing.ButtonModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -25,7 +23,7 @@ public class GameButton extends JButton {
 
         setContentAreaFilled(false);
 
-        // setIcon(new ImageIcon(ImageUtilities.getImage("items", "itemTileSet")));
+        // setIcon(new ImageIcon(ImageUtilities.getImage("item_data", "itemTileSet")));
         // setRolloverIcon();
         // setPressedIcon();
         // setDisabledIcon();

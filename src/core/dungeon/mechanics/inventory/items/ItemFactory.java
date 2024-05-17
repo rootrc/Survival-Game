@@ -1,9 +1,6 @@
 package core.dungeon.mechanics.inventory.items;
 
-import java.awt.image.BufferedImage;
-
 import core.utilities.Factory;
-import core.utilities.ImageUtilities;
 
 public class ItemFactory extends Factory<Item> {
     private ItemFileData data;
