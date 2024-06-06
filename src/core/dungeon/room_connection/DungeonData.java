@@ -37,8 +37,13 @@ public class DungeonData extends FileOpener {
     public int getMapId(Ladder ladder, int a, int b) {
         int hash = 10 * a + b;
         ArrayList<Integer> list = maps.get(hash);
-        depthMapCnt[depth]++;;
-        return list.get((int) (list.size() * Math.random()));
+        depthMapCnt[depth]++;
+        int mapId = list.get((int) (list.size() * Math.random()));
+        // TEMP
+        while (mapId == 1) {
+            mapId = list.get((int) (list.size() * Math.random()));
+        }
+        return mapId;
     }
 
     public void updateLadderConnections(Ladder ladder, int id) {
@@ -46,11 +51,11 @@ public class DungeonData extends FileOpener {
         ArrayList<Integer> list = maps.get(hash);
         list.remove((Integer) id);
         // if (ladder.getDirection() == -1) {
-        //     maps.get(hash - 1).add(id);
-        //     idToHash.put(id, hash - 1);
+        // maps.get(hash - 1).add(id);
+        // idToHash.put(id, hash - 1);
         // } else {
-        //     maps.get(hash - 10).add(id);
-        //     idToHash.put(id, hash - 10);
+        // maps.get(hash - 10).add(id);
+        // idToHash.put(id, hash - 10);
         // }
     }
 

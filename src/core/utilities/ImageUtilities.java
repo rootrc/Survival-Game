@@ -28,12 +28,11 @@ public class ImageUtilities {
             image = ImageIO.read(new File(
                     new StringBuilder("res/").append(folder).append('/').append(name).append(".png").toString()));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(new StringBuilder("Image \"").append(folder).append('\\').append(name).append("\" not found").toString());
+            System.exit(-1);
         }
         image = resize(image, (int) (scale * image.getWidth()), (int) (scale * image.getHeight()));
-        if (image != null) {
-            map.put(name, image);
-        }
+        map.put(name, image);
         return image;
     }
 

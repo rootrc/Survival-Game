@@ -14,6 +14,7 @@ import core.dungeon.room.tile.TileGrid;
 import core.dungeon.room_connection.DungeonData;
 import core.dungeon.room_connection.DungeonLayoutGenerator;
 import core.utilities.Factory;
+import core.window.GamePanel;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
@@ -54,7 +55,7 @@ public class RoomFactory extends Factory<Room> {
         dungeonData.changeDepth(player.getLadder());
         if (previousRoom.getConnectedRoomId(player.getLadder()) == -1) {
             previousRoom.addLadderConnection(player.getLadder(),
-                    dungeonGenerator.getGeneratedId(player.getLadder(), previousRoom, dungeonData));
+                    dungeonGenerator.getGeneratedId(player.getLadder(), dungeonData));
         }
         RoomFileData file = new RoomFileData(previousRoom.getConnectedRoomId(player.getLadder()));
         if (rooms.containsKey(file.getId())) {
@@ -62,6 +63,7 @@ public class RoomFactory extends Factory<Room> {
             if (previousRoom.getConnectedLadder(player.getLadder()) == null) {
                 createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
             }
+            setTransition(previousRoom, nextRoom);
             nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
             return rooms.get(file.getId());
         }
@@ -69,8 +71,15 @@ public class RoomFactory extends Factory<Room> {
         setKeyBinds(nextRoom);
         rooms.put(file.getId(), nextRoom);
         createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
+        setTransition(previousRoom, nextRoom);
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
         return rooms.get(file.getId());
+    }
+
+    private void setTransition(Room previousRoom, Room nextRoom) {
+        // double x = GamePanel.screenWidth / 2 - previousRoom.getConnectedLadder(player.getLadder()).getX();
+        // double y = GamePanel.screenHeight / 2 - previousRoom.getConnectedLadder(player.getLadder()).getY();
+        nextRoom.setLocation((int) (previousRoom.getX()), (int) (previousRoom.getY()));
     }
 
     private Room createRoom(RoomFileData file, int id) {

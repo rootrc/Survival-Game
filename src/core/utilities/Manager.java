@@ -4,46 +4,50 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public abstract class Manager<T> implements Drawable, Updatable{
-    public static abstract class SubScreen<T extends core.window.GameComponent> extends Manager<T> {
-        private T subScreen;
+    public static abstract class Component<T extends core.window.GameComponent> extends Manager<T> {
+        private T component;
         public void update() {
-            subScreen.update();
+            component.update();
         }
 
         public void draw(Graphics2D g2d) {
-            subScreen.draw(g2d);
+            component.draw(g2d);
         }
 
         public void set(T subScreen) {
-            this.subScreen = subScreen;
+            this.component = subScreen;
         }
 
         public T get() {
-            return subScreen;
+            return component;
         }
 
         public int getWidth() {
-            return subScreen.getWidth();
+            return component.getWidth();
         }
 
         public int getHeight() {
-            return subScreen.getHeight();
+            return component.getHeight();
+        }
+
+        protected void setLocation(int x, int y) {
+            component.setLocation(x, y);
         }
 
         public void show() {
-            subScreen.show();
+            component.show();
         }
     
         public void stop() {
-            subScreen.stop();
+            component.stop();
         }
     
         public void pause() {
-            subScreen.pause();
+            component.pause();
         }
     
         public void unpause() {
-            subScreen.unpause();
+            component.unpause();
         }
     }
     public static abstract class List<T extends Drawable & Updatable> extends Manager<T> {

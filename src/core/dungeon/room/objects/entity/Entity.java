@@ -7,6 +7,7 @@ import core.dungeon.room.objects.object_utilities.CollisionBox;
 import core.dungeon.room.objects.object_utilities.RoomObject;
 
 public abstract class Entity extends RoomObject {
+    private int lightStrength;
     protected int maxSpeed;
     protected double speedX;
     protected double speedY;
@@ -21,6 +22,8 @@ public abstract class Entity extends RoomObject {
         super(image, r, c, hitbox, interactbox);
         this.maxSpeed = maxSpeed;
         this.collision = collision;
+        // TEMP
+        lightStrength = 400;
     }
 
     public Entity(BufferedImage image, CollisionBox hitbox, int maxSpeed, CollisionChecker collision) {
@@ -31,7 +34,7 @@ public abstract class Entity extends RoomObject {
         this(image, r, c, hitbox, null, maxSpeed, collision);
     }
 
-    public void setCollision(CollisionChecker collision) {
-        this.collision = collision;
+    public int getLightStrength() {
+        return lightStrength;
     }
 }

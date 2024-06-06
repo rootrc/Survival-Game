@@ -29,17 +29,18 @@ public abstract class RoomObject implements Drawable, Updatable {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.drawImage(image, (int) Math.round(x), (int) Math.round(y), null);
-        if (Game.DEBUG) {
-            if (interactbox != null) {
-                g2d.setColor(Color.blue);
-                g2d.drawRect((int) Math.round(x + interactbox.getX()), (int) Math.round(y + interactbox.getY()),
-                        (int) interactbox.getWidth(), (int) interactbox.getHeight());
-            }
-            g2d.setColor(Color.red);
-            g2d.drawRect((int) Math.round(x + hitbox.getX()), (int) Math.round(y + hitbox.getY()),
-                    (int) hitbox.getWidth(), (int) hitbox.getHeight());
+        g2d.drawImage(image, (int) x, (int) y, null);
+        if (!Game.DEBUG) {
+            return;
         }
+        if (interactbox != null) {
+            g2d.setColor(Color.blue);
+            g2d.drawRect((int) (x + interactbox.getX()), (int) (y + interactbox.getY()),
+                    (int) interactbox.getWidth(), (int) interactbox.getHeight());
+        }
+        g2d.setColor(Color.red);
+        g2d.drawRect((int) (x + hitbox.getX()), (int) (y + hitbox.getY()),
+                (int) hitbox.getWidth(), (int) hitbox.getHeight());
     }
 
     public boolean interacts(RoomObject object) {

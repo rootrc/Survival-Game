@@ -16,7 +16,6 @@ import core.window.GamePanel;
 
 public class Player extends Entity {
     private HotbarManager inventory;
-    private int lightStrength;
     private Ladder ladder;
     private RoomObject interactable;
 
@@ -26,11 +25,9 @@ public class Player extends Entity {
                 new CollisionBox(0, 0, 1, 1),
                 new CollisionBox(-0.25, -0.25, 1.5, 1.5), GamePanel.TILESIZE / 4, null);
         this.inventory = inventory;
-        lightStrength = 400;
-
     }
 
-    public void set(int x, int y, CollisionChecker collision) {
+    public void set(double x, double y, CollisionChecker collision) {
         setX(x);
         setY(y);
         this.collision = collision;
@@ -56,27 +53,23 @@ public class Player extends Entity {
     private final double deacc = 4.0;
 
     public void update() {
+        move();
+    }
+
+    private void move() {
         double ax = 0;
         double ay = 0;
-        if (movementKeys.contains("w")) {
-            if (Math.abs(speedY) < maxSpeed) {
-                ay -= maxSpeed / acc;
-            }
+        if (movementKeys.contains("w") && Math.abs(speedY) < maxSpeed) {
+            ay -= maxSpeed / acc;
         }
-        if (movementKeys.contains("a")) {
-            if (Math.abs(speedX) < maxSpeed) {
-                ax -= maxSpeed / acc;
-            }
+        if (movementKeys.contains("a") && Math.abs(speedX) < maxSpeed) {
+            ax -= maxSpeed / acc;
         }
-        if (movementKeys.contains("s")) {
-            if (Math.abs(speedY) < maxSpeed) {
-                ay += maxSpeed / acc;
-            }
+        if (movementKeys.contains("s") && Math.abs(speedY) < maxSpeed) {
+            ay += maxSpeed / acc;
         }
-        if (movementKeys.contains("d")) {
-            if (Math.abs(speedX) < maxSpeed) {
-                ax += maxSpeed / acc;
-            }
+        if (movementKeys.contains("d") && Math.abs(speedX) < maxSpeed) {
+            ax += maxSpeed / acc;
         }
         if (ax == 0) {
             if (speedX > 0) {
@@ -99,7 +92,6 @@ public class Player extends Entity {
                 moveX(speedX * a);
             } else {
                 moveX(speedX);
-
             }
         }
         if (collision.checkTile(this, 0, speedY)) {
@@ -137,9 +129,5 @@ public class Player extends Entity {
 
     public void setLadder(Ladder ladder) {
         this.ladder = ladder;
-    }
-
-    public int getLightStrength() {
-        return lightStrength;
     }
 }

@@ -49,7 +49,7 @@ public class Room extends GameComponent {
     }
 
     public void setPlayer(Ladder ladder) {
-        player.set((int) ladder.getPlayerPlacementX(), (int) ladder.getPlayerPlacementY(), collision);
+        player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY(), collision);
     }
 
     @Override
@@ -57,10 +57,11 @@ public class Room extends GameComponent {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         draw(g2d);
-        if (Game.DEBUG) {
-            g2d.setColor(Color.white);
-            g2d.drawString(String.valueOf(getId()), 0, 10);
+        if (!Game.DEBUG) {
+            return;
         }
+        g2d.setColor(Color.white);
+        g2d.drawString(String.valueOf(getId()), 0, 10);
     }
 
     public int getId() {

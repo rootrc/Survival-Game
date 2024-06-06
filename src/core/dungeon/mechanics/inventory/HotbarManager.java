@@ -5,7 +5,7 @@ import core.dungeon.mechanics.inventory.items.ItemFactory;
 import core.utilities.Manager;
 import core.window.GamePanel;
 
-public class HotbarManager extends Manager.SubScreen<Hotbar> {
+public class HotbarManager extends Manager.Component<Hotbar> {
     private Dungeon dungeon;
     private int size;
     private ItemFactory itemFactory;
@@ -14,7 +14,7 @@ public class HotbarManager extends Manager.SubScreen<Hotbar> {
         this.dungeon = dungeon;
         size = 8;
         set(new Hotbar(size));
-        get().setLocation(GamePanel.screenWidth / 2 - getWidth() / 2, GamePanel.screenHeight - getHeight());
+        setLocation(GamePanel.screenWidth / 2 - getWidth() / 2, GamePanel.screenHeight - getHeight());
         itemFactory = new ItemFactory();
 
         // Test

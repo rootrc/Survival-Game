@@ -24,20 +24,11 @@ public class DungeonLayoutGenerator extends FileOpener {
         }
     }
 
-    public int getGeneratedId(Ladder ladder, Room room, DungeonData dungeonData) {
-        int id = getGeneratedId(ladder, dungeonData);
-        while (room.getId() == id) {
-            id = getGeneratedId(ladder, dungeonData);
-        }
-        return id;
-    }
-
-    private int getGeneratedId(Ladder ladder, DungeonData dungeonData) {
+    public int getGeneratedId(Ladder ladder, DungeonData dungeonData) {
         int hash = hashes[dungeonData.getDepth()][dungeonData.getDepthCnt(dungeonData.getDepth())];
         if (hash != 0) {
             return dungeonData.getMapId(ladder, hash / 10, hash % 10);
-        }
-        if (ladder.getDirection() == 1) {
+        } else if (ladder.getDirection() == 1) {
             return dungeonData.getMapId(ladder, 0, 1);
         } else {
             return dungeonData.getMapId(ladder, 1, 0);

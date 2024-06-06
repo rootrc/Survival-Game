@@ -26,12 +26,12 @@ public class Ladder extends RoomObject {
         player.setLadder(this);
     }
 
-    public int getPlayerPlacementX() {
-        return (int) getX() + playerPlacementX;
+    public double getPlayerPlacementX() {
+        return getX() + playerPlacementX;
     }
 
-    public int getPlayerPlacementY() {
-        return (int) getY() + playerPlacementY;
+    public double getPlayerPlacementY() {
+        return getY() + playerPlacementY;
     }
 
     public int getDirection() {

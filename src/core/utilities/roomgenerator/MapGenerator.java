@@ -1,7 +1,6 @@
 package core.utilities.roomgenerator;
 
 public class MapGenerator {
-    // TEMP
     public static int[][] getRandomMap(int N, int M) {
         SimplexNoise simplexNoise = new SimplexNoise(257, 0.3, (int) (50000 * Math.random()));
 

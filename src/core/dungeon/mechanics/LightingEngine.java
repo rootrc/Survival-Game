@@ -11,6 +11,7 @@ import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import core.dungeon.room.objects.entity.Entity;
 import core.dungeon.room.objects.entity.Player;
 import core.utilities.Drawable;
 import core.utilities.Updatable;
@@ -28,10 +29,10 @@ public class LightingEngine implements Drawable, Updatable {
     private final float fraction[] = new float[] { 0f, 0.3f, 0.4f, 0.5f, 0.6f, 0.65f, 0.7f, 0.75f, 0.8f, 0.85f, 0.9f,
             0.95f };
     private static final HashMap<Integer, BufferedImage> darknessFilter = new HashMap<>();
-    private Player player;
+    private Entity entity;
 
-    public LightingEngine(Player player) {
-        this.player = player;
+    public LightingEngine(Entity entity) {
+        this.entity = entity;
     }
 
     public BufferedImage getDarknessFilter(int i) {
@@ -52,35 +53,27 @@ public class LightingEngine implements Drawable, Updatable {
 
     public void update() {
     }
-    
-    private int randomFactor;
+
+    private double randomFactor;
+    private int flickerDegree = 3;
+    private double flickerSize = 0.1;
+
     public void draw(Graphics2D g2d) {
         if (Game.DEBUG) {
             return;
         }
-        // GraphicsDevice gd =
-        // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        // BufferedImage image0 =
-        // gd.getDefaultConfiguration().createCompatibleImage(GamePanel.screenWidth,
-        // GamePanel.screenHeight, Transparency.TRANSLUCENT);
-        // g2d.drawImage(image0, 0, 0, null);
-        if (randomFactor >= 5) {
-            randomFactor--;
-        } else if (randomFactor <= -5) {
-            randomFactor++;
-        } else if (Math.random() > 0.5) {
-            randomFactor++;
-        } else {
-            randomFactor--;
-        }
-        BufferedImage image = getDarknessFilter(player.getLightStrength() + randomFactor);
-        int x = (int) player.getX() + player.getWidth() / 2 - image.getWidth() / 2;
-        int y = (int) player.getY() + player.getHeight() / 2 - image.getHeight() / 2;
+
+        // Maybe move to update?
+        randomFactor += 2 * flickerDegree * Math.random() - flickerDegree - randomFactor * flickerSize;
+
+        BufferedImage image = getDarknessFilter((int) (entity.getLightStrength() * (1 + randomFactor / 600)));
+        int x = (int) entity.getX() + entity.getWidth() / 2 - image.getWidth() / 2;
+        int y = (int) entity.getY() + entity.getHeight() / 2 - image.getHeight() / 2;
 
         g2d.setColor(Color.black);
-        int buffer = 32;
-        Area a = new Area(new Rectangle((int) player.getX() - GamePanel.screenWidth / 2 - buffer,
-                (int) player.getY() - GamePanel.screenHeight / 2 - buffer, GamePanel.screenWidth + 2 * buffer,
+        int buffer = 640;
+        Area a = new Area(new Rectangle((int) entity.getX() - GamePanel.screenWidth / 2 - buffer,
+                (int) entity.getY() - GamePanel.screenHeight / 2 - buffer, GamePanel.screenWidth + 2 * buffer,
                 GamePanel.screenHeight + 2 * buffer));
         a.subtract(new Area(new Rectangle(x, y, image.getWidth(), image.getHeight())));
         g2d.fill(a);

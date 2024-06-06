@@ -25,6 +25,7 @@ public class Item implements Drawable {
 
     public final Action useItem = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
+            // TEMP
             System.out.println("Item Used");
         }
     };

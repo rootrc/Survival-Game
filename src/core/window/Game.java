@@ -1,8 +1,10 @@
 package core.window;
 
+import javax.swing.JFrame;
+
 import core.dungeon.Dungeon;
 
-public class Game implements Runnable {
+public class Game extends JFrame implements Runnable {
     public final int FPS = 60;
     public final int UPS = 60;
 
@@ -12,8 +14,17 @@ public class Game implements Runnable {
     private Thread gameThread;
 
     public Game() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setTitle("Game");
+        
         gamePanel = new Dungeon();
-        new GameFrame(gamePanel);
+        add(gamePanel);
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
         startGameThread();
     }
 

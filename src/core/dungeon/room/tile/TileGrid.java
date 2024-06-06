@@ -35,10 +35,10 @@ public class TileGrid implements Drawable {
         for (int i = 0; i < layers; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
-                    if (tileGrid[i][r][c] != null) {
-                        g2d.drawImage(tileGrid[i][r][c].getImage(), GamePanel.TILESIZE * (c), GamePanel.TILESIZE * r,
-                                null);
+                    if (tileGrid[i][r][c] == null) {
+                        continue;
                     }
+                    g2d.drawImage(tileGrid[i][r][c].getImage(), GamePanel.TILESIZE * (c), GamePanel.TILESIZE * r, null);
                 }
             }
         }
