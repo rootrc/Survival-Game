@@ -21,4 +21,8 @@ public class HotbarManager extends Manager.Component<Hotbar> {
         get().inventorySlots[1].setItem(itemFactory.getItem(5, 0));
         get().getActionMap().put(1, get().inventorySlots[1].getAction());
     }
+
+    public void updateComponentManager() {
+
+    }
 }

@@ -31,9 +31,7 @@ public class RoomManager extends Manager.Component<Room> {
 
     private boolean movingRoom;
 
-    @Override
-    public void update() {
-        super.update();
+    public void updateComponentManager() {
         if (!Game.DEBUG) {
             int tx = GamePanel.screenWidth / 2 - (int) player.getX();
             int ty = GamePanel.screenHeight / 2 - (int) player.getY();

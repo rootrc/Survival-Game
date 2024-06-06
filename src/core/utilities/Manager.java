@@ -7,8 +7,11 @@ public abstract class Manager<T> implements Updatable {
     public static abstract class Component<T extends core.window.GameComponent> extends Manager<T> {
         private T component;
 
-        public void update() {
+        public abstract void updateComponentManager();
+
+        public final void update() {
             component.updateComponent();
+            updateComponentManager();
         }
 
         public void set(T subScreen) {
