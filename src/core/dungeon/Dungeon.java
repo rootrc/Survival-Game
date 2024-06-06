@@ -17,7 +17,7 @@ public class Dungeon extends GamePanel {
         add(inventory.get());
         add(room.get());
     }
-    
+
     public void update() {
         room.update();
         inventory.update();

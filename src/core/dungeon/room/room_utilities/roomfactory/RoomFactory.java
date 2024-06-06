@@ -14,7 +14,6 @@ import core.dungeon.room.tile.TileGrid;
 import core.dungeon.room_connection.DungeonData;
 import core.dungeon.room_connection.DungeonLayoutGenerator;
 import core.utilities.Factory;
-import core.window.GamePanel;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;

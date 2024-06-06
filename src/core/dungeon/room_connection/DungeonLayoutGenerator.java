@@ -1,6 +1,5 @@
 package core.dungeon.room_connection;
 
-import core.dungeon.room.Room;
 import core.dungeon.room.objects.Ladder;
 import core.utilities.FileOpener;
 

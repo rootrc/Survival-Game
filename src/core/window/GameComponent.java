@@ -1,5 +1,6 @@
 package core.window;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -28,7 +29,7 @@ public abstract class GameComponent extends JComponent {
         unpause();
     }
 
-    public void update() {
+    public void updateComponent() {
         if (!update) {
             return;
         }
@@ -38,13 +39,9 @@ public abstract class GameComponent extends JComponent {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public final void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        draw(g2d);
-    }
-
-    public void draw(Graphics2D g2d) {
         if (!draw) {
             return;
         }
@@ -61,14 +58,18 @@ public abstract class GameComponent extends JComponent {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.OPAQUE);
-        Graphics2D g = image.createGraphics();
-        g.fillRect(0, 0, getWidth(), getHeight());
+        Graphics2D g2d2 = image.createGraphics();
+        g2d2.setColor(Color.black);
+        g2d2.fillRect(0, 0, getWidth(), getHeight());
         for (Drawable drawable : drawables) {
-            drawable.draw(g);
+            drawable.draw(g2d2);
         }
-        g.dispose();
+        g2d2.dispose();
         g2d.drawImage(image, 0, 0, null);
+        drawComponent(g2d);
     }
+
+    public abstract void drawComponent(Graphics2D g2d);
 
     public void addObject(Object object) {
         if (object instanceof Updatable) {

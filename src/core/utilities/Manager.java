@@ -3,15 +3,12 @@ package core.utilities;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
-public abstract class Manager<T> implements Drawable, Updatable{
+public abstract class Manager<T> implements Updatable {
     public static abstract class Component<T extends core.window.GameComponent> extends Manager<T> {
         private T component;
-        public void update() {
-            component.update();
-        }
 
-        public void draw(Graphics2D g2d) {
-            component.draw(g2d);
+        public void update() {
+            component.updateComponent();
         }
 
         public void set(T subScreen) {
@@ -37,27 +34,29 @@ public abstract class Manager<T> implements Drawable, Updatable{
         public void show() {
             component.show();
         }
-    
+
         public void stop() {
             component.stop();
         }
-    
+
         public void pause() {
             component.pause();
         }
-    
+
         public void unpause() {
             component.unpause();
         }
     }
-    public static abstract class List<T extends Drawable & Updatable> extends Manager<T> {
+
+    public static abstract class List<T extends Drawable & Updatable> extends Manager<T> implements Drawable {
         private ArrayList<T> list = new ArrayList<>();
+
         public void update() {
             for (T t : list) {
                 t.update();
             }
         }
-    
+
         public void draw(Graphics2D g2d) {
             for (T t : list) {
                 t.draw(g2d);

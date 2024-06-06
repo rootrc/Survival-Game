@@ -1,7 +1,6 @@
 package core.dungeon.room;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import core.dungeon.mechanics.LightingEngine;
@@ -52,11 +51,7 @@ public class Room extends GameComponent {
         player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY(), collision);
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        draw(g2d);
+    public void drawComponent(Graphics2D g2d) {
         if (!Game.DEBUG) {
             return;
         }

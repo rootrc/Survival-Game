@@ -17,15 +17,16 @@ public class Game extends JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setTitle("Game");
-        
-        gamePanel = new Dungeon();
-        add(gamePanel);
-
+        initPanel();
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-
         startGameThread();
+    }
+    
+    private void initPanel() {
+        gamePanel = new Dungeon();
+        add(gamePanel);
     }
 
     private void startGameThread() {

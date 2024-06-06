@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import core.dungeon.room.objects.entity.Entity;
-import core.dungeon.room.objects.entity.Player;
 import core.utilities.Drawable;
 import core.utilities.Updatable;
 import core.window.Game;
