@@ -6,14 +6,14 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 
-import core.dungeon.Dungeon;
-import core.menus.Menu;
+import core.game_panels.Menu;
+import core.game_panels.dungeon.Dungeon;
 
 public class Game extends JFrame implements Runnable {
-    public final int FPS = 60;
-    public final int UPS = 60;
+    private static final int FPS = 60;
+    private static final int UPS = 60;
 
-    public final static boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
     private GamePanel gamePanel;
     private Dungeon dungeon;

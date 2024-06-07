@@ -1,6 +1,5 @@
 package core.utilities;
 
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -15,12 +14,12 @@ public class UIButton extends GameButton {
 
     public UIButton(Action action, String actionCommand, Rectangle rect, BufferedImage image) {
         super(action, actionCommand, rect);
-        setIcon(buildImageIcon(image, 0));
-        setRolloverIcon(buildImageIcon(image, 1));
-        setPressedIcon(buildImageIcon(image, 2));
+        setIcon(createImageIcon(image, 0));
+        setRolloverIcon(createImageIcon(image, 1));
+        setPressedIcon(createImageIcon(image, 2));
     }
 
-    private ImageIcon buildImageIcon(BufferedImage image, int id) {
+    private ImageIcon createImageIcon(BufferedImage image, int id) {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage output = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.BITMASK);

@@ -15,9 +15,9 @@ import javax.imageio.ImageIO;
 import core.window.GamePanel;
 
 public class ImageUtilities {
-    private final static HashMap<String, BufferedImage> map = new HashMap<>();
-    private final static int tileSize = 16;
-    private final static double scale = (double) GamePanel.TILESIZE / tileSize;
+    private static final HashMap<String, BufferedImage> map = new HashMap<>();
+    private static final int tileSize = 16;
+    private static final double scale = (double) GamePanel.TILESIZE / tileSize;
 
     public static BufferedImage getImage(String folder, String name) {
         if (map.containsKey(name)) {
