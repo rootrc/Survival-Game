@@ -3,6 +3,7 @@ package core.dungeon.room.room_utilities;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Action;
 import javax.swing.Timer;
 
 import core.dungeon.Dungeon;
@@ -21,15 +22,13 @@ public class RoomManager extends Manager.Component<Room> {
     private RoomFactory roomFactory;
     private Player player;
 
-    public RoomManager(Dungeon dungeon, DungeonData dungeonData, HotbarManager inventory) {
+    public RoomManager(Dungeon dungeon, DungeonData dungeonData, HotbarManager inventory, Action nextRoom) {
         this.dungeon = dungeon;
-        player = new Player(inventory);
+        player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(dungeonData, player, new LightingEngine(player));
         set(roomFactory.getStartingRoom(1));
         // set(roomFactory.createRandomRoom(58, 32));
     }
-
-    private boolean movingRoom;
 
     public void updateComponentManager() {
         if (!Game.DEBUG) {
@@ -37,22 +36,11 @@ public class RoomManager extends Manager.Component<Room> {
             int ty = GamePanel.screenHeight / 2 - (int) player.getY();
             int dx = tx - get().getX();
             int dy = ty - get().getY();
-            setLocation(get().getX() + Math.min(dx / 8, 16), get().getY() + Math.min(dy / 8, 16));
+            setLocation(get().getX() + Math.min(dx / 16, 16), get().getY() + Math.min(dy / 16, 16));
         }
-        if (player.getLadder() != null && !movingRoom) {
-            movingRoom = true;
-            dungeon.remove(get());
-            set(roomFactory.getNextRoom(get()));
-            dungeon.add(get());
-            dungeon.revalidate();
-            Timer timer = new Timer(500, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    movingRoom = false;
-                }
-            });
-            timer.setRepeats(false);
-            timer.start();
-        }
+    }
+
+    public void nextRoom() {
+        set(roomFactory.getNextRoom(get()));
     }
 }

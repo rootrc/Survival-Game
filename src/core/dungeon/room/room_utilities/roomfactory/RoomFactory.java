@@ -100,7 +100,7 @@ public class RoomFactory extends Factory<Room> {
             room.getActionMap().put(new StringBuilder("acc ").append(c).toString(), player.accelerate);
             room.getActionMap().put(new StringBuilder("decel ").append(c).toString(), player.decelerate);
         }
-        room.getInputMap(2).put(KeyStroke.getKeyStroke("E"), "interact");
+        room.getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
         room.getActionMap().put("interact", player.interact);
     }
 

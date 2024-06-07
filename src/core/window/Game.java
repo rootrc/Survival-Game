@@ -1,8 +1,13 @@
 package core.window;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JFrame;
 
 import core.dungeon.Dungeon;
+import core.menus.Menu;
 
 public class Game extends JFrame implements Runnable {
     public final int FPS = 60;
@@ -11,6 +16,9 @@ public class Game extends JFrame implements Runnable {
     public final static boolean DEBUG = false;
 
     private GamePanel gamePanel;
+    private Dungeon dungeon;
+    private Menu menu;
+
     private Thread gameThread;
 
     public Game() {
@@ -23,10 +31,35 @@ public class Game extends JFrame implements Runnable {
         setVisible(true);
         startGameThread();
     }
-    
+
     private void initPanel() {
-        gamePanel = new Dungeon();
+
+        Action changePanel = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("dungeon")) {
+                    changePanel(dungeon);
+                } else if (e.getActionCommand().equals("options")) {
+                    // TODO
+                } else if (e.getActionCommand().equals("mainMenu")) {
+                    changePanel(menu);
+                    dungeon.restart();
+                } else if (e.getActionCommand().equals("mainMenu")) {
+                    // TODO
+                }
+            }
+        };
+
+        dungeon = new Dungeon(changePanel);
+        menu = new Menu(dungeon, changePanel);
+        gamePanel = menu;
         add(gamePanel);
+    }
+
+    private void changePanel(GamePanel gamePanel) {
+        remove(this.gamePanel);
+        this.gamePanel = gamePanel;
+        add(gamePanel);
+        revalidate();
     }
 
     private void startGameThread() {

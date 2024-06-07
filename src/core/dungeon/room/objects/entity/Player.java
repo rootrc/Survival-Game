@@ -19,11 +19,14 @@ public class Player extends Entity {
     private Ladder ladder;
     private RoomObject interactable;
 
-    public Player(HotbarManager inventory) {
+    private Action nextRoom;
+
+    public Player(Action nextRoom, HotbarManager inventory) {
         // TEMP
         super(ImageUtilities.getImage("entities", "player"),
                 new CollisionBox(0, 0, 1, 1),
                 new CollisionBox(-0.25, -0.25, 1.5, 1.5), GamePanel.TILESIZE / 4, null);
+        this.nextRoom = nextRoom;
         this.inventory = inventory;
     }
 
@@ -105,8 +108,12 @@ public class Player extends Entity {
 
     public final Action interact = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            if (interactable != null) {
-                interactable.interaction(Player.this);
+            if (interactable == null) {
+                return;
+            }
+            interactable.interaction(Player.this);
+            if (interactable.getClass() == Ladder.class) {
+                nextRoom.actionPerformed(e);
             }
         }
     };

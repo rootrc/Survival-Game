@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import javax.swing.Action;
 import javax.swing.JPanel;
 
 public abstract class GamePanel extends JPanel {
@@ -13,7 +14,7 @@ public abstract class GamePanel extends JPanel {
     public final static int screenWidth = TILESIZE * maxScreenCol; // 1024 pixels
     public final static int screenHeight = TILESIZE * maxScreenRow; // 768 pixels
 
-    public GamePanel() {
+    public GamePanel(Action changePanel) {
         setPreferredSize(new Dimension(screenWidth, screenHeight));
         if (!Game.DEBUG) {
             setBackground(Color.black);
