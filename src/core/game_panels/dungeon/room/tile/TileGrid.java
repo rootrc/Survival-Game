@@ -7,16 +7,17 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
-import core.utilities.Drawable;
+import core.utilities.GameImageLabel;
 import core.window.GamePanel;
 
-public class TileGrid implements Drawable {
+public class TileGrid extends GameImageLabel {
     private BufferedImage image;
     private int N, M, layers;
     private int width, height;
     private Tile[][][] tileGrid;
 
     public TileGrid(Tile[][][] tileGrid) {
+        super();
         this.tileGrid = tileGrid;
         layers = tileGrid.length;
         N = tileGrid[0].length;
@@ -24,6 +25,7 @@ public class TileGrid implements Drawable {
         height = GamePanel.TILESIZE * N;
         width = GamePanel.TILESIZE * M;
         createImage();
+        setIcon(image);
     }
 
     private void createImage() {

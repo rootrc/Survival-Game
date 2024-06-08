@@ -26,8 +26,4 @@ public class Menu extends GamePanel {
         add(new UIButton(exit, "exit", new Rectangle(GamePanel.screenWidth / 2 - 192, 620, 384, 96),
                 ImageUtilities.getImage("UI", "ExitButton")));
     }
-
-    public void update() {
-
-    }
 }

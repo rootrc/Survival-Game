@@ -1,30 +1,37 @@
 package core.game_panels.dungeon.room.objects.object_utilities;
 
-import core.game_panels.dungeon.room.objects.entity.Player;
-import core.utilities.Manager;
+import java.awt.Component;
+import java.awt.Graphics2D;
 
-public class RoomObjectManager extends Manager.List<RoomObject>{
+import core.game_panels.dungeon.room.objects.entity.Player;
+import core.window.GameComponent;
+import core.window.GamePanel;
+
+public class RoomObjectManager extends GameComponent {
     private Player player;
 
     public RoomObjectManager(Player player) {
+        super(4 * GamePanel.screenWidth, 4 * GamePanel.screenHeight);
         this.player = player;
     }
 
-    @Override
+    public void drawComponent(Graphics2D g2d) {
+        
+    }
+
     public void update() {
-        super.update();
         objectInteractions();
-        for (RoomObject object : get()) {
-            if (player.collides(object)) {
-                player.collide(object);
+        for (Component object : getComponents()) {
+            if (player.collides((RoomObject) object)) {
+                player.collide((RoomObject) object);
             }
         }
     }
 
     public void objectInteractions() {
-        for (RoomObject object : get()) {
-            if (player.interacts(object)) {
-                player.setInteractable(object);
+        for (Component object : getComponents()) {
+            if (player.interacts((RoomObject) object)) {
+                player.setInteractable((RoomObject) object);
                 return;
             }
         }

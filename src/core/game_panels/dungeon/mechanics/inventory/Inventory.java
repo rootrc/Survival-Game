@@ -1,6 +1,5 @@
 package core.game_panels.dungeon.mechanics.inventory;
 
-import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -48,6 +47,10 @@ public class Inventory extends GameComponent {
         buildImage();
     }
 
+    public void update() {
+
+    }
+
     private void buildImage() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         background = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
@@ -67,9 +70,9 @@ public class Inventory extends GameComponent {
     public void drawComponent(Graphics2D g2d) {
         g2d.drawImage(background, 0, 0, null);
         if (isMouseWithinComponent(20, 50) || move) {
-            setLocation(getX(), Math.max(GamePanel.screenHeight - getHeight(), getY() - 2));
+            setY(Math.max(GamePanel.screenHeight - getHeight(), getY() - 8));
         } else {
-            setLocation(getX(), Math.min(GamePanel.screenHeight - tab.getHeight(), getY() + 1));
+            setY(Math.min(GamePanel.screenHeight - tab.getHeight(), getY() + 4));
         }
     }
 

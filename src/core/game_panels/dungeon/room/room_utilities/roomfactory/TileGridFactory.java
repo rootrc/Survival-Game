@@ -80,7 +80,7 @@ class TileGridFactory extends Factory<TileGrid> {
     private Tile getTile(int r, int c) {
         // the r and c are backwards because I messed something up and it would take 6
         // hours to fix so i'm keeping it like this
-        return new Tile(ImageUtilities.getImage("tiles", name, c, r), collisionTiles.contains(tileN * c + r), false);
+        return new Tile(ImageUtilities.getImage("tiles", name, c, r), collisionTiles.contains(tileN * c + r));
     }
 
     private static final HashSet<Integer> layer0 = new HashSet<>(Arrays.asList(5, 6));

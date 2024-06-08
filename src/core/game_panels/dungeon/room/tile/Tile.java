@@ -5,12 +5,10 @@ import java.awt.image.BufferedImage;
 public class Tile {
     private BufferedImage image;
     private boolean collision;
-    private boolean opacity;
 
-    public Tile(BufferedImage image, boolean collision, boolean opacity) {
+    public Tile(BufferedImage image, boolean collision) {
         this.image = image;
         this.collision = collision;
-        this.opacity = opacity;
     }
 
     public BufferedImage getImage() {
@@ -19,10 +17,6 @@ public class Tile {
 
     public boolean getCollision() {
         return collision;
-    }
-
-    public boolean getOpacity() {
-        return opacity;
     }
 
 }

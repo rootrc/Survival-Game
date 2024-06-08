@@ -91,7 +91,7 @@ public class Game extends JFrame implements Runnable {
             delta2 += (currentTime2 - lastTime2) / updateInterval;
             lastTime2 = currentTime2;
             if (delta2 > 1) {
-                gamePanel.update();
+                gamePanel.updateComponent();
                 delta2--;
             }
         }

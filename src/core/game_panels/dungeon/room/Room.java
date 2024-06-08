@@ -13,6 +13,7 @@ import core.game_panels.dungeon.room.tile.TileGrid;
 import core.game_panels.dungeon.room_connection.RoomConnecter;
 import core.window.Game;
 import core.window.GameComponent;
+import core.window.GamePanel;
 
 public class Room extends GameComponent {
     private int id;
@@ -31,10 +32,10 @@ public class Room extends GameComponent {
         connecter = new RoomConnecter();
         this.collision = collision;
         this.objectManager = objectManager;
-        addObject(tileGrid);
-        addObject(objectManager);
-        addObject(player);
-        addObject(lighting);
+        add(tileGrid);
+        add(objectManager);
+        add(player);
+        add(lighting);
     }
 
     // TEMP
@@ -43,8 +44,19 @@ public class Room extends GameComponent {
         // this.tileGrid = tileGrid;
         this.collision = collision;
         this.objectManager = objectManager;
-        addObject(tileGrid);
-        addObject(objectManager);
+        add(tileGrid);
+        add(objectManager);
+    }
+
+    public void update() {
+         if (!Game.DEBUG) {
+            int tx = GamePanel.screenWidth / 2 - (int) player.getX();
+            int ty = GamePanel.screenHeight / 2 - (int) player.getY();
+            int dx = tx - getX();
+            int dy = ty - getY();
+            moveX(Math.min(dx / 16, 16));
+            moveY(Math.min(dy / 16, 16));
+        }
     }
 
     public void setPlayer(Ladder ladder) {
@@ -64,7 +76,7 @@ public class Room extends GameComponent {
     }
 
     public RoomObject getRoomObject(int idx) {
-        return objectManager.get(idx);
+        return (RoomObject) objectManager.getComponents()[idx];
     }
 
     public void addLadderConnection(Ladder ladder, int id) {

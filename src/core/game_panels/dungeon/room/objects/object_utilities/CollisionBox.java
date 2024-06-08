@@ -9,4 +9,5 @@ public class CollisionBox extends Rectangle {
         super((int) (x * GamePanel.TILESIZE), (int) (y * GamePanel.TILESIZE),
                 (int) (width * GamePanel.TILESIZE), (int) (height * GamePanel.TILESIZE));
     }
+
 }

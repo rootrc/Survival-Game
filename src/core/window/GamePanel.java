@@ -1,6 +1,7 @@
 package core.window;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -28,6 +29,21 @@ public abstract class GamePanel extends JPanel {
     public final void paintComponent(Graphics g) {
         super.paintComponent(g);
     }
-    
-    public abstract void update();
+
+    public void updateComponent() {
+        updateChildren();
+    }
+
+    private void updateChildren() {
+        for (Component component : getComponents()) {
+            if (component instanceof GameComponent) {
+                ((GameComponent) component).updateComponent();
+            }
+        }
+    }
+
+    public void add(GameComponent gameComponent) {
+        add(gameComponent, 0);
+    }
+
 }

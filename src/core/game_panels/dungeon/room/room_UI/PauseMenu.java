@@ -23,4 +23,8 @@ public class PauseMenu extends PopupUI {
 		add(new UIButton(changePanel, "title", new Rectangle(getWidth() / 2 - 224, 328, 448, 64),
 				ImageUtilities.getImage("UI", "TitleScreenButton")));
 	}
+
+	public void update() {
+
+    }
 }

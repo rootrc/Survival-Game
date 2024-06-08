@@ -37,14 +37,11 @@ public class RoomFactory extends Factory<Room> {
     }
 
     public Room getStartingRoom(int id) {
-        if (rooms.containsKey(id)) {
-            return rooms.get(id);
-        }
         RoomFileData file = new RoomFileData(id);
         TileGrid tileGrid = tileFactory.createGrid(file);
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
-        player.set(200, 300, collision);
-        rooms.put(id, new Room(id, player, lighting, tileGrid, collision,
+        player.set(100, 300, collision);
+        putRoom(id, new Room(id, player, lighting, tileGrid, collision,
                 objectManagerFactory.getRoomObjectManager(player, file)));
         setKeyBinds(rooms.get(id));
         return rooms.get(id);
@@ -57,35 +54,37 @@ public class RoomFactory extends Factory<Room> {
                     dungeonGenerator.getGeneratedId(player.getLadder(), dungeonData));
         }
         RoomFileData file = new RoomFileData(previousRoom.getConnectedRoomId(player.getLadder()));
+        Room nextRoom;
         if (rooms.containsKey(file.getId())) {
-            Room nextRoom = rooms.get(file.getId());
+            nextRoom = getRoom(file.getId());
             if (previousRoom.getConnectedLadder(player.getLadder()) == null) {
                 createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
             }
-            setTransition(previousRoom, nextRoom);
-            nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
-            return rooms.get(file.getId());
+        } else {
+            nextRoom = createRoom(file, file.getId(), previousRoom);
+            putRoom(file.getId(), nextRoom);
+            createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
         }
-        Room nextRoom = createRoom(file, file.getId());
-        setKeyBinds(nextRoom);
-        rooms.put(file.getId(), nextRoom);
-        createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
         setTransition(previousRoom, nextRoom);
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
-        return rooms.get(file.getId());
+        return nextRoom;
     }
 
     private void setTransition(Room previousRoom, Room nextRoom) {
-        // double x = GamePanel.screenWidth / 2 - previousRoom.getConnectedLadder(player.getLadder()).getX();
-        // double y = GamePanel.screenHeight / 2 - previousRoom.getConnectedLadder(player.getLadder()).getY();
+        // double x = GamePanel.screenWidth / 2 -
+        // previousRoom.getConnectedLadder(player.getLadder()).getX();
+        // double y = GamePanel.screenHeight / 2 -
+        // previousRoom.getConnectedLadder(player.getLadder()).getY();
         nextRoom.setLocation((int) (previousRoom.getX()), (int) (previousRoom.getY()));
     }
 
-    private Room createRoom(RoomFileData file, int id) {
+    // BUG IN HERE
+    private Room createRoom(RoomFileData file, int id, Room previousRoom) {
         TileGrid tileGrid = tileFactory.createGrid(file);
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
                 objectManagerFactory.getRoomObjectManager(player, file));
+        setKeyBinds(room);
         return room;
     }
 
@@ -126,6 +125,17 @@ public class RoomFactory extends Factory<Room> {
     public Room createRandomRoom(int N, int M) {
         TileGrid tileGrid = tileFactory.createRandomGrid(N, M);
         return new Room(tileGrid, collisionFactory.getCollisionChecker(tileGrid), new RoomObjectManager(null));
+    }
+
+    private void putRoom(int id, Room room) {
+        rooms.put(id, room);
+    }
+
+    private Room getRoom(int id) {
+        Room room = rooms.get(id);
+        room.add(player);
+        room.add(lighting);
+        return room;
     }
 
 }

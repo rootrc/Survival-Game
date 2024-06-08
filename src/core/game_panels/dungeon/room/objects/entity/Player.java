@@ -31,8 +31,7 @@ public class Player extends Entity {
     }
 
     public void set(double x, double y, CollisionChecker collision) {
-        setX(x);
-        setY(y);
+        setLocation(x, y);
         this.collision = collision;
         ladder = null;
     }

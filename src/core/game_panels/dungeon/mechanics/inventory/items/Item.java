@@ -1,16 +1,14 @@
 package core.game_panels.dungeon.mechanics.inventory.items;
 
 import java.awt.event.ActionEvent;
-import java.awt.Graphics2D;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
-import core.utilities.Drawable;
 import core.utilities.ImageUtilities;
 
-public class Item implements Drawable {
+public class Item {
     private ImageIcon imageIcon;
     private ImageIcon rolloverIcon;
     private String name;
@@ -35,9 +33,6 @@ public class Item implements Drawable {
     }
     public ImageIcon getRolloverIcon() {
         return rolloverIcon;
-    }
-
-    public void draw(Graphics2D g2d) {
     }
 
     public String getName() {

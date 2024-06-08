@@ -30,7 +30,7 @@ public class Dungeon extends GamePanel {
                 movingRoom = true;
                 remove(room.get());
                 room.nextRoom();
-                add(room.get());
+                add(room.get(), -1);
                 revalidate();
                 Timer timer = new Timer(500, new ActionListener() {
                     @Override
@@ -50,7 +50,7 @@ public class Dungeon extends GamePanel {
 
             final ActionListener enter = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    pauseMenu.setLocation(pauseMenu.getX() + 104, pauseMenu.getY());
+                    pauseMenu.moveX(104);
                     if (pauseMenu.getX() == (GamePanel.screenWidth - pauseMenu.getWidth()) / 2) {
                         timer.stop();
                         timer.removeActionListener(this);
@@ -60,7 +60,7 @@ public class Dungeon extends GamePanel {
 
             final ActionListener exit = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    pauseMenu.setLocation(pauseMenu.getX() + 104, pauseMenu.getY());
+                    pauseMenu.moveX(104);
                     if (pauseMenu.getX() == GamePanel.screenWidth) {
                         Dungeon.this.remove(pauseMenu);
                         timer.stop();
@@ -69,7 +69,7 @@ public class Dungeon extends GamePanel {
                 }
             };
             if (getComponents()[0] != pauseMenu) {
-                 add(pauseMenu, 0);
+                add(pauseMenu);
                 pauseMenu.setLocation(-pauseMenu.getWidth(), pauseMenu.getY());
                 timer.addActionListener(enter);
                 timer.start();
@@ -98,22 +98,16 @@ public class Dungeon extends GamePanel {
         dungeonData = new DungeonData();
         inventory = new InventoryManager();
         room = new RoomManager(dungeonData, inventory, nextRoom);
-        add(inventory.get());
         add(room.get());
+        add(inventory.get());
         pauseMenu = new PauseMenu(pause, restart, changePanel);
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
         getActionMap().put("pause", pause);
     }
 
-    public void update() {
-        room.update();
-        inventory.update();
-    }
-
     public void restart() {
-        remove(inventory.get());
-        remove(room.get());
+        removeAll();
         dungeonData = new DungeonData();
         inventory = new InventoryManager();
         room = new RoomManager(dungeonData, inventory, nextRoom);
