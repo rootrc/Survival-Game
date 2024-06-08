@@ -1,10 +1,13 @@
 package core.utilities;
 
+import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Transparency;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Action;
@@ -17,6 +20,12 @@ public class UIButton extends GameButton {
         setIcon(createImageIcon(image, 0));
         setRolloverIcon(createImageIcon(image, 1));
         setPressedIcon(createImageIcon(image, 2));
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+        }); 
     }
 
     private ImageIcon createImageIcon(BufferedImage image, int id) {

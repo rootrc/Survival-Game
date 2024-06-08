@@ -1,5 +1,6 @@
 package core.game_panels.dungeon.mechanics.inventory;
 
+import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
