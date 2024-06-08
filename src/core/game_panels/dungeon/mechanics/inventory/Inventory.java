@@ -29,11 +29,13 @@ public class Inventory extends GameComponent {
     public Inventory(int size) {
         super(left.getWidth() + middle.getWidth() * (size - 2) + right.getWidth(),
                 middle.getHeight() + tab.getHeight());
+        setLocation(GamePanel.screenWidth / 2 - getWidth() / 2, GamePanel.screenHeight - tab.getHeight());
         // this.size = size;
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
-            inventorySlots[i] = new ItemSlot(new Rectangle(middle.getWidth() * i - middle.getWidth() + itemMargin, itemMargin + tab.getHeight(),
-                    middle.getHeight() - 2 * itemMargin, middle.getHeight() - 2 * itemMargin));
+            inventorySlots[i] = new ItemSlot(
+                    new Rectangle(middle.getWidth() * i - middle.getWidth() + itemMargin, itemMargin + tab.getHeight(),
+                            middle.getHeight() - 2 * itemMargin, middle.getHeight() - 2 * itemMargin));
             add(inventorySlots[i]);
             getInputMap(2).put(
                     KeyStroke.getKeyStroke((new StringBuilder("pressed ").append(i % 10)).toString()), i);

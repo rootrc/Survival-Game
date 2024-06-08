@@ -2,7 +2,6 @@ package core.game_panels.dungeon.mechanics.inventory;
 
 import core.game_panels.dungeon.mechanics.inventory.items.ItemFactory;
 import core.utilities.Manager;
-import core.window.GamePanel;
 
 public class InventoryManager extends Manager.Component<Inventory> {
     private int size;
@@ -11,7 +10,6 @@ public class InventoryManager extends Manager.Component<Inventory> {
     public InventoryManager() {
         size = 8;
         set(new Inventory(size));
-        setLocation(GamePanel.screenWidth / 2 - getWidth() / 2, GamePanel.screenHeight - getHeight());
         itemFactory = new ItemFactory();
 
         // Test

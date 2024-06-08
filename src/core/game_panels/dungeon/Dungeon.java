@@ -44,16 +44,49 @@ public class Dungeon extends GamePanel {
         }
     };
     private final Action pause = new AbstractAction() {
+        final Timer timer = new Timer(1000 / 60, null);
+
         public void actionPerformed(ActionEvent e) {
-            if (getComponents()[0] == pauseMenu) {
-                remove(pauseMenu);
-                room.unpause();
-            } else {
-                add(pauseMenu, 0);
+
+            final ActionListener enter = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    pauseMenu.setLocation(pauseMenu.getX() + 104, pauseMenu.getY());
+                    if (pauseMenu.getX() == (GamePanel.screenWidth - pauseMenu.getWidth()) / 2) {
+                        timer.stop();
+                        timer.removeActionListener(this);
+                    }
+                }
+            };
+
+            final ActionListener exit = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    pauseMenu.setLocation(pauseMenu.getX() + 104, pauseMenu.getY());
+                    if (pauseMenu.getX() == GamePanel.screenWidth) {
+                        Dungeon.this.remove(pauseMenu);
+                        timer.stop();
+                        timer.removeActionListener(this);
+                    }
+                }
+            };
+            if (getComponents()[0] != pauseMenu) {
+                 add(pauseMenu, 0);
+                pauseMenu.setLocation(-pauseMenu.getWidth(), pauseMenu.getY());
+                timer.addActionListener(enter);
+                timer.start();
                 room.pause();
+                inventory.pause();
+            } else {
+                if (timer.isRunning()) {
+                    return;
+                }
+                timer.addActionListener(exit);
+                timer.start();
+                room.unpause();
+                inventory.unpause();
             }
         }
     };
+
     private final Action restart = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             restart();
@@ -73,6 +106,11 @@ public class Dungeon extends GamePanel {
         getActionMap().put("pause", pause);
     }
 
+    public void update() {
+        room.update();
+        inventory.update();
+    }
+
     public void restart() {
         remove(inventory.get());
         remove(room.get());
@@ -84,8 +122,4 @@ public class Dungeon extends GamePanel {
         pause.actionPerformed(null);
     }
 
-    public void update() {
-        room.update();
-        inventory.update();
-    }
 }
