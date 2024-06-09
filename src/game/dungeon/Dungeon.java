@@ -52,6 +52,9 @@ public class Dungeon extends GamePanel {
                 inventory.pause();
             } else {
                 pauseMenu.exit();
+                if (pauseMenu.getComponentCount() == 5) {
+                    pauseMenu.remove(pauseMenu.getComponent(0));
+                }
                 room.unpause();
                 inventory.unpause();
             }
@@ -82,6 +85,9 @@ public class Dungeon extends GamePanel {
         removeAll();
         inventory = new Inventory(8);
         room = roomFactory.getStartingRoom(1);
+        if (pauseMenu.getComponentCount() == 5) {
+            pauseMenu.remove(pauseMenu.getComponent(0));
+        }
         add(room);
         add(inventory);
     }

@@ -7,6 +7,7 @@ import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import game.utilities.ImageUtilities;
@@ -14,15 +15,21 @@ import game.utilities.ImageUtilities;
 public abstract class PopupUI extends GameComponent {
     private Action removeRoomUI;
     private BufferedImage image;
+    private int ancestorWidth;
     private int framesToEnter;
     private boolean moving;
 
-    public PopupUI(int width, int height, Action removeRoomUI, int framesToEnter) {
+    public PopupUI(int width, int height, Action removeRoomUI, int framesToEnter, int ancestorWidth, int ancestorHeight) {
         super(width, height);
         this.removeRoomUI = removeRoomUI;
         this.framesToEnter = framesToEnter;
-        setLocation((GamePanel.screenWidth - getWidth()) / 2, (GamePanel.screenHeight - getHeight()) / 2);
+        this.ancestorWidth = ancestorWidth;
+        setLocation((ancestorWidth - getWidth()) / 2, (ancestorHeight - getHeight()) / 2);
         image = getNotebookBackground();
+    }
+
+    public PopupUI(int width, int height, Action removeRoomUI, int framesToEnter) {
+        this(width, height, removeRoomUI, framesToEnter, GamePanel.screenWidth, GamePanel.screenHeight);
     }
 
     public void drawComponent(Graphics2D g2d) {
@@ -60,11 +67,11 @@ public abstract class PopupUI extends GameComponent {
         if (!moving) {
             return;
         }
-        moveX((GamePanel.screenWidth + getWidth()) / (2 * framesToEnter));
-        if (getX() == (GamePanel.screenWidth - getWidth()) / 2) {
+        moveX((ancestorWidth + getWidth()) / (2 * framesToEnter));
+        if (getX() == (ancestorWidth - getWidth()) / 2) {
             moving = false;
         }
-        if (getX() == GamePanel.screenWidth) {
+        if (getX() == ancestorWidth) {
             moving = false;
             close();
         }
@@ -83,4 +90,10 @@ public abstract class PopupUI extends GameComponent {
         removeRoomUI.actionPerformed(
                 new ActionEvent(this, 0, getClass().toString().substring(getClass().toString().lastIndexOf('.') + 1)));
     }
+
+    protected final Action close = new AbstractAction() {
+		public void actionPerformed(ActionEvent e) {
+			exit();
+		}
+	};  
 }
