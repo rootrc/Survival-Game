@@ -51,7 +51,7 @@ public class Game extends JFrame implements Runnable {
     private void initPanel() {
 
         dungeon = new Dungeon(changePanel);
-        menu = new Menu(dungeon, changePanel);
+        menu = new Menu(changePanel);
         gamePanel = menu;
         add(gamePanel);
     }

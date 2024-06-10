@@ -56,12 +56,11 @@ public class LightingEngine extends GameComponent {
 
     public void update() {
         randomFactor += 2 * flickerDegree * Math.random() - flickerDegree - randomFactor * flickerSize;
-
     }
 
     private double randomFactor;
-    private static final int flickerDegree = 3;
-    private static final double flickerSize = 0.1;
+    private final int flickerDegree = 5;
+    private final double flickerSize = 0.1;
     private static final int buffer = 1024;
 
     public void drawComponent(Graphics2D g2d) {

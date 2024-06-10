@@ -35,10 +35,16 @@ public class ActionUtilities {
 
             public void actionPerformed(ActionEvent e) {
                 if (gamePanel.getComponent(0) instanceof ConfirmUI) {
-                    gamePanel.remove(0);
+                    if (gamePanel.getComponent(0) != confirmUI) {
+                        ((ConfirmUI) gamePanel.getComponent(0)).exit();
+                        gamePanel.add(confirmUI);
+                        confirmUI.enter();
+                    }
+                } else {
+                    gamePanel.add(confirmUI);
+                    confirmUI.enter();
                 }
-                gamePanel.add(confirmUI);
-                confirmUI.enter();
+
             }
         };
     }
