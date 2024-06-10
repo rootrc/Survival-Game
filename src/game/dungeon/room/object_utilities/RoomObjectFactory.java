@@ -2,9 +2,9 @@ package game.dungeon.room.object_utilities;
 
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object.TreasureChest;
+import game.game_components.Factory;
+import game.game_components.GamePanel;
 import game.utilities.ImageUtilities;
-import game.utilities.game_components.Factory;
-import game.utilities.game_components.GamePanel;
 
 public class RoomObjectFactory extends Factory<RoomObject> {
 

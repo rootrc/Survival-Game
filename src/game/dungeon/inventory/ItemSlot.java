@@ -2,7 +2,7 @@ package game.dungeon.inventory;
 
 import java.awt.Rectangle;
 
-import game.utilities.game_components.GameButton;
+import game.game_components.GameButton;
 
 public class ItemSlot extends GameButton {
     private Item item;

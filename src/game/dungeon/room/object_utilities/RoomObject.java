@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 import game.Game;
 import game.dungeon.room.entity.Player;
-import game.utilities.game_components.GameComponent;
-import game.utilities.game_components.GamePanel;
+import game.game_components.GameComponent;
+import game.game_components.GamePanel;
 
 public abstract class RoomObject extends GameComponent {
     private BufferedImage image;

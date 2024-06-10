@@ -7,8 +7,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
-import game.utilities.game_components.GameImageLabel;
-import game.utilities.game_components.GamePanel;
+import game.game_components.GameImageLabel;
+import game.game_components.GamePanel;
 
 public class TileGrid extends GameImageLabel {
     private BufferedImage image;

@@ -7,8 +7,8 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 
 import game.dungeon.Dungeon;
+import game.game_components.GamePanel;
 import game.game_panel.Menu;
-import game.utilities.game_components.GamePanel;
 
 public class Game extends JFrame implements Runnable {
     private static final int FPS = 60;
@@ -22,6 +22,21 @@ public class Game extends JFrame implements Runnable {
 
     private Thread gameThread;
 
+    final Action changePanel = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (e.getActionCommand().equals("dungeon")) {
+                changePanel(dungeon);
+            } else if (e.getActionCommand().equals("options")) {
+                // TODO
+            } else if (e.getActionCommand().equals("mainMenu")) {
+                changePanel(menu);
+                dungeon.restart();
+            } else if (e.getActionCommand().equals("mainMenu")) {
+                // TODO
+            }
+        }
+    };
+
     public Game() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -34,21 +49,6 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initPanel() {
-
-        Action changePanel = new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand().equals("dungeon")) {
-                    changePanel(dungeon);
-                } else if (e.getActionCommand().equals("options")) {
-                    // TODO
-                } else if (e.getActionCommand().equals("mainMenu")) {
-                    changePanel(menu);
-                    dungeon.restart();
-                } else if (e.getActionCommand().equals("mainMenu")) {
-                    // TODO
-                }
-            }
-        };
 
         dungeon = new Dungeon(changePanel);
         menu = new Menu(dungeon, changePanel);

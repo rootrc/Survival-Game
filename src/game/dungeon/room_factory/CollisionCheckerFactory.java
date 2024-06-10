@@ -3,7 +3,7 @@ package game.dungeon.room_factory;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.room.tile.Tile;
 import game.dungeon.room.tile.TileGrid;
-import game.utilities.game_components.Factory;
+import game.game_components.Factory;
 
 class CollisionCheckerFactory extends Factory<CollisionChecker>{
 

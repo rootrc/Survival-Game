@@ -12,9 +12,9 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import game.game_components.GameComponent;
+import game.game_components.GamePanel;
 import game.utilities.ImageUtilities;
-import game.utilities.game_components.GameComponent;
-import game.utilities.game_components.GamePanel;
 
 public class Inventory extends GameComponent {
     private final static BufferedImage tab = ImageUtilities.getImage("item_images", "InventoryTab");

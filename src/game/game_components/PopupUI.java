@@ -1,35 +1,35 @@
-package game.utilities.game_components;
+package game.game_components;
 
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.KeyStroke;
 
+import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
 public abstract class PopupUI extends GameComponent {
     private Action removeRoomUI;
+    private Action removeConfirmUI;
     private BufferedImage image;
-    private int ancestorWidth;
     private int framesToEnter;
     private boolean moving;
 
-    public PopupUI(int width, int height, Action removeRoomUI, int framesToEnter, int ancestorWidth, int ancestorHeight) {
+    public PopupUI(GamePanel gamePanel, int width, int height, int framesToEnter) {
         super(width, height);
-        this.removeRoomUI = removeRoomUI;
+        removeRoomUI = ActionUtilities.closeGameComponent(gamePanel, this);
+        removeConfirmUI = ActionUtilities.removeConfirmUI(gamePanel);
         this.framesToEnter = framesToEnter;
-        this.ancestorWidth = ancestorWidth;
-        setLocation((ancestorWidth - getWidth()) / 2, (ancestorHeight - getHeight()) / 2);
+        setLocation((GamePanel.screenWidth - getWidth()) / 2, (GamePanel.screenHeight - getHeight()) / 2);
         image = getNotebookBackground();
-    }
-
-    public PopupUI(int width, int height, Action removeRoomUI, int framesToEnter) {
-        this(width, height, removeRoomUI, framesToEnter, GamePanel.screenWidth, GamePanel.screenHeight);
+        setEscapeExits(true);
     }
 
     public void drawComponent(Graphics2D g2d) {
@@ -67,13 +67,13 @@ public abstract class PopupUI extends GameComponent {
         if (!moving) {
             return;
         }
-        moveX((ancestorWidth + getWidth()) / (2 * framesToEnter));
-        if (getX() == (ancestorWidth - getWidth()) / 2) {
+        moveX((GamePanel.screenWidth + getWidth()) / (2 * framesToEnter));
+        if (getX() == (GamePanel.screenWidth - getWidth()) / 2) {
             moving = false;
         }
-        if (getX() == ancestorWidth) {
+        if (getX() == GamePanel.screenWidth) {
             moving = false;
-            close();
+            removeRoomUI.actionPerformed(null);
         }
     }
 
@@ -86,14 +86,20 @@ public abstract class PopupUI extends GameComponent {
         moving = true;
     }
 
-    protected void close() {
-        removeRoomUI.actionPerformed(
-                new ActionEvent(this, 0, getClass().toString().substring(getClass().toString().lastIndexOf('.') + 1)));
-    }
-
     protected final Action close = new AbstractAction() {
-		public void actionPerformed(ActionEvent e) {
-			exit();
-		}
-	};  
+        public void actionPerformed(ActionEvent e) {
+            exit();
+            removeConfirmUI.actionPerformed(e);
+        }
+    };
+
+    public void setEscapeExits(boolean bool) {
+        if (bool) {
+            getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
+            getActionMap().put("close", close);
+        } else {
+            getInputMap().clear();
+            getActionMap().clear();
+        }
+    }
 }

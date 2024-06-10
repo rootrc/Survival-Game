@@ -5,8 +5,8 @@ import java.util.HashSet;
 
 import game.dungeon.room.tile.Tile;
 import game.dungeon.room.tile.TileGrid;
+import game.game_components.Factory;
 import game.utilities.ImageUtilities;
-import game.utilities.game_components.Factory;
 import game.utilities.roomgenerator.MapGenerator;
 
 class TileGridFactory extends Factory<TileGrid> {

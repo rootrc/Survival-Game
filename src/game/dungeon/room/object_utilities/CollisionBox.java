@@ -2,7 +2,7 @@ package game.dungeon.room.object_utilities;
 
 import java.awt.Rectangle;
 
-import game.utilities.game_components.GamePanel;
+import game.game_components.GamePanel;
 
 public class CollisionBox extends Rectangle {
     public CollisionBox(double x, double y, double width, double height) {

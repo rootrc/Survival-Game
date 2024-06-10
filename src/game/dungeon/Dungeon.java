@@ -10,9 +10,9 @@ import javax.swing.KeyStroke;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
-import game.dungeon.room.room_UI.PauseMenu;
+import game.dungeon.room.room_UI.RoomMenu;
 import game.dungeon.room_factory.RoomFactory;
-import game.utilities.game_components.GamePanel;
+import game.game_components.GamePanel;
 
 public class Dungeon extends GamePanel {
     private Room room;
@@ -20,17 +20,7 @@ public class Dungeon extends GamePanel {
     private Player player;
     private RoomFactory roomFactory;
 
-    private PauseMenu pauseMenu;
-
-    private final Action removeRoomUI = new AbstractAction() {
-
-        public void actionPerformed(ActionEvent e) {
-            if (e.getActionCommand().equals("PauseMenu")) {
-                remove(pauseMenu);
-            }
-            revalidate();
-        }
-    };
+    private RoomMenu roomMenu;
 
     private final Action nextRoom = new AbstractAction() {
 
@@ -45,18 +35,11 @@ public class Dungeon extends GamePanel {
 
         public void actionPerformed(ActionEvent e) {
 
-            if (getComponents()[0] != pauseMenu) {
-                add(pauseMenu);
-                pauseMenu.enter();
-                room.pause();
-                inventory.pause();
+            if (getComponent(0) != roomMenu && getComponent(1) != roomMenu) {
+                add(roomMenu);
+                roomMenu.enter();
             } else {
-                pauseMenu.exit();
-                if (pauseMenu.getComponentCount() == 5) {
-                    pauseMenu.remove(pauseMenu.getComponent(0));
-                }
-                room.unpause();
-                inventory.unpause();
+                roomMenu.exit();
             }
         }
     };
@@ -75,7 +58,7 @@ public class Dungeon extends GamePanel {
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);
-        pauseMenu = new PauseMenu(removeRoomUI, pause, restart, changePanel);
+        roomMenu = new RoomMenu(this, pause, restart, changePanel);
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
         getActionMap().put("pause", pause);
@@ -85,9 +68,6 @@ public class Dungeon extends GamePanel {
         removeAll();
         inventory = new Inventory(8);
         room = roomFactory.getStartingRoom(1);
-        if (pauseMenu.getComponentCount() == 5) {
-            pauseMenu.remove(pauseMenu.getComponent(0));
-        }
         add(room);
         add(inventory);
     }

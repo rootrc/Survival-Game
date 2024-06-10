@@ -3,7 +3,7 @@ package game.dungeon.mechanics;
 import java.util.ArrayList;
 
 import game.dungeon.room.entity.Entity;
-import game.utilities.game_components.GamePanel;
+import game.game_components.GamePanel;
 
 public class CollisionChecker {
     private boolean collision[][];

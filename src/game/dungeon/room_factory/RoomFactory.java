@@ -13,7 +13,7 @@ import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
-import game.utilities.game_components.Factory;
+import game.game_components.Factory;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
@@ -98,8 +98,6 @@ public class RoomFactory extends Factory<Room> {
             room.getActionMap().put(new StringBuilder("acc ").append(c).toString(), player.accelerate);
             room.getActionMap().put(new StringBuilder("decel ").append(c).toString(), player.decelerate);
         }
-        room.getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
-        room.getActionMap().put("interact", player.interact);
     }
 
     private void createLadderConnection(Ladder ladder0, Room previousRoom, Room nextRoom, RoomFileData file) {

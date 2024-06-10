@@ -4,8 +4,8 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 
 import game.dungeon.room.entity.Player;
-import game.utilities.game_components.GameComponent;
-import game.utilities.game_components.GamePanel;
+import game.game_components.GameComponent;
+import game.game_components.GamePanel;
 
 public class RoomObjectManager extends GameComponent {
     private Player player;

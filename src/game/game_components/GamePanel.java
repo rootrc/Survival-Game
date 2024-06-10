@@ -1,4 +1,4 @@
-package game.utilities.game_components;
+package game.game_components;
 
 import java.awt.Color;
 import java.awt.Component;

@@ -12,8 +12,8 @@ import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.RoomConnecter;
-import game.utilities.game_components.GameComponent;
-import game.utilities.game_components.GamePanel;
+import game.game_components.GameComponent;
+import game.game_components.GamePanel;
 
 public class Room extends GameComponent {
     private int id;

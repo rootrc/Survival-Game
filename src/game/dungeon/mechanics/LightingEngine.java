@@ -13,8 +13,8 @@ import java.util.HashMap;
 
 import game.Game;
 import game.dungeon.room.entity.Entity;
-import game.utilities.game_components.GameComponent;
-import game.utilities.game_components.GamePanel;
+import game.game_components.GameComponent;
+import game.game_components.GamePanel;
 
 public class LightingEngine extends GameComponent {
     BufferedImage image;

@@ -4,7 +4,7 @@ import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.RoomObjectFactory;
 import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.object_utilities.RoomObjectFactory.RoomObjectData;
-import game.utilities.game_components.Factory;
+import game.game_components.Factory;
 
 class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
     Player player;

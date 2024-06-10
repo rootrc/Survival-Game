@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import game.utilities.game_components.GamePanel;
+import game.game_components.GamePanel;
 
 public class ImageUtilities {
     private static final HashMap<String, BufferedImage> map = new HashMap<>();

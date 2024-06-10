@@ -1,6 +1,6 @@
 package game.dungeon.inventory;
 
-import game.utilities.game_components.Factory;
+import game.game_components.Factory;
 
 public class ItemFactory extends Factory<Item> {
     private ItemFileData data;
