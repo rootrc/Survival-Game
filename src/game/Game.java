@@ -1,6 +1,5 @@
 package game;
 
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -8,13 +7,13 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 
 import game.dungeon.Dungeon;
-import game.dungeon.UILayer;
-import game.game_components.GameComponent;
 import game.game_components.GamePanel;
-import game.game_components.UIButton;
 import game.game_panel.Menu;
 
 public class Game extends JFrame implements Runnable {
+    public final static int screenWidth = Dungeon.TILESIZE * Dungeon.maxScreenCol; // 1024 pixels
+    public final static int screenHeight = Dungeon.TILESIZE * Dungeon.maxScreenRow; // 768 pixels
+    
     private static final int FPS = 60;
     private static final int UPS = 60;
 
@@ -23,8 +22,6 @@ public class Game extends JFrame implements Runnable {
     private GamePanel gamePanel;
     private Dungeon dungeon;
     private Menu menu;
-    
-    private static UILayer UI;
 
     private Thread gameThread;
 
@@ -57,21 +54,10 @@ public class Game extends JFrame implements Runnable {
     private void initPanel() {
         dungeon = new Dungeon(changePanel);
         menu = new Menu(changePanel);
-        UI = new UILayer();
+        
         gamePanel = menu;
-        add(UI);
+        
         add(gamePanel);
-    }
-
-    public static UILayer getUI() {
-        return UI;
-    }
-    public static void addUI(GameComponent gameComponent) {
-        UI.add(gameComponent);
-    }
-
-    public static void removeUI(GameComponent gameComponent) {
-        UI.remove(gameComponent);
     }
 
     private void changePanel(GamePanel gamePanel) {

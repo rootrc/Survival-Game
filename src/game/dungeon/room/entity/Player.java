@@ -7,12 +7,12 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import game.dungeon.Dungeon;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
-import game.game_components.GamePanel;
 import game.utilities.ImageUtilities;
 
 public class Player extends Entity {
@@ -25,7 +25,7 @@ public class Player extends Entity {
         // TEMP
         super(ImageUtilities.getImage("entities", "player"),
                 new CollisionBox(0, 0, 1, 1),
-                new CollisionBox(-0.25, -0.25, 1.5, 1.5), GamePanel.TILESIZE / 4, null);
+                new CollisionBox(-0.25, -0.25, 1.5, 1.5), Dungeon.TILESIZE / 4, null);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");

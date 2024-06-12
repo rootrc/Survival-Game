@@ -13,12 +13,12 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import game.game_components.GamePanel;
+import game.dungeon.Dungeon;
 
 public class ImageUtilities {
     private static final HashMap<String, BufferedImage> map = new HashMap<>();
     private static final int tileSize = 16;
-    private static final double scale = (double) GamePanel.TILESIZE / tileSize;
+    private static final double scale = (double) Dungeon.TILESIZE / tileSize;
 
     public static BufferedImage getImage(String folder, String name) {
         if (map.containsKey(name)) {
@@ -43,8 +43,8 @@ public class ImageUtilities {
     }
 
     public static BufferedImage getImage(String folder, String name, int r, int c, int scale) {
-        return getImage(folder, name).getSubimage(scale * GamePanel.TILESIZE * c, scale * GamePanel.TILESIZE * r,
-                scale * GamePanel.TILESIZE, scale * GamePanel.TILESIZE);
+        return getImage(folder, name).getSubimage(scale * Dungeon.TILESIZE * c, scale * Dungeon.TILESIZE * r,
+                scale * Dungeon.TILESIZE, scale * Dungeon.TILESIZE);
     }
 
     public static BufferedImage getImageFrom3x3Tileset(String folder, String name, int width, int height, int size) {

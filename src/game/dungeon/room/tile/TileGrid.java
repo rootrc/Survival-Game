@@ -7,8 +7,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
+import game.dungeon.Dungeon;
 import game.game_components.GameImageLabel;
-import game.game_components.GamePanel;
 
 public class TileGrid extends GameImageLabel {
     private BufferedImage image;
@@ -22,8 +22,8 @@ public class TileGrid extends GameImageLabel {
         layers = tileGrid.length;
         N = tileGrid[0].length;
         M = tileGrid[0][0].length;
-        height = GamePanel.TILESIZE * N;
-        width = GamePanel.TILESIZE * M;
+        height = Dungeon.TILESIZE * N;
+        width = Dungeon.TILESIZE * M;
         createImage();
         setIcon(image);
     }
@@ -40,7 +40,7 @@ public class TileGrid extends GameImageLabel {
                     if (tileGrid[i][r][c] == null) {
                         continue;
                     }
-                    g2d.drawImage(tileGrid[i][r][c].getImage(), GamePanel.TILESIZE * (c), GamePanel.TILESIZE * r, null);
+                    g2d.drawImage(tileGrid[i][r][c].getImage(), Dungeon.TILESIZE * (c), Dungeon.TILESIZE * r, null);
                 }
             }
         }

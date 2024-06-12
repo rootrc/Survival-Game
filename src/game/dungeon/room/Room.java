@@ -13,7 +13,6 @@ import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.RoomConnecter;
 import game.game_components.GameComponent;
-import game.game_components.GamePanel;
 
 public class Room extends GameComponent {
     private int id;
@@ -50,8 +49,8 @@ public class Room extends GameComponent {
 
     public void update() {
          if (!Game.DEBUG) {
-            int tx = GamePanel.screenWidth / 2 - (int) player.getX();
-            int ty = GamePanel.screenHeight / 2 - (int) player.getY();
+            int tx = Game.screenWidth / 2 - (int) player.getX();
+            int ty = Game.screenHeight / 2 - (int) player.getY();
             int dx = tx - getX();
             int dy = ty - getY();
             moveX(Math.min(dx / 16, 16));

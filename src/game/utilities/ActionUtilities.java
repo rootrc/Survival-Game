@@ -6,27 +6,27 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 
+import game.dungeon.Dungeon;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.inventory.Item;
 import game.game_components.ConfirmUI;
-import game.game_components.GamePanel;
 import game.game_components.PopupUI;
 
 public class ActionUtilities {
 
-    public static Action openPopupUI(GamePanel gamePanel, PopupUI popupUI) {
+    public static Action openPopupUI(PopupUI popupUI) {
         return new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                gamePanel.add(popupUI);
+                Dungeon.addUI(popupUI);
                 popupUI.enterPanel();
             }
         };
     }
 
-    public static Action closePopupUI(GamePanel gamePanel, PopupUI popupUI) {
+    public static Action closePopupUI(PopupUI popupUI) {
         return new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                gamePanel.remove(popupUI);
+                Dungeon.removeUI(popupUI);
             }
         };
     }
@@ -39,19 +39,19 @@ public class ActionUtilities {
         };
     }
 
-    public static Action createConfirmUI(GamePanel gamePanel, Action action, String actionCommand) {
+    public static Action createConfirmUI(Action action, String actionCommand) {
         return new AbstractAction() {
-            ConfirmUI confirmUI = new ConfirmUI(gamePanel, action, actionCommand);
+            ConfirmUI confirmUI = new ConfirmUI(action, actionCommand);
 
             public void actionPerformed(ActionEvent e) {
-                if (gamePanel.getComponent(0) instanceof ConfirmUI) {
-                    if (gamePanel.getComponent(0) != confirmUI) {
-                        ((ConfirmUI) gamePanel.getComponent(0)).exitPanel();
-                        gamePanel.add(confirmUI);
+                if (Dungeon.getUI(0) instanceof ConfirmUI) {
+                    if (Dungeon.getUI(0) != confirmUI) {
+                        ((ConfirmUI) Dungeon.getUI(0)).exitPanel();
+                        Dungeon.addUI(confirmUI);
                         confirmUI.enterPanel();
                     }
                 } else {
-                    gamePanel.add(confirmUI);
+                    Dungeon.addUI(confirmUI);
                     confirmUI.enterPanel();
                 }
 
@@ -59,11 +59,11 @@ public class ActionUtilities {
         };
     }
 
-    public static Action removeConfirmUI(GamePanel gamePanel) {
+    public static Action removeConfirmUI() {
         return new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                if (gamePanel.getComponent(0) instanceof ConfirmUI) {
-                    ((ConfirmUI) gamePanel.getComponent(0)).exitPanel();
+                if (Dungeon.getUI(0) instanceof ConfirmUI) {
+                    ((ConfirmUI) Dungeon.getUI(0)).exitPanel();
                 }
             }
         };

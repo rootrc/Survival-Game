@@ -9,30 +9,27 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import game.Game;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
 public abstract class PopupUI extends GameComponent {
     private BufferedImage image;
-    private Action removeRoomUI;
-    private Action removeConfirmUI;
     private int framesToEnter;
     private boolean moving;
 
-    public PopupUI(GamePanel gamePanel, int width, int height, int framesToEnter, String tileSet) {
+    public PopupUI(int width, int height, int framesToEnter, String tileSet) {
         super(width, height);
-        removeRoomUI = ActionUtilities.closePopupUI(gamePanel, this);
-        removeConfirmUI = ActionUtilities.removeConfirmUI(gamePanel);
         this.framesToEnter = framesToEnter;
-        setLocation((GamePanel.screenWidth - getWidth()) / 2, (GamePanel.screenHeight - getHeight()) / 2);
+        setLocation((Game.screenWidth - getWidth()) / 2, (Game.screenHeight - getHeight()) / 2);
         buildImage(tileSet);
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed Z"), "close");
         setEscapeExits(true);
     }
 
-    public PopupUI(GamePanel gamePanel, int width, int height, int framesToEnter) {
-        this(gamePanel, width, height, framesToEnter, "Notebook");
+    public PopupUI(int width, int height, int framesToEnter) {
+        this(width, height, framesToEnter, "Notebook");
     }
 
     public void drawComponent(Graphics2D g2d) {
@@ -43,11 +40,11 @@ public abstract class PopupUI extends GameComponent {
         if (!moving) {
             return;
         }
-        moveX((GamePanel.screenWidth + getWidth()) / (2 * framesToEnter));
-        if (getX() == (GamePanel.screenWidth - getWidth()) / 2) {
+        moveX((Game.screenWidth + getWidth()) / (2 * framesToEnter));
+        if (getX() == (Game.screenWidth - getWidth()) / 2) {
             moving = false;
         }
-        if (getX() == GamePanel.screenWidth) {
+        if (getX() == Game.screenWidth) {
             moving = false;
             remove();
         }
@@ -67,13 +64,13 @@ public abstract class PopupUI extends GameComponent {
     }
 
     protected void remove() {
-        removeRoomUI.actionPerformed(null);
+        ActionUtilities.closePopupUI(this);
     }
 
     public final Action close = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             exitPanel();
-            removeConfirmUI.actionPerformed(e);
+            ActionUtilities.removeConfirmUI();
         }
     };
 

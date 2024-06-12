@@ -12,14 +12,20 @@ import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.room_UI.RoomMenu;
 import game.dungeon.room_factory.RoomFactory;
+import game.game_components.GameComponent;
 import game.game_components.GamePanel;
 
 public class Dungeon extends GamePanel {
+    public final static int TILESIZE = 16;
+    public final static int maxScreenRow = 48;
+    public final static int maxScreenCol = 64;
+
     private Room room;
     private Inventory inventory;
     private Player player;
     private RoomFactory roomFactory;
-    
+
+    private static UILayer UI;
     private RoomMenu roomMenu;
 
     private final Action nextRoom = new AbstractAction() {
@@ -35,8 +41,8 @@ public class Dungeon extends GamePanel {
 
         public void actionPerformed(ActionEvent e) {
 
-            if (getComponent(0) != roomMenu && getComponent(1) != roomMenu) {
-                add(roomMenu);
+            if (getUI(0) != roomMenu && getUI(1) != roomMenu) {
+                addUI(roomMenu);
                 roomMenu.enterPanel();
             } else {
                 roomMenu.exitPanel();
@@ -52,26 +58,44 @@ public class Dungeon extends GamePanel {
 
     public Dungeon(Action changePanel) {
         super(changePanel);
-        inventory = new Inventory(this, 8);
+        inventory = new Inventory(8);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(this, player);
+        roomFactory = new RoomFactory(player);
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);
-        roomMenu = new RoomMenu(this, pause, restart, changePanel);
+        roomMenu = new RoomMenu(pause, restart, changePanel);
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
         getActionMap().put("pause", pause);
+
+        UI = new UILayer();
+        add(UI);
     }
 
     public void restart() {
         removeAll();
-        inventory = new Inventory(this, 8);
+        inventory = new Inventory(8);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(this, player);
+        roomFactory = new RoomFactory(player);
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);
+    }
+
+    public static GameComponent getUI(int n) {
+        if (UI.getComponentCount() == 0) {
+            return null;
+        }
+        return (GameComponent) UI.getComponent(n);
+    }
+
+    public static void addUI(GameComponent gameComponent) {
+        UI.add(gameComponent);
+    }
+
+    public static void removeUI(GameComponent gameComponent) {
+        UI.remove(gameComponent);
     }
 
 }

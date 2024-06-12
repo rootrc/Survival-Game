@@ -12,11 +12,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import game.dungeon.Dungeon;
+import game.Game;
 import game.dungeon.room.object.TreasureChest;
 import game.dungeon.room.room_UI.ChestUI;
 import game.game_components.GameComponent;
-import game.game_components.GamePanel;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
@@ -33,13 +32,12 @@ public class Inventory extends GameComponent {
     private ItemSlot[] inventorySlots;
 
     private ItemFactory itemFactory;
-    private Action openChest;
 
-    public Inventory(Dungeon dungeon, int size) {
+    public Inventory(int size) {
         super(left.getWidth() + middle.getWidth() * (size - 2) + right.getWidth(),
                 middle.getHeight() + tab.getHeight());
         itemFactory = new ItemFactory(this);
-        setLocation(GamePanel.screenWidth / 2 - getWidth() / 2, GamePanel.screenHeight - tab.getHeight());
+        setLocation(Game.screenWidth / 2 - getWidth() / 2, Game.screenHeight - tab.getHeight());
         this.size = size;
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
@@ -53,8 +51,6 @@ public class Inventory extends GameComponent {
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed TAB"), "toggle moveUp");
         getActionMap().put("toggle moveUp", moveUp);
         buildImage();
-
-        openChest = ActionUtilities.openPopupUI(dungeon, new ChestUI(dungeon, itemFactory.getItem(5, 0), flash));
     }
 
     private boolean move;
@@ -62,9 +58,9 @@ public class Inventory extends GameComponent {
 
     public void update() {
         if (isMouseWithinComponent(20, 50) || move) {
-            setY(Math.max(GamePanel.screenHeight - getHeight(), getY() - 8));
+            setY(Math.max(Game.screenHeight - getHeight(), getY() - 8));
         } else {
-            setY(Math.min(GamePanel.screenHeight - tab.getHeight(), getY() + 3));
+            setY(Math.min(Game.screenHeight - tab.getHeight(), getY() + 3));
         }
         timer = Math.max(timer - 1, -1);
         if (timer == 0) {
@@ -118,6 +114,6 @@ public class Inventory extends GameComponent {
     };
 
     public void openChest(TreasureChest treasureChest) {
-        openChest.actionPerformed(null);
+        ActionUtilities.openPopupUI(new ChestUI(itemFactory.getItem(5, 0), flash));
     }
 }

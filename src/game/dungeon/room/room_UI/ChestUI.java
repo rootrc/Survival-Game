@@ -10,7 +10,6 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.dungeon.inventory.Item;
-import game.game_components.GamePanel;
 import game.game_components.PopupUI;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
@@ -18,8 +17,8 @@ import game.utilities.ImageUtilities;
 public class ChestUI extends PopupUI {
 	private Action check;
 
-	public ChestUI(GamePanel gamePanel, Item item, Action flash) {
-		super(gamePanel, 320, 256, 8, "ChestFloor");
+	public ChestUI(Item item, Action flash) {
+		super(320, 256, 8, "ChestFloor");
 		GetItemButton getItemButton = new GetItemButton(this, flash, item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
 		add(getItemButton);
 		
@@ -29,7 +28,7 @@ public class ChestUI extends PopupUI {
 				getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "close");
 			}
 		}));
-		check = ActionUtilities.createConfirmUI(gamePanel, (Action) (new AbstractAction() {
+		check = ActionUtilities.createConfirmUI((Action) (new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				ChestUI.super.exitPanel();
 			}

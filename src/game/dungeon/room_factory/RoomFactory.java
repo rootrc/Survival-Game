@@ -14,7 +14,6 @@ import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
 import game.game_components.Factory;
-import game.game_components.GamePanel;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
@@ -23,12 +22,10 @@ public class RoomFactory extends Factory<Room> {
     private RoomObjectManagerFactory objectManagerFactory;
     private DungeonData dungeonData;
     private DungeonLayoutGenerator dungeonGenerator;
-    private GamePanel gamePanel;
     private Player player;
     private LightingEngine lighting;
 
-    public RoomFactory(GamePanel gamePanel, Player player) {
-        this.gamePanel = gamePanel;
+    public RoomFactory(Player player) {
         this.player = player;
         dungeonData = new DungeonData();
         lighting = new LightingEngine(player);
@@ -45,7 +42,7 @@ public class RoomFactory extends Factory<Room> {
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         player.set(300, 100, collision);
         putRoom(id, new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(gamePanel, file)));
+                objectManagerFactory.getRoomObjectManager(file)));
         setKeyBinds(rooms.get(id));
         return rooms.get(id);
     }
@@ -74,9 +71,9 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private void setTransition(Room previousRoom, Room nextRoom) {
-        // double x = GamePanel.screenWidth / 2 -
+        // double x = Game.screenWidth / 2 -
         // previousRoom.getConnectedLadder(player.getLadder()).getX();
-        // double y = GamePanel.screenHeight / 2 -
+        // double y = Game.screenHeight / 2 -
         // previousRoom.getConnectedLadder(player.getLadder()).getY();
         nextRoom.setLocation((int) (previousRoom.getX()), (int) (previousRoom.getY()));
     }
@@ -85,7 +82,7 @@ public class RoomFactory extends Factory<Room> {
         TileGrid tileGrid = tileFactory.createGrid(file);
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(gamePanel, file));
+                objectManagerFactory.getRoomObjectManager(file));
         setKeyBinds(room);
         return room;
     }

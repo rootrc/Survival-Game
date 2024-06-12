@@ -14,7 +14,6 @@ import java.util.HashMap;
 import game.Game;
 import game.dungeon.room.entity.Entity;
 import game.game_components.GameComponent;
-import game.game_components.GamePanel;
 
 public class LightingEngine extends GameComponent {
     BufferedImage image;
@@ -32,7 +31,7 @@ public class LightingEngine extends GameComponent {
     private Entity entity;
 
     public LightingEngine(Entity entity) {
-        super(4 * GamePanel.screenWidth, 4 * GamePanel.screenHeight);
+        super(4 * Game.screenWidth, 4 * Game.screenHeight);
         this.entity = entity;
     }
 
@@ -70,8 +69,8 @@ public class LightingEngine extends GameComponent {
         image = getDarknessFilter((int) (entity.getLightStrength() * (1 + randomFactor / 600)));
         int x = (int) entity.getX() + entity.getWidth() / 2 - image.getWidth() / 2;
         int y = (int) entity.getY() + entity.getHeight() / 2 - image.getHeight() / 2;
-        a = new Area(new Rectangle(-GamePanel.screenWidth / 2 - buffer, -GamePanel.screenHeight / 2 - buffer,
-                GamePanel.screenWidth + 2 * buffer, GamePanel.screenHeight + 2 * buffer));
+        a = new Area(new Rectangle(-Game.screenWidth / 2 - buffer, -Game.screenHeight / 2 - buffer,
+                Game.screenWidth + 2 * buffer, Game.screenHeight + 2 * buffer));
         a.subtract(new Area(new Rectangle(x, y, image.getWidth(), image.getHeight())));
         g2d.setColor(Color.black);
         g2d.fill(a);
