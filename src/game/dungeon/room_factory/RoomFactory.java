@@ -40,7 +40,7 @@ public class RoomFactory extends Factory<Room> {
         RoomFileData file = new RoomFileData(id);
         TileGrid tileGrid = tileFactory.createGrid(file);
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
-        player.set(100, 300, collision);
+        player.set(300, 100, collision);
         putRoom(id, new Room(id, player, lighting, tileGrid, collision,
                 objectManagerFactory.getRoomObjectManager(file)));
         setKeyBinds(rooms.get(id));

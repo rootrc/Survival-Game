@@ -37,9 +37,9 @@ public class Dungeon extends GamePanel {
 
             if (getComponent(0) != roomMenu && getComponent(1) != roomMenu) {
                 add(roomMenu);
-                roomMenu.enter();
+                roomMenu.enterPanel();
             } else {
-                roomMenu.exit();
+                roomMenu.exitPanel();
             }
         }
     };
@@ -52,7 +52,7 @@ public class Dungeon extends GamePanel {
 
     public Dungeon(Action changePanel) {
         super(changePanel);
-        inventory = new Inventory(8);
+        inventory = new Inventory(this, 8);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player);
         room = roomFactory.getStartingRoom(1);
@@ -66,7 +66,9 @@ public class Dungeon extends GamePanel {
 
     public void restart() {
         removeAll();
-        inventory = new Inventory(8);
+        inventory = new Inventory(this, 8);
+        player = new Player(nextRoom, inventory);
+        roomFactory = new RoomFactory(player);
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);

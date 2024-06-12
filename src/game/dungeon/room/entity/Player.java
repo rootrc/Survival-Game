@@ -16,8 +16,7 @@ import game.game_components.GamePanel;
 import game.utilities.ImageUtilities;
 
 public class Player extends Entity {
-    // private Inventory inventory;
-    private Ladder ladder;
+    private Inventory inventory;
     private RoomObject interactable;
 
     private Action nextRoom;
@@ -27,16 +26,15 @@ public class Player extends Entity {
         super(ImageUtilities.getImage("entities", "player"),
                 new CollisionBox(0, 0, 1, 1),
                 new CollisionBox(-0.25, -0.25, 1.5, 1.5), GamePanel.TILESIZE / 4, null);
-                this.nextRoom = nextRoom;
-                // this.inventory = inventory;
-                getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
-                getActionMap().put("interact", interact);
+        this.nextRoom = nextRoom;
+        this.inventory = inventory;
+        getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
+        getActionMap().put("interact", interact);
     }
 
     public void set(double x, double y, CollisionChecker collision) {
         setLocation(x, y);
         this.collision = collision;
-        ladder = null;
     }
 
     HashSet<String> movementKeys = new HashSet<>();
@@ -56,7 +54,7 @@ public class Player extends Entity {
     private static final double a = Math.sqrt(2) / 2;
     private static final double acc = 10.0;
     private static final double deacc = 4.0;
-    
+
     public void update() {
         interactionCooldown++;
         move();
@@ -137,10 +135,10 @@ public class Player extends Entity {
     }
 
     public Ladder getLadder() {
-        return ladder;
+        return (Ladder) interactable;
     }
 
-    public void setLadder(Ladder ladder) {
-        this.ladder = ladder;
+    public Inventory getInventory() {
+        return inventory;
     }
 }

@@ -9,6 +9,7 @@ import game.utilities.ImageUtilities;
 
 public class TreasureChest extends RoomObject {
     private int id;
+    private boolean isClosed;
     private BufferedImage chestClosed;
 
     public TreasureChest(int x, int y, CollisionBox hitbox, CollisionBox interactbox, int id) {
@@ -21,9 +22,13 @@ public class TreasureChest extends RoomObject {
     }
 
     public void interaction(Player player) {
+        if (isClosed) {
+            return;
+        }
+        isClosed = true;
         setImage(chestClosed);
+        player.getInventory().chestOpened();
         // TODO
-        // Add loot tables and giving player items
         id = id - 0;
     }
 }

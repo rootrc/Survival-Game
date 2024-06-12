@@ -3,10 +3,12 @@ package game.dungeon.inventory;
 import game.game_components.Factory;
 
 public class ItemFactory extends Factory<Item> {
+    private Inventory inventory;
     private ItemFileData data;
     // private final Item items[][] = new Item[tileN][tileM];
 
-    public ItemFactory() {
+    public ItemFactory(Inventory inventory) {
+        this.inventory = inventory;
         data = new ItemFileData();
         for (int r = 0; r < data.N; r++) {
             for (int c = 0; c < data.M; c++) {
@@ -16,6 +18,6 @@ public class ItemFactory extends Factory<Item> {
     }
 
     public Item getItem(int r, int c) {
-        return new Item(r, c, data.getName(r, c), data.getDescription(r, c));
+        return new Item(inventory, r, c, data.getName(r, c), data.getDescription(r, c));
     }
 }

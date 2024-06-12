@@ -23,7 +23,6 @@ public class Ladder extends RoomObject {
     }
 
     public void interaction(Player player) {
-        player.setLadder(this);
     }
 
     public double getPlayerPlacementX() {
