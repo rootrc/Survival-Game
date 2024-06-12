@@ -16,6 +16,6 @@ public class ItemSlot extends GameButton {
         setAction(item.useItem);
         setIcon(item.getImageIcon());
         setRolloverIcon(item.getRolloverIcon());
-        setToolTipText("<html>" + item.getName() + "<br>" + item.getDescription() + "</html>");
+        setToolTipText(item.getToolTip());
     }
 }

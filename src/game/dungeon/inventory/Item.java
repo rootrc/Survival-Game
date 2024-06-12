@@ -49,4 +49,8 @@ public class Item {
     public String getDescription() {
         return description;
     }
+
+    public String getToolTip() {
+        return new StringBuilder("<html>").append(name).append("<br>").append(description).append("</html>").toString();
+    }
 }

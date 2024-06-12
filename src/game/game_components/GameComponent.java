@@ -12,19 +12,13 @@ import java.awt.RenderingHints;
 import javax.swing.JComponent;
 
 public abstract class GameComponent extends JComponent {
-    private boolean update;
-
     public GameComponent(int width, int height) {
         setPreferredSize(new Dimension(width, height));
         setSize(getPreferredSize());
         setLayout(null);
-        unpause();
     }
 
     public void updateComponent() {
-        if (!update) {
-            return;
-        }
         updateChildren();
         update();
     }
@@ -57,9 +51,6 @@ public abstract class GameComponent extends JComponent {
     }
 
     public boolean isMouseWithinComponent(int widthAllowance, int heightAllowance) {
-        if (!update) {
-            return false;
-        }
         Point mousePos = MouseInfo.getPointerInfo().getLocation();
         Rectangle bounds = getBounds();
         bounds.setLocation(getLocationOnScreen());
@@ -105,13 +96,5 @@ public abstract class GameComponent extends JComponent {
 
     public void setLocation(double x, double y) {
         setLocation((int) x, (int) y);
-    }
-
-    public void pause() {
-        update = false;
-    }
-
-    public void unpause() {
-        update = true;
     }
 }

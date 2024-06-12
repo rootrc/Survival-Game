@@ -13,6 +13,7 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.dungeon.Dungeon;
+import game.dungeon.room.object.TreasureChest;
 import game.dungeon.room.room_UI.ChestUI;
 import game.game_components.GameComponent;
 import game.game_components.GamePanel;
@@ -53,18 +54,11 @@ public class Inventory extends GameComponent {
         getActionMap().put("toggle moveUp", moveUp);
         buildImage();
 
-        openChest = ActionUtilities.openPopupUI(dungeon, new ChestUI(dungeon,itemFactory.getItem(5, 0)));
+        openChest = ActionUtilities.openPopupUI(dungeon, new ChestUI(dungeon, itemFactory.getItem(5, 0), flash));
     }
 
-    public void addItem(Item item) {
-        if (occupiedSlots == size) {
-            // TODO
-            throw new UnsupportedOperationException("Feature Incomplete");
-        }
-        inventorySlots[occupiedSlots].setItem(item);
-        getActionMap().put(occupiedSlots, inventorySlots[occupiedSlots].getAction());
-        occupiedSlots++;
-    }
+    private boolean move;
+    private int timer;
 
     public void update() {
         if (isMouseWithinComponent(20, 50) || move) {
@@ -72,7 +66,22 @@ public class Inventory extends GameComponent {
         } else {
             setY(Math.min(GamePanel.screenHeight - tab.getHeight(), getY() + 3));
         }
+        timer = Math.max(timer - 1, -1);
+        if (timer == 0) {
+            move = false;
+        }
     }
+
+    private final static int flashTime = 80;
+
+    private final Action flash = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (!move) {
+                move = true;
+                timer = flashTime;
+            }
+        }
+    };
 
     private void buildImage() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -88,10 +97,18 @@ public class Inventory extends GameComponent {
         g2d.dispose();
     }
 
-    private boolean move;
-
     public void drawComponent(Graphics2D g2d) {
         g2d.drawImage(image, 0, 0, null);
+    }
+
+    public void addItem(Item item) {
+        if (occupiedSlots == size) {
+            // TODO
+            throw new UnsupportedOperationException("Feature Incomplete");
+        }
+        inventorySlots[occupiedSlots].setItem(item);
+        getActionMap().put(occupiedSlots, inventorySlots[occupiedSlots].getAction());
+        occupiedSlots++;
     }
 
     private final Action moveUp = new AbstractAction() {
@@ -100,7 +117,7 @@ public class Inventory extends GameComponent {
         }
     };
 
-    public void chestOpened() {
+    public void openChest(TreasureChest treasureChest) {
         openChest.actionPerformed(null);
     }
 }

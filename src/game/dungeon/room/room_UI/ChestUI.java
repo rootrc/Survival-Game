@@ -7,10 +7,10 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.text.Utilities;
+import javax.swing.KeyStroke;
 
-import game.dungeon.Dungeon;
 import game.dungeon.inventory.Item;
+import game.game_components.GamePanel;
 import game.game_components.PopupUI;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
@@ -18,14 +18,28 @@ import game.utilities.ImageUtilities;
 public class ChestUI extends PopupUI {
 	private Action check;
 
-	public ChestUI(Dungeon dungeon, Item item) {
-		super(dungeon, 320, 256, 8, "ChestFloor");
-		add(new GetItemButton(this, item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64)));
-		check = ActionUtilities.createConfirmUI(dungeon, (Action) (new AbstractAction() {
+	public ChestUI(GamePanel gamePanel, Item item, Action flash) {
+		super(gamePanel, 320, 256, 8, "ChestFloor");
+		GetItemButton getItemButton = new GetItemButton(this, flash, item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
+		add(getItemButton);
+		
+		getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "getAll");
+		getActionMap().put("getAll", ActionUtilities.combineActions(getItemButton.getAction(), new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "close");
+			}
+		}));
+		check = ActionUtilities.createConfirmUI(gamePanel, (Action) (new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				ChestUI.super.exitPanel();
 			}
 		}), "areYouSure");
+	}
+
+	@Override 
+	public void update() {
+		super.update();
+		// System.out.println("hi");	
 	}
 
 	@Override

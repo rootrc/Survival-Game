@@ -19,7 +19,7 @@ public class Dungeon extends GamePanel {
     private Inventory inventory;
     private Player player;
     private RoomFactory roomFactory;
-
+    
     private RoomMenu roomMenu;
 
     private final Action nextRoom = new AbstractAction() {
@@ -54,7 +54,7 @@ public class Dungeon extends GamePanel {
         super(changePanel);
         inventory = new Inventory(this, 8);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(player);
+        roomFactory = new RoomFactory(this, player);
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);
@@ -68,7 +68,7 @@ public class Dungeon extends GamePanel {
         removeAll();
         inventory = new Inventory(this, 8);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(player);
+        roomFactory = new RoomFactory(this, player);
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);

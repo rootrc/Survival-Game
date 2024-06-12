@@ -5,6 +5,7 @@ import game.dungeon.room.object_utilities.RoomObjectFactory;
 import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.object_utilities.RoomObjectFactory.RoomObjectData;
 import game.game_components.Factory;
+import game.game_components.GamePanel;
 
 class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
     Player player;
@@ -13,9 +14,9 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
         this.player = player;
     }
 
-    RoomObjectManager getRoomObjectManager(RoomFileData file) {
+    RoomObjectManager getRoomObjectManager(GamePanel gamePanel, RoomFileData file) {
         RoomObjectManager objectManager = new RoomObjectManager(player);
-        RoomObjectFactory RoomObjectFactory = new RoomObjectFactory();
+        RoomObjectFactory RoomObjectFactory = new RoomObjectFactory(gamePanel);
         for (RoomObjectData data : file.getObjects()) {
             objectManager.add(RoomObjectFactory.getRoomObject(data), -1);
         }

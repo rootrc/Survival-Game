@@ -7,7 +7,11 @@ import game.game_components.GamePanel;
 import game.utilities.ImageUtilities;
 
 public class RoomObjectFactory extends Factory<RoomObject> {
+    private GamePanel gamePanel;
 
+    public RoomObjectFactory(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
+    }
     public RoomObject getRoomObject(RoomObjectData data) {
         if (data.id == 0 || data.id == 1) {
             return getLadder(data);
@@ -33,23 +37,23 @@ public class RoomObjectFactory extends Factory<RoomObject> {
 
     private TreasureChest getTreasureChest(RoomObjectData data) {
         if (data.id == 10) {
-            return new TreasureChest(data.r, data.c,
+            return new TreasureChest(gamePanel, data.r, data.c,
                     new CollisionBox(0.375, 1, 1.25, 0.8125),
                     new CollisionBox(0.375, 1.5, 1.25, 1.0625), 0);
         } else if (data.id == 11) {
-            return new TreasureChest(data.r, data.c,
+            return new TreasureChest(gamePanel, data.r, data.c,
                     new CollisionBox(0.3125, 0.8125, 1.375, 1),
                     new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 1);
         } else if (data.id == 12) {
-            return new TreasureChest(data.r, data.c,
+            return new TreasureChest(gamePanel, data.r, data.c,
                     new CollisionBox(0.3125, 0.8125, 1.375, 1),
                     new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 2);
         } else if (data.id == 13) {
-            return new TreasureChest(data.r, data.c,
+            return new TreasureChest(gamePanel, data.r, data.c,
                     new CollisionBox(0.125, 0.6875, 1.75, 1.125),
                     new CollisionBox(0.125, 1.1875, 1.75, 1.375), 3);
         } else if (data.id == 14) {
-            return new TreasureChest(data.r, data.c,
+            return new TreasureChest(gamePanel, data.r, data.c,
                     new CollisionBox(0.3125, 0.8125, 1.375, 1),
                     new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 4);
         }

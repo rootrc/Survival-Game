@@ -14,6 +14,7 @@ import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
 import game.game_components.Factory;
+import game.game_components.GamePanel;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
@@ -22,10 +23,12 @@ public class RoomFactory extends Factory<Room> {
     private RoomObjectManagerFactory objectManagerFactory;
     private DungeonData dungeonData;
     private DungeonLayoutGenerator dungeonGenerator;
+    private GamePanel gamePanel;
     private Player player;
     private LightingEngine lighting;
 
-    public RoomFactory(Player player) {
+    public RoomFactory(GamePanel gamePanel, Player player) {
+        this.gamePanel = gamePanel;
         this.player = player;
         dungeonData = new DungeonData();
         lighting = new LightingEngine(player);
@@ -42,7 +45,7 @@ public class RoomFactory extends Factory<Room> {
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         player.set(300, 100, collision);
         putRoom(id, new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file)));
+                objectManagerFactory.getRoomObjectManager(gamePanel, file)));
         setKeyBinds(rooms.get(id));
         return rooms.get(id);
     }
@@ -82,7 +85,7 @@ public class RoomFactory extends Factory<Room> {
         TileGrid tileGrid = tileFactory.createGrid(file);
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file));
+                objectManagerFactory.getRoomObjectManager(gamePanel, file));
         setKeyBinds(room);
         return room;
     }
