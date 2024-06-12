@@ -114,6 +114,6 @@ public class Inventory extends GameComponent {
     };
 
     public void openChest(TreasureChest treasureChest) {
-        ActionUtilities.openPopupUI(new ChestUI(itemFactory.getItem(5, 0), flash));
+        ActionUtilities.openPopupUI(new ChestUI(itemFactory.getItem(5, 0), flash)).actionPerformed(null);
     }
 }

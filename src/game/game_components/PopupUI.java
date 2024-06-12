@@ -64,7 +64,7 @@ public abstract class PopupUI extends GameComponent {
     }
 
     protected void remove() {
-        ActionUtilities.closePopupUI(this);
+        ActionUtilities.closePopupUI(this).actionPerformed(null);;
     }
 
     public final Action close = new AbstractAction() {
