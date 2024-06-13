@@ -122,8 +122,31 @@ public class Player extends Entity {
         }
     };
 
-    public void collide(RoomObject o) {
-        // TODO
+    public void collide(RoomObject object) {
+        CollisionBox h1 = getHitBox();
+        CollisionBox h2 = object.getHitBox();
+        if (h1.getMinX() + getX() < h2.getMinX() + object.getX()
+                && h1.getMaxX() + getX() - h2.getMinX() - object.getX() < speedX
+                && (speedX > 0 || movementKeys.contains("d"))) {
+            setX(h2.getMinX() + object.getX() - h1.getMaxX());
+            speedX = 0;
+        }
+        if (h1.getMinX() + getX() - h2.getMaxX() - object.getX() > speedX
+                && h2.getMaxX() + object.getX() < h1.getMaxX() + getX() && (speedX < 0 || movementKeys.contains("a"))) {
+            setX(h2.getMaxX() + object.getX() - h1.getMinX());
+            speedX = 0;
+        }
+        if (h1.getMinY() + getY() < h2.getMinY() + object.getY()
+                && h1.getMaxY() + getY() - h2.getMinY() - object.getY() < speedY
+                && (speedY > 0 || movementKeys.contains("s"))) {
+            setY(h2.getMinY() + object.getY() - h1.getMaxY());
+            speedY = 0;
+        }
+        if (h1.getMinY() + getY() - h2.getMaxY() - object.getY() > speedY
+                && h2.getMaxY() + object.getY() < h1.getMaxY() + getY() && (speedY < 0 || movementKeys.contains("w"))) {
+            setY(h2.getMaxY() + object.getY() - h1.getMinY());
+            speedY = 0;
+        }
     }
 
     public void interaction(Player player) {

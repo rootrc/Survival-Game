@@ -47,8 +47,9 @@ public abstract class RoomObject extends GameComponent {
         if (h1 == null || h2 == null) {
             return false;
         }
-        if (h1.getMinX() +getX() < h2.getMaxX() + object.getX() && h1.getMaxX() +getX() > h2.getMinX() + object.getX()
-                && h1.getMinY() + getY() < h2.getMaxY() + object.getY() && h1.getMaxY() + getY() > h2.getMinY() + object.getY()) {
+        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX() && h1.getMaxX() + getX() > h2.getMinX() + object.getX()
+                && h1.getMinY() + getY() < h2.getMaxY() + object.getY()
+                && h1.getMaxY() + getY() > h2.getMinY() + object.getY()) {
             return true;
         }
         return false;
@@ -60,8 +61,9 @@ public abstract class RoomObject extends GameComponent {
         if (h1 == null || h2 == null) {
             return false;
         }
-        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX() && h1.getMaxX() +getX() > h2.getMinX() + object.getX()
-                && h1.getMinY() + getY() < h2.getMaxY() + object.getY() && h1.getMaxY() + getY() > h2.getMinY() + object.getY()) {
+        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX() && h1.getMaxX() + getX() > h2.getMinX() + object.getX()
+                && h1.getMinY() + getY() < h2.getMaxY() + object.getY()
+                && h1.getMaxY() + getY() > h2.getMinY() + object.getY()) {
             return true;
         }
         return false;
