@@ -84,7 +84,7 @@ public class Dungeon extends GamePanel {
     }
 
     public static GameComponent getUI(int n) {
-        if (UI.getComponentCount() == 0) {
+        if (UI.getComponentCount() <= n) {
             return null;
         }
         return (GameComponent) UI.getComponent(n);

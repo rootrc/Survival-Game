@@ -36,22 +36,42 @@ public abstract class PopupUI extends GameComponent {
         g2d.drawImage(image, 0, 0, null);
     }
 
+    private int timer;
+
     public void update() {
         if (!moving) {
             return;
         }
-        moveX((Game.screenWidth + getWidth()) / (2 * framesToEnter));
+        if (getX() < (Game.screenWidth - getWidth()) / 2) {
+            setX(-getWidth() + (Game.screenWidth + getWidth()) / 2 * easeOutQuad((double) timer / framesToEnter));
+            timer++;
+        } else {
+            setX((Game.screenWidth - getWidth()) / 2
+                    + (Game.screenWidth + getWidth()) / 2 * easeInQuad((double) timer / framesToEnter));
+            timer++;
+        }
         if (getX() == (Game.screenWidth - getWidth()) / 2) {
             moving = false;
+            timer = 1;
         }
         if (getX() == Game.screenWidth) {
             moving = false;
+            timer = 1;
             remove();
         }
     }
 
+    private double easeOutQuad(double x) {
+        return 1 - (1 - x) * (1 - x);
+    }
+
+    private double easeInQuad(double x) {
+        return x * x;
+    }
+
     public void buildImage(String tileSet) {
-        image = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(), getWidth(), getHeight());
+        image = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(),
+                getWidth(), getHeight());
     }
 
     public void enterPanel() {
@@ -64,7 +84,8 @@ public abstract class PopupUI extends GameComponent {
     }
 
     protected void remove() {
-        ActionUtilities.closePopupUI(this).actionPerformed(null);;
+        ActionUtilities.closePopupUI(this).actionPerformed(null);
+        ;
     }
 
     public final Action close = new AbstractAction() {
