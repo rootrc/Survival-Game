@@ -1,5 +1,6 @@
 package game.utilities;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -41,7 +42,7 @@ public class ActionUtilities {
 
     public static Action createConfirmUI(Action action, String actionCommand) {
         return new AbstractAction() {
-            ConfirmUI confirmUI = new ConfirmUI(action, actionCommand);
+            private ConfirmUI confirmUI = new ConfirmUI(action, actionCommand);
 
             public void actionPerformed(ActionEvent e) {
                 if (Dungeon.getUI(0) instanceof ConfirmUI) {
@@ -71,7 +72,8 @@ public class ActionUtilities {
 
     public static Action addItem(Inventory inventory, Item item) {
         return new AbstractAction() {
-            boolean added = false;
+            private boolean added = false;
+
             public void actionPerformed(ActionEvent e) {
                 if (added) {
                     return;

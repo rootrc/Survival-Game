@@ -13,19 +13,19 @@ public class ItemFileData extends FileOpener {
         super("item_data/type");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                type[i][j] = nextStr();
+                type[i][j] = next();
             }
         }
         openFile("item_data/names");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                names[i][j] = nextStr();
+                names[i][j] = next();
             }
         }
         openFile("item_data/descriptions");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                description[i][j] = nextStr();
+                description[i][j] = next();
             }
         }
         closeFile();

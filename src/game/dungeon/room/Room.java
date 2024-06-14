@@ -83,7 +83,7 @@ public class Room extends GameComponent {
     }
 
     public RoomObject getRoomObject(int idx) {
-        return (RoomObject) objectManager.getComponents()[idx];
+        return (RoomObject) objectManager.getComponent(idx);
     }
 
     public void addLadderConnection(Ladder ladder, int id) {

@@ -252,7 +252,7 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     private static final HashSet<Integer> layer2 = new HashSet<>(Arrays.asList(1, 2, 4, 5, 6));
-    private final static int[] smallRocks = { 6, 24, 42 };
+    private static final int[] smallRocks = { 6, 24, 42 };
 
     private void layer2(int[][] arr, int[][] arr2, int r, int c) {
         if (arr2[r][c] != -1) {

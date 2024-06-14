@@ -13,19 +13,17 @@ import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
 public class Menu extends GamePanel {
-    private final Action exit = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            System.exit(0);
-        }
-    };
-
     public Menu(Action changePanel) {
         super(changePanel);
         add(new UIButton(changePanel, "dungeon", new Rectangle(Game.screenWidth / 2 - 192, 380, 384, 96),
                 ImageUtilities.getImage("UI", "StartButton")));
         add(new UIButton(changePanel, "options", new Rectangle(Game.screenWidth / 2 - 192, 500, 384, 96),
                 ImageUtilities.getImage("UI", "OptionsButton")));
-        add(new UIButton(ActionUtilities.createConfirmUI(exit, "exit"), "exit", new Rectangle(Game.screenWidth / 2 - 192, 620, 384, 96),
+        add(new UIButton(ActionUtilities.createConfirmUI(new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        }, "exit"), "exit", new Rectangle(Game.screenWidth / 2 - 192, 620, 384, 96),
                 ImageUtilities.getImage("UI", "ExitButton")));
     }
 }

@@ -18,14 +18,13 @@ import game.utilities.ImageUtilities;
 public class Player extends Entity {
     private Inventory inventory;
     private RoomObject interactable;
-
     private Action nextRoom;
 
     public Player(Action nextRoom, Inventory inventory) {
         // TEMP
         super(ImageUtilities.getImage("entities", "player"),
                 new CollisionBox(0, 0, 1, 1),
-                new CollisionBox(-0.25, -0.25, 1.5, 1.5), Dungeon.TILESIZE / 4, null);
+                new CollisionBox(-0.25, -0.25, 1.5, 1.5), Dungeon.TILESIZE / 4, null, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
@@ -51,10 +50,6 @@ public class Player extends Entity {
         }
     };
 
-    private static final double a = Math.sqrt(2) / 2;
-    private static final double acc = 10.0;
-    private static final double deacc = 4.0;
-
     public void update() {
         interactionCooldown++;
         move();
@@ -63,46 +58,46 @@ public class Player extends Entity {
     private void move() {
         double ax = 0;
         double ay = 0;
-        if (movementKeys.contains("w") && Math.abs(speedY) < maxSpeed) {
-            ay -= maxSpeed / acc;
+        if (movementKeys.contains("w") && Math.abs(getSpeedY()) < getMaxSpeed()) {
+            ay -= getAcc();
         }
-        if (movementKeys.contains("a") && Math.abs(speedX) < maxSpeed) {
-            ax -= maxSpeed / acc;
+        if (movementKeys.contains("a") && Math.abs(getSpeedX()) < getMaxSpeed()) {
+            ax -= getAcc();
         }
-        if (movementKeys.contains("s") && Math.abs(speedY) < maxSpeed) {
-            ay += maxSpeed / acc;
+        if (movementKeys.contains("s") && Math.abs(getSpeedY()) < getMaxSpeed()) {
+            ay += getAcc();
         }
-        if (movementKeys.contains("d") && Math.abs(speedX) < maxSpeed) {
-            ax += maxSpeed / acc;
+        if (movementKeys.contains("d") && Math.abs(getSpeedX()) < getMaxSpeed()) {
+            ax += getAcc();
         }
         if (ax == 0) {
-            if (speedX > 0) {
-                speedX = Math.max(speedX - maxSpeed / deacc, 0);
-            } else if (speedX < 0) {
-                speedX = Math.min(speedX + maxSpeed / deacc, 0);
+            if (getSpeedX() > 0) {
+                setSpeedX(Math.max(getSpeedX() - getDeacc(), 0));
+            } else if (getSpeedX() < 0) {
+                setSpeedX(Math.min(getSpeedX() + getDeacc(), 0));
             }
         }
         if (ay == 0) {
-            if (speedY > 0) {
-                speedY = Math.max(speedY - maxSpeed / deacc, 0);
-            } else if (speedY < 0) {
-                speedY = Math.min(speedY + maxSpeed / deacc, 0);
+            if (getSpeedY() > 0) {
+                setSpeedY(Math.max(getSpeedY() - getDeacc(), 0));
+            } else if (getSpeedY() < 0) {
+                setSpeedY(Math.min(getSpeedY() + getDeacc(), 0));
             }
         }
-        speedX += ax;
-        speedY += ay;
-        if (collision.checkTile(this, speedX, 0)) {
+        addSpeedX(ax);
+        addSpeedY(ay);
+        if (collision.checkTile(this, getSpeedX(), 0)) {
             if (ax != 0 && ay != 0) {
-                moveX(speedX * a);
+                moveX(getSpeedX() * a);
             } else {
-                moveX(speedX);
+                moveX(getSpeedX());
             }
         }
-        if (collision.checkTile(this, 0, speedY)) {
+        if (collision.checkTile(this, 0, getSpeedY())) {
             if (ax != 0 && ay != 0) {
-                moveY(speedY * a);
+                moveY(getSpeedY() * a);
             } else {
-                moveY(speedY);
+                moveY(getSpeedY());
             }
         }
     }
@@ -126,26 +121,26 @@ public class Player extends Entity {
         CollisionBox h1 = getHitBox();
         CollisionBox h2 = object.getHitBox();
         if (h1.getMinX() + getX() < h2.getMinX() + object.getX()
-                && h1.getMaxX() + getX() - h2.getMinX() - object.getX() < speedX
-                && (speedX > 0 || movementKeys.contains("d"))) {
+                && h1.getMaxX() + getX() - h2.getMinX() - object.getX() < getSpeedX()
+                && (getSpeedX() > 0 || movementKeys.contains("d"))) {
             setX(h2.getMinX() + object.getX() - h1.getMaxX());
-            speedX = 0;
+            setSpeedX(0);
         }
-        if (h1.getMinX() + getX() - h2.getMaxX() - object.getX() > speedX
-                && h2.getMaxX() + object.getX() < h1.getMaxX() + getX() && (speedX < 0 || movementKeys.contains("a"))) {
+        if (h1.getMinX() + getX() - h2.getMaxX() - object.getX() > getSpeedX()
+                && h2.getMaxX() + object.getX() < h1.getMaxX() + getX() && (getSpeedX() < 0 || movementKeys.contains("a"))) {
             setX(h2.getMaxX() + object.getX() - h1.getMinX());
-            speedX = 0;
+            setSpeedX(0);
         }
         if (h1.getMinY() + getY() < h2.getMinY() + object.getY()
-                && h1.getMaxY() + getY() - h2.getMinY() - object.getY() < speedY
-                && (speedY > 0 || movementKeys.contains("s"))) {
+                && h1.getMaxY() + getY() - h2.getMinY() - object.getY() < getSpeedY()
+                && (getSpeedY() > 0 || movementKeys.contains("s"))) {
             setY(h2.getMinY() + object.getY() - h1.getMaxY());
-            speedY = 0;
+            setSpeedY(0);
         }
-        if (h1.getMinY() + getY() - h2.getMaxY() - object.getY() > speedY
-                && h2.getMaxY() + object.getY() < h1.getMaxY() + getY() && (speedY < 0 || movementKeys.contains("w"))) {
+        if (h1.getMinY() + getY() - h2.getMaxY() - object.getY() > getSpeedY()
+                && h2.getMaxY() + object.getY() < h1.getMaxY() + getY() && (getSpeedY() < 0 || movementKeys.contains("w"))) {
             setY(h2.getMaxY() + object.getY() - h1.getMinY());
-            speedY = 0;
+            setSpeedY(0);
         }
     }
 

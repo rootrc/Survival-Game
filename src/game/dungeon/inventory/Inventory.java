@@ -22,25 +22,28 @@ import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
 public class Inventory extends GameComponent {
-    private final static BufferedImage tab = ImageUtilities.getImage("item_images", "InventoryTab");
-    private final static BufferedImage left = ImageUtilities.getImage("item_images", "InventoryLeft");
-    private final static BufferedImage middle = ImageUtilities.getImage("item_images", "InventoryMiddle");
-    private final static BufferedImage right = ImageUtilities.getImage("item_images", "InventoryRight");
-    private final static int itemMargin = 8;
+    private static final BufferedImage tab = ImageUtilities.getImage("item_images", "InventoryTab");
+    private static final BufferedImage left = ImageUtilities.getImage("item_images", "InventoryLeft");
+    private static final BufferedImage middle = ImageUtilities.getImage("item_images", "InventoryMiddle");
+    private static final BufferedImage right = ImageUtilities.getImage("item_images", "InventoryRight");
+    private static final int itemMargin = 8;
+    private static final int flashTime = 80;
+    
+    private ItemFactory itemFactory;
     private BufferedImage image;
-
     private int size;
-    private int occupiedSlots = 1;
+    private int occupiedSlots;
     private ItemSlot[] inventorySlots;
 
-    private ItemFactory itemFactory;
+    private boolean move;
+    private int timer;
 
     public Inventory(int size) {
         super(left.getWidth() + middle.getWidth() * (size - 2) + right.getWidth(),
                 middle.getHeight() + tab.getHeight());
+                this.size = size;
         itemFactory = new ItemFactory(this);
         setLocation(Game.screenWidth / 2 - getWidth() / 2, Game.screenHeight - tab.getHeight());
-        this.size = size;
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
             inventorySlots[i] = new ItemSlot(i,
@@ -48,13 +51,11 @@ public class Inventory extends GameComponent {
                             middle.getHeight() - 2 * itemMargin, middle.getHeight() - 2 * itemMargin));
             add(inventorySlots[i]);
         }
+        occupiedSlots = 1;
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed TAB"), "toggle moveUp");
         getActionMap().put("toggle moveUp", moveUp);
         buildImage();
     }
-
-    private boolean move;
-    private int timer;
 
     public void update() {
         if (isMouseWithinComponent(20, 50) || move) {
@@ -67,8 +68,6 @@ public class Inventory extends GameComponent {
             move = false;
         }
     }
-
-    private final static int flashTime = 80;
 
     private final Action flash = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {

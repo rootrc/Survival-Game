@@ -19,19 +19,17 @@ class CollisionCheckerFactory extends Factory<CollisionChecker>{
             }
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
-                    if (tileGrid[i][r][c] == null) {
-                        continue;
+                    if (tileGrid[i][r][c] != null) {
+                        collision[r][c] |= tileGrid[i][r][c].getCollision();
                     }
-                    collision[r][c] |= tileGrid[i][r][c].getCollision();
                 }
             }
         }
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
-                if (tileGrid[2][r][c] == null) {
-                    continue;
+                if (tileGrid[2][r][c] != null) {
+                    collision[r][c] = tileGrid[2][r][c].getCollision();
                 }
-                collision[r][c] = tileGrid[2][r][c].getCollision();
             }
         }
         return collision;

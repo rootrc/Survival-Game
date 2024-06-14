@@ -17,34 +17,32 @@ import game.dungeon.Dungeon;
 
 public class ImageUtilities {
     private static final HashMap<String, BufferedImage> map = new HashMap<>();
-    private static final int tileSize = 16;
-    private static final double scale = (double) Dungeon.TILESIZE / tileSize;
+    public static final int default3x3TilesetScale = 32;
 
     public static BufferedImage getImage(String folder, String name) {
         if (map.containsKey(name)) {
             return map.get(name);
         }
-        BufferedImage image = null;
         try {
-            image = ImageIO.read(new File(
+            BufferedImage image = ImageIO.read(new File(
                     new StringBuilder("res/").append(folder).append('/').append(name).append(".png").toString()));
+            map.put(name, image);
+            return image;
         } catch (IOException e) {
             System.err.println(new StringBuilder("Image \"").append(folder).append('\\').append(name)
                     .append("\" not found").toString());
             System.exit(-1);
         }
-        image = resize(image, (int) (scale * image.getWidth()), (int) (scale * image.getHeight()));
-        map.put(name, image);
-        return image;
-    }
-
-    public static BufferedImage getImage(String folder, String name, int r, int c) {
-        return getImage(folder, name, r, c, 1);
+        return null;
     }
 
     public static BufferedImage getImage(String folder, String name, int r, int c, int scale) {
         return getImage(folder, name).getSubimage(scale * Dungeon.TILESIZE * c, scale * Dungeon.TILESIZE * r,
                 scale * Dungeon.TILESIZE, scale * Dungeon.TILESIZE);
+    }
+
+    public static BufferedImage getImage(String folder, String name, int r, int c) {
+        return getImage(folder, name, r, c, 1);
     }
 
     public static BufferedImage getImageFrom3x3Tileset(String folder, String name, int width, int height, int size) {
@@ -74,16 +72,19 @@ public class ImageUtilities {
     }
 
     public static BufferedImage getImageFrom3x3Tileset(String folder, String name, int width, int height) {
-        return getImageFrom3x3Tileset(folder, name, width, height, 32);
+        return getImageFrom3x3Tileset(folder, name, width, height, default3x3TilesetScale);
     }
 
-    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+    public static BufferedImage resize(BufferedImage oldImage, int newW, int newH) {
+        if (newW == 1 && newH == 1) {
+            return oldImage;
+        }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(newW, newH, Transparency.TRANSLUCENT);
-        Graphics2D g2d = image.createGraphics();
-        g2d.drawImage(img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH), 0, 0, null);
+        BufferedImage newImage = gd.getDefaultConfiguration().createCompatibleImage(newW, newH, Transparency.TRANSLUCENT);
+        Graphics2D g2d = newImage.createGraphics();
+        g2d.drawImage(oldImage.getScaledInstance(newW, newH, Image.SCALE_SMOOTH), 0, 0, null);
         g2d.dispose();
-        return image;
+        return newImage;
     }
 
     public static ImageIcon resize(ImageIcon imageIcon, int newW, int newH) {

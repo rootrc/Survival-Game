@@ -41,12 +41,9 @@ public class ChestUI extends PopupUI {
 	}
 
 	@Override
-	public void buildImage(String tileSet) {
-		super.buildImage(tileSet);
-		Graphics2D g2d = getImage().createGraphics();
-		g2d.setColor(new Color(165, 120, 85));
+	public void drawComponent(Graphics2D g2d) {
+		super.drawComponent(g2d);
 		g2d.drawImage(ImageUtilities.getImage("UI", "ChestSlot"), getWidth() / 2 - 46, getHeight() / 2 - 46, null);
-		g2d.dispose();
 	}
 
 	@Override

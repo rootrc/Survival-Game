@@ -23,7 +23,7 @@ public abstract class GameComponent extends JComponent {
         update();
     }
 
-    private final void updateChildren() {
+    private void updateChildren() {
         for (Component component : getComponents()) {
             if (component instanceof GameComponent) {
                 ((GameComponent) component).updateComponent();
@@ -46,11 +46,11 @@ public abstract class GameComponent extends JComponent {
 
     public abstract void drawComponent(Graphics2D g2d);
 
-    public void add(GameComponent gameComponent) {
+    public final void add(GameComponent gameComponent) {
         add(gameComponent, 0);
     }
 
-    public boolean isMouseWithinComponent(int widthAllowance, int heightAllowance) {
+    protected final boolean isMouseWithinComponent(int widthAllowance, int heightAllowance) {
         Point mousePos = MouseInfo.getPointerInfo().getLocation();
         Rectangle bounds = getBounds();
         bounds.setLocation(getLocationOnScreen());
@@ -58,43 +58,43 @@ public abstract class GameComponent extends JComponent {
         return bounds.contains(mousePos);
     }
 
-    public boolean isMouseWithinComponent() {
+    protected final boolean isMouseWithinComponent() {
         return isMouseWithinComponent(0, 0);
     }
 
-    public void setX(double x) {
+    public final void setX(double x) {
         setX((int) x);
     }
 
-    public void setX(int x) {
+    public final void setX(int x) {
         setLocation(x, getY());
     }
 
-    public void setY(double y) {
+    public final void setY(double y) {
         setY((int) y);
     }
 
-    public void setY(int y) {
+    public final void setY(int y) {
         setLocation(getX(), y);
     }
 
-    public void moveX(double delta) {
+    public final void moveX(double delta) {
         moveX((int) delta);
     }
 
-    public void moveX(int delta) {
+    public final void moveX(int delta) {
         setLocation(getX() + delta, getY());
     }
 
-    public void moveY(double delta) {
+    public final void moveY(double delta) {
         moveY((int) delta);
     }
 
-    public void moveY(int delta) {
+    public final void moveY(int delta) {
         setLocation(getX(), getY() + delta);
     }
 
-    public void setLocation(double x, double y) {
+    public final void setLocation(double x, double y) {
         setLocation((int) x, (int) y);
     }
 }

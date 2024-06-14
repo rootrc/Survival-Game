@@ -1,5 +1,6 @@
 package game.dungeon;
 
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -7,13 +8,15 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import game.Game;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
-import game.dungeon.room.room_UI.RoomMenu;
+import game.dungeon.room.room_UI.PauseMenu;
 import game.dungeon.room_factory.RoomFactory;
 import game.game_components.GameComponent;
 import game.game_components.GamePanel;
+import game.utilities.ActionUtilities;
 
 public class Dungeon extends GamePanel {
     public final static int TILESIZE = 16;
@@ -26,34 +29,14 @@ public class Dungeon extends GamePanel {
     private RoomFactory roomFactory;
 
     private static UILayer UI;
-    private RoomMenu roomMenu;
+    private PauseMenu roomMenu;
 
     private final Action nextRoom = new AbstractAction() {
-
         public void actionPerformed(ActionEvent e) {
             remove(room);
             room = roomFactory.getNextRoom(room);
             add(room, -1);
             revalidate();
-        }
-    };
-    private final Action pause = new AbstractAction() {
-
-        public void actionPerformed(ActionEvent e) {
-
-            if (getUI(0) != roomMenu && getUI(1) != roomMenu) {
-                addUI(roomMenu);
-                roomMenu.enterPanel();
-            } else {
-                roomMenu.exitPanel();
-            }
-        }
-    };
-
-    private final Action restart = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            restart();
-            enterFrame();
         }
     };
 
@@ -65,16 +48,21 @@ public class Dungeon extends GamePanel {
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);
-        roomMenu = new RoomMenu(pause, restart, changePanel);
+        roomMenu = new PauseMenu(new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                restart();
+                enterFrame();
+            }
+        }, changePanel);
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
-        getActionMap().put("pause", pause);
+        getActionMap().put("pause", ActionUtilities.openPopupUI(roomMenu));
 
         UI = new UILayer();
         add(UI);
     }
 
-    public void restart() {
+    public final void restart() {
         remove(room);
         remove(inventory);
         remove(UI);
@@ -103,4 +91,16 @@ public class Dungeon extends GamePanel {
         UI.remove(gameComponent);
     }
 
+    private class UILayer extends GameComponent {
+
+        public UILayer() {
+            super(Game.screenWidth, Game.screenHeight);
+        }
+
+        public void update() {
+        }
+
+        public void drawComponent(Graphics2D g2d) {
+        }
+    }
 }

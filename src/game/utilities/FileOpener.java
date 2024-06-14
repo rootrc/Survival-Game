@@ -9,33 +9,33 @@ import java.io.IOException;
 public abstract class FileOpener {
     private String fileName;
     private BufferedReader br;
+    private StringTokenizer st;
 
     public FileOpener(String fileName) {
         openFile(fileName);
+        st = new StringTokenizer("");
     }
 
-    protected void openFile(String fileName) {
+    protected final void openFile(String fileName) {
         this.fileName = fileName;
         try {
             br = new BufferedReader(
                     new FileReader(new StringBuilder().append("res/").append(fileName).append(".txt").toString()));
-            // sc = new Scanner(new FileReader(new
-            // StringBuilder().append("res/").append(str).append(".txt").toString()));
         } catch (FileNotFoundException e) {
             System.err.println(new StringBuilder("File \"").append(fileName).append("\" not found").toString());
             System.exit(-1);
         }
     }
 
-    protected int nextInt() {
-        return Integer.parseInt(readLine());
+    protected final int nextInt() {
+        return Integer.parseInt(read());
     }
 
-    protected String nextStr() {
-        return readLine().replace('_', ' ');
+    protected final String next() {
+        return read().replace('_', ' ');
     }
 
-    protected void closeFile() {
+    protected final void closeFile() {
         try {
             br.close();
         } catch (IOException e) {
@@ -44,9 +44,7 @@ public abstract class FileOpener {
         }
     }
 
-    private StringTokenizer st = new StringTokenizer("");
-
-    private String readLine() {
+    private String read() {
         if (st.hasMoreTokens()) {
             return st.nextToken();
         }

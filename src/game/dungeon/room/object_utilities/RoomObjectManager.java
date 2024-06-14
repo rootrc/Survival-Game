@@ -15,8 +15,7 @@ public class RoomObjectManager extends GameComponent {
         this.player = player;
     }
 
-    public void drawComponent(Graphics2D g2d) {
-        
+    public void drawComponent(Graphics2D g2d) {    
     }
 
     public void update() {

@@ -41,13 +41,14 @@ public abstract class RoomObject extends GameComponent {
                 (int) hitbox.getWidth(), (int) hitbox.getHeight());
     }
 
-    public boolean interacts(RoomObject object) {
+    public final boolean interacts(RoomObject object) {
         CollisionBox h1 = interactbox;
         CollisionBox h2 = object.getinteractbox();
         if (h1 == null || h2 == null) {
             return false;
         }
-        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX() && h1.getMaxX() + getX() > h2.getMinX() + object.getX()
+        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX()
+                && h1.getMaxX() + getX() > h2.getMinX() + object.getX()
                 && h1.getMinY() + getY() < h2.getMaxY() + object.getY()
                 && h1.getMaxY() + getY() > h2.getMinY() + object.getY()) {
             return true;
@@ -55,13 +56,14 @@ public abstract class RoomObject extends GameComponent {
         return false;
     }
 
-    public boolean collides(RoomObject object) {
+    public final boolean collides(RoomObject object) {
         CollisionBox h1 = hitbox;
         CollisionBox h2 = object.getHitBox();
         if (h1 == null || h2 == null) {
             return false;
         }
-        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX() && h1.getMaxX() + getX() > h2.getMinX() + object.getX()
+        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX()
+                && h1.getMaxX() + getX() > h2.getMinX() + object.getX()
                 && h1.getMinY() + getY() < h2.getMaxY() + object.getY()
                 && h1.getMaxY() + getY() > h2.getMinY() + object.getY()) {
             return true;
@@ -71,15 +73,15 @@ public abstract class RoomObject extends GameComponent {
 
     public abstract void interaction(Player player);
 
-    public void setImage(BufferedImage image) {
+    public final void setImage(BufferedImage image) {
         this.image = image;
     }
 
-    public CollisionBox getinteractbox() {
+    public final CollisionBox getinteractbox() {
         return interactbox;
     }
 
-    public CollisionBox getHitBox() {
+    public final CollisionBox getHitBox() {
         return hitbox;
     }
 
