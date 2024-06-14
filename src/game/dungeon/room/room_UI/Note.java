@@ -34,6 +34,12 @@ public class Note extends PopupUI {
         g2d.drawImage(images[i], 0, 0, null);
     }
 
+    @Override
+    public void enterPanel() {
+        super.enterPanel();
+        i = 0;
+    }
+
     private final Action rightImage = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             if (i == images.length - 1) {

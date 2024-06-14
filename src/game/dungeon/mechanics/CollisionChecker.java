@@ -13,6 +13,9 @@ public class CollisionChecker {
     }
 
     public boolean checkTile(Entity entity, double x, double y) {
+        if (entity.getX() < 0 || entity.getY() < 0) {
+            return true;
+        }
         ArrayList<Integer> rows = new ArrayList<>();
         ArrayList<Integer> cols = new ArrayList<>();
         rows.add((int) ((entity.getY() + y) / Dungeon.TILESIZE));

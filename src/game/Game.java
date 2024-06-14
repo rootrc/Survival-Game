@@ -13,7 +13,7 @@ import game.game_panel.Menu;
 public class Game extends JFrame implements Runnable {
     public final static int screenWidth = Dungeon.TILESIZE * Dungeon.maxScreenCol; // 1024 pixels
     public final static int screenHeight = Dungeon.TILESIZE * Dungeon.maxScreenRow; // 768 pixels
-    
+
     private static final int FPS = 60;
     private static final int UPS = 60;
 
@@ -25,7 +25,7 @@ public class Game extends JFrame implements Runnable {
 
     private Thread gameThread;
 
-    final Action changePanel = new AbstractAction() {
+    private final Action changePanel = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("dungeon")) {
                 changePanel(dungeon);
@@ -49,14 +49,12 @@ public class Game extends JFrame implements Runnable {
         setLocationRelativeTo(null);
         setVisible(true);
         startGameThread();
-        }
-        
+    }
+
     private void initPanel() {
         dungeon = new Dungeon(changePanel);
         menu = new Menu(changePanel);
-        
         gamePanel = menu;
-        
         add(gamePanel);
     }
 
@@ -64,6 +62,7 @@ public class Game extends JFrame implements Runnable {
         remove(this.gamePanel);
         this.gamePanel = gamePanel;
         add(gamePanel);
+        gamePanel.enterFrame();
         revalidate();
     }
 

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import javax.swing.KeyStroke;
 
+import game.Game;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
@@ -40,9 +41,11 @@ public class RoomFactory extends Factory<Room> {
         RoomFileData file = new RoomFileData(id);
         TileGrid tileGrid = tileFactory.createGrid(file);
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
-        player.set(300, 100, collision);
-        putRoom(id, new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file)));
+        player.set(312, 100, collision);
+        Room room = new Room(id, player, lighting, tileGrid, collision,
+        objectManagerFactory.getRoomObjectManager(file));
+        room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
+        putRoom(id, room);
         setKeyBinds(rooms.get(id));
         return rooms.get(id);
     }
@@ -75,7 +78,7 @@ public class RoomFactory extends Factory<Room> {
         // previousRoom.getConnectedLadder(player.getLadder()).getX();
         // double y = Game.screenHeight / 2 -
         // previousRoom.getConnectedLadder(player.getLadder()).getY();
-        nextRoom.setLocation((int) (previousRoom.getX()), (int) (previousRoom.getY()));
+        nextRoom.setLocation(previousRoom.getX(), previousRoom.getY());
     }
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {

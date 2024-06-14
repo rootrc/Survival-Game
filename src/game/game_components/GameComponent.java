@@ -23,7 +23,7 @@ public abstract class GameComponent extends JComponent {
         update();
     }
 
-    private void updateChildren() {
+    private final void updateChildren() {
         for (Component component : getComponents()) {
             if (component instanceof GameComponent) {
                 ((GameComponent) component).updateComponent();

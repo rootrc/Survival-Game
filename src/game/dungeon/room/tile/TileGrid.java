@@ -8,27 +8,34 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
 import game.dungeon.Dungeon;
-import game.game_components.GameImageLabel;
+import game.game_components.GameComponent;
 
-public class TileGrid extends GameImageLabel {
+public class TileGrid extends GameComponent {
     private BufferedImage image;
     private int N, M, layers;
     private int width, height;
     private Tile[][][] tileGrid;
 
     public TileGrid(Tile[][][] tileGrid) {
-        super();
+        super(0, 0);
         this.tileGrid = tileGrid;
         layers = tileGrid.length;
         N = tileGrid[0].length;
         M = tileGrid[0][0].length;
         height = Dungeon.TILESIZE * N;
         width = Dungeon.TILESIZE * M;
-        createImage();
-        setIcon(image);
+        setSize(width, height);
+        buildImage();
     }
 
-    private void createImage() {
+    public void update() {
+    }
+
+    public void drawComponent(Graphics2D g2d) {
+        g2d.drawImage(image, 0, 0, null);
+    }
+
+    private void buildImage() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         image = gd.getDefaultConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
         Graphics2D g2d = image.createGraphics();

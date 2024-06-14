@@ -3,7 +3,6 @@ package game.game_components;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -11,6 +10,8 @@ import javax.swing.JPanel;
 import game.Game;
 
 public abstract class GamePanel extends JPanel {
+    private FadingEffect fadingEffect;
+
     public GamePanel(Action changePanel) {
         setPreferredSize(new Dimension(Game.screenWidth, Game.screenHeight));
         if (!Game.DEBUG) {
@@ -19,18 +20,19 @@ public abstract class GamePanel extends JPanel {
         setLayout(null);
         setDoubleBuffered(true);
         setFocusable(true);
+        fadingEffect = new FadingEffect();
+        add(fadingEffect, 0);
     }
 
-    @Override
-    public final void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void enterFrame() {
+        fadingEffect.fadeIn();
     }
 
     public void updateComponent() {
         updateChildren();
     }
 
-    private void updateChildren() {
+    private final void updateChildren() {
         for (Component component : getComponents()) {
             if (component instanceof GameComponent) {
                 ((GameComponent) component).updateComponent();
@@ -39,7 +41,7 @@ public abstract class GamePanel extends JPanel {
     }
 
     public void add(GameComponent gameComponent) {
-        add(gameComponent, 0);
+        add(gameComponent, 1);
     }
 
 }

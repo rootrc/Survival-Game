@@ -53,6 +53,7 @@ public class Dungeon extends GamePanel {
     private final Action restart = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             restart();
+            enterFrame();
         }
     };
 
@@ -74,7 +75,9 @@ public class Dungeon extends GamePanel {
     }
 
     public void restart() {
-        removeAll();
+        remove(room);
+        remove(inventory);
+        remove(UI);
         inventory = new Inventory(8);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player);
