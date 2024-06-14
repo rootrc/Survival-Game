@@ -1,20 +1,19 @@
-package game.dungeon.inventory;
+package game.dungeon.items;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
+import game.dungeon.inventory.Inventory;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
-public class Item {
+public abstract class Item {
     private ImageIcon imageIcon;
     private ImageIcon rolloverIcon;
     private Action acquireItem;
     private String name;
     private String description;
+    private Action useItem;
 
     public Item(Inventory inventory, int r, int c, String name, String description) {
         imageIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet", r, c, 2));
@@ -24,22 +23,26 @@ public class Item {
         acquireItem = ActionUtilities.addItem(inventory, this);
     }
 
-    public final Action useItem = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            // TEMP
-            System.out.println("Item Used");
-        }
-    };
+    public abstract void enable(int idx);
 
     public ImageIcon getImageIcon() {
         return imageIcon;
     }
+
     public ImageIcon getRolloverIcon() {
         return rolloverIcon;
     }
 
     public Action getAquireItem() {
         return acquireItem;
+    }
+
+    protected void setUseItem(Action action) {
+        useItem = action;
+    }
+
+    public Action getUseItem() {
+        return useItem;
     }
 
     public String getName() {

@@ -81,6 +81,8 @@ public class Dungeon extends GamePanel {
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);
+        UI.removeAll();
+        add(UI);
     }
 
     public static GameComponent getUI(int n) {

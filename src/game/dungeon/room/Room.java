@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import game.Game;
+import game.dungeon.Dungeon;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.entity.Player;
@@ -47,8 +48,15 @@ public class Room extends GameComponent {
         add(objectManager);
     }
 
+    @Override
+    public void updateComponent() {
+        if (Dungeon.getUI(0) == null) {
+            super.updateComponent();
+        }
+    }
+
     public void update() {
-         if (!Game.DEBUG) {
+        if (!Game.DEBUG) {
             int tx = Game.screenWidth / 2 - (int) player.getX();
             int ty = Game.screenHeight / 2 - (int) player.getY();
             int dx = tx - getX();

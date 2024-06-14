@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 
 import game.dungeon.Dungeon;
 import game.dungeon.inventory.Inventory;
-import game.dungeon.inventory.Item;
+import game.dungeon.items.Item;
 import game.game_components.ConfirmUI;
 import game.game_components.PopupUI;
 

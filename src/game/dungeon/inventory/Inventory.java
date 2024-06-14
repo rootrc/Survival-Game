@@ -13,6 +13,8 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.Game;
+import game.dungeon.items.Item;
+import game.dungeon.items.ItemFactory;
 import game.dungeon.room.object.TreasureChest;
 import game.dungeon.room.room_UI.ChestUI;
 import game.game_components.GameComponent;
@@ -41,12 +43,10 @@ public class Inventory extends GameComponent {
         this.size = size;
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
-            inventorySlots[i] = new ItemSlot(
+            inventorySlots[i] = new ItemSlot(i,
                     new Rectangle(middle.getWidth() * i - middle.getWidth() + itemMargin, itemMargin + tab.getHeight(),
                             middle.getHeight() - 2 * itemMargin, middle.getHeight() - 2 * itemMargin));
             add(inventorySlots[i]);
-            getInputMap(2).put(
-                    KeyStroke.getKeyStroke((new StringBuilder("pressed ").append(i % 10)).toString()), i);
         }
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed TAB"), "toggle moveUp");
         getActionMap().put("toggle moveUp", moveUp);
@@ -103,7 +103,6 @@ public class Inventory extends GameComponent {
             throw new UnsupportedOperationException("Feature Incomplete");
         }
         inventorySlots[occupiedSlots].setItem(item);
-        getActionMap().put(occupiedSlots, inventorySlots[occupiedSlots].getAction());
         occupiedSlots++;
     }
 

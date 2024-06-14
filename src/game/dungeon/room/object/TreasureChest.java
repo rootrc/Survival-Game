@@ -2,7 +2,7 @@ package game.dungeon.room.object;
 
 import java.awt.image.BufferedImage;
 
-import game.dungeon.inventory.Item;
+import game.dungeon.items.Item;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -30,7 +30,6 @@ public class TreasureChest extends RoomObject {
         setImage(chestClosed);
         player.getInventory().openChest(this);
         // TODO
-        id = id - 0;
     }
 
     public Item getItem() {

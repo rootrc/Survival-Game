@@ -1,4 +1,4 @@
-package game.dungeon.inventory;
+package game.dungeon.items;
 
 import game.utilities.FileOpener;
 

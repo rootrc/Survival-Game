@@ -1,5 +1,6 @@
-package game.dungeon.inventory;
+package game.dungeon.items;
 
+import game.dungeon.inventory.Inventory;
 import game.game_components.Factory;
 
 public class ItemFactory extends Factory<Item> {
@@ -18,6 +19,7 @@ public class ItemFactory extends Factory<Item> {
     }
 
     public Item getItem(int r, int c) {
-        return new Item(inventory, r, c, data.getName(r, c), data.getDescription(r, c));
+        // TODO
+        return new UICreatorItem(inventory, r, c, data.getName(r, c), data.getDescription(r, c));
     }
 }

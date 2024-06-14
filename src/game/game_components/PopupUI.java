@@ -53,8 +53,7 @@ public abstract class PopupUI extends GameComponent {
         if (getX() == (Game.screenWidth - getWidth()) / 2) {
             moving = false;
             timer = 1;
-        }
-        if (getX() == Game.screenWidth) {
+        } else if (getX() == Game.screenWidth) {
             moving = false;
             timer = 1;
             remove();
@@ -85,7 +84,6 @@ public abstract class PopupUI extends GameComponent {
 
     protected void remove() {
         ActionUtilities.closePopupUI(this).actionPerformed(null);
-        ;
     }
 
     public final Action close = new AbstractAction() {
