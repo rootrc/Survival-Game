@@ -3,6 +3,7 @@ package game.dungeon.room_connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import game.Game;
 import game.dungeon.room.object.Ladder;
 import game.utilities.FileOpener;
 
@@ -42,6 +43,9 @@ public class DungeonData extends FileOpener {
         // TEMP
         while (mapId == 1) {
             mapId = list.get((int) (list.size() * Math.random()));
+        }
+        if (Game.DEBUG) {
+            System.out.println(mapId);
         }
         return mapId;
     }

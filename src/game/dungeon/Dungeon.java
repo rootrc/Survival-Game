@@ -46,6 +46,7 @@ public class Dungeon extends GamePanel {
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player);
         room = roomFactory.getStartingRoom(1);
+        // room = roomFactory.createRandomRoom(40, 30);
         add(room);
         add(inventory);
         roomMenu = new PauseMenu(new AbstractAction() {
@@ -57,7 +58,6 @@ public class Dungeon extends GamePanel {
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
         getActionMap().put("pause", ActionUtilities.openPopupUI(roomMenu));
-
         UI = new UILayer();
         add(UI);
     }

@@ -35,46 +35,46 @@ public class MapGenerator {
                 int x = (int) (xStart + i * ((XEnd - xStart) / N));
                 int y = (int) (yStart + j * ((yEnd - yStart) / M));
                 double temp = 0.5 * (1 + simplexNoise.getNoise(x, y));
-                // if (temp > 0.7) {
-                //     res[i][j] = 0;
-                //     System.out.print("0");
-                // } else if (temp > 0.65) {
-                //     res[i][j] = 3;
-                //     System.out.print("3");
-                // } else if (temp > 0.5) {
-                //     res[i][j] = 1;
-                //     System.out.print("1");
-                // } else {
-                //     res[i][j] = 5;
-                //     System.out.print("5");
-                // }
-                // if (j != M - 1) {
-                //     System.out.print(" ");
-                // }
-
-                temp -= 0.5;
-                if (temp > 0) {
-                    temp *= -1;
-                }
-                temp = -temp;
-                temp += 0.5;
-
-                if (temp < 0.55) {
-                    res[i][j] = 5;
-                    System.out.print("5");
-                } else if (temp < 0.63) {
-                    res[i][j] = 1;
-                    System.out.print("1");
-                } else if (temp < 0.7) {
-                    res[i][j] = 3;
-                    System.out.print("3");
-                } else {
+                if (temp > 0.7) {
                     res[i][j] = 0;
                     System.out.print("0");
+                } else if (temp > 0.65) {
+                    res[i][j] = 3;
+                    System.out.print("3");
+                } else if (temp > 0.5) {
+                    res[i][j] = 1;
+                    System.out.print("1");
+                } else {
+                    res[i][j] = 5;
+                    System.out.print("5");
                 }
                 if (j != M - 1) {
                     System.out.print(" ");
                 }
+
+                // temp -= 0.5;
+                // if (temp > 0) {
+                //     temp *= -1;
+                // }
+                // temp = -temp;
+                // temp += 0.5;
+
+                // if (temp < 0.55) {
+                //     res[i][j] = 5;
+                //     System.out.print("5");
+                // } else if (temp < 0.63) {
+                //     res[i][j] = 1;
+                //     System.out.print("1");
+                // } else if (temp < 0.7) {
+                //     res[i][j] = 3;
+                //     System.out.print("3");
+                // } else {
+                //     res[i][j] = 0;
+                //     System.out.print("0");
+                // }
+                // if (j != M - 1) {
+                //     System.out.print(" ");
+                // }
             }
             System.out.println();
         }

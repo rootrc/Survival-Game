@@ -48,6 +48,10 @@ public class Room extends GameComponent {
         add(objectManager);
     }
 
+    public void drawComponent(Graphics2D g2d) {
+
+    }
+
     @Override
     public void updateComponent() {
         if (Dungeon.getUI(0) == null) {
@@ -68,14 +72,6 @@ public class Room extends GameComponent {
 
     public void setPlayer(Ladder ladder) {
         player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY(), collision);
-    }
-
-    public void drawComponent(Graphics2D g2d) {
-        if (!Game.DEBUG) {
-            return;
-        }
-        g2d.setColor(Color.white);
-        g2d.drawString(String.valueOf(getId()), 0, 10);
     }
 
     public int getId() {

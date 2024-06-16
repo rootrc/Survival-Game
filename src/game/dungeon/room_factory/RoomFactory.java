@@ -43,8 +43,10 @@ public class RoomFactory extends Factory<Room> {
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         player.set(312, 100, collision);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-        objectManagerFactory.getRoomObjectManager(file));
-        room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
+                objectManagerFactory.getRoomObjectManager(file));
+        if (!Game.DEBUG) {
+            room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
+        }
         putRoom(id, room);
         setKeyBinds(rooms.get(id));
         return rooms.get(id);

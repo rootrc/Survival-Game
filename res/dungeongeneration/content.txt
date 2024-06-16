@@ -12,4 +12,4 @@
 40 - 49 Noodle
 50 - 59 Contains Secret Room
 60 - 69 Corriders
-70 - 79 Dead Ends
+70 - 89 Dead Ends
