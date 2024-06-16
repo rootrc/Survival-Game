@@ -1,6 +1,5 @@
 package game.dungeon.room;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import game.Game;

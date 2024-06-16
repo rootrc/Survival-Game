@@ -1,6 +1,5 @@
 package game.dungeon.room.room_UI;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -32,12 +31,6 @@ public class ChestUI extends PopupUI {
 				ChestUI.super.exitPanel();
 			}
 		}), "areYouSure");
-	}
-
-	@Override 
-	public void update() {
-		super.update();
-		// System.out.println("hi");	
 	}
 
 	@Override

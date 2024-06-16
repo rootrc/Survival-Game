@@ -34,6 +34,8 @@ public class Inventory extends GameComponent {
     private int size;
     private int occupiedSlots;
     private ItemSlot[] inventorySlots;
+    
+    private boolean newItem;
 
     private boolean move;
     private int timer;
@@ -103,6 +105,15 @@ public class Inventory extends GameComponent {
         }
         inventorySlots[occupiedSlots].setItem(item);
         occupiedSlots++;
+        newItem = true;
+    }
+
+    public boolean hasNewItem() {
+        if (newItem) {
+            newItem = false;
+            return true;
+        }
+        return false;
     }
 
     private final Action moveUp = new AbstractAction() {

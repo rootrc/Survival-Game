@@ -53,6 +53,9 @@ public class Player extends Entity {
     public void update() {
         interactionCooldown++;
         move();
+        if (inventory.hasNewItem()) {
+            // TODO
+        }
     }
 
     private void move() {
