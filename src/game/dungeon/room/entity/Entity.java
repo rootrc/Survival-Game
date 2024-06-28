@@ -23,8 +23,7 @@ public abstract class Entity extends RoomObject {
         this.collision = collision;
         this.accFrames = accFrames;
         this.deaccFrames = deaccFrames;
-        // TEMP
-        lightStrength = 400;
+        lightStrength = 300;
     }
 
     public Entity(BufferedImage image, CollisionBox hitbox, CollisionBox interactbox, int maxSpeed,
@@ -32,16 +31,26 @@ public abstract class Entity extends RoomObject {
         this(image, 0, 0, hitbox, interactbox, maxSpeed, collision, accFrames, deaccFrames);
     }
 
-    public Entity(BufferedImage image, CollisionBox hitbox, int maxSpeed, CollisionChecker collision, double accFrames, double deaccFrames) {
+    public Entity(BufferedImage image, CollisionBox hitbox, int maxSpeed, CollisionChecker collision, double accFrames,
+            double deaccFrames) {
         this(image, 0, 0, hitbox, maxSpeed, collision, accFrames, deaccFrames);
     }
 
-    public Entity(BufferedImage image, int r, int c, CollisionBox hitbox, int maxSpeed, CollisionChecker collision, double accFrames, double deaccFrames) {
+    public Entity(BufferedImage image, int r, int c, CollisionBox hitbox, int maxSpeed, CollisionChecker collision,
+            double accFrames, double deaccFrames) {
         this(image, r, c, hitbox, null, maxSpeed, collision, accFrames, deaccFrames);
+    }
+
+    protected final void increaseLightStrength(int delta) {
+        lightStrength += delta;
     }
 
     public final int getLightStrength() {
         return lightStrength;
+    }
+
+    protected final void increaseMaxSpeed(int delta) {
+        maxSpeed += delta;
     }
 
     protected final int getMaxSpeed() {

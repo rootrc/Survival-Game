@@ -10,7 +10,6 @@ import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
-import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
@@ -72,14 +71,15 @@ public class RoomFactory extends Factory<Room> {
         }
         setTransition(previousRoom, nextRoom);
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
+        if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == 1) {
+            player.setDirection(4);
+        } else if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == -1){
+            player.setDirection(0);
+        }
         return nextRoom;
     }
 
     private void setTransition(Room previousRoom, Room nextRoom) {
-        // double x = Game.screenWidth / 2 -
-        // previousRoom.getConnectedLadder(player.getLadder()).getX();
-        // double y = Game.screenHeight / 2 -
-        // previousRoom.getConnectedLadder(player.getLadder()).getY();
         nextRoom.setLocation(previousRoom.getX(), previousRoom.getY());
     }
 
@@ -122,11 +122,6 @@ public class RoomFactory extends Factory<Room> {
         previousRoom.addLadderConnection(ladder0, ladder1);
         dungeonData.updateLadderConnections(ladder0, previousRoom.getId());
         dungeonData.updateLadderConnections(ladder1, nextRoom.getId());
-    }
-
-    public Room createRandomRoom(int N, int M) {
-        TileGrid tileGrid = tileFactory.createRandomGrid(N, M);
-        return new Room(tileGrid, collisionFactory.getCollisionChecker(tileGrid), new RoomObjectManager(null));
     }
 
     private void putRoom(int id, Room room) {

@@ -36,9 +36,14 @@ public class ImageUtilities {
         return null;
     }
 
-    public static BufferedImage getImage(String folder, String name, int r, int c, int scale) {
-        return getImage(folder, name).getSubimage(scale * Dungeon.TILESIZE * c, scale * Dungeon.TILESIZE * r,
-                scale * Dungeon.TILESIZE, scale * Dungeon.TILESIZE);
+    public static BufferedImage getImage(String folder, String name, int r, int c, double scaleR, double scaleC) {
+        return getImage(folder, name).getSubimage((int) (scaleC * Dungeon.TILESIZE * c),
+                (int) (scaleR * Dungeon.TILESIZE * r), (int) (scaleC * Dungeon.TILESIZE),
+                (int) (scaleR * Dungeon.TILESIZE));
+    }
+
+    public static BufferedImage getImage(String folder, String name, int r, int c, double scale) {
+        return getImage(folder, name, r, c, scale, scale);
     }
 
     public static BufferedImage getImage(String folder, String name, int r, int c) {
@@ -80,7 +85,8 @@ public class ImageUtilities {
             return oldImage;
         }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        BufferedImage newImage = gd.getDefaultConfiguration().createCompatibleImage(newW, newH, Transparency.TRANSLUCENT);
+        BufferedImage newImage = gd.getDefaultConfiguration().createCompatibleImage(newW, newH,
+                Transparency.TRANSLUCENT);
         Graphics2D g2d = newImage.createGraphics();
         g2d.drawImage(oldImage.getScaledInstance(newW, newH, Image.SCALE_SMOOTH), 0, 0, null);
         g2d.dispose();

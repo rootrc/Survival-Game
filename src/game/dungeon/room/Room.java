@@ -6,6 +6,7 @@ import game.Game;
 import game.dungeon.Dungeon;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
+import game.dungeon.mechanics.SnowEffect;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -34,6 +35,7 @@ public class Room extends GameComponent {
         add(tileGrid);
         add(objectManager);
         add(player);
+        add(new SnowEffect(getWidth(), getHeight(), collision));
         add(lighting);
     }
 

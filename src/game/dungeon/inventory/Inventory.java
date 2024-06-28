@@ -28,13 +28,13 @@ public class Inventory extends GameComponent {
     private static final BufferedImage right = ImageUtilities.getImage("item_images", "InventoryRight");
     private static final int itemMargin = 8;
     private static final int flashTime = 80;
-    
+
     private ItemFactory itemFactory;
     private BufferedImage image;
     private int size;
     private int occupiedSlots;
     private ItemSlot[] inventorySlots;
-    
+
     private boolean newItem;
 
     private boolean move;
@@ -43,7 +43,7 @@ public class Inventory extends GameComponent {
     public Inventory(int size) {
         super(left.getWidth() + middle.getWidth() * (size - 2) + right.getWidth(),
                 middle.getHeight() + tab.getHeight());
-                this.size = size;
+        this.size = size;
         itemFactory = new ItemFactory(this);
         setLocation(Game.screenWidth / 2 - getWidth() / 2, Game.screenHeight - tab.getHeight());
         inventorySlots = new ItemSlot[size + 1];
@@ -99,13 +99,20 @@ public class Inventory extends GameComponent {
     }
 
     public void addItem(Item item) {
-        if (occupiedSlots == size) {
-            // TODO
-            throw new UnsupportedOperationException("Feature Incomplete");
+        if (occupiedSlots > size) {
+            return;
         }
         inventorySlots[occupiedSlots].setItem(item);
         occupiedSlots++;
         newItem = true;
+    }
+
+    public Item getItem(int idx) {
+        return inventorySlots[idx].getItem();
+    }
+
+    public Item getItem() {
+        return getItem(occupiedSlots - 1);
     }
 
     public boolean hasNewItem() {
@@ -123,6 +130,6 @@ public class Inventory extends GameComponent {
     };
 
     public void openChest(TreasureChest treasureChest) {
-        ActionUtilities.openPopupUI(new ChestUI(itemFactory.getItem(5, 0), flash)).actionPerformed(null);
+        ActionUtilities.openPopupUI(new ChestUI(itemFactory.getItem(), flash)).actionPerformed(null);
     }
 }

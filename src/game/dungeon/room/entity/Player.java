@@ -1,5 +1,6 @@
 package game.dungeon.room.entity;
 
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 
@@ -16,15 +17,15 @@ import game.dungeon.room.object_utilities.RoomObject;
 import game.utilities.ImageUtilities;
 
 public class Player extends Entity {
+    private HashSet<String> movementKeys = new HashSet<>();
     private Inventory inventory;
     private RoomObject interactable;
     private Action nextRoom;
 
     public Player(Action nextRoom, Inventory inventory) {
-        // TEMP
-        super(ImageUtilities.getImage("entities", "player"),
-                new CollisionBox(0, 0, 1, 1),
-                new CollisionBox(-0.25, -0.25, 1.5, 1.5), Dungeon.TILESIZE / 4, null, 10, 4);
+        super(ImageUtilities.getImage("entities", "playerTileset", 0, 0, 3, 2),
+                new CollisionBox(0.5, 1.25, 1, 1.5),
+                new CollisionBox(0, 0.75, 2, 2.5), Dungeon.TILESIZE / 4, null, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
@@ -36,25 +37,48 @@ public class Player extends Entity {
         this.collision = collision;
     }
 
-    HashSet<String> movementKeys = new HashSet<>();
+    private int n;
+    private int cnt;
 
-    public final Action accelerate = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            movementKeys.add(e.getActionCommand());
-        }
-    };
-
-    public final Action decelerate = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            movementKeys.remove(e.getActionCommand());
-        }
-    };
+    @Override
+    public void drawComponent(Graphics2D g2d) {
+        g2d.drawImage(ImageUtilities.getImage("entities", "playerTileset", cnt / getMaxSpeed() / 2, n, 3, 2), 0, 0, null);
+    }
 
     public void update() {
         interactionCooldown++;
         move();
-        if (inventory.hasNewItem()) {
-            // TODO
+        updateSprite();
+        
+    }
+
+    private void updateSprite() {
+        if (getSpeedX() != 0 || getSpeedY() != 0) {
+            cnt++;
+            cnt %= 4 *  getMaxSpeed() * 2 ;
+        } else {
+            cnt = 0;
+        }
+        int lastN = n;
+        n = 0;
+        if (getSpeedX() > 0) {
+            n += 1;
+        } else if (getSpeedX() < 0) {
+            n += 3;
+        }
+        if (getSpeedY() == 0) {
+            n *= 2;
+        } else if (getSpeedY() > 0) {
+            n += 2;
+            if (getSpeedX() == 0) {
+                n *= 2;
+            }
+        }
+        if (getSpeedX() < 0 && getSpeedY() < 0) {
+            n = 7;
+        }
+        if (n == 0 && getSpeedY() == 0) {
+            n = lastN;
         }
     }
 
@@ -105,6 +129,18 @@ public class Player extends Entity {
         }
     }
 
+    public final Action accelerate = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movementKeys.add(e.getActionCommand());
+        }
+    };
+
+    public final Action decelerate = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movementKeys.remove(e.getActionCommand());
+        }
+    };
+
     private int interactionCooldown;
 
     private final Action interact = new AbstractAction() {
@@ -130,7 +166,8 @@ public class Player extends Entity {
             setSpeedX(0);
         }
         if (h1.getMinX() + getX() - h2.getMaxX() - object.getX() > getSpeedX()
-                && h2.getMaxX() + object.getX() < h1.getMaxX() + getX() && (getSpeedX() < 0 || movementKeys.contains("a"))) {
+                && h2.getMaxX() + object.getX() < h1.getMaxX() + getX()
+                && (getSpeedX() < 0 || movementKeys.contains("a"))) {
             setX(h2.getMaxX() + object.getX() - h1.getMinX());
             setSpeedX(0);
         }
@@ -141,7 +178,8 @@ public class Player extends Entity {
             setSpeedY(0);
         }
         if (h1.getMinY() + getY() - h2.getMaxY() - object.getY() > getSpeedY()
-                && h2.getMaxY() + object.getY() < h1.getMaxY() + getY() && (getSpeedY() < 0 || movementKeys.contains("w"))) {
+                && h2.getMaxY() + object.getY() < h1.getMaxY() + getY()
+                && (getSpeedY() < 0 || movementKeys.contains("w"))) {
             setY(h2.getMaxY() + object.getY() - h1.getMinY());
             setSpeedY(0);
         }
@@ -153,6 +191,10 @@ public class Player extends Entity {
 
     public void setInteractable(RoomObject interactable) {
         this.interactable = interactable;
+    }
+
+    public void setDirection(int d) {
+        n = d;
     }
 
     public Ladder getLadder() {

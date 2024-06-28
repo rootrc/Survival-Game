@@ -18,22 +18,22 @@ public class CollisionChecker {
         }
         ArrayList<Integer> rows = new ArrayList<>();
         ArrayList<Integer> cols = new ArrayList<>();
-        rows.add((int) ((entity.getY() + y) / Dungeon.TILESIZE));
-        rows.add((int) ((entity.getY() + y) / Dungeon.TILESIZE));
-        rows.add((int) ((entity.getY() + y) / Dungeon.TILESIZE) + 1);
-        rows.add((int) ((entity.getY() + y) / Dungeon.TILESIZE) + 1);
-        cols.add((int) ((entity.getX() + x) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + x) / Dungeon.TILESIZE) + 1);
-        cols.add((int) ((entity.getX() + x) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + x) / Dungeon.TILESIZE) + 1);
-        for (int r: rows) {
-            for (int c: cols) {
+        rows.add((int) ((entity.getY() + entity.getHitBox().getY() + y) / Dungeon.TILESIZE));
+        rows.add((int) ((entity.getY() + entity.getHitBox().getMaxY() + y) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getX() + x) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() + x) / Dungeon.TILESIZE));
+        for (int r : rows) {
+            for (int c : cols) {
                 if (collision[r][c]) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    public boolean checkPoint(int x, int y) {
+        return !collision[y / Dungeon.TILESIZE][x / Dungeon.TILESIZE];
     }
 
 }

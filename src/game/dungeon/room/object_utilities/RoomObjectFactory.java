@@ -19,12 +19,12 @@ public class RoomObjectFactory extends Factory<RoomObject> {
     private Ladder getLadder(RoomObjectData data) {
         if (data.id == 0) {
             return new Ladder(ImageUtilities.getImage("objects", "ladderup"), data.r, data.c,
-                    0, Dungeon.TILESIZE * 9 / 4,
+                    -Dungeon.TILESIZE / 2, Dungeon.TILESIZE * 5 / 4,
                     new CollisionBox(0, 1.25, 1, 0.75),
                     new CollisionBox(-0.25, 1, 1.5, 1.75), 1);
         } else {
             return new Ladder(ImageUtilities.getImage("objects", "ladderdown"), data.r, data.c,
-                    Dungeon.TILESIZE / 2, -Dungeon.TILESIZE * 7 / 8,
+                    0, -Dungeon.TILESIZE * 3,
                     new CollisionBox(0.5, 0.375, 1, 1.125),
                     new CollisionBox(0.25, -0.25, 1.5, 2), -1);
         }

@@ -56,5 +56,5 @@ Forks - 12: 13
 Forks - 21: 3
 Forks - 22: 3
 Corriders: 10
-Dead Ends - down: 19
+Dead Ends - down: 18
 Dead Ends - up: 3

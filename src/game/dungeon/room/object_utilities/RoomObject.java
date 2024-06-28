@@ -43,7 +43,7 @@ public abstract class RoomObject extends GameComponent {
 
     public final boolean interacts(RoomObject object) {
         CollisionBox h1 = interactbox;
-        CollisionBox h2 = object.getinteractbox();
+        CollisionBox h2 = object.getInteractbox();
         if (h1 == null || h2 == null) {
             return false;
         }
@@ -77,7 +77,7 @@ public abstract class RoomObject extends GameComponent {
         this.image = image;
     }
 
-    public final CollisionBox getinteractbox() {
+    public final CollisionBox getInteractbox() {
         return interactbox;
     }
 
