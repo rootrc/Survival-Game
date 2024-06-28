@@ -27,7 +27,6 @@ public class UILayer extends GameComponent {
      public Action openPopupUI(PopupUI popupUI) {
         return new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                add(popupUI);
                 popupUI.enterPanel();
             }
         };
@@ -57,11 +56,9 @@ public class UILayer extends GameComponent {
                 if (getComponent(0) instanceof ConfirmUI) {
                     if (getComponent(0) != confirmUI) {
                         ((ConfirmUI) getComponent(0)).exitPanel();
-                        add(confirmUI);
                         confirmUI.enterPanel();
                     }
                 } else {
-                    add(confirmUI);
                     confirmUI.enterPanel();
                 }
 

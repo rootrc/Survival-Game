@@ -3,7 +3,6 @@ package game.dungeon.room;
 import java.awt.Graphics2D;
 
 import game.Game;
-import game.dungeon.Dungeon;
 import game.dungeon.UILayer;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;

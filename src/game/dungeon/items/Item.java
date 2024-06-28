@@ -1,10 +1,12 @@
 package game.dungeon.items;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
 import game.dungeon.inventory.Inventory;
-import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
 public class Item {
@@ -20,9 +22,19 @@ public class Item {
         rolloverIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet1", r, c, 2));
         this.name = name;
         this.description = description;
-        acquireItem = ActionUtilities.addItem(inventory, this);
-    }
+        acquireItem = new AbstractAction() {
+            private boolean added = false;
 
+            public void actionPerformed(ActionEvent e) {
+                if (added) {
+                    return;
+                }
+                inventory.addItem(Item.this);
+                added = true;
+            }
+        };
+    }
+        
     public void enable(int idx) {
         // TODO
     }

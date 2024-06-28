@@ -19,7 +19,6 @@ import game.dungeon.items.ItemFactory;
 import game.dungeon.room.object.TreasureChest;
 import game.dungeon.room.room_UI.ChestUI;
 import game.game_components.GameComponent;
-import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
 public class Inventory extends GameComponent {
@@ -133,6 +132,7 @@ public class Inventory extends GameComponent {
     };
 
     public void openChest(TreasureChest treasureChest) {
-        UILayer.openPopupUI(new ChestUI(UILayer, itemFactory.getItem(), flash)).actionPerformed(null);
+        ChestUI chestUI = new ChestUI(UILayer, itemFactory.getItem(), flash);
+        chestUI.enterPanel();
     }
 }

@@ -1,6 +1,5 @@
 package game.dungeon;
 
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -8,15 +7,12 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import game.Game;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.room_UI.PauseMenu;
 import game.dungeon.room_factory.RoomFactory;
-import game.game_components.GameComponent;
 import game.game_components.GamePanel;
-import game.utilities.ActionUtilities;
 
 public class Dungeon extends GamePanel {
     public final static int TILESIZE = 16;

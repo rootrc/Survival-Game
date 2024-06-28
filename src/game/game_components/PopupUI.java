@@ -15,7 +15,7 @@ import game.utilities.ImageUtilities;
 
 public abstract class PopupUI extends GameComponent {
     private UILayer UILayer;
-    private BufferedImage image;
+    private BufferedImage backgroundImage;
     private int framesToEnter;
     private boolean moving;
     private int timer;
@@ -36,11 +36,11 @@ public abstract class PopupUI extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(image, 0, 0, null);
+        g2d.drawImage(backgroundImage, 0, 0, null);
     }
 
     private void buildImage(String tileSet) {
-        image = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(),
+        backgroundImage = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(),
                 getWidth(), getHeight());
     }
 
@@ -60,10 +60,18 @@ public abstract class PopupUI extends GameComponent {
             moving = false;
             timer = 1;
         } else if (getX() == Game.screenWidth) {
-            moving = false;
-            timer = 1;
             UILayer.remove(this);
         }
+    }
+
+    public void enterPanel() {
+        UILayer.add(this);
+        moving = true;
+        setLocation(-getWidth(), getY());
+    }
+
+    public void exitPanel() {
+        moving = true;
     }
 
     private double easeOutQuad(double x) {
@@ -74,23 +82,10 @@ public abstract class PopupUI extends GameComponent {
         return x * x;
     }
 
-    public void enterPanel() {
-        moving = true;
-        setLocation(-getWidth(), getY());
-    }
-
-    public void exitPanel() {
-        moving = true;
-    }
-
     protected final Action close = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             exitPanel();
-            UILayer.removeConfirmUI().actionPerformed(e);;
+            UILayer.removeConfirmUI().actionPerformed(e);
         }
     };
-
-    protected final BufferedImage getImage() {
-        return image;
-    }
 }
