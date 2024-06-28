@@ -33,7 +33,7 @@ public class Game extends JFrame implements Runnable {
                 // TODO
             } else if (e.getActionCommand().equals("mainMenu")) {
                 changePanel(menu);
-                dungeon.restart();
+                dungeon.reset();
             } else if (e.getActionCommand().equals("mainMenu")) {
                 // TODO
             }

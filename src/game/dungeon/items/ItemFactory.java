@@ -20,6 +20,6 @@ public class ItemFactory extends Factory<Item> {
 
     public Item getItem() {
         // TODO
-        return new UICreatorItem(inventory, 0, 0, data.getName(0, 0), data.getDescription(0, 0));
+        return new Item(inventory, 0, 0, data.getName(0, 0), data.getDescription(0, 0));
     }
 }

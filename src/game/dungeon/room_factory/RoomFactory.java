@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.swing.KeyStroke;
 
 import game.Game;
+import game.dungeon.UILayer;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
@@ -24,10 +25,12 @@ public class RoomFactory extends Factory<Room> {
     private DungeonLayoutGenerator dungeonGenerator;
     private Player player;
     private LightingEngine lighting;
+    private UILayer UILayer;
 
-    public RoomFactory(Player player) {
+    public RoomFactory(Player player, UILayer UILayer) {
         this.player = player;
         dungeonData = new DungeonData();
+        this.UILayer = UILayer;
         lighting = new LightingEngine(player);
         rooms = new HashMap<>();
         tileFactory = new TileGridFactory();
@@ -42,7 +45,7 @@ public class RoomFactory extends Factory<Room> {
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         player.set(312, 100, collision);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file));
+                objectManagerFactory.getRoomObjectManager(file), UILayer);
         if (!Game.DEBUG) {
             room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
         }
@@ -87,7 +90,7 @@ public class RoomFactory extends Factory<Room> {
         TileGrid tileGrid = tileFactory.createGrid(file);
         CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file));
+                objectManagerFactory.getRoomObjectManager(file), UILayer);
         setKeyBinds(room);
         return room;
     }
@@ -132,6 +135,7 @@ public class RoomFactory extends Factory<Room> {
         Room room = rooms.get(id);
         room.add(player);
         room.add(lighting);
+        room.add(UILayer);
         return room;
     }
 

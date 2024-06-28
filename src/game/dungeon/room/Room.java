@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import game.Game;
 import game.dungeon.Dungeon;
+import game.dungeon.UILayer;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.mechanics.SnowEffect;
@@ -22,12 +23,14 @@ public class Room extends GameComponent {
     private RoomConnecter connecter;
     private RoomObjectManager objectManager;
     private CollisionChecker collision;
+    private UILayer UILayer;
 
     public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, CollisionChecker collision,
-            RoomObjectManager objectManager) {
+            RoomObjectManager objectManager, UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
         this.player = player;
+        this.UILayer = new UILayer();
         // this.tileGrid = tileGrid;
         connecter = new RoomConnecter();
         this.collision = collision;
@@ -55,7 +58,7 @@ public class Room extends GameComponent {
 
     @Override
     public void updateComponent() {
-        if (Dungeon.getUI(0) == null) {
+        if (UILayer.getComponentCount() == 0) {
             super.updateComponent();
         }
     }

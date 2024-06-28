@@ -13,6 +13,7 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.Game;
+import game.dungeon.UILayer;
 import game.dungeon.items.Item;
 import game.dungeon.items.ItemFactory;
 import game.dungeon.room.object.TreasureChest;
@@ -29,6 +30,7 @@ public class Inventory extends GameComponent {
     private static final int itemMargin = 8;
     private static final int flashTime = 80;
 
+    private UILayer UILayer;
     private ItemFactory itemFactory;
     private BufferedImage image;
     private int size;
@@ -40,9 +42,10 @@ public class Inventory extends GameComponent {
     private boolean move;
     private int timer;
 
-    public Inventory(int size) {
+    public Inventory(UILayer UILayer, int size) {
         super(left.getWidth() + middle.getWidth() * (size - 2) + right.getWidth(),
                 middle.getHeight() + tab.getHeight());
+        this.UILayer = UILayer;
         this.size = size;
         itemFactory = new ItemFactory(this);
         setLocation(Game.screenWidth / 2 - getWidth() / 2, Game.screenHeight - tab.getHeight());
@@ -130,6 +133,6 @@ public class Inventory extends GameComponent {
     };
 
     public void openChest(TreasureChest treasureChest) {
-        ActionUtilities.openPopupUI(new ChestUI(itemFactory.getItem(), flash)).actionPerformed(null);
+        UILayer.openPopupUI(new ChestUI(UILayer, itemFactory.getItem(), flash)).actionPerformed(null);
     }
 }

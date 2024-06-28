@@ -7,7 +7,7 @@ import game.dungeon.inventory.Inventory;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
-public abstract class Item {
+public class Item {
     private ImageIcon imageIcon;
     private ImageIcon rolloverIcon;
     private Action acquireItem;
@@ -23,7 +23,9 @@ public abstract class Item {
         acquireItem = ActionUtilities.addItem(inventory, this);
     }
 
-    public abstract void enable(int idx);
+    public void enable(int idx) {
+        // TODO
+    }
 
     public ImageIcon getImageIcon() {
         return imageIcon;

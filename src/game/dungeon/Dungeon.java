@@ -28,7 +28,7 @@ public class Dungeon extends GamePanel {
     private Player player;
     private RoomFactory roomFactory;
 
-    private static UILayer UI;
+    private UILayer UILayer;
     private PauseMenu roomMenu;
 
     private final Action nextRoom = new AbstractAction() {
@@ -42,65 +42,38 @@ public class Dungeon extends GamePanel {
 
     public Dungeon(Action changePanel) {
         super(changePanel);
-        inventory = new Inventory(8);
+        UILayer = new UILayer();
+        inventory = new Inventory(UILayer, 8);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(player);
+        roomFactory = new RoomFactory(player, UILayer);
         room = roomFactory.getStartingRoom(1);
         // room = roomFactory.createRandomRoom(40, 30);
         add(room);
         add(inventory);
-        roomMenu = new PauseMenu(new AbstractAction() {
+        roomMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                restart();
+                reset();
                 enterFrame();
             }
         }, changePanel);
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
-        getActionMap().put("pause", ActionUtilities.openPopupUI(roomMenu));
-        UI = new UILayer();
-        add(UI);
+        getActionMap().put("pause", UILayer.openPopupUI(roomMenu));
+        add(UILayer);
     }
 
-    public final void restart() {
+    public final void reset() {
         remove(room);
         remove(inventory);
-        remove(UI);
-        inventory = new Inventory(8);
+        remove(UILayer);
+        inventory = new Inventory(UILayer, 8);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(player);
+        roomFactory = new RoomFactory(player, UILayer);
         room = roomFactory.getStartingRoom(1);
         add(room);
         add(inventory);
-        UI.removeAll();
-        add(UI);
+        UILayer.removeAll();
+        add(UILayer);
     }
 
-    public static GameComponent getUI(int n) {
-        if (UI.getComponentCount() <= n) {
-            return null;
-        }
-        return (GameComponent) UI.getComponent(n);
-    }
-
-    public static void addUI(GameComponent gameComponent) {
-        UI.add(gameComponent);
-    }
-
-    public static void removeUI(GameComponent gameComponent) {
-        UI.remove(gameComponent);
-    }
-
-    private class UILayer extends GameComponent {
-
-        public UILayer() {
-            super(Game.screenWidth, Game.screenHeight);
-        }
-
-        public void update() {
-        }
-
-        public void drawComponent(Graphics2D g2d) {
-        }
-    }
 }

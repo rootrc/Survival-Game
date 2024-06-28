@@ -9,6 +9,7 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.dungeon.items.Item;
+import game.dungeon.UILayer;
 import game.game_components.PopupUI;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
@@ -16,8 +17,8 @@ import game.utilities.ImageUtilities;
 public class ChestUI extends PopupUI {
 	private Action check;
 
-	public ChestUI(Item item, Action flash) {
-		super(320, 256, 8, "ChestFloor");
+	public ChestUI(UILayer UILayer, Item item, Action flash) {
+		super(UILayer, 320, 256, 8, "ChestFloor");
 		GetItemButton getItemButton = new GetItemButton(this, ActionUtilities.combineActions(flash, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "close");
@@ -26,7 +27,7 @@ public class ChestUI extends PopupUI {
 		add(getItemButton);	
 		getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "getAll");
 		getActionMap().put("getAll", getItemButton.getAction());
-		check = ActionUtilities.createConfirmUI((Action) (new AbstractAction() {
+		check = UILayer.createConfirmUI((Action) (new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				ChestUI.super.exitPanel();
 			}
@@ -41,11 +42,12 @@ public class ChestUI extends PopupUI {
 
 	@Override
 	public void exitPanel() {
-		if (getComponentCount() == 0) {
+		// TODO
+		// if (getComponentCount() == 0) {
 			super.exitPanel();
-		} else {
-			check.actionPerformed(null);
-		}
+		// } else {
+		// 	check.actionPerformed(null);
+		// }
 	}
 
 }

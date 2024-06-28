@@ -10,17 +10,19 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.Game;
-import game.utilities.ActionUtilities;
+import game.dungeon.UILayer;
 import game.utilities.ImageUtilities;
 
 public abstract class PopupUI extends GameComponent {
+    private UILayer UILayer;
     private BufferedImage image;
     private int framesToEnter;
     private boolean moving;
     private int timer;
 
-    public PopupUI(int width, int height, int framesToEnter, String tileSet) {
+    public PopupUI(UILayer UILayer, int width, int height, int framesToEnter, String tileSet) {
         super(width, height);
+        this.UILayer = UILayer;
         this.framesToEnter = framesToEnter;
         setLocation((Game.screenWidth - getWidth()) / 2, (Game.screenHeight - getHeight()) / 2);
         buildImage(tileSet);
@@ -29,8 +31,8 @@ public abstract class PopupUI extends GameComponent {
         getActionMap().put("close", close);
     }
 
-    public PopupUI(int width, int height, int framesToEnter) {
-        this(width, height, framesToEnter, "Notebook");
+    public PopupUI(UILayer UILayer, int width, int height, int framesToEnter) {
+        this(UILayer, width, height, framesToEnter, "Notebook");
     }
 
     public void drawComponent(Graphics2D g2d) {
@@ -60,7 +62,7 @@ public abstract class PopupUI extends GameComponent {
         } else if (getX() == Game.screenWidth) {
             moving = false;
             timer = 1;
-            ActionUtilities.closePopupUI(this).actionPerformed(null);
+            UILayer.remove(this);
         }
     }
 
@@ -84,7 +86,7 @@ public abstract class PopupUI extends GameComponent {
     protected final Action close = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             exitPanel();
-            ActionUtilities.removeConfirmUI().actionPerformed(e);;
+            UILayer.removeConfirmUI().actionPerformed(e);;
         }
     };
 
