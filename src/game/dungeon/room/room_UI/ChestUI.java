@@ -9,8 +9,8 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.dungeon.items.Item;
-import game.dungeon.UILayer;
 import game.game_components.PopupUI;
+import game.game_components.UILayer;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
@@ -27,11 +27,11 @@ public class ChestUI extends PopupUI {
 		add(getItemButton);	
 		getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "getAll");
 		getActionMap().put("getAll", getItemButton.getAction());
-		check = UILayer.createConfirmUI((Action) (new AbstractAction() {
+		check = UILayer.createAndOpenConfirmUI((Action) (new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				ChestUI.super.exitPanel();
 			}
-		}), "areYouSure");
+		}));
 	}
 
 	@Override

@@ -25,20 +25,20 @@ public class Game extends JFrame implements Runnable {
 
     private Thread gameThread;
 
-    private final Action changePanel = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getActionCommand().equals("dungeon")) {
-                changePanel(dungeon);
-            } else if (e.getActionCommand().equals("options")) {
-                // TODO
-            } else if (e.getActionCommand().equals("mainMenu")) {
-                changePanel(menu);
-                dungeon.reset();
-            } else if (e.getActionCommand().equals("mainMenu")) {
-                // TODO
-            }
-        }
-    };
+    // private final Action changePanel = new AbstractAction() {
+    // public void actionPerformed(ActionEvent e) {
+    // if (e.getActionCommand().equals("dungeon")) {
+    // changePanel(dungeon);
+    // } else if (e.getActionCommand().equals("options")) {
+    // // TODO
+    // } else if (e.getActionCommand().equals("mainMenu")) {
+    // changePanel(menu);
+    // dungeon.reset();
+    // } else if (e.getActionCommand().equals("mainMenu")) {
+    // // TODO
+    // }
+    // }
+    // };
 
     public Game() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,18 +52,30 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initPanel() {
-        dungeon = new Dungeon(changePanel);
-        menu = new Menu(changePanel);
+        dungeon = new Dungeon(this);
+        menu = new Menu(this);
         gamePanel = menu;
         add(gamePanel);
     }
 
-    private void changePanel(GamePanel gamePanel) {
-        remove(this.gamePanel);
-        this.gamePanel = gamePanel;
-        add(gamePanel);
-        gamePanel.enterFrame();
-        revalidate();
+    public Action changePanel(String str) {
+        return new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                remove(gamePanel);
+                if (str.equals("dungeon")) {
+                    gamePanel = dungeon;
+                } else if (str.equals("options")) {
+                    // TODO
+                } else if (str.equals("mainMenu")) {
+                    gamePanel = menu;
+                } else if (str.equals("title")) {
+                    // TODO
+                }
+                add(gamePanel);
+                gamePanel.fadeIn();
+                revalidate();
+            }
+        };
     }
 
     private void startGameThread() {
@@ -77,12 +89,12 @@ public class Game extends JFrame implements Runnable {
         double delta1 = 0;
         long lastTime1 = System.nanoTime();
         long currentTime1;
-
+        
         double updateInterval = 1000000000 / UPS;
         double delta2 = 0;
         long lastTime2 = System.nanoTime();
         long currentTime2;
-
+        
         while (gameThread != null) {
             currentTime1 = System.nanoTime();
             delta1 += (currentTime1 - lastTime1) / drawInterval;

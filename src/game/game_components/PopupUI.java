@@ -10,9 +10,9 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.Game;
-import game.dungeon.UILayer;
 import game.utilities.ImageUtilities;
 
+// A UI panel that appears and disappears
 public abstract class PopupUI extends GameComponent {
     private UILayer UILayer;
     private BufferedImage backgroundImage;
@@ -67,6 +67,7 @@ public abstract class PopupUI extends GameComponent {
     public void enterPanel() {
         UILayer.add(this);
         moving = true;
+        timer = 1;
         setLocation(-getWidth(), getY());
     }
 
@@ -85,7 +86,6 @@ public abstract class PopupUI extends GameComponent {
     protected final Action close = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             exitPanel();
-            UILayer.removeConfirmUI().actionPerformed(e);
         }
     };
 }

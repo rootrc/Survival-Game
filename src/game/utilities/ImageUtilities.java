@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 
 import game.dungeon.Dungeon;
 
+// Opens, edits, and processes images
 public class ImageUtilities {
     private static final HashMap<String, BufferedImage> map = new HashMap<>();
     public static final int default3x3TilesetScale = 32;

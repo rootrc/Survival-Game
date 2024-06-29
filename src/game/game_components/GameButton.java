@@ -6,10 +6,10 @@ import java.awt.Rectangle;
 import javax.swing.Action;
 import javax.swing.JButton;
 
+// Custom GameButton drawn at a rectangle using actions 
 public abstract class GameButton extends JButton {
-    public GameButton(Action action, String actionCommand, Rectangle rect) {
+    public GameButton(Action action, Rectangle rect) {
         super(action);
-        setActionCommand(actionCommand);
         setBounds(rect);
         setBorder(null);
         setBorderPainted(false);

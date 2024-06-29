@@ -7,12 +7,15 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import game.Game;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.room_UI.PauseMenu;
 import game.dungeon.room_factory.RoomFactory;
 import game.game_components.GamePanel;
+import game.game_components.UILayer;
+import game.utilities.ActionUtilities;
 
 public class Dungeon extends GamePanel {
     public final static int TILESIZE = 16;
@@ -25,7 +28,7 @@ public class Dungeon extends GamePanel {
     private RoomFactory roomFactory;
 
     private UILayer UILayer;
-    private PauseMenu roomMenu;
+    private PauseMenu pauseMenu;
 
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -36,8 +39,8 @@ public class Dungeon extends GamePanel {
         }
     };
 
-    public Dungeon(Action changePanel) {
-        super(changePanel);
+    public Dungeon(Game game) {
+        super(game);
         UILayer = new UILayer();
         inventory = new Inventory(UILayer, 8);
         player = new Player(nextRoom, inventory);
@@ -46,15 +49,19 @@ public class Dungeon extends GamePanel {
         // room = roomFactory.createRandomRoom(40, 30);
         add(room);
         add(inventory);
-        roomMenu = new PauseMenu(UILayer, new AbstractAction() {
+        pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 reset();
-                enterFrame();
+                fadeIn();
             }
-        }, changePanel);
+        }, ActionUtilities.combineActions(game.changePanel("mainMenu"), new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                reset();
+            }
+        }), game.changePanel("title"));
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
-        getActionMap().put("pause", UILayer.openPopupUI(roomMenu));
+        getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
         add(UILayer);
     }
 

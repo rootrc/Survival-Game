@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+// Utilites for Actions
 public class ActionUtilities {
 
     public static Action combineActions(Action a, Action b) {

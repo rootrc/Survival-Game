@@ -5,7 +5,6 @@ import java.util.HashMap;
 import javax.swing.KeyStroke;
 
 import game.Game;
-import game.dungeon.UILayer;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
@@ -15,6 +14,7 @@ import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
 import game.game_components.Factory;
+import game.game_components.UILayer;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;

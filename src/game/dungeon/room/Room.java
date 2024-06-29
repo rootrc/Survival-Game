@@ -3,7 +3,6 @@ package game.dungeon.room;
 import java.awt.Graphics2D;
 
 import game.Game;
-import game.dungeon.UILayer;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.mechanics.SnowEffect;
@@ -14,6 +13,7 @@ import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.RoomConnecter;
 import game.game_components.GameComponent;
+import game.game_components.UILayer;
 
 public class Room extends GameComponent {
     private int id;

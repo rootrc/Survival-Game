@@ -12,39 +12,42 @@ import javax.swing.ImageIcon;
 
 import game.utilities.ImageUtilities;
 
+// Custom UIButton that is used for UI
 public class UIButton extends GameButton {
 
-    public UIButton(Action action, String actionCommand, Rectangle rect, BufferedImage image) {
-        super(action, actionCommand, rect);
-        setIcon(createImageIcon(image, 0));
-        setRolloverIcon(createImageIcon(image, 1));
-        setPressedIcon(createImageIcon(image, 2));
+    public UIButton(Action action, Rectangle rect, BufferedImage text) {
+        super(action, rect);
+        setIcon(createImageIcon(text, 0));
+        setRolloverIcon(createImageIcon(text, 1));
+        setPressedIcon(createImageIcon(text, 2));
     }
 
-    private ImageIcon createImageIcon(BufferedImage image, int id) {
+    // creates ImageIcons for various button states with background and text
+    private ImageIcon createImageIcon(BufferedImage text, int id) {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        BufferedImage res = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+        BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.BITMASK);
-        Graphics2D g2d = res.createGraphics();
+        if (text == null) {
+            return new ImageIcon(image);
+        }
+        Graphics2D g2d = image.createGraphics();
         g2d.drawImage(buildBackgroundImage(id), 0, 0, null);
-        if (image == null) {
-            return new ImageIcon(res);
-        }
-        if (id == 2) {
-            g2d.drawImage(image, (getWidth() - image.getWidth()) / 2, (getHeight() - image.getHeight()) / 2 + 1, null);
+        if (id != 2) {
+            g2d.drawImage(text, (getWidth() - text.getWidth()) / 2, (getHeight() - text.getHeight()) / 2, null);
         } else {
-            g2d.drawImage(image, (getWidth() - image.getWidth()) / 2, (getHeight() - image.getHeight()) / 2, null);
+            g2d.drawImage(text, (getWidth() - text.getWidth()) / 2, (getHeight() - text.getHeight()) / 2 + 2, null);
         }
-        return new ImageIcon(res);
+        return new ImageIcon(image);
     }
 
+    // Builds background with tileset
     private BufferedImage buildBackgroundImage(int id) {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.BITMASK);
         Graphics2D g2d = image.createGraphics();
-        final int rows = getWidth() / ImageUtilities.default3x3TilesetScale;
-        final int cols = getHeight() / ImageUtilities.default3x3TilesetScale;
+        int rows = getWidth() / ImageUtilities.default3x3TilesetScale;
+        int cols = getHeight() / ImageUtilities.default3x3TilesetScale;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 int r = 1;
@@ -65,14 +68,11 @@ public class UIButton extends GameButton {
                 } else if (j == cols - 1) {
                     r++;
                 }
-                drawButtonTile(g2d, r, c + 4 * id, i, j);
+                g2d.drawImage(ImageUtilities.getImage("UI", "ButtonTileSet", r, c + 4 * id, 2),
+                        ImageUtilities.default3x3TilesetScale * i, ImageUtilities.default3x3TilesetScale * j, null);
             }
         }
         return image;
-    }
-
-    private void drawButtonTile(Graphics2D g2d, int r, int c, int i, int j) {
-        g2d.drawImage(ImageUtilities.getImage("UI", "ButtonTileSet", r, c, 2), ImageUtilities.default3x3TilesetScale * i, ImageUtilities.default3x3TilesetScale * j, null);
     }
 
 }

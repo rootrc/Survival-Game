@@ -14,7 +14,7 @@ import game.utilities.ImageUtilities;
 
 public class GetItemButton extends GameButton {
     public GetItemButton(PopupUI popupUI, Action flash, Item item, Rectangle rect) {
-        super(null, "getItem", rect);
+        super(null, rect);
         setAction(ActionUtilities.combineActions(item.getAquireItem(), new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 setIcon(null);

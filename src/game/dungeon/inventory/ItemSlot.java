@@ -12,7 +12,7 @@ public class ItemSlot extends GameButton {
     private Item item;
 
     public ItemSlot(int idx, Rectangle rect) {
-        super(null, null, rect);
+        super(null, rect);
         this.idx = idx;
         getInputMap(2).put(
                     KeyStroke.getKeyStroke((new StringBuilder("pressed ").append(idx % 10)).toString()), idx);

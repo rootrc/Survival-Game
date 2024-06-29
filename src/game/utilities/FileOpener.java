@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+// Opens files
 public abstract class FileOpener {
     private String fileName;
     private BufferedReader br;

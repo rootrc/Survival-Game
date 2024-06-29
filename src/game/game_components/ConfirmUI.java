@@ -5,17 +5,17 @@ import java.awt.Rectangle;
 
 import javax.swing.Action;
 
-import game.dungeon.UILayer;
 import game.utilities.ActionUtilities;
 import game.utilities.ImageUtilities;
 
+// A ConfirmUI that asks the user "are you sure?"
 public class ConfirmUI extends PopupUI {
-    public ConfirmUI(UILayer UIlayer, Action action, String actionCommand) {
+    public ConfirmUI(UILayer UIlayer, Action action) {
         super(UIlayer, 480, 256, 4);
-        add(new UIButton(ActionUtilities.combineActions(action, close), actionCommand,
+        add(new UIButton(ActionUtilities.combineActions(action, close),
                 new Rectangle(getWidth() / 2 - 164, 152, 160, 64),
                 ImageUtilities.getImage("UI", "YesButton")));
-        add(new UIButton(close, "close", new Rectangle(getWidth() / 2 + 4, 152, 160, 64),
+        add(new UIButton(close, new Rectangle(getWidth() / 2 + 4, 152, 160, 64),
                 ImageUtilities.getImage("UI", "NoButton")));
     }
 

@@ -11,6 +11,7 @@ import java.awt.RenderingHints;
 
 import javax.swing.JComponent;
 
+// Custom GameComponent that updates children with utility methods
 public abstract class GameComponent extends JComponent {
     public GameComponent(int width, int height) {
         setPreferredSize(new Dimension(width, height));
@@ -33,6 +34,7 @@ public abstract class GameComponent extends JComponent {
 
     public abstract void update();
 
+    // Casts Graphics to Graphics2D
     @Override
     public final void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -44,9 +46,11 @@ public abstract class GameComponent extends JComponent {
         drawComponent(g2d);
     }
 
+    // The actual method to draw component
     public abstract void drawComponent(Graphics2D g2d);
 
-    public final void add(GameComponent gameComponent) {
+    // Utility method as gamecomponents are usually added to the back
+    public void add(GameComponent gameComponent) {
         add(gameComponent, 0);
     }
 
@@ -61,6 +65,8 @@ public abstract class GameComponent extends JComponent {
     protected final boolean isMouseWithinComponent() {
         return isMouseWithinComponent(0, 0);
     }
+
+    // Utility methods
 
     public final void setX(double x) {
         setX((int) x);

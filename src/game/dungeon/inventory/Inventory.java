@@ -13,12 +13,12 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.Game;
-import game.dungeon.UILayer;
 import game.dungeon.items.Item;
 import game.dungeon.items.ItemFactory;
 import game.dungeon.room.object.TreasureChest;
 import game.dungeon.room.room_UI.ChestUI;
 import game.game_components.GameComponent;
+import game.game_components.UILayer;
 import game.utilities.ImageUtilities;
 
 public class Inventory extends GameComponent {
