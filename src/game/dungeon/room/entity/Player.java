@@ -49,7 +49,6 @@ public class Player extends Entity {
         interactionCooldown++;
         move();
         updateSprite();
-        
     }
 
     private void updateSprite() {

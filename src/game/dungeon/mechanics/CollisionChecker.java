@@ -32,8 +32,8 @@ public class CollisionChecker {
         return true;
     }
 
-    public boolean checkPoint(int x, int y) {
-        return !collision[y / Dungeon.TILESIZE][x / Dungeon.TILESIZE];
+    public boolean checkPoint(double x, double y) {
+        return !collision[(int) (y / Dungeon.TILESIZE)][(int) (x / Dungeon.TILESIZE)];
     }
 
 }
