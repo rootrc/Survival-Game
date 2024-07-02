@@ -5,10 +5,11 @@ import game.dungeon.room.tile.Tile;
 import game.dungeon.room.tile.TileGrid;
 import game.game_components.Factory;
 
-class CollisionCheckerFactory extends Factory<CollisionChecker>{
+class CollisionCheckerFactory extends Factory<CollisionChecker> {
 
-    CollisionChecker getCollisionChecker(TileGrid tileGrid) {
-        return new CollisionChecker(getCollisionArray(tileGrid.getN(), tileGrid.getM(), tileGrid.getTileGrid()));
+    CollisionChecker getCollisionChecker(RoomFileData file, TileGrid tileGrid) {
+        return new CollisionChecker(getCollisionArray(tileGrid.getN(), tileGrid.getM(), tileGrid.getTileGrid(0)),
+                getHeightArray(file.getN(), file.getM(), file.getTileGrid()));
     }
 
     private boolean[][] getCollisionArray(int N, int M, Tile[][][] tileGrid) {
@@ -33,5 +34,15 @@ class CollisionCheckerFactory extends Factory<CollisionChecker>{
             }
         }
         return collision;
+    }
+
+    private boolean[][] getHeightArray(int N, int M, int[][] tileGrid) {
+        boolean[][] height = new boolean[N][M];
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < M; c++) {
+                height[r][c] = (tileGrid[r][c] == 1 || tileGrid[r][c] == 3 || tileGrid[r][c] == 6);
+            }
+        }
+        return height;
     }
 }

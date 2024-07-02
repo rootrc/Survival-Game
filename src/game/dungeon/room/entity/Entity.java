@@ -17,7 +17,7 @@ public abstract class Entity extends RoomObject {
     private double speedY;
     private double accFrames;
     private double deaccFrames;
-    protected CollisionChecker collision;
+    private CollisionChecker collision;
     private int direction;
     private int animationFrame;
 
@@ -56,14 +56,14 @@ public abstract class Entity extends RoomObject {
         if (!isMoving()) {
             return;
         }
-        if (collision.checkTile(this, getSpeedX(), 0)) {
+        if (collision.canMove(this, getSpeedX(), 0)) {
             if (isMovingY()) {
                 moveX(getSpeedX() * a);
             } else {
                 moveX(getSpeedX());
             }
         }
-        if (collision.checkTile(this, 0, getSpeedY())) {
+        if (collision.canMove(this, 0, getSpeedY())) {
             if (isMovingX()) {
                 moveY(getSpeedY() * a);
             } else {
@@ -83,20 +83,28 @@ public abstract class Entity extends RoomObject {
         setImage(ImageUtilities.getImage(tileset, animationFrame / maxSpeed / 2, direction, 3, 2));
     }
 
-    public int getDirection() {
-        return direction;
+    public int getTileGridHeight() {
+        return collision.getTileGridHeight(this);
     }
 
-    public void setDirection(int direction) {
-        this.direction = direction;
+    public void setCollision(CollisionChecker collision) {
+        this.collision = collision;
     }
 
-    protected final void changeLightStrength(int delta) {
+    public final void changeLightStrength(int delta) {
         lightStrength += delta;
     }
 
     public final int getLightStrength() {
         return lightStrength;
+    }
+
+    public final int getDirection() {
+        return direction;
+    }
+
+    public final void setDirection(int direction) {
+        this.direction = direction;
     }
 
     public final boolean isMoving() {
@@ -106,7 +114,7 @@ public abstract class Entity extends RoomObject {
     public final boolean isMovingX() {
         return speedX != 0;
     }
-    
+
     public final boolean isMovingY() {
         return speedY != 0;
     }

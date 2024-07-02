@@ -3,6 +3,7 @@ package game.dungeon.room_factory;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import game.dungeon.room.entity.Player;
 import game.dungeon.room.tile.Tile;
 import game.dungeon.room.tile.TileGrid;
 import game.game_components.Factory;
@@ -28,15 +29,21 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    TileGrid createRandomGrid(int N, int M) {
-        return new TileGrid(createGrid(N, M, MapGenerator.getRandomMap(N, M)));
+    TileGrid createRandomGrid(Player player, int N, int M) {
+        return new TileGrid(player, createGrid(N, M, MapGenerator.getRandomMap(N, M), 0),
+                createGrid(N, M, MapGenerator.getRandomMap(N, M), 1));
     }
 
-    TileGrid createGrid(RoomFileData file) {
-        return new TileGrid(createGrid(file.getN(), file.getM(), file.getTileGrid()));
+    TileGrid createGrid(RoomFileData file, Player player) {
+        int[][] fileTileGridClone = new int[file.getN()][];
+        for (int i = 0; i < file.getN(); i++) {
+            fileTileGridClone[i] = file.getTileGrid()[i].clone();
+        }
+        return new TileGrid(player, createGrid(file.getN(), file.getM(), fileTileGridClone, 0),
+                createGrid(file.getN(), file.getM(), fileTileGridClone, 1));
     }
 
-    private Tile[][][] createGrid(int N, int M, int arr[][]) {
+    private Tile[][][] createGrid(int N, int M, int arr[][], int height) {
         int arr2[][][] = new int[layers][N][M];
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
@@ -50,13 +57,24 @@ class TileGridFactory extends Factory<TileGrid> {
                 }
             }
         }
-        for (int r = 0; r < N; r++) {
-            for (int c = 0; c < M; c++) {
-                layer0(arr, arr2[0], r, c);
-                layer1(arr, arr2[1], r, c);
-                layer2(arr, arr2[2], r, c);
-                layer3(arr, arr2[3], r, c);
-                layer4(arr, arr2[4], r, c);
+        if (height == 0) {
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < M; c++) {
+                    layer0(arr, arr2[0], r, c);
+                    layer1(arr, arr2[1], r, c);
+                    layer2(arr, arr2[2], r, c);
+                    layer3(arr, arr2[3], r, c);
+                    layer4(arr, arr2[4], r, c);
+                }
+            }
+        } else if (height == 1) {
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < M; c++) {
+                    layer0(arr, arr2[0], r, c);
+                    layer1(arr, arr2[1], r, c);
+                    layer2(arr, arr2[2], r, c);
+                    layer41(arr, arr2[3], r, c);
+                }
             }
         }
         Tile[][][] res = new Tile[layers][N][M];
@@ -457,6 +475,57 @@ class TileGridFactory extends Factory<TileGrid> {
                     arr2[r][c] = 162;
                 } else if (arr[r][c + 1] == 0 && arr[r + 1][c] == 0) {
                     arr2[r][c] = 164;
+                }
+            }
+        }
+    }
+
+    private final HashSet<Integer> layer41 = new HashSet<>(Arrays.asList(-1, 2, 5));
+
+    private void layer41(int[][] arr, int[][] arr2, int r, int c) {
+        if (arr[r][c] == 0 || arr[r][c] == 3 || arr[r][c] == 6) {
+            arr2[r][c] = 145;
+            return;
+        }
+        if (arr[r][c] == 1  || arr[r][c] == 4) {
+            arr2[r][c] = 145;
+            int cnt = 0;
+            for (int d[] : direct) {
+                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                    cnt++;
+                } else if (!layer41.contains(arr[r + d[0]][c + d[1]])) {
+                    cnt++;
+                }
+            }
+            if (cnt == 4) {
+                if (layer41.contains(arr[r + 1][c - 1])) {
+                    arr2[r][c] = 128;
+                } else if (layer41.contains(arr[r + 1][c + 1])) {
+                    arr2[r][c] = 126;
+                } else if (layer41.contains(arr[r - 1][c - 1])) {
+                    arr2[r][c] = 164;
+                } else if (layer41.contains(arr[r - 1][c + 1])) {
+                    arr2[r][c] = 162;
+                }
+            } else if (cnt == 3) {
+                if (layer41.contains(arr[r - 1][c])) {
+                    arr2[r][c] = 163;
+                } else if (layer41.contains(arr[r + 1][c])) {
+                    arr2[r][c] = 127;
+                } else if (layer41.contains(arr[r][c - 1])) {
+                    arr2[r][c] = 146;
+                } else if (layer41.contains(arr[r][c + 1])) {
+                    arr2[r][c] = 144;
+                }
+            } else if (cnt == 2) {
+                if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r - 1][c])) {
+                    arr2[r][c] = 148;
+                } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r - 1][c])) {
+                    arr2[r][c] = 147;
+                } else if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r + 1][c])) {
+                    arr2[r][c] = 130;
+                } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r + 1][c])) {
+                    arr2[r][c] = 129;
                 }
             }
         }

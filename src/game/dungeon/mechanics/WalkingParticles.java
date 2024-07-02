@@ -2,8 +2,6 @@ package game.dungeon.mechanics;
 
 import java.awt.Color;
 
-import javax.tools.Diagnostic;
-
 import game.Game;
 import game.dungeon.room.entity.Entity;
 import game.dungeon.room.object_utilities.DirectionUtilities;

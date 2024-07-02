@@ -41,8 +41,8 @@ public class RoomFactory extends Factory<Room> {
 
     public Room getStartingRoom(int id) {
         RoomFileData file = new RoomFileData(id);
-        TileGrid tileGrid = tileFactory.createGrid(file);
-        CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
+        TileGrid tileGrid = tileFactory.createGrid(file, player);
+        CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
         player.set(312, 100, collision);
         Room room = new Room(id, player, lighting, tileGrid, collision,
                 objectManagerFactory.getRoomObjectManager(file), UILayer);
@@ -87,8 +87,8 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {
-        TileGrid tileGrid = tileFactory.createGrid(file);
-        CollisionChecker collision = collisionFactory.getCollisionChecker(tileGrid);
+        TileGrid tileGrid = tileFactory.createGrid(file, player);
+        CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
                 objectManagerFactory.getRoomObjectManager(file), UILayer);
         setKeyBinds(room);

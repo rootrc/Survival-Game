@@ -7,21 +7,20 @@ import game.dungeon.room.entity.Entity;
 
 public class CollisionChecker {
     private boolean collision[][];
+    private boolean height[][];
 
-    public CollisionChecker(boolean collision[][]) {
+    public CollisionChecker(boolean collision[][], boolean[][] height) {
         this.collision = collision;
+        this.height = height;
     }
 
-    public boolean checkTile(Entity entity, double x, double y) {
-        if (entity.getX() < 0 || entity.getY() < 0) {
-            return true;
-        }
+    public boolean canMove(Entity entity, double dx, double dy) {
         ArrayList<Integer> rows = new ArrayList<>();
         ArrayList<Integer> cols = new ArrayList<>();
-        rows.add((int) ((entity.getY() + entity.getHitBox().getY() + y) / Dungeon.TILESIZE));
-        rows.add((int) ((entity.getY() + entity.getHitBox().getMaxY() + y) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + entity.getHitBox().getX() + x) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() + x) / Dungeon.TILESIZE));
+        rows.add((int) ((entity.getY() + entity.getHitBox().getY() + dy) / Dungeon.TILESIZE));
+        rows.add((int) ((entity.getY() + entity.getHitBox().getMaxY() + dy) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getX() + dx) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() + dx) / Dungeon.TILESIZE));
         for (int r : rows) {
             for (int c : cols) {
                 if (collision[r][c]) {
@@ -30,6 +29,23 @@ public class CollisionChecker {
             }
         }
         return true;
+    }
+
+    public int getTileGridHeight(Entity entity) {
+        ArrayList<Integer> rows = new ArrayList<>();
+        ArrayList<Integer> cols = new ArrayList<>();
+        rows.add((int) ((entity.getY() + entity.getHitBox().getY()) / Dungeon.TILESIZE));
+        rows.add((int) ((entity.getY() + entity.getHitBox().getMaxY()) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getX()) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX()) / Dungeon.TILESIZE));
+        for (int r : rows) {
+            for (int c : cols) {
+                if (height[r][c]) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 
     public boolean checkPoint(double x, double y) {
