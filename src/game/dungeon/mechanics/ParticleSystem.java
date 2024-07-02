@@ -23,33 +23,35 @@ public abstract class ParticleSystem extends GameComponent {
         g2d.setColor(Color.white);
         for (int i = 0; i < particles.size(); i++) {
             Particle particle = particles.get(i);
-            if (checkValid(particle)) {
+            if (particle.isInvalid()) {
                 particles.remove(particle);
-            } else if (shouldDraw(particle)) {
+            } else if (particle.shouldDraw()) {
                 particle.draw(g2d);
             }
         }
     }
 
-    protected abstract boolean checkValid(Particle particle);
-
-    protected abstract boolean shouldDraw(Particle particle);
+    public int getParticleCount() {
+        return particles.size();
+    }
 
     public void addParticle(Particle particle) {
         particles.add(particle);
     }
 
-    protected class Particle {
-        int size;
-        Color color;
-        double x;
-        double y;
-        double xSpeed;
-        double ySpeed;
-        double xAcc;
-        double yAcc;
+    protected abstract class Particle {
+        protected int size;
+        protected Color color;
+        protected double x;
+        protected double y;
+        protected double xSpeed;
+        protected double ySpeed;
+        protected double xAcc;
+        protected double yAcc;
+        protected int t;
 
-        Particle(int size, Color color, double x0, double y0, double xSpeed0, double ySpeed0, double xAcc0, double yAcc0) {
+        Particle(int size, Color color, double x0, double y0, double xSpeed0, double ySpeed0, double xAcc0,
+                double yAcc0) {
             this.size = size;
             this.color = color;
             x = x0;
@@ -65,11 +67,23 @@ public abstract class ParticleSystem extends GameComponent {
             y += ySpeed;
             xSpeed += xAcc;
             ySpeed += yAcc;
+            if (Math.abs(xSpeed) < 0.000001) {
+                xAcc = 0;
+            }
+            if (Math.abs(ySpeed) < 0.000001) {
+                yAcc = 0;
+            }
+            t++;
         }
 
         public void draw(Graphics2D g2d) {
+            g2d.setColor(color);
             g2d.fillRect((int) (x) - size / 2, (int) (y) - size / 2, size, size);
         }
+
+        protected abstract boolean isInvalid();
+
+        protected abstract boolean shouldDraw();
     }
 
 }

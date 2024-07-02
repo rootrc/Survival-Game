@@ -6,6 +6,7 @@ import game.Game;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.mechanics.SnowParticles;
+import game.dungeon.mechanics.WalkingParticles;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -35,6 +36,7 @@ public class Room extends GameComponent {
         this.collision = collision;
         this.objectManager = objectManager;
         add(tileGrid);
+        add(new WalkingParticles(getWidth(), getHeight(), player));
         add(objectManager);
         add(player);
         add(new SnowParticles(getWidth(), getHeight(), collision));

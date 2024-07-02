@@ -37,18 +37,30 @@ public class ImageUtilities {
         return null;
     }
 
-    public static BufferedImage getImage(String folder, String name, int r, int c, double scaleR, double scaleC) {
-        return getImage(folder, name).getSubimage((int) (scaleC * Dungeon.TILESIZE * c),
+    public static BufferedImage getImage(BufferedImage image, int r, int c, double scaleR, double scaleC) {
+        return image.getSubimage((int) (scaleC * Dungeon.TILESIZE * c),
                 (int) (scaleR * Dungeon.TILESIZE * r), (int) (scaleC * Dungeon.TILESIZE),
                 (int) (scaleR * Dungeon.TILESIZE));
     }
 
+    public static BufferedImage getImage(BufferedImage image, int r, int c, double scale) {
+        return getImage(image, r, c, scale, scale);
+    }
+
+    public static BufferedImage getImage(BufferedImage image, int r, int c) {
+        return getImage(image, r, c, 1);
+    }
+
+    public static BufferedImage getImage(String folder, String name, int r, int c, double scaleR, double scaleC) {
+        return getImage(getImage(folder, name), r, c, scaleR, scaleC);
+    }
+
     public static BufferedImage getImage(String folder, String name, int r, int c, double scale) {
-        return getImage(folder, name, r, c, scale, scale);
+        return getImage(getImage(folder, name), r, c, scale, scale);
     }
 
     public static BufferedImage getImage(String folder, String name, int r, int c) {
-        return getImage(folder, name, r, c, 1);
+        return getImage(getImage(folder, name), r, c, 1);
     }
 
     public static BufferedImage getImageFrom3x3Tileset(String folder, String name, int width, int height, int size) {

@@ -1,6 +1,5 @@
 package game.dungeon.room.entity;
 
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 
@@ -14,7 +13,6 @@ import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
-import game.utilities.ImageUtilities;
 
 public class Player extends Entity {
     private HashSet<String> movementKeys = new HashSet<>();
@@ -23,7 +21,7 @@ public class Player extends Entity {
     private Action nextRoom;
 
     public Player(Action nextRoom, Inventory inventory) {
-        super(ImageUtilities.getImage("entities", "playerTileset", 0, 0, 3, 2),
+        super("playerTileset",
                 new CollisionBox(0.5, 1.25, 1, 1.5),
                 new CollisionBox(0, 0.75, 2, 2.5), Dungeon.TILESIZE / 4, null, 10, 4);
         this.nextRoom = nextRoom;
@@ -37,51 +35,14 @@ public class Player extends Entity {
         this.collision = collision;
     }
 
-    private int n;
-    private int cnt;
+    @Override
+    public void update() {
+        super.update();
+        interactionCooldown++;
+    }
 
     @Override
-    public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(ImageUtilities.getImage("entities", "playerTileset", cnt / getMaxSpeed() / 2, n, 3, 2), 0, 0, null);
-    }
-
-    public void update() {
-        interactionCooldown++;
-        move();
-        updateSprite();
-    }
-
-    private void updateSprite() {
-        if (getSpeedX() != 0 || getSpeedY() != 0) {
-            cnt++;
-            cnt %= 4 *  getMaxSpeed() * 2 ;
-        } else {
-            cnt = 0;
-        }
-        int lastN = n;
-        n = 0;
-        if (getSpeedX() > 0) {
-            n += 1;
-        } else if (getSpeedX() < 0) {
-            n += 3;
-        }
-        if (getSpeedY() == 0) {
-            n *= 2;
-        } else if (getSpeedY() > 0) {
-            n += 2;
-            if (getSpeedX() == 0) {
-                n *= 2;
-            }
-        }
-        if (getSpeedX() < 0 && getSpeedY() < 0) {
-            n = 7;
-        }
-        if (n == 0 && getSpeedY() == 0) {
-            n = lastN;
-        }
-    }
-
-    private void move() {
+    protected void move() {
         double ax = 0;
         double ay = 0;
         if (movementKeys.contains("w") && Math.abs(getSpeedY()) < getMaxSpeed()) {
@@ -112,20 +73,7 @@ public class Player extends Entity {
         }
         addSpeedX(ax);
         addSpeedY(ay);
-        if (collision.checkTile(this, getSpeedX(), 0)) {
-            if (ax != 0 && ay != 0) {
-                moveX(getSpeedX() * a);
-            } else {
-                moveX(getSpeedX());
-            }
-        }
-        if (collision.checkTile(this, 0, getSpeedY())) {
-            if (ax != 0 && ay != 0) {
-                moveY(getSpeedY() * a);
-            } else {
-                moveY(getSpeedY());
-            }
-        }
+        super.move();
     }
 
     public final Action accelerate = new AbstractAction() {
@@ -190,10 +138,6 @@ public class Player extends Entity {
 
     public void setInteractable(RoomObject interactable) {
         this.interactable = interactable;
-    }
-
-    public void setDirection(int d) {
-        n = d;
     }
 
     public Ladder getLadder() {

@@ -14,8 +14,8 @@ public class Game extends JFrame implements Runnable {
     public final static int screenWidth = Dungeon.TILESIZE * Dungeon.maxScreenCol; // 1024 pixels
     public final static int screenHeight = Dungeon.TILESIZE * Dungeon.maxScreenRow; // 768 pixels
 
-    private static final int FPS = 60;
-    private static final int UPS = 60;
+    public static final int FPS = 60;
+    public static final int UPS = 60;
 
     public static final boolean DEBUG = false;
 
