@@ -1,17 +1,17 @@
 package game.dungeon.room.object_utilities;
 
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import game.Game;
 import game.dungeon.room.entity.Player;
 import game.game_components.GameComponent;
 
 public class RoomObjectManager extends GameComponent {
     private Player player;
 
-    public RoomObjectManager(Player player) {
-        super(4 * Game.screenWidth, 4 * Game.screenHeight);
+    public RoomObjectManager(int width, int height, Player player) {
+        super(width, height);
         this.player = player;
     }
 

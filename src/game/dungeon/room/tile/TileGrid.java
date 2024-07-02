@@ -12,66 +12,60 @@ import game.dungeon.room.entity.Player;
 import game.game_components.GameComponent;
 
 public class TileGrid extends GameComponent {
-    private BufferedImage tileGridImage;
-    private BufferedImage tileGrid1Image;
+    private BufferedImage[] image;
     private int N, M, layers;
     private int width, height;
-    private Tile[][][] tileGrid;
-    private Tile[][][] tileGrid1;
+    private Tile[][][][] tileGrids;
     private Player player;
 
-    public TileGrid(Player player, Tile[][][] tileGrid, Tile[][][] tileGrid1) {
+    public TileGrid(int N, int M, Tile[][][][] tileGrids, Player player) {
         super(0, 0);
-        this.tileGrid = tileGrid;
-        this.tileGrid1 = tileGrid1;
+        this.tileGrids = tileGrids;
         this.player = player;
-        layers = tileGrid.length;
-        N = tileGrid[0].length;
-        M = tileGrid[0][0].length;
+        layers = tileGrids[0].length;
+        this.N = N;
+        this.M = M;
         height = Dungeon.TILESIZE * N;
         width = Dungeon.TILESIZE * M;
         setSize(width, height);
-        buildImage();
+        buildImages();
     }
 
     public void update() {
     }
 
     public void drawComponent(Graphics2D g2d) {
-        if (player.getTileGridHeight() == 1) {
-            g2d.drawImage(tileGridImage, 0, 0, null);
-        } else {
-            g2d.drawImage(tileGrid1Image, 0, 0, null);
-        }
+        g2d.drawImage(image[player.getTileGridHeight()], 0, 0, null);
     }
 
-    private void buildImage() {
+    private void buildImages() {
+        image = new BufferedImage[2];
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        tileGridImage = gd.getDefaultConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
-        Graphics2D g2d = tileGridImage.createGraphics();
+        image[0] = gd.getDefaultConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
+        Graphics2D g2d = image[0].createGraphics();
         g2d.setBackground(Color.darkGray);
         g2d.clearRect(0, 0, width, height);
         for (int i = 0; i < layers; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
-                    if (tileGrid[i][r][c] == null) {
+                    if (tileGrids[0][i][r][c] == null) {
                         continue;
                     }
-                    g2d.drawImage(tileGrid[i][r][c].getImage(), Dungeon.TILESIZE * (c), Dungeon.TILESIZE * r, null);
+                    g2d.drawImage(tileGrids[0][i][r][c].getImage(), Dungeon.TILESIZE * (c), Dungeon.TILESIZE * r, null);
                 }
             }
         }
-        tileGrid1Image = gd.getDefaultConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
-        g2d = tileGrid1Image.createGraphics();
+        image[1] = gd.getDefaultConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
+        g2d = image[1].createGraphics();
         g2d.setBackground(Color.darkGray);
         g2d.clearRect(0, 0, width, height);
         for (int i = 0; i < layers; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
-                    if (tileGrid1[i][r][c] == null) {
+                    if (tileGrids[1][i][r][c] == null) {
                         continue;
                     }
-                    g2d.drawImage(tileGrid1[i][r][c].getImage(), Dungeon.TILESIZE * (c), Dungeon.TILESIZE * r, null);
+                    g2d.drawImage(tileGrids[1][i][r][c].getImage(), Dungeon.TILESIZE * (c), Dungeon.TILESIZE * r, null);
                 }
             }
         }
@@ -80,7 +74,9 @@ public class TileGrid extends GameComponent {
 
     public Tile[][][] getTileGrid(int height) {
         if (height == 0) {
-            return tileGrid;
+            return tileGrids[0];
+        } else if (height == 1) {
+            return tileGrids[1];
         }
         return null;
     }

@@ -30,8 +30,7 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     TileGrid createRandomGrid(Player player, int N, int M) {
-        return new TileGrid(player, createGrid(N, M, MapGenerator.getRandomMap(N, M), 0),
-                createGrid(N, M, MapGenerator.getRandomMap(N, M), 1));
+    return new TileGrid(N, M, createTileGrids(N, M, MapGenerator.getRandomMap(N, M)), player);
     }
 
     TileGrid createGrid(RoomFileData file, Player player) {
@@ -39,52 +38,73 @@ class TileGridFactory extends Factory<TileGrid> {
         for (int i = 0; i < file.getN(); i++) {
             fileTileGridClone[i] = file.getTileGrid()[i].clone();
         }
-        return new TileGrid(player, createGrid(file.getN(), file.getM(), fileTileGridClone, 0),
-                createGrid(file.getN(), file.getM(), fileTileGridClone, 1));
+        return new TileGrid(file.getN(), file.getM(), createTileGrids(file.getN(), file.getM(), fileTileGridClone),
+                player);
     }
 
-    private Tile[][][] createGrid(int N, int M, int arr[][], int height) {
-        int arr2[][][] = new int[layers][N][M];
+    private Tile[][][][] createTileGrids(int N, int M, int arr[][]) {
+        int arr2[][][][] = new int[2][layers][N][M];
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
-                arr2[0][r][c] = 204;
+                arr2[0][0][r][c] = 204;
             }
         }
         for (int i = 1; i < layers; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
-                    arr2[i][r][c] = -1;
+                    arr2[0][i][r][c] = -1;
+                    arr2[1][i][r][c] = -1;
                 }
             }
         }
-        if (height == 0) {
-            for (int r = 0; r < N; r++) {
-                for (int c = 0; c < M; c++) {
-                    layer0(arr, arr2[0], r, c);
-                    layer1(arr, arr2[1], r, c);
-                    layer2(arr, arr2[2], r, c);
-                    layer3(arr, arr2[3], r, c);
-                    layer4(arr, arr2[4], r, c);
-                }
-            }
-        } else if (height == 1) {
-            for (int r = 0; r < N; r++) {
-                for (int c = 0; c < M; c++) {
-                    layer0(arr, arr2[0], r, c);
-                    layer1(arr, arr2[1], r, c);
-                    layer2(arr, arr2[2], r, c);
-                    layer41(arr, arr2[3], r, c);
-                }
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < M; c++) {
+                layer0(arr, arr2[0][0], r, c);
+                layer1(arr, arr2[0][1], r, c);
+                layer2(arr, arr2[0][2], r, c);
+                layer3(arr, arr2[0][3], r, c);
+                layer4(arr, arr2[0][4], r, c);
             }
         }
-        Tile[][][] res = new Tile[layers][N][M];
-        for (int i = 0; i < layers; i++) {
-            for (int r = 0; r < N; r++) {
-                for (int c = 0; c < M; c++) {
-                    if (arr2[i][r][c] != -1) {
-                        res[i][r][c] = tileMap[arr2[i][r][c] % tileN][arr2[i][r][c] / tileN];
-                    } else {
-                        res[i][r][c] = null;
+        arr2[1][0] = arr2[0][0];
+        arr2[1][1] = arr2[0][1];
+        arr2[1][2] = arr2[0][2];
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < M; c++) {
+                int clone[][] = new int[N][M];
+                for (int i = 0; i < N; i++) {
+                    for (int j = 0; j < M; j++) {
+                        if (clone[i][j] == 2) {
+                            continue;
+                        }
+                        clone[i][j] = arr[i][j];
+                        if (arr[i][j] == 2) {
+                            if (arr[i - 1][j] == 5 || arr[i + 1][j] == -1) {
+                                clone[i][j - 1] = 2;
+                                clone[i][j + 1] = 2;
+                            } else {
+                                clone[i - 2][j] = 2;
+                                clone[i - 1][j] = 2;
+                                clone[i + 1][j] = 2;
+                                clone[i + 2][j] = 2;
+                                clone[i + 3][j] = 2;
+                            }
+                        }
+                    }
+                }
+                layer41(clone, arr2[1][3], r, c);
+            }
+        }
+        Tile[][][][] res = new Tile[2][layers][N][M];
+        for (int j = 0; j < 2; j++) {
+            for (int i = 0; i < layers; i++) {
+                for (int r = 0; r < N; r++) {
+                    for (int c = 0; c < M; c++) {
+                        if (arr2[j][i][r][c] != -1) {
+                            res[j][i][r][c] = tileMap[arr2[j][i][r][c] % tileN][arr2[j][i][r][c] / tileN];
+                        } else {
+                            res[j][i][r][c] = null;
+                        }
                     }
                 }
             }
@@ -483,11 +503,11 @@ class TileGridFactory extends Factory<TileGrid> {
     private final HashSet<Integer> layer41 = new HashSet<>(Arrays.asList(-1, 2, 5));
 
     private void layer41(int[][] arr, int[][] arr2, int r, int c) {
-        if (arr[r][c] == 0 || arr[r][c] == 3 || arr[r][c] == 6) {
+        if (arr[r][c] == 0 || arr[r][c] == 3) {
             arr2[r][c] = 145;
             return;
         }
-        if (arr[r][c] == 1  || arr[r][c] == 4) {
+        if (arr[r][c] == 1 || arr[r][c] == 4 || arr[r][c] == 6) {
             arr2[r][c] = 145;
             int cnt = 0;
             for (int d[] : direct) {

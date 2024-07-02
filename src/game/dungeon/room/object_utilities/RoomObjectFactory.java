@@ -19,7 +19,7 @@ public class RoomObjectFactory extends Factory<RoomObject> {
     private Ladder getLadder(RoomObjectData data) {
         if (data.id == 0) {
             return new Ladder(ImageUtilities.getImage("objects", "ladderup"), data.r, data.c,
-                    -Dungeon.TILESIZE / 2, Dungeon.TILESIZE * 5 / 4,
+                    -Dungeon.TILESIZE / 2, Dungeon.TILESIZE,
                     new CollisionBox(0, 1.25, 1, 0.75),
                     new CollisionBox(-0.25, 1, 1.5, 1.75), 1);
         } else {

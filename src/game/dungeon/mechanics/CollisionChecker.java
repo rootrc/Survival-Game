@@ -41,11 +41,11 @@ public class CollisionChecker {
         for (int r : rows) {
             for (int c : cols) {
                 if (height[r][c]) {
-                    return 1;
+                    return 0;
                 }
             }
         }
-        return 0;
+        return 1;
     }
 
     public boolean checkPoint(double x, double y) {

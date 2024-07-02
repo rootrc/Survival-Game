@@ -36,11 +36,11 @@ public class Room extends GameComponent {
         this.collision = collision;
         this.objectManager = objectManager;
         add(tileGrid);
-        // add(new WalkingParticles(getWidth(), getHeight(), player));
+        add(new WalkingParticles(getWidth(), getHeight(), player));
         add(objectManager);
         add(player);
-        // add(new SnowParticles(getWidth(), getHeight(), collision));
-        // add(lighting);
+        add(new SnowParticles(getWidth(), getHeight(), collision));
+        add(lighting);
     }
 
     // TEMP
