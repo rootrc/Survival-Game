@@ -12,6 +12,12 @@ class CollisionCheckerFactory extends Factory<CollisionChecker> {
                 getHeightArray(file.getN(), file.getM(), file.getTileGrid()));
     }
 
+    // TEMP
+    CollisionChecker getCollisionChecker(int N, int M, TileGrid tileGrid) {
+        return new CollisionChecker(getCollisionArray(tileGrid.getN(), tileGrid.getM(), tileGrid.getTileGridFloor().getTileGridArray()),
+                null);
+    }
+
     private boolean[][] getCollisionArray(int N, int M, Tile[][][] tileGrid) {
         boolean[][] collision = new boolean[N][M];
         for (int i = 0; i < tileGrid.length; i++) {

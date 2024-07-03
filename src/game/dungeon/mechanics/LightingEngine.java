@@ -64,9 +64,6 @@ public class LightingEngine extends GameComponent {
     private static final int buffer = 1024;
 
     public void drawComponent(Graphics2D g2d) {
-        if (Game.DEBUG) {
-            return;
-        }
         image = getDarknessFilter((int) (entity.getLightStrength() * (1 + randomFactor)));
         int x = (int) entity.getX() + entity.getWidth() / 2 - image.getWidth() / 2;
         int y = (int) entity.getY() + entity.getHeight() / 2 - image.getHeight() / 2;

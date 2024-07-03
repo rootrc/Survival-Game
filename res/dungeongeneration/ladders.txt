@@ -1,4 +1,4 @@
-50
+51
 01 1 2
 02 1 2
 03 1 2
@@ -27,6 +27,7 @@
 44 1 2
 45 1 0
 46 2 2
+47 1 2
 50 1 2
 51 1 1
 52 1 2
@@ -52,7 +53,7 @@
 
 Numbers reflect number of reachable ladders, not actual number
 
-Forks - 12: 13
+Forks - 12: 14
 Forks - 21: 3
 Forks - 22: 3
 Corriders: 10

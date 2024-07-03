@@ -31,7 +31,7 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    TileGrid createRandomGrid(Player player, int N, int M) {
+    TileGrid createRandomGrid(int N, int M, Player player) {
         return new TileGrid(N, M, createTileGridArray(N, M, MapGenerator.getRandomMap(N, M)), player);
     }
 

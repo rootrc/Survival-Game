@@ -10,6 +10,7 @@ import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
+import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
@@ -37,6 +38,12 @@ public class RoomFactory extends Factory<Room> {
         collisionFactory = new CollisionCheckerFactory();
         objectManagerFactory = new RoomObjectManagerFactory(player);
         dungeonGenerator = new DungeonLayoutGenerator();
+    }
+
+    // TEMP
+    public Room createRandomRoom(int N, int M) {
+        TileGrid tileGrid = tileFactory.createRandomGrid(N, M, player);
+        return new Room(tileGrid, collisionFactory.getCollisionChecker(N, M, tileGrid), objectManagerFactory.getRoomObjectManager(tileGrid));
     }
 
     public Room getStartingRoom(int id) {
@@ -76,7 +83,7 @@ public class RoomFactory extends Factory<Room> {
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
         if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == 1) {
             player.setDirection(4);
-        } else if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == -1){
+        } else if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == -1) {
             player.setDirection(0);
         }
         return nextRoom;

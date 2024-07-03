@@ -6,6 +6,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
+import game.Game;
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Player;
 import game.game_components.GameComponent;
@@ -29,6 +30,10 @@ public class TileGridCeiling extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
+        if (Game.DEBUG) {
+            g2d.drawImage(image[0], 0, 0, null);
+            return;
+        }
         g2d.drawImage(image[player.getLayer()], 0, 0, null);
     }
 

@@ -22,6 +22,8 @@ public class Dungeon extends GamePanel {
     public final static int maxScreenRow = 48;
     public final static int maxScreenCol = 64;
 
+    private final static int startingRoom = 1;
+
     private Room room;
     private Inventory inventory;
     private Player player;
@@ -45,8 +47,8 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, 8);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player, UILayer);
-        room = roomFactory.getStartingRoom(1);
-        // room = roomFactory.createRandomRoom(40, 30);
+        room = roomFactory.getStartingRoom(startingRoom);
+        // room = roomFactory.createRandomRoom(63, 57);
         add(room);
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
@@ -72,7 +74,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, 8);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player, UILayer);
-        room = roomFactory.getStartingRoom(1);
+        room = roomFactory.getStartingRoom(startingRoom);
         add(room);
         add(inventory);
         UILayer.removeAll();

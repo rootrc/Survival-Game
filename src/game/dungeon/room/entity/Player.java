@@ -1,6 +1,5 @@
 package game.dungeon.room.entity;
 
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 
@@ -14,7 +13,6 @@ import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
-import game.utilities.ImageUtilities;
 
 public class Player extends Entity {
     private HashSet<String> movementKeys = new HashSet<>();
@@ -41,7 +39,6 @@ public class Player extends Entity {
     public void update() {
         super.update();
         interactionCooldown++;
-        // System.out.println(collision.getHeight(this));
     }
 
     @Override

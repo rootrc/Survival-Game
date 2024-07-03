@@ -55,6 +55,9 @@ public class Game extends JFrame implements Runnable {
         dungeon = new Dungeon(this);
         menu = new Menu(this);
         gamePanel = menu;
+        if (Game.DEBUG) {
+            gamePanel = dungeon;
+        }
         add(gamePanel);
     }
 

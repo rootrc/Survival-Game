@@ -1,7 +1,6 @@
 package game.dungeon.room.object_utilities;
 
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import game.dungeon.room.entity.Player;
