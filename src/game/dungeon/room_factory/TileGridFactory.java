@@ -10,9 +10,11 @@ import game.game_components.Factory;
 import game.utilities.ImageUtilities;
 import game.utilities.roomgenerator.MapGenerator;
 
+// My litle black box to generate images from number arrays
+// Do not look if you value your sanity
 class TileGridFactory extends Factory<TileGrid> {
     private static final String name = "dungeonTileSet";
-    private static final int layers = 5;
+    private static final int layers = 4;
     private static final int tileN = 18;
     private static final int tileM = 16;
     private static final Tile tileMap[][] = new Tile[tileN][tileM];
@@ -30,19 +32,19 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     TileGrid createRandomGrid(Player player, int N, int M) {
-    return new TileGrid(N, M, createTileGrids(N, M, MapGenerator.getRandomMap(N, M)), player);
+        return new TileGrid(N, M, createTileGridArray(N, M, MapGenerator.getRandomMap(N, M)), player);
     }
 
-    TileGrid createGrid(RoomFileData file, Player player) {
+    TileGrid createTileGrid(RoomFileData file, Player player) {
         int[][] fileTileGridClone = new int[file.getN()][];
         for (int i = 0; i < file.getN(); i++) {
             fileTileGridClone[i] = file.getTileGrid()[i].clone();
         }
-        return new TileGrid(file.getN(), file.getM(), createTileGrids(file.getN(), file.getM(), fileTileGridClone),
+        return new TileGrid(file.getN(), file.getM(), createTileGridArray(file.getN(), file.getM(), fileTileGridClone),
                 player);
     }
 
-    private Tile[][][][] createTileGrids(int N, int M, int arr[][]) {
+    private Tile[][][][] createTileGridArray(int N, int M, int arr[][]) {
         int arr2[][][][] = new int[2][layers][N][M];
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
@@ -53,6 +55,12 @@ class TileGridFactory extends Factory<TileGrid> {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
                     arr2[0][i][r][c] = -1;
+                }
+            }
+        }
+        for (int i = 0; i < 2; i++) {
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < M; c++) {
                     arr2[1][i][r][c] = -1;
                 }
             }
@@ -63,12 +71,9 @@ class TileGridFactory extends Factory<TileGrid> {
                 layer1(arr, arr2[0][1], r, c);
                 layer2(arr, arr2[0][2], r, c);
                 layer3(arr, arr2[0][3], r, c);
-                layer4(arr, arr2[0][4], r, c);
+                layer4(arr, arr2[1][0], r, c);
             }
         }
-        arr2[1][0] = arr2[0][0];
-        arr2[1][1] = arr2[0][1];
-        arr2[1][2] = arr2[0][2];
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
                 int clone[][] = new int[N][M];
@@ -92,7 +97,7 @@ class TileGridFactory extends Factory<TileGrid> {
                         }
                     }
                 }
-                layer41(clone, arr2[1][3], r, c);
+                layer41(clone, arr2[1][1], r, c);
             }
         }
         Tile[][][][] res = new Tile[2][layers][N][M];

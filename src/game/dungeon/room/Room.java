@@ -35,11 +35,12 @@ public class Room extends GameComponent {
         connecter = new RoomConnecter();
         this.collision = collision;
         this.objectManager = objectManager;
-        add(tileGrid);
+        add(tileGrid.getTileGridFloor());
         add(new WalkingParticles(getWidth(), getHeight(), player));
         add(objectManager);
         add(player);
         add(new SnowParticles(getWidth(), getHeight(), collision));
+        add(tileGrid.getTileGridCeiling());
         add(lighting);
     }
 
@@ -49,7 +50,7 @@ public class Room extends GameComponent {
         // this.tileGrid = tileGrid;
         this.collision = collision;
         this.objectManager = objectManager;
-        add(tileGrid);
+        add(tileGrid.getTileGridFloor());
         add(objectManager);
     }
 

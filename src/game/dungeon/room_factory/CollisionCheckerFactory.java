@@ -8,7 +8,7 @@ import game.game_components.Factory;
 class CollisionCheckerFactory extends Factory<CollisionChecker> {
 
     CollisionChecker getCollisionChecker(RoomFileData file, TileGrid tileGrid) {
-        return new CollisionChecker(getCollisionArray(tileGrid.getN(), tileGrid.getM(), tileGrid.getTileGrid(0)),
+        return new CollisionChecker(getCollisionArray(tileGrid.getN(), tileGrid.getM(), tileGrid.getTileGridFloor().getTileGridArray()),
                 getHeightArray(file.getN(), file.getM(), file.getTileGrid()));
     }
 

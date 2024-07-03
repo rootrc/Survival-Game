@@ -31,7 +31,7 @@ public class CollisionChecker {
         return true;
     }
 
-    public int getTileGridHeight(Entity entity) {
+    public int getLayer(Entity entity) {
         ArrayList<Integer> rows = new ArrayList<>();
         ArrayList<Integer> cols = new ArrayList<>();
         rows.add((int) ((entity.getY() + entity.getHitBox().getY()) / Dungeon.TILESIZE));

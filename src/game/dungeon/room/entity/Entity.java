@@ -83,8 +83,8 @@ public abstract class Entity extends RoomObject {
         setImage(ImageUtilities.getImage(tileset, animationFrame / maxSpeed / 2, direction, 3, 2));
     }
 
-    public int getTileGridHeight() {
-        return collision.getTileGridHeight(this);
+    public int getLayer() {
+        return collision.getLayer(this);
     }
 
     public void setCollision(CollisionChecker collision) {
