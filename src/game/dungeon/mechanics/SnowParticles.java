@@ -13,7 +13,7 @@ public class SnowParticles extends ParticleSystem {
         super(width, height);
         this.collision = collision;
         for (int i = 0; i < 2 * height / speed; i++) {
-            if (Math.random() < 0.5) {
+            if (Math.random() < 0.2) {
                 addParticle(new SnowParticle());
             }
             update();
@@ -31,7 +31,7 @@ public class SnowParticles extends ParticleSystem {
 
     private class SnowParticle extends Particle {
         SnowParticle() {
-            super(2, Color.white, (int) (Math.random() * getWidth()), 0, 0, (int) (speed / 2 + speed * Math.random()),
+            super(2, Color.white, 0.4, (int) (Math.random() * getWidth()), 0, 0, speed / 2 + 2 * Math.random(),
                     0, 0);
         }
 

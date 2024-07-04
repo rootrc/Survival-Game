@@ -1,5 +1,6 @@
 package game.dungeon.mechanics;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public abstract class ParticleSystem extends GameComponent {
     protected abstract class Particle {
         protected int size;
         protected Color color;
+        private AlphaComposite opacity;
         protected double x;
         protected double y;
         protected double xSpeed;
@@ -50,10 +52,12 @@ public abstract class ParticleSystem extends GameComponent {
         protected double yAcc;
         protected int t;
 
-        Particle(int size, Color color, double x0, double y0, double xSpeed0, double ySpeed0, double xAcc0,
+        Particle(int size, Color color, double opacity, double x0, double y0, double xSpeed0, double ySpeed0,
+                double xAcc0,
                 double yAcc0) {
             this.size = size;
             this.color = color;
+            this.opacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) opacity);
             x = x0;
             y = y0;
             xSpeed = xSpeed0;
@@ -78,12 +82,17 @@ public abstract class ParticleSystem extends GameComponent {
 
         public void draw(Graphics2D g2d) {
             g2d.setColor(color);
+            g2d.setComposite(opacity);
             g2d.fillRect((int) (x) - size / 2, (int) (y) - size / 2, size, size);
         }
 
         protected abstract boolean isInvalid();
 
         protected abstract boolean shouldDraw();
+
+        public final void setOpacity(double opacity) {
+            this.opacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) Math.max(0, Math.min(1, opacity)));
+        }
     }
 
 }

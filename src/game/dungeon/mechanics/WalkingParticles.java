@@ -28,12 +28,18 @@ public class WalkingParticles extends ParticleSystem {
         private int lifespan;
 
         WalkParticle() {
-            super(1, Color.gray,
+            super(1, Color.gray, 1,
                     entity.getX() + entity.getHitBox().getX() + Math.random() * entity.getHitBox().getWidth(),
                     entity.getY() + entity.getHitBox().getY() + Math.random() * entity.getHitBox().getHeight(),
                     -2 * DirectionUtilities.getXDirection(entity), -2 * DirectionUtilities.getYDirection(entity),
                     DirectionUtilities.getXDirection(entity) / 10.0, DirectionUtilities.getYDirection(entity) / 10.0);
             lifespan = 5 * Game.UPS + (int) (8 * Game.UPS * Math.random());
+        }
+
+        @Override
+        public void update() {
+            super.update();
+            setOpacity(1 - (double) t / lifespan);
         }
 
         protected boolean isInvalid() {

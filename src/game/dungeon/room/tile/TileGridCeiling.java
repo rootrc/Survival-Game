@@ -1,5 +1,6 @@
 package game.dungeon.room.tile;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -16,6 +17,7 @@ public class TileGridCeiling extends GameComponent {
     private int N, M;
     private Tile[][][] tileGrid;
     private Player player;
+    private float opacity = 0;
 
     public TileGridCeiling(int N, int M, Tile[][][] tileGrid, Player player) {
         super(Dungeon.TILESIZE * M, Dungeon.TILESIZE * N);
@@ -26,7 +28,13 @@ public class TileGridCeiling extends GameComponent {
         buildImage();
     }
 
+
     public void update() {
+        if (player.getLayer() == 1) {
+            opacity = Math.min(1, opacity + 0.1f);
+        } else {
+            opacity = Math.max(0, opacity - 0.1f);
+        }
     }
 
     public void drawComponent(Graphics2D g2d) {
@@ -34,7 +42,13 @@ public class TileGridCeiling extends GameComponent {
             g2d.drawImage(image[0], 0, 0, null);
             return;
         }
-        g2d.drawImage(image[player.getLayer()], 0, 0, null);
+        if (opacity != 1) {
+            g2d.drawImage(image[0], 0, 0, null);
+        }
+        if (opacity != 0) {
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+            g2d.drawImage(image[1], 0, 0, null);
+        }
     }
 
     private void buildImage() {
