@@ -88,6 +88,10 @@ public abstract class Entity extends RoomObject {
         return collision.getLayer(this);
     }
 
+    public CollisionChecker getCollision() {
+        return collision;
+    }
+
     public void setCollision(CollisionChecker collision) {
         this.collision = collision;
     }

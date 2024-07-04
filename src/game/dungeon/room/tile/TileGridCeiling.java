@@ -28,6 +28,14 @@ public class TileGridCeiling extends GameComponent {
         buildImage();
     }
 
+    public void setOpacity(Player player) {
+        if (player.getLayer() == 1) {
+            opacity = 1;
+        } else {
+            opacity = 0;
+        }
+    }
+
     public void update() {
         if (player.getLayer() == 1) {
             opacity = Math.min(1, opacity + 0.1f);

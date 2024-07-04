@@ -27,6 +27,10 @@ public class TileGrid {
         return tileGridCeiling;
     }
 
+    public void set(Player player) {
+        tileGridCeiling.setOpacity(player);
+    }
+
     public int getN() {
         return N;
     }

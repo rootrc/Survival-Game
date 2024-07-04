@@ -49,7 +49,7 @@ public class RoomFactory extends Factory<Room> {
         CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
         player.set(312, 100, collision);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
+        objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
         if (!Game.DEBUG) {
             room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
         }
@@ -93,7 +93,7 @@ public class RoomFactory extends Factory<Room> {
         TileGrid tileGrid = tileFactory.createTileGrid(file, player);
         CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
+        objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
         return room;
     }
 
