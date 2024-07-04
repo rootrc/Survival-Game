@@ -10,13 +10,14 @@ import game.utilities.ImageUtilities;
 
 public abstract class Entity extends RoomObject {
     protected static final double a = Math.sqrt(2) / 2;
+    private static final int defaultLightStrength = 300;
     private BufferedImage tileset;
     private int lightStrength;
     private int maxSpeed;
     private double speedX;
     private double speedY;
-    private double accFrames;
-    private double deaccFrames;
+    private double accFrameCnt;
+    private double deaccFrameCnt;
     private CollisionChecker collision;
     private int direction;
     private int animationFrame;
@@ -27,9 +28,9 @@ public abstract class Entity extends RoomObject {
         tileset = ImageUtilities.getImage("entities", tilesetName);
         this.maxSpeed = maxSpeed;
         this.collision = collision;
-        this.accFrames = accFrames;
-        this.deaccFrames = deaccFrames;
-        lightStrength = 300;
+        this.accFrameCnt = accFrames;
+        this.deaccFrameCnt = deaccFrames;
+        lightStrength = defaultLightStrength;
     }
 
     public Entity(String tilesetName, CollisionBox hitbox, CollisionBox interactbox, int maxSpeed,
@@ -52,22 +53,22 @@ public abstract class Entity extends RoomObject {
         updateSprite();
     }
 
-    protected void move() {
+    public void move() {
         if (!isMoving()) {
             return;
         }
-        if (collision.canMove(this, getSpeedX(), 0)) {
+        if (collision.canMove(this, speedX, 0)) {
             if (isMovingY()) {
-                moveX(getSpeedX() * a);
+                moveX(speedX * a);
             } else {
-                moveX(getSpeedX());
+                moveX(speedX);
             }
         }
-        if (collision.canMove(this, 0, getSpeedY())) {
+        if (collision.canMove(this, 0, speedY)) {
             if (isMovingX()) {
-                moveY(getSpeedY() * a);
+                moveY(speedY * a);
             } else {
-                moveY(getSpeedY());
+                moveY(speedY);
             }
         }
     }
@@ -80,7 +81,7 @@ public abstract class Entity extends RoomObject {
             animationFrame = 2 * maxSpeed - 1;
         }
         direction = DirectionUtilities.getDirection(this);
-        setImage(ImageUtilities.getImage(tileset, animationFrame / maxSpeed / 2, direction, 3, 2));
+        setImage(ImageUtilities.getImage(tileset, animationFrame / (2 * maxSpeed), direction, 3, 2));
     }
 
     public int getLayer() {
@@ -97,14 +98,6 @@ public abstract class Entity extends RoomObject {
 
     public final int getLightStrength() {
         return lightStrength;
-    }
-
-    public final int getDirection() {
-        return direction;
-    }
-
-    public final void setDirection(int direction) {
-        this.direction = direction;
     }
 
     public final boolean isMoving() {
@@ -152,11 +145,19 @@ public abstract class Entity extends RoomObject {
     }
 
     public final double getAcc() {
-        return maxSpeed / accFrames;
+        return maxSpeed / accFrameCnt;
     }
 
     public final double getDeacc() {
-        return maxSpeed / deaccFrames;
+        return maxSpeed / deaccFrameCnt;
+    }
+
+    public final int getDirection() {
+        return direction;
+    }
+
+    public final void setDirection(int direction) {
+        this.direction = direction;
     }
 
 }

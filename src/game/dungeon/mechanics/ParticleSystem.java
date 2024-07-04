@@ -21,22 +21,20 @@ public abstract class ParticleSystem extends GameComponent {
     }
 
     public final void drawComponent(Graphics2D g2d) {
-        g2d.setColor(Color.white);
         for (int i = 0; i < particles.size(); i++) {
-            Particle particle = particles.get(i);
-            if (particle.isInvalid()) {
-                particles.remove(particle);
-            } else if (particle.shouldDraw()) {
-                particle.draw(g2d);
+            if (particles.get(i).isInvalid()) {
+                particles.remove(particles.get(i));
+            } else if (particles.get(i).shouldDraw()) {
+                particles.get(i).draw(g2d);
             }
         }
     }
 
-    public int getParticleCount() {
+    public final int getParticleCount() {
         return particles.size();
     }
 
-    public void addParticle(Particle particle) {
+    public final void addParticle(Particle particle) {
         particles.add(particle);
     }
 
@@ -46,24 +44,23 @@ public abstract class ParticleSystem extends GameComponent {
         private AlphaComposite opacity;
         protected double x;
         protected double y;
-        protected double xSpeed;
-        protected double ySpeed;
-        protected double xAcc;
-        protected double yAcc;
-        protected int t;
+        private double xSpeed;
+        private double ySpeed;
+        private double xAcc;
+        private double yAcc;
+        protected int time;
 
-        Particle(int size, Color color, double opacity, double x0, double y0, double xSpeed0, double ySpeed0,
-                double xAcc0,
-                double yAcc0) {
+        Particle(int size, Color color, double opacity, double x, double y, double xSpeed, double ySpeed, double xAcc,
+                double yAcc) {
             this.size = size;
             this.color = color;
             this.opacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) opacity);
-            x = x0;
-            y = y0;
-            xSpeed = xSpeed0;
-            ySpeed = ySpeed0;
-            xAcc = xAcc0;
-            yAcc = yAcc0;
+            this.x = x;
+            this.y = y;
+            this.xSpeed = xSpeed;
+            this.ySpeed = ySpeed;
+            this.xAcc = xAcc;
+            this.yAcc = yAcc;
         }
 
         public void update() {
@@ -77,7 +74,7 @@ public abstract class ParticleSystem extends GameComponent {
             if (Math.abs(ySpeed) < 0.000001) {
                 yAcc = 0;
             }
-            t++;
+            time++;
         }
 
         public void draw(Graphics2D g2d) {
@@ -91,7 +88,8 @@ public abstract class ParticleSystem extends GameComponent {
         protected abstract boolean shouldDraw();
 
         public final void setOpacity(double opacity) {
-            this.opacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) Math.max(0, Math.min(1, opacity)));
+            this.opacity = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    (float) Math.max(0, Math.min(1, opacity)));
         }
     }
 

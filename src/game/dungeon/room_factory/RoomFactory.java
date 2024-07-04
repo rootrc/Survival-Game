@@ -2,15 +2,12 @@ package game.dungeon.room_factory;
 
 import java.util.HashMap;
 
-import javax.swing.KeyStroke;
-
 import game.Game;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
-import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
@@ -57,7 +54,6 @@ public class RoomFactory extends Factory<Room> {
             room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
         }
         putRoom(id, room);
-        setKeyBinds(rooms.get(id));
         return rooms.get(id);
     }
 
@@ -98,21 +94,7 @@ public class RoomFactory extends Factory<Room> {
         CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
                 objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
-        setKeyBinds(room);
         return room;
-    }
-
-    private void setKeyBinds(Room room) {
-        for (char c : "WASD".toCharArray()) {
-            room.getInputMap(2).put(KeyStroke.getKeyStroke(
-                    new StringBuilder("pressed ").append(c).toString()),
-                    new StringBuilder("acc ").append(c).toString());
-            room.getInputMap(2).put(KeyStroke.getKeyStroke(
-                    new StringBuilder("released ").append(c).toString()),
-                    new StringBuilder("decel ").append(c).toString());
-            room.getActionMap().put(new StringBuilder("acc ").append(c).toString(), player.accelerate);
-            room.getActionMap().put(new StringBuilder("decel ").append(c).toString(), player.decelerate);
-        }
     }
 
     private void createLadderConnection(Ladder ladder0, Room previousRoom, Room nextRoom, RoomFileData file) {
@@ -139,11 +121,10 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private Room getRoom(int id) {
-        Room room = rooms.get(id);
-        room.add(player);
-        room.add(lighting);
-        room.add(UILayer);
-        return room;
+        rooms.get(id).add(player);
+        rooms.get(id).add(lighting);
+        rooms.get(id).add(UILayer);
+        return rooms.get(id);
     }
 
 }

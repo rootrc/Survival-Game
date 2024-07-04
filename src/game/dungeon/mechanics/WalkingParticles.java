@@ -39,11 +39,11 @@ public class WalkingParticles extends ParticleSystem {
         @Override
         public void update() {
             super.update();
-            setOpacity(1 - (double) t / lifespan);
+            setOpacity(1 - (double) time / lifespan);
         }
 
         protected boolean isInvalid() {
-            return t > lifespan;
+            return time > lifespan;
         }
 
         protected boolean shouldDraw() {

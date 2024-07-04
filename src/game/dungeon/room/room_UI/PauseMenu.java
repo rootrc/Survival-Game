@@ -21,6 +21,6 @@ public class PauseMenu extends PopupUI {
 				ImageUtilities.getImage("UI", "MainMenuButton")));
 		add(new UIButton(UILayer.createAndOpenConfirmUI(title), new Rectangle(getWidth() / 2 - 224, 328, 448, 64),
 				ImageUtilities.getImage("UI", "TitleScreenButton")));
-		 getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "close");
+		getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "close");
 	}
 }
