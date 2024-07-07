@@ -7,7 +7,7 @@ import game.dungeon.room.entity.Entity;
 import game.dungeon.room.object_utilities.DirectionUtilities;
 import game.utilities.RNGUtilities;
 
-    public class WalkingParticles extends ParticleSystem {
+public class WalkingParticles extends ParticleSystem {
     private Entity entity;
 
     public WalkingParticles(int width, int height, Entity entity) {
@@ -35,12 +35,6 @@ import game.utilities.RNGUtilities;
                     -2 * DirectionUtilities.getXDirection(entity), -2 * DirectionUtilities.getYDirection(entity),
                     DirectionUtilities.getXDirection(entity) / 10.0, DirectionUtilities.getYDirection(entity) / 10.0);
             lifespan = 5 * Game.UPS + RNGUtilities.getInt(8 * Game.UPS);
-        }
-
-        @Override
-        public void update() {
-            super.update();
-            setOpacity(1 - (double) time / lifespan);
         }
 
         @Override
