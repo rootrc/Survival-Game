@@ -43,6 +43,12 @@ import game.utilities.RNGUtilities;
             setOpacity(1 - (double) time / lifespan);
         }
 
+        @Override
+        public void update() {
+            super.update();
+            setOpacity(1 - (double) time / lifespan);
+        }
+
         protected boolean isInvalid() {
             return time > lifespan;
         }
