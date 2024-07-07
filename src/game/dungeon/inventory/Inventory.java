@@ -82,6 +82,10 @@ public class Inventory extends GameComponent {
         }
     };
 
+    public void drawComponent(Graphics2D g2d) {
+        g2d.drawImage(image, 0, 0, null);
+    }
+
     private void buildImage() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
@@ -94,10 +98,6 @@ public class Inventory extends GameComponent {
         }
         g2d.drawImage(right, getWidth() - right.getWidth(), tab.getHeight(), null);
         g2d.dispose();
-    }
-
-    public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(image, 0, 0, null);
     }
 
     public void addItem(Item item) {

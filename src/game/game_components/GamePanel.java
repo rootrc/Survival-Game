@@ -12,10 +12,11 @@ import game.Game;
 // Custom GamePanel that updates children with utility methods and graphical features
 public abstract class GamePanel extends JPanel {
     private FadingEffect fadingEffect;
+    protected UILayer UILayer;
     // private Game game;
 
-    public GamePanel(Game game) {
-        // this.game = game;
+    public GamePanel(Game game, UILayer UILayer) {
+        this.UILayer = UILayer;
         setPreferredSize(new Dimension(Game.screenWidth, Game.screenHeight));
         if (!Game.DEBUG) {
             setBackground(Color.black);

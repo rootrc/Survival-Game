@@ -8,11 +8,14 @@ import game.dungeon.room.tile.Tile;
 import game.dungeon.room.tile.TileGrid;
 import game.game_components.Factory;
 import game.utilities.ImageUtilities;
+import game.utilities.RNGUtilities;
 import game.utilities.roomgenerator.MapGenerator;
 
+// When I wrote this only God and I knew how it was worked
+// Now only God knows
 class TileGridFactory extends Factory<TileGrid> {
     private static final String name = "dungeonTileSet";
-    private static final int layers = 5;
+    private static final int layers = 4;
     private static final int tileN = 18;
     private static final int tileM = 16;
     private static final Tile tileMap[][] = new Tile[tileN][tileM];
@@ -29,30 +32,31 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    TileGrid createRandomGrid(Player player, int N, int M) {
-    return new TileGrid(N, M, createTileGrids(N, M, MapGenerator.getRandomMap(N, M)), player);
+    TileGrid createRandomGrid(int N, int M, Player player) {
+        return new TileGrid(N, M, createTileGridArray(N, M, MapGenerator.getRandomMap(N, M)), player);
     }
 
-    TileGrid createGrid(RoomFileData file, Player player) {
+    TileGrid createTileGrid(RoomFileData file, Player player) {
         int[][] fileTileGridClone = new int[file.getN()][];
         for (int i = 0; i < file.getN(); i++) {
             fileTileGridClone[i] = file.getTileGrid()[i].clone();
         }
-        return new TileGrid(file.getN(), file.getM(), createTileGrids(file.getN(), file.getM(), fileTileGridClone),
+        return new TileGrid(file.getN(), file.getM(), createTileGridArray(file.getN(), file.getM(), fileTileGridClone),
                 player);
     }
 
-    private Tile[][][][] createTileGrids(int N, int M, int arr[][]) {
+    private Tile[][][][] createTileGridArray(int N, int M, int arr[][]) {
         int arr2[][][][] = new int[2][layers][N][M];
-        for (int r = 0; r < N; r++) {
-            for (int c = 0; c < M; c++) {
-                arr2[0][0][r][c] = 204;
-            }
-        }
         for (int i = 1; i < layers; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
                     arr2[0][i][r][c] = -1;
+                }
+            }
+        }
+        for (int i = 0; i < 2; i++) {
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < M; c++) {
                     arr2[1][i][r][c] = -1;
                 }
             }
@@ -63,12 +67,9 @@ class TileGridFactory extends Factory<TileGrid> {
                 layer1(arr, arr2[0][1], r, c);
                 layer2(arr, arr2[0][2], r, c);
                 layer3(arr, arr2[0][3], r, c);
-                layer4(arr, arr2[0][4], r, c);
+                layer4(arr, arr2[1][0], r, c);
             }
         }
-        arr2[1][0] = arr2[0][0];
-        arr2[1][1] = arr2[0][1];
-        arr2[1][2] = arr2[0][2];
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
                 int clone[][] = new int[N][M];
@@ -92,7 +93,7 @@ class TileGridFactory extends Factory<TileGrid> {
                         }
                     }
                 }
-                layer41(clone, arr2[1][3], r, c);
+                layer41(clone, arr2[1][1], r, c);
             }
         }
         Tile[][][][] res = new Tile[2][layers][N][M];
@@ -125,6 +126,7 @@ class TileGridFactory extends Factory<TileGrid> {
 
     private void layer0(int[][] arr, int[][] arr2, int r, int c) {
         if (!layer0.contains(arr[r][c])) {
+            arr2[r][c] = 73;
             return;
         }
         int cnt = 0;
@@ -290,7 +292,7 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     private static final HashSet<Integer> layer2 = new HashSet<>(Arrays.asList(1, 2, 4, 5, 6));
-    private static final int[] smallRocks = { 6, 24, 42 };
+    private static final int[] smallRocks = { 5, 6, 7, 23, 24, 25, 41, 42, 43 };
 
     private void layer2(int[][] arr, int[][] arr2, int r, int c) {
         if (arr2[r][c] != -1) {
@@ -357,7 +359,7 @@ class TileGridFactory extends Factory<TileGrid> {
                     return;
                 }
             }
-            double rand = Math.random();
+            double rand = RNGUtilities.getDouble();
             if (arr[r][c] == 1) {
                 if (cnt == 8 && arr[r + 2][c] == 1) {
                     rand -= 0.5;
@@ -365,7 +367,7 @@ class TileGridFactory extends Factory<TileGrid> {
                     return;
                 }
             }
-            rand += cnt / 15.0;
+            rand += cnt / 30.0;
             if (rand < 0.05) {
                 if (arr[r][c] == 5 && arr[r][c] == arr[r + 1][c] && arr[r][c] == arr[r + 1][c - 1]
                         && arr[r][c] == arr[r][c - 1]) {
@@ -376,18 +378,8 @@ class TileGridFactory extends Factory<TileGrid> {
                         arr2[r][c + 1] = 169;
                     }
                 }
-            } else if (rand > 0.95) {
-                double rand2 = Math.random();
-                for (int i = 0; i < smallRocks.length; i++) {
-                    if (rand2 > 1 - ((double) i + 1) / smallRocks.length) {
-                        if (arr[r][c] != 1) {
-                            arr2[r][c] = smallRocks[i];
-                        } else {
-                            arr2[r][c] = smallRocks[i];
-                        }
-                        break;
-                    }
-                }
+            } else if (rand > 0.99) {
+                arr2[r][c] = smallRocks[RNGUtilities.getInt(smallRocks.length)];
             }
         }
     }

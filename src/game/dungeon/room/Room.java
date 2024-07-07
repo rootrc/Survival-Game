@@ -19,7 +19,7 @@ import game.game_components.UILayer;
 public class Room extends GameComponent {
     private int id;
     private Player player;
-    // private TileGrid tileGrid;
+    private TileGrid tileGrid;
     private RoomConnecter connecter;
     private RoomObjectManager objectManager;
     private CollisionChecker collision;
@@ -31,25 +31,26 @@ public class Room extends GameComponent {
         this.id = id;
         this.player = player;
         this.UILayer = new UILayer();
-        // this.tileGrid = tileGrid;
+        this.tileGrid = tileGrid;
         connecter = new RoomConnecter();
         this.collision = collision;
         this.objectManager = objectManager;
-        add(tileGrid);
+        add(tileGrid.getTileGridFloor());
         add(new WalkingParticles(getWidth(), getHeight(), player));
         add(objectManager);
         add(player);
         add(new SnowParticles(getWidth(), getHeight(), collision));
+        add(tileGrid.getTileGridCeiling());
         add(lighting);
     }
 
     // TEMP
     public Room(TileGrid tileGrid, CollisionChecker collision, RoomObjectManager objectManager) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
-        // this.tileGrid = tileGrid;
+        this.tileGrid = tileGrid;
         this.collision = collision;
         this.objectManager = objectManager;
-        add(tileGrid);
+        add(tileGrid.getTileGridFloor());
         add(objectManager);
     }
 
@@ -77,6 +78,7 @@ public class Room extends GameComponent {
 
     public void setPlayer(Ladder ladder) {
         player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY(), collision);
+        tileGrid.set(player);
     }
 
     public int getId() {

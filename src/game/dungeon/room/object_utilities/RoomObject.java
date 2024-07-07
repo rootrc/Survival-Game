@@ -41,6 +41,8 @@ public abstract class RoomObject extends GameComponent {
                 (int) hitbox.getWidth(), (int) hitbox.getHeight());
     }
 
+    public abstract void interaction(Player player);
+
     public final boolean interacts(RoomObject object) {
         CollisionBox h1 = interactbox;
         CollisionBox h2 = object.getInteractbox();
@@ -70,8 +72,6 @@ public abstract class RoomObject extends GameComponent {
         }
         return false;
     }
-
-    public abstract void interaction(Player player);
 
     public final void setImage(BufferedImage image) {
         this.image = image;

@@ -14,7 +14,7 @@ class RoomFileData extends FileOpener {
     private int ladderDownCnt;
 
     RoomFileData(int id) {
-        super(new StringBuilder("dungeongeneration/tilegrids/map")
+        super(new StringBuilder("dungeongeneration/tileGrids/map")
                 .append(String.format("%02d", id)).toString());
         this.id = id;
         N = nextInt();

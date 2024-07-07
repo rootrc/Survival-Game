@@ -6,6 +6,7 @@ import java.util.HashMap;
 import game.Game;
 import game.dungeon.room.object.Ladder;
 import game.utilities.FileOpener;
+import game.utilities.RNGUtilities;
 
 public class DungeonData extends FileOpener {
     private HashMap<Integer, ArrayList<Integer>> maps;
@@ -39,10 +40,10 @@ public class DungeonData extends FileOpener {
         int hash = 10 * a + b;
         ArrayList<Integer> list = maps.get(hash);
         depthMapCnt[depth]++;
-        int mapId = list.get((int) (list.size() * Math.random()));
+        int mapId = list.get(RNGUtilities.getInt(list.size()));
         // TEMP
         while (mapId == 1) {
-            mapId = list.get((int) (list.size() * Math.random()));
+            mapId = list.get(RNGUtilities.getInt(list.size()));
         }
         if (Game.DEBUG) {
             System.out.println(mapId);

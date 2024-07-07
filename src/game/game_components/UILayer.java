@@ -43,6 +43,10 @@ public class UILayer extends GameComponent {
             private ConfirmUI confirmUI = new ConfirmUI(UILayer.this, action);
 
             public void actionPerformed(ActionEvent e) {
+                if (getComponentCount() == 0) {
+                    confirmUI.enterPanel();
+                    return;
+                }
                 if (getComponent(0) instanceof ConfirmUI) {
                     if (getComponent(0) != confirmUI) {
                         ((ConfirmUI) getComponent(0)).exitPanel();

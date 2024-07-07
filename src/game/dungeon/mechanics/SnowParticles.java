@@ -3,6 +3,7 @@ package game.dungeon.mechanics;
 import java.awt.Color;
 
 import game.dungeon.Dungeon;
+import game.utilities.RNGUtilities;
 
 public class SnowParticles extends ParticleSystem {
     private static final int speed = 6;
@@ -13,7 +14,7 @@ public class SnowParticles extends ParticleSystem {
         super(width, height);
         this.collision = collision;
         for (int i = 0; i < 2 * height / speed; i++) {
-            if (Math.random() < 0.5) {
+            if (RNGUtilities.getBoolean(0.2)) {
                 addParticle(new SnowParticle());
             }
             update();
@@ -31,7 +32,7 @@ public class SnowParticles extends ParticleSystem {
 
     private class SnowParticle extends Particle {
         SnowParticle() {
-            super(2, Color.white, (int) (Math.random() * getWidth()), 0, 0, (int) (speed / 2 + speed * Math.random()),
+            super(3, Color.white, 0.4, RNGUtilities.getInt(getWidth()), 0, 0, speed / 2 + RNGUtilities.getDouble(2),
                     0, 0);
         }
 

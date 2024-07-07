@@ -23,4 +23,9 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
         }
         return objectManager;
     }
+
+    // TEMP
+    public RoomObjectManager getRoomObjectManager(TileGrid tileGrid) {
+        return new RoomObjectManager(tileGrid.getWidth(), tileGrid.getHeight(), player);
+    }
 }

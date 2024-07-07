@@ -22,12 +22,14 @@ public class Dungeon extends GamePanel {
     public final static int maxScreenRow = 48;
     public final static int maxScreenCol = 64;
 
+    private final static int startingRoom = 1;
+    private final static int startingInventorySize = 8;
+
     private Room room;
     private Inventory inventory;
     private Player player;
     private RoomFactory roomFactory;
 
-    private UILayer UILayer;
     private PauseMenu pauseMenu;
 
     private final Action nextRoom = new AbstractAction() {
@@ -39,14 +41,13 @@ public class Dungeon extends GamePanel {
         }
     };
 
-    public Dungeon(Game game) {
-        super(game);
-        UILayer = new UILayer();
-        inventory = new Inventory(UILayer, 8);
+    public Dungeon(Game game, UILayer UILayer) {
+        super(game, UILayer);
+        inventory = new Inventory(UILayer, startingInventorySize);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player, UILayer);
-        room = roomFactory.getStartingRoom(1);
-        // room = roomFactory.createRandomRoom(40, 30);
+        room = roomFactory.getStartingRoom(startingRoom);
+        // room = roomFactory.createRandomRoom(63, 57);
         add(room);
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
@@ -62,17 +63,26 @@ public class Dungeon extends GamePanel {
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
-        add(UILayer);
+
+        // try {
+        //     AudioInputStream sound = AudioSystem.getAudioInputStream(new File ("res/audio/bgm.wav"));
+        //     Clip background = AudioSystem.getClip();
+        //     background.open(sound);
+        //     background.setFramePosition (0);
+        //     background.loop(Clip.LOOP_CONTINUOUSLY);
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
     }
 
     public final void reset() {
         remove(room);
         remove(inventory);
         remove(UILayer);
-        inventory = new Inventory(UILayer, 8);
+        inventory = new Inventory(UILayer, startingInventorySize);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player, UILayer);
-        room = roomFactory.getStartingRoom(1);
+        room = roomFactory.getStartingRoom(startingRoom);
         add(room);
         add(inventory);
         UILayer.removeAll();

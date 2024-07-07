@@ -35,15 +35,6 @@ public abstract class PopupUI extends GameComponent {
         this(UILayer, width, height, framesToEnter, "Notebook");
     }
 
-    public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(backgroundImage, 0, 0, null);
-    }
-
-    private void buildImage(String tileSet) {
-        backgroundImage = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(),
-                getWidth(), getHeight());
-    }
-
     public void update() {
         if (!moving) {
             return;
@@ -62,6 +53,15 @@ public abstract class PopupUI extends GameComponent {
         } else if (getX() == Game.screenWidth) {
             UILayer.remove(this);
         }
+    }
+
+    public void drawComponent(Graphics2D g2d) {
+        g2d.drawImage(backgroundImage, 0, 0, null);
+    }
+
+    private void buildImage(String tileSet) {
+        backgroundImage = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(),
+                getWidth(), getHeight());
     }
 
     public void enterPanel() {

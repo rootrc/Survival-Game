@@ -8,7 +8,9 @@ import javax.swing.JFrame;
 
 import game.dungeon.Dungeon;
 import game.game_components.GamePanel;
+import game.game_components.UILayer;
 import game.game_panel.Menu;
+import game.game_panel.Options;
 
 public class Game extends JFrame implements Runnable {
     public final static int screenWidth = Dungeon.TILESIZE * Dungeon.maxScreenCol; // 1024 pixels
@@ -22,23 +24,11 @@ public class Game extends JFrame implements Runnable {
     private GamePanel gamePanel;
     private Dungeon dungeon;
     private Menu menu;
+    private Options options;
+    
+    private UILayer UILayer;
 
     private Thread gameThread;
-
-    // private final Action changePanel = new AbstractAction() {
-    // public void actionPerformed(ActionEvent e) {
-    // if (e.getActionCommand().equals("dungeon")) {
-    // changePanel(dungeon);
-    // } else if (e.getActionCommand().equals("options")) {
-    // // TODO
-    // } else if (e.getActionCommand().equals("mainMenu")) {
-    // changePanel(menu);
-    // dungeon.reset();
-    // } else if (e.getActionCommand().equals("mainMenu")) {
-    // // TODO
-    // }
-    // }
-    // };
 
     public Game() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,9 +42,14 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initPanel() {
-        dungeon = new Dungeon(this);
-        menu = new Menu(this);
+        UILayer = new UILayer();
+        dungeon = new Dungeon(this, UILayer);
+        menu = new Menu(this, UILayer);
+        options = new Options(this, UILayer);
         gamePanel = menu;
+        if (Game.DEBUG) {
+            gamePanel = dungeon;
+        }
         add(gamePanel);
     }
 
@@ -65,7 +60,7 @@ public class Game extends JFrame implements Runnable {
                 if (str.equals("dungeon")) {
                     gamePanel = dungeon;
                 } else if (str.equals("options")) {
-                    // TODO
+                    gamePanel = options;
                 } else if (str.equals("mainMenu")) {
                     gamePanel = menu;
                 } else if (str.equals("title")) {
@@ -73,6 +68,7 @@ public class Game extends JFrame implements Runnable {
                 }
                 add(gamePanel);
                 gamePanel.fadeIn();
+                gamePanel.add(UILayer);
                 revalidate();
             }
         };

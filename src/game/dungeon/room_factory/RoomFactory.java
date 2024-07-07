@@ -2,8 +2,6 @@ package game.dungeon.room_factory;
 
 import java.util.HashMap;
 
-import javax.swing.KeyStroke;
-
 import game.Game;
 import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.LightingEngine;
@@ -15,6 +13,7 @@ import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
 import game.game_components.Factory;
 import game.game_components.UILayer;
+import game.utilities.RNGUtilities;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
@@ -39,18 +38,23 @@ public class RoomFactory extends Factory<Room> {
         dungeonGenerator = new DungeonLayoutGenerator();
     }
 
+    // TEMP
+    public Room createRandomRoom(int N, int M) {
+        TileGrid tileGrid = tileFactory.createRandomGrid(N, M, player);
+        return new Room(tileGrid, collisionFactory.getCollisionChecker(N, M, tileGrid), objectManagerFactory.getRoomObjectManager(tileGrid));
+    }
+
     public Room getStartingRoom(int id) {
         RoomFileData file = new RoomFileData(id);
-        TileGrid tileGrid = tileFactory.createGrid(file, player);
+        TileGrid tileGrid = tileFactory.createTileGrid(file, player);
         CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
         player.set(312, 100, collision);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
+        objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
         if (!Game.DEBUG) {
             room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
         }
         putRoom(id, room);
-        setKeyBinds(rooms.get(id));
         return rooms.get(id);
     }
 
@@ -76,7 +80,7 @@ public class RoomFactory extends Factory<Room> {
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
         if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == 1) {
             player.setDirection(4);
-        } else if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == -1){
+        } else if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == -1) {
             player.setDirection(0);
         }
         return nextRoom;
@@ -87,25 +91,11 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {
-        TileGrid tileGrid = tileFactory.createGrid(file, player);
+        TileGrid tileGrid = tileFactory.createTileGrid(file, player);
         CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collision,
-                objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
-        setKeyBinds(room);
+        objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
         return room;
-    }
-
-    private void setKeyBinds(Room room) {
-        for (char c : "WASD".toCharArray()) {
-            room.getInputMap(2).put(KeyStroke.getKeyStroke(
-                    new StringBuilder("pressed ").append(c).toString()),
-                    new StringBuilder("acc ").append(c).toString());
-            room.getInputMap(2).put(KeyStroke.getKeyStroke(
-                    new StringBuilder("released ").append(c).toString()),
-                    new StringBuilder("decel ").append(c).toString());
-            room.getActionMap().put(new StringBuilder("acc ").append(c).toString(), player.accelerate);
-            room.getActionMap().put(new StringBuilder("decel ").append(c).toString(), player.decelerate);
-        }
     }
 
     private void createLadderConnection(Ladder ladder0, Room previousRoom, Room nextRoom, RoomFileData file) {
@@ -113,11 +103,11 @@ public class RoomFactory extends Factory<Room> {
         if (ladder0.getDirection() == 1) {
             while (ladder1 == null || nextRoom.getConnectedLadder(ladder1) != null) {
                 ladder1 = (Ladder) nextRoom
-                        .getRoomObject((int) (file.getLadderUp() + (file.getLadderDown() * Math.random())));
+                        .getRoomObject(file.getLadderUp() + RNGUtilities.getInt(file.getLadderDown()));
             }
         } else {
             while (ladder1 == null || nextRoom.getConnectedLadder(ladder1) != null) {
-                ladder1 = (Ladder) nextRoom.getRoomObject((int) (file.getLadderUp() * Math.random()));
+                ladder1 = (Ladder) nextRoom.getRoomObject(RNGUtilities.getInt(file.getLadderUp()));
             }
         }
         nextRoom.addLadderConnection(ladder1, previousRoom.getId());
@@ -132,11 +122,10 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private Room getRoom(int id) {
-        Room room = rooms.get(id);
-        room.add(player);
-        room.add(lighting);
-        room.add(UILayer);
-        return room;
+        rooms.get(id).add(player);
+        rooms.get(id).add(lighting);
+        rooms.get(id).add(UILayer);
+        return rooms.get(id);
     }
 
 }

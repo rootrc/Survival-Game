@@ -1,6 +1,5 @@
 package game.dungeon.room.entity;
 
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
 
@@ -14,13 +13,38 @@ import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
-import game.utilities.ImageUtilities;
 
 public class Player extends Entity {
     private HashSet<String> movementKeys = new HashSet<>();
     private Inventory inventory;
     private RoomObject interactable;
     private Action nextRoom;
+    private int interactionCooldown;
+
+    private final Action accelerate = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movementKeys.add(e.getActionCommand());
+        }
+    };
+
+    private final Action decelerate = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movementKeys.remove(e.getActionCommand());
+        }
+    };
+
+    private final Action interact = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (interactable == null || interactionCooldown < 30) {
+                return;
+            }
+            interactionCooldown = 0;
+            interactable.interaction(Player.this);
+            if (interactable.getClass() == Ladder.class) {
+                nextRoom.actionPerformed(e);
+            }
+        }
+    };
 
     public Player(Action nextRoom, Inventory inventory) {
         super("playerTileset",
@@ -28,8 +52,7 @@ public class Player extends Entity {
                 new CollisionBox(0, 0.75, 2, 2.5), Dungeon.TILESIZE / 4, null, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
-        getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
-        getActionMap().put("interact", interact);
+        setKeyBinds();
     }
 
     public void set(double x, double y, CollisionChecker collision) {
@@ -37,15 +60,29 @@ public class Player extends Entity {
         setCollision(collision);
     }
 
+    private void setKeyBinds() {
+        getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
+        getActionMap().put("interact", interact);
+        for (char c : "WASD".toCharArray()) {
+            getInputMap(2).put(KeyStroke.getKeyStroke(
+                    new StringBuilder("pressed ").append(c).toString()),
+                    new StringBuilder("acc ").append(c).toString());
+            getInputMap(2).put(KeyStroke.getKeyStroke(
+                    new StringBuilder("released ").append(c).toString()),
+                    new StringBuilder("decel ").append(c).toString());
+            getActionMap().put(new StringBuilder("acc ").append(c).toString(), accelerate);
+            getActionMap().put(new StringBuilder("decel ").append(c).toString(), decelerate);
+        }
+    }
+
     @Override
     public void update() {
         super.update();
         interactionCooldown++;
-        // System.out.println(collision.getHeight(this));
     }
 
     @Override
-    protected void move() {
+    public void move() {
         double ax = 0;
         double ay = 0;
         if (movementKeys.contains("w") && Math.abs(getSpeedY()) < getMaxSpeed()) {
@@ -78,33 +115,6 @@ public class Player extends Entity {
         addSpeedY(ay);
         super.move();
     }
-
-    public final Action accelerate = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            movementKeys.add(e.getActionCommand());
-        }
-    };
-
-    public final Action decelerate = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            movementKeys.remove(e.getActionCommand());
-        }
-    };
-
-    private int interactionCooldown;
-
-    private final Action interact = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            if (interactable == null || interactionCooldown < 30) {
-                return;
-            }
-            interactionCooldown = 0;
-            interactable.interaction(Player.this);
-            if (interactable.getClass() == Ladder.class) {
-                nextRoom.actionPerformed(e);
-            }
-        }
-    };
 
     public void collide(RoomObject object) {
         CollisionBox h1 = getHitBox();
