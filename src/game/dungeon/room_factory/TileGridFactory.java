@@ -16,7 +16,6 @@ import game.utilities.roomgenerator.MapGenerator;
 class TileGridFactory extends Factory<TileGrid> {
     private static final String name = "dungeonTileSet";
     private static final int layers = 4;
-    private static final int layers = 4;
     private static final int tileN = 18;
     private static final int tileM = 16;
     private static final Tile tileMap[][] = new Tile[tileN][tileM];
@@ -35,22 +34,17 @@ class TileGridFactory extends Factory<TileGrid> {
 
     TileGrid createRandomGrid(int N, int M, Player player) {
         return new TileGrid(N, M, createTileGridArray(N, M, MapGenerator.getRandomMap(N, M)), player);
-    TileGrid createRandomGrid(int N, int M, Player player) {
-        return new TileGrid(N, M, createTileGridArray(N, M, MapGenerator.getRandomMap(N, M)), player);
     }
 
-    TileGrid createTileGrid(RoomFileData file, Player player) {
     TileGrid createTileGrid(RoomFileData file, Player player) {
         int[][] fileTileGridClone = new int[file.getN()][];
         for (int i = 0; i < file.getN(); i++) {
             fileTileGridClone[i] = file.getTileGrid()[i].clone();
         }
         return new TileGrid(file.getN(), file.getM(), createTileGridArray(file.getN(), file.getM(), fileTileGridClone),
-        return new TileGrid(file.getN(), file.getM(), createTileGridArray(file.getN(), file.getM(), fileTileGridClone),
                 player);
     }
 
-    private Tile[][][][] createTileGridArray(int N, int M, int arr[][]) {
     private Tile[][][][] createTileGridArray(int N, int M, int arr[][]) {
         int arr2[][][][] = new int[2][layers][N][M];
         for (int i = 1; i < layers; i++) {
