@@ -33,7 +33,7 @@ public class Game extends JFrame implements Runnable {
     public Game() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        setTitle("Game");
+        setTitle("Survival Game");
         initPanel();
         pack();
         setLocationRelativeTo(null);

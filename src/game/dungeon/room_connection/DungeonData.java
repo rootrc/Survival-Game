@@ -55,13 +55,6 @@ public class DungeonData extends FileOpener {
         int hash = idToHash.get(id);
         ArrayList<Integer> list = maps.get(hash);
         list.remove((Integer) id);
-        // if (ladder.getDirection() == -1) {
-        // maps.get(hash - 1).add(id);
-        // idToHash.put(id, hash - 1);
-        // } else {
-        // maps.get(hash - 10).add(id);
-        // idToHash.put(id, hash - 10);
-        // }
     }
 
     public int getDepth() {

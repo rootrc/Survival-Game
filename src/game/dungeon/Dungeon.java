@@ -63,16 +63,6 @@ public class Dungeon extends GamePanel {
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
-
-        // try {
-        //     AudioInputStream sound = AudioSystem.getAudioInputStream(new File ("res/audio/bgm.wav"));
-        //     Clip background = AudioSystem.getClip();
-        //     background.open(sound);
-        //     background.setFramePosition (0);
-        //     background.loop(Clip.LOOP_CONTINUOUSLY);
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
     }
 
     public final void reset() {

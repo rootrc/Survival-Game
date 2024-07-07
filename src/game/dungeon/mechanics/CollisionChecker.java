@@ -32,7 +32,6 @@ public class CollisionChecker {
     }
 
     public int getLayer(Entity entity) {
-        // TEMP
         if (height == null) {
             return 0;
         }

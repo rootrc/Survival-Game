@@ -40,14 +40,14 @@ public class ChestUI extends PopupUI {
 		g2d.drawImage(ImageUtilities.getImage("UI", "ChestSlot"), getWidth() / 2 - 46, getHeight() / 2 - 46, null);
 	}
 
-	@Override
-	public void exitPanel() {
-		// TODO
+	// TODO
+	// @Override
+	// public void exitPanel() {
 		// if (getComponentCount() == 0) {
-			super.exitPanel();
+			// super.exitPanel();
 		// } else {
 		// 	check.actionPerformed(null);
 		// }
-	}
+	// }
 
 }
