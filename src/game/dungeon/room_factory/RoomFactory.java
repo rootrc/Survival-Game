@@ -3,7 +3,7 @@ package game.dungeon.room_factory;
 import java.util.HashMap;
 
 import game.Game;
-import game.dungeon.mechanics.CollisionChecker;
+import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
@@ -18,7 +18,7 @@ import game.utilities.RNGUtilities;
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
     private TileGridFactory tileFactory;
-    private CollisionCheckerFactory collisionFactory;
+    private CollisionHandlerFactory collisionHandlerFactory;
     private RoomObjectManagerFactory objectManagerFactory;
     private DungeonData dungeonData;
     private DungeonLayoutGenerator dungeonGenerator;
@@ -33,7 +33,7 @@ public class RoomFactory extends Factory<Room> {
         lighting = new LightingEngine(player);
         rooms = new HashMap<>();
         tileFactory = new TileGridFactory();
-        collisionFactory = new CollisionCheckerFactory();
+        collisionHandlerFactory = new CollisionHandlerFactory();
         objectManagerFactory = new RoomObjectManagerFactory(player);
         dungeonGenerator = new DungeonLayoutGenerator();
     }
@@ -41,16 +41,17 @@ public class RoomFactory extends Factory<Room> {
     // TEMP
     public Room createRandomRoom(int N, int M) {
         TileGrid tileGrid = tileFactory.createRandomGrid(N, M, player);
-        return new Room(tileGrid, collisionFactory.getCollisionChecker(N, M, tileGrid), objectManagerFactory.getRoomObjectManager(tileGrid));
+        CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(N, M, tileGrid);
+        return new Room(tileGrid, collisionHandler, objectManagerFactory.getRoomObjectManager(tileGrid, collisionHandler));
     }
 
     public Room getStartingRoom(int id) {
         RoomFileData file = new RoomFileData(id);
         TileGrid tileGrid = tileFactory.createTileGrid(file, player);
-        CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
-        player.set(312, 100, collision);
-        Room room = new Room(id, player, lighting, tileGrid, collision,
-        objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
+        CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(file, tileGrid);
+        player.set(312, 100);
+        Room room = new Room(id, player, lighting, tileGrid, collisionHandler,
+        objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler), UILayer);
         if (!Game.DEBUG) {
             room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
         }
@@ -92,9 +93,9 @@ public class RoomFactory extends Factory<Room> {
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {
         TileGrid tileGrid = tileFactory.createTileGrid(file, player);
-        CollisionChecker collision = collisionFactory.getCollisionChecker(file, tileGrid);
-        Room room = new Room(id, player, lighting, tileGrid, collision,
-        objectManagerFactory.getRoomObjectManager(file, tileGrid), UILayer);
+        CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(file, tileGrid);
+        Room room = new Room(id, player, lighting, tileGrid, collisionHandler,
+        objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler), UILayer);
         return room;
     }
 

@@ -1,5 +1,6 @@
 package game.dungeon.room_factory;
 
+import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.RoomObjectFactory;
 import game.dungeon.room.object_utilities.RoomObjectManager;
@@ -16,8 +17,8 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
         RoomObjectFactory = new RoomObjectFactory();
     }
 
-    public RoomObjectManager getRoomObjectManager(RoomFileData file, TileGrid tileGrid) {
-        RoomObjectManager objectManager = new RoomObjectManager(tileGrid.getWidth(), tileGrid.getHeight(), player);
+    public RoomObjectManager getRoomObjectManager(RoomFileData file, TileGrid tileGrid, CollisionHandler collisionHandler) {
+        RoomObjectManager objectManager = new RoomObjectManager(tileGrid.getWidth(), tileGrid.getHeight(), player, collisionHandler);
         for (RoomObjectData data : file.getObjects()) {
             objectManager.add(RoomObjectFactory.getRoomObject(data), -1);
         }
@@ -25,7 +26,7 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
     }
 
     // TEMP
-    public RoomObjectManager getRoomObjectManager(TileGrid tileGrid) {
-        return new RoomObjectManager(tileGrid.getWidth(), tileGrid.getHeight(), player);
+    public RoomObjectManager getRoomObjectManager(TileGrid tileGrid, CollisionHandler collisionHandler) {
+        return new RoomObjectManager(tileGrid.getWidth(), tileGrid.getHeight(), player, collisionHandler);
     }
 }

@@ -5,29 +5,25 @@ import java.util.HashSet;
 
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.tile.Tile;
+import game.dungeon.room.tile.TileFactory;
 import game.dungeon.room.tile.TileGrid;
 import game.game_components.Factory;
-import game.utilities.ImageUtilities;
 import game.utilities.RNGUtilities;
 import game.utilities.roomgenerator.MapGenerator;
 
 // When I wrote this only God and I knew how it was worked
 // Now only God knows
 class TileGridFactory extends Factory<TileGrid> {
-    private static final String name = "dungeonTileSet";
     private static final int layers = 4;
     private static final int tileN = 18;
     private static final int tileM = 16;
     private static final Tile tileMap[][] = new Tile[tileN][tileM];
-    private static final HashSet<Integer> collisionTiles = new HashSet<>(
-            Arrays.asList(0, 1, 2, 3, 4, 18, 20, 21, 22, 36, 37, 38, 54, 55, 56, 57, 58, 72, 74, 75, 76, 90, 91, 92, 93,
-                    94, 108, 109, 110, 126, 127, 128, 129, 130, 144, 145, 146, 147, 148, 162, 163, 164, 214, 215, 286,
-                    287));
 
     TileGridFactory() {
+        TileFactory tileFactory = new TileFactory();
         for (int r = 0; r < tileN; r++) {
             for (int c = 0; c < tileM; c++) {
-                tileMap[r][c] = getTile(r, c);
+                tileMap[r][c] = tileFactory.getTile(r, c);
             }
         }
     }
@@ -46,17 +42,13 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     private Tile[][][][] createTileGridArray(int N, int M, int arr[][]) {
-        int arr2[][][][] = new int[2][layers][N][M];
+        int arr2[][][][] = new int[2][][][];
+        arr2[0] = new int[layers][N][M];
+        arr2[1] = new int[2][N][M];
         for (int i = 1; i < layers; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
                     arr2[0][i][r][c] = -1;
-                }
-            }
-        }
-        for (int i = 0; i < 2; i++) {
-            for (int r = 0; r < N; r++) {
-                for (int c = 0; c < M; c++) {
                 }
             }
         }
@@ -101,19 +93,29 @@ class TileGridFactory extends Factory<TileGrid> {
                     }
                 }
                 layer41(clone, arr2[1][1], r, c);
-                layer41(clone, arr2[1][1], r, c);
             }
         }
-        Tile[][][][] res = new Tile[2][layers][N][M];
-        for (int j = 0; j < 2; j++) {
-            for (int i = 0; i < layers; i++) {
-                for (int r = 0; r < N; r++) {
-                    for (int c = 0; c < M; c++) {
-                        if (arr2[j][i][r][c] != -1) {
-                            res[j][i][r][c] = tileMap[arr2[j][i][r][c] % tileN][arr2[j][i][r][c] / tileN];
-                        } else {
-                            res[j][i][r][c] = null;
-                        }
+        Tile[][][][] res = new Tile[2][][][];
+        res[0] = new Tile[layers][N][M];
+        res[1] = new Tile[2][N][M];
+        for (int i = 0; i < layers; i++) {
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < M; c++) {
+                    if (arr2[0][i][r][c] != -1) {
+                        res[0][i][r][c] = tileMap[arr2[0][i][r][c] % tileN][arr2[0][i][r][c] / tileN];
+                    } else {
+                        res[0][i][r][c] = null;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 2; i++) {
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < M; c++) {
+                    if (arr2[1][i][r][c] != -1) {
+                        res[1][i][r][c] = tileMap[arr2[1][i][r][c] % tileN][arr2[1][i][r][c] / tileN];
+                    } else {
+                        res[1][i][r][c] = null;
                     }
                 }
             }
@@ -123,12 +125,6 @@ class TileGridFactory extends Factory<TileGrid> {
 
     private static final int direct[][] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
     private static final int direct2[][] = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 } };
-
-    private Tile getTile(int r, int c) {
-        // the r and c are backwards because I messed something up and it would take 6
-        // hours to fix so i'm keeping it like this
-        return new Tile(ImageUtilities.getImage("tiles", name, c, r), collisionTiles.contains(tileN * c + r));
-    }
 
     private static final HashSet<Integer> layer0 = new HashSet<>(Arrays.asList(5, 6));
 

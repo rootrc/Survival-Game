@@ -58,21 +58,6 @@ public abstract class RoomObject extends GameComponent {
         return false;
     }
 
-    public final boolean collides(RoomObject object) {
-        CollisionBox h1 = hitbox;
-        CollisionBox h2 = object.getHitBox();
-        if (h1 == null || h2 == null) {
-            return false;
-        }
-        if (h1.getMinX() + getX() < h2.getMaxX() + object.getX()
-                && h1.getMaxX() + getX() > h2.getMinX() + object.getX()
-                && h1.getMinY() + getY() < h2.getMaxY() + object.getY()
-                && h1.getMaxY() + getY() > h2.getMinY() + object.getY()) {
-            return true;
-        }
-        return false;
-    }
-
     public final void setImage(BufferedImage image) {
         this.image = image;
     }

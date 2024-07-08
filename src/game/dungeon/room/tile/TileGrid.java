@@ -6,7 +6,6 @@ import game.dungeon.room.entity.Player;
 public class TileGrid {
     private int N, M;
     private int width, height;
-
     private TileGridFloor tileGridFloor;
     private TileGridCeiling tileGridCeiling;
 

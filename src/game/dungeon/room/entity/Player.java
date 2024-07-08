@@ -9,7 +9,6 @@ import javax.swing.KeyStroke;
 
 import game.dungeon.Dungeon;
 import game.dungeon.inventory.Inventory;
-import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -48,16 +47,15 @@ public class Player extends Entity {
 
     public Player(Action nextRoom, Inventory inventory) {
         super("playerTileset",
-                new CollisionBox(0.5, 1.25, 1, 1.5),
-                new CollisionBox(0, 0.75, 2, 2.5), Dungeon.TILESIZE / 4, null, 10, 4);
+                new CollisionBox(0.5, 1.75, 1, 1),
+                new CollisionBox(0, 1.25, 2, 2), Dungeon.TILESIZE / 4, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         setKeyBinds();
     }
 
-    public void set(double x, double y, CollisionChecker collision) {
+    public void set(double x, double y) {
         setLocation(x, y);
-        setCollision(collision);
     }
 
     private void setKeyBinds() {
@@ -116,41 +114,16 @@ public class Player extends Entity {
         super.move();
     }
 
-    public void collide(RoomObject object) {
-        CollisionBox h1 = getHitBox();
-        CollisionBox h2 = object.getHitBox();
-        if (h1.getMinX() + getX() < h2.getMinX() + object.getX()
-                && h1.getMaxX() + getX() - h2.getMinX() - object.getX() < getSpeedX()
-                && (getSpeedX() > 0 || movementKeys.contains("d"))) {
-            setX(h2.getMinX() + object.getX() - h1.getMaxX());
-            setSpeedX(0);
-        }
-        if (h1.getMinX() + getX() - h2.getMaxX() - object.getX() > getSpeedX()
-                && h2.getMaxX() + object.getX() < h1.getMaxX() + getX()
-                && (getSpeedX() < 0 || movementKeys.contains("a"))) {
-            setX(h2.getMaxX() + object.getX() - h1.getMinX());
-            setSpeedX(0);
-        }
-        if (h1.getMinY() + getY() < h2.getMinY() + object.getY()
-                && h1.getMaxY() + getY() - h2.getMinY() - object.getY() < getSpeedY()
-                && (getSpeedY() > 0 || movementKeys.contains("s"))) {
-            setY(h2.getMinY() + object.getY() - h1.getMaxY());
-            setSpeedY(0);
-        }
-        if (h1.getMinY() + getY() - h2.getMaxY() - object.getY() > getSpeedY()
-                && h2.getMaxY() + object.getY() < h1.getMaxY() + getY()
-                && (getSpeedY() < 0 || movementKeys.contains("w"))) {
-            setY(h2.getMaxY() + object.getY() - h1.getMinY());
-            setSpeedY(0);
-        }
-    }
-
     public void interaction(Player player) {
 
     }
 
     public void setInteractable(RoomObject interactable) {
         this.interactable = interactable;
+    }
+
+    public HashSet<String> getMovementKeys() {
+        return movementKeys;
     }
 
     public Ladder getLadder() {

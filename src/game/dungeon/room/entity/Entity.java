@@ -2,7 +2,6 @@ package game.dungeon.room.entity;
 
 import java.awt.image.BufferedImage;
 
-import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.DirectionUtilities;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -18,34 +17,32 @@ public abstract class Entity extends RoomObject {
     private double speedY;
     private double accFrameCnt;
     private double deaccFrameCnt;
-    private CollisionChecker collision;
     private int direction;
     private int animationFrame;
 
     public Entity(String tilesetName, int r, int c, CollisionBox hitbox, CollisionBox interactbox, int maxSpeed,
-            CollisionChecker collision, double accFrames, double deaccFrames) {
+        double accFrames, double deaccFrames) {
         super(ImageUtilities.getImage("entities", tilesetName, 0, 0, 3, 2), r, c, hitbox, interactbox);
         tileset = ImageUtilities.getImage("entities", tilesetName);
         this.maxSpeed = maxSpeed;
-        this.collision = collision;
         this.accFrameCnt = accFrames;
         this.deaccFrameCnt = deaccFrames;
         lightStrength = defaultLightStrength;
     }
 
     public Entity(String tilesetName, CollisionBox hitbox, CollisionBox interactbox, int maxSpeed,
-            CollisionChecker collision, double accFrames, double deaccFrames) {
-        this(tilesetName, 0, 0, hitbox, interactbox, maxSpeed, collision, accFrames, deaccFrames);
-    }
-
-    public Entity(String tilesetName, CollisionBox hitbox, int maxSpeed, CollisionChecker collision, double accFrames,
-            double deaccFrames) {
-        this(tilesetName, 0, 0, hitbox, maxSpeed, collision, accFrames, deaccFrames);
-    }
-
-    public Entity(String tilesetName, int r, int c, CollisionBox hitbox, int maxSpeed, CollisionChecker collision,
             double accFrames, double deaccFrames) {
-        this(tilesetName, r, c, hitbox, null, maxSpeed, collision, accFrames, deaccFrames);
+        this(tilesetName, 0, 0, hitbox, interactbox, maxSpeed, accFrames, deaccFrames);
+    }
+
+    public Entity(String tilesetName, CollisionBox hitbox, int maxSpeed, double accFrames,
+            double deaccFrames) {
+        this(tilesetName, 0, 0, hitbox, maxSpeed, accFrames, deaccFrames);
+    }
+
+    public Entity(String tilesetName, int r, int c, CollisionBox hitbox, int maxSpeed,
+            double accFrames, double deaccFrames) {
+        this(tilesetName, r, c, hitbox, null, maxSpeed, accFrames, deaccFrames);
     }
 
     public void update() {
@@ -57,19 +54,15 @@ public abstract class Entity extends RoomObject {
         if (!isMoving()) {
             return;
         }
-        if (collision.canMove(this, speedX, 0)) {
-            if (isMovingY()) {
-                moveX(speedX * a);
-            } else {
-                moveX(speedX);
-            }
+        if (isMovingY()) {
+            moveX(speedX * a);
+        } else {
+            moveX(speedX);
         }
-        if (collision.canMove(this, 0, speedY)) {
-            if (isMovingX()) {
-                moveY(speedY * a);
-            } else {
-                moveY(speedY);
-            }
+        if (isMovingX()) {
+            moveY(speedY * a);
+        } else {
+            moveY(speedY);
         }
     }
 
@@ -82,18 +75,6 @@ public abstract class Entity extends RoomObject {
         }
         direction = DirectionUtilities.getDirection(this);
         setImage(ImageUtilities.getImage(tileset, animationFrame / (2 * maxSpeed), direction, 3, 2));
-    }
-
-    public int getLayer() {
-        return collision.getLayer(this);
-    }
-
-    public CollisionChecker getCollision() {
-        return collision;
-    }
-
-    public void setCollision(CollisionChecker collision) {
-        this.collision = collision;
     }
 
     public final void changeLightStrength(int delta) {

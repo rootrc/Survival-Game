@@ -68,10 +68,10 @@ public class TileGridCeiling extends GameComponent {
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
                 if (tileGrid[0][r][c] != null) {
-                    g2d.drawImage(tileGrid[0][r][c].getImage(), Dungeon.TILESIZE * (c), Dungeon.TILESIZE * r, null);
+                    tileGrid[0][r][c].draw(g2d, r, c);
                 }
                 if (tileGrid[1][r][c] != null) {
-                    g2d2.drawImage(tileGrid[1][r][c].getImage(), Dungeon.TILESIZE * (c), Dungeon.TILESIZE * r, null);
+                    tileGrid[1][r][c].draw(g2d2, r, c);
                 }
             }
         }

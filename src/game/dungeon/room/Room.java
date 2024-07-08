@@ -3,7 +3,7 @@ package game.dungeon.room;
 import java.awt.Graphics2D;
 
 import game.Game;
-import game.dungeon.mechanics.CollisionChecker;
+import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.mechanics.SnowParticles;
 import game.dungeon.mechanics.WalkingParticles;
@@ -22,10 +22,9 @@ public class Room extends GameComponent {
     private TileGrid tileGrid;
     private RoomConnecter connecter;
     private RoomObjectManager objectManager;
-    private CollisionChecker collision;
     private UILayer UILayer;
 
-    public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, CollisionChecker collision,
+    public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, CollisionHandler collisionHandler,
             RoomObjectManager objectManager, UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
@@ -33,22 +32,20 @@ public class Room extends GameComponent {
         this.UILayer = new UILayer();
         this.tileGrid = tileGrid;
         connecter = new RoomConnecter();
-        this.collision = collision;
         this.objectManager = objectManager;
         add(tileGrid.getTileGridFloor());
         add(new WalkingParticles(getWidth(), getHeight(), player));
         add(objectManager);
         add(player);
-        add(new SnowParticles(getWidth(), getHeight(), collision));
+        add(new SnowParticles(getWidth(), getHeight(), collisionHandler));
         add(tileGrid.getTileGridCeiling());
         add(lighting);
     }
 
     // TEMP
-    public Room(TileGrid tileGrid, CollisionChecker collision, RoomObjectManager objectManager) {
+    public Room(TileGrid tileGrid, CollisionHandler collisionHandler, RoomObjectManager objectManager) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.tileGrid = tileGrid;
-        this.collision = collision;
         this.objectManager = objectManager;
         add(tileGrid.getTileGridFloor());
         add(objectManager);
@@ -77,7 +74,7 @@ public class Room extends GameComponent {
     }
 
     public void setPlayer(Ladder ladder) {
-        player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY(), collision);
+        player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY());
         tileGrid.set(player);
     }
 

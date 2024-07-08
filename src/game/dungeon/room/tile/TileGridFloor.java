@@ -40,7 +40,7 @@ public class TileGridFloor extends GameComponent {
                     if (tileGrid[i][r][c] == null) {
                         continue;
                     }
-                    g2d.drawImage(tileGrid[i][r][c].getImage(), Dungeon.TILESIZE * c, Dungeon.TILESIZE * r, null);
+                    tileGrid[i][r][c].draw(g2d, r, c);
                 }
             }
         }
