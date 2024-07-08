@@ -126,6 +126,10 @@ public class Player extends Entity {
         return movementKeys;
     }
 
+    public int getLayer() {
+        return 0;
+    }
+
     public Ladder getLadder() {
         return (Ladder) interactable;
     }
