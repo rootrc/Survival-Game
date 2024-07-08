@@ -3,6 +3,7 @@ package game.dungeon.room_factory;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.tile.Tile;
 import game.dungeon.room.tile.TileFactory;
@@ -28,17 +29,17 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    TileGrid createRandomGrid(int N, int M, Player player) {
-        return new TileGrid(N, M, createTileGridArray(N, M, MapGenerator.getRandomMap(N, M)), player);
+    TileGrid createRandomGrid(int N, int M, Player player, HeightHandler heightHandler) {
+        return new TileGrid(N, M, createTileGridArray(N, M, MapGenerator.getRandomMap(N, M)), player, heightHandler);
     }
 
-    TileGrid createTileGrid(RoomFileData file, Player player) {
+    TileGrid createTileGrid(RoomFileData file, Player player, HeightHandler heightHandler) {
         int[][] fileTileGridClone = new int[file.getN()][];
         for (int i = 0; i < file.getN(); i++) {
-            fileTileGridClone[i] = file.getTileGrid()[i].clone();
+            fileTileGridClone[i] = file.getTileGridArray()[i].clone();
         }
         return new TileGrid(file.getN(), file.getM(), createTileGridArray(file.getN(), file.getM(), fileTileGridClone),
-                player);
+                player, heightHandler);
     }
 
     private Tile[][][][] createTileGridArray(int N, int M, int arr[][]) {
@@ -69,29 +70,29 @@ class TileGridFactory extends Factory<TileGrid> {
                 layer4(arr, arr2[1][0], r, c);
             }
         }
+        int clone[][] = new int[N][M];
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
-                int clone[][] = new int[N][M];
-                for (int i = 0; i < N; i++) {
-                    for (int j = 0; j < M; j++) {
-                        if (clone[i][j] == 2) {
-                            continue;
-                        }
-                        clone[i][j] = arr[i][j];
-                        if (arr[i][j] == 2) {
-                            if (arr[i - 1][j] == 5 || arr[i + 1][j] == -1) {
-                                clone[i][j - 1] = 2;
-                                clone[i][j + 1] = 2;
-                            } else {
-                                clone[i - 2][j] = 2;
-                                clone[i - 1][j] = 2;
-                                clone[i + 1][j] = 2;
-                                clone[i + 2][j] = 2;
-                                clone[i + 3][j] = 2;
-                            }
-                        }
+                if (clone[r][c] == 2) {
+                    continue;
+                }
+                clone[r][c] = arr[r][c];
+                if (arr[r][c] == 2) {
+                    if (arr[r - 1][c] == 5 || arr[r + 1][c] == -1) {
+                        clone[r][c - 1] = 2;
+                        clone[r][c + 1] = 2;
+                    } else {
+                        clone[r - 2][c] = 2;
+                        clone[r - 1][c] = 2;
+                        clone[r + 1][c] = 2;
+                        clone[r + 2][c] = 2;
+                        clone[r + 3][c] = 2;
                     }
                 }
+            }
+        }
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < M; c++) {
                 layer41(clone, arr2[1][1], r, c);
             }
         }

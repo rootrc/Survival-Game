@@ -40,7 +40,7 @@ public class TileFactory extends Factory<Tile> {
             put(108, new CollisionBox(0, 0, 1, 1));
             put(109, new CollisionBox(0, 0, 1, 1));
             put(110, new CollisionBox(0, 0, 1, 1));
-            
+
             put(126, new CollisionBox(0, 0, 1, 1));
             put(127, new CollisionBox(0, 0, 1, 1));
             put(128, new CollisionBox(0, 0, 1, 1));
@@ -73,10 +73,6 @@ public class TileFactory extends Factory<Tile> {
     };
 
     public Tile getTile(int r, int c) {
-        if (!map.containsKey(18 * c + r)) {
-            return new Tile(ImageUtilities.getImage("tiles", name, c, r), false, null);
-        }
-        return new Tile(ImageUtilities.getImage("tiles", name, c, r), true,
-               map.get(18 * c + r));
+        return new Tile(18 * c + r, ImageUtilities.getImage("tiles", name, c, r), map.get(18 * c + r));
     }
 }

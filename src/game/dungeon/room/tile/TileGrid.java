@@ -1,6 +1,7 @@
 package game.dungeon.room.tile;
 
 import game.dungeon.Dungeon;
+import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 
 public class TileGrid {
@@ -9,13 +10,13 @@ public class TileGrid {
     private TileGridFloor tileGridFloor;
     private TileGridCeiling tileGridCeiling;
 
-    public TileGrid(int N, int M, Tile[][][][] tileGrid, Player player) {
+    public TileGrid(int N, int M, Tile[][][][] tileGrid, Player player, HeightHandler heightHandler) {
         this.N = N;
         this.M = M;
         height = Dungeon.TILESIZE * N;
         width = Dungeon.TILESIZE * M;
         tileGridFloor = new TileGridFloor(N, M, tileGrid[0]);
-        tileGridCeiling = new TileGridCeiling(N, M, tileGrid[1], player);
+        tileGridCeiling = new TileGridCeiling(N, M, tileGrid[1], player, heightHandler);
     }
 
     public TileGridFloor getTileGridFloor() {

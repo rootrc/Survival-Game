@@ -19,7 +19,7 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
 
     public RoomObjectManager getRoomObjectManager(RoomFileData file, TileGrid tileGrid, CollisionHandler collisionHandler) {
         RoomObjectManager objectManager = new RoomObjectManager(tileGrid.getWidth(), tileGrid.getHeight(), player, collisionHandler);
-        for (RoomObjectData data : file.getObjects()) {
+        for (RoomObjectData data : file.getRoomObjects()) {
             objectManager.add(RoomObjectFactory.getRoomObject(data), -1);
         }
         return objectManager;

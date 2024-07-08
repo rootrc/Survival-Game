@@ -9,7 +9,7 @@ class RoomFileData extends FileOpener {
     private int id;
     private int N, M;
     private int arr[][];
-    private ArrayList<RoomObjectData> objects;
+    private ArrayList<RoomObjectData> roomObjects;
     private int ladderUpCnt;
     private int ladderDownCnt;
 
@@ -26,11 +26,11 @@ class RoomFileData extends FileOpener {
             }
         }
         int K = nextInt();
-        objects = new ArrayList<>();
+        roomObjects = new ArrayList<>();
         for (int i = 0; i < K; i++) {
             int id2 = nextInt();
             RoomObjectData temp = new RoomObjectData(id2, nextInt(), nextInt());
-            objects.add(temp);
+            roomObjects.add(temp);
             if (id2 == 0) {
                 ladderUpCnt++;
             } else {
@@ -40,7 +40,7 @@ class RoomFileData extends FileOpener {
         K = nextInt();
         for (int i = 0; i < K; i++) {
             RoomObjectData temp = new RoomObjectData(10 + nextInt(), nextInt(), nextInt());
-            objects.add(temp);
+            roomObjects.add(temp);
         }
         closeFile();
     }
@@ -57,7 +57,7 @@ class RoomFileData extends FileOpener {
         return M;
     }
 
-    int[][] getTileGrid() {
+    int[][] getTileGridArray() {
         return arr;
     }
 
@@ -69,7 +69,7 @@ class RoomFileData extends FileOpener {
         return ladderDownCnt;
     }
 
-    ArrayList<RoomObjectData> getObjects() {
-        return objects;
+    ArrayList<RoomObjectData> getRoomObjects() {
+        return roomObjects;
     }
 }

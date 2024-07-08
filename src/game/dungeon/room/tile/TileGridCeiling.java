@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import game.Game;
 import game.dungeon.Dungeon;
+import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 import game.game_components.GameComponent;
 
@@ -18,18 +19,20 @@ public class TileGridCeiling extends GameComponent {
     private Tile[][][] tileGrid;
     private Player player;
     private float opacity = 0;
+    private HeightHandler heightHandler;
 
-    public TileGridCeiling(int N, int M, Tile[][][] tileGrid, Player player) {
+    public TileGridCeiling(int N, int M, Tile[][][] tileGrid, Player player, HeightHandler heightHandler) {
         super(Dungeon.TILESIZE * M, Dungeon.TILESIZE * N);
         this.tileGrid = tileGrid;
         this.player = player;
+        this.heightHandler = heightHandler;
         this.N = N;
         this.M = M;
         buildImage();
     }
 
     public void setOpacity(Player player) {
-        if (player.getLayer() == 1) {
+        if (heightHandler.getLayer(player) == 1) {
             opacity = 1;
         } else {
             opacity = 0;
@@ -37,7 +40,7 @@ public class TileGridCeiling extends GameComponent {
     }
 
     public void update() {
-        if (player.getLayer() == 1) {
+        if (heightHandler.getLayer(player) == 1) {
             opacity = Math.min(1, opacity + 0.1f);
         } else {
             opacity = Math.max(0, opacity - 0.1f);

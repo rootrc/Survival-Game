@@ -9,26 +9,15 @@ import game.dungeon.Dungeon;
 import game.dungeon.room.object_utilities.CollisionBox;
 
 public class Tile {
+    private int id;
+
     private BufferedImage image;
-    private boolean collision;
     private CollisionBox hitbox;
 
-    public Tile(BufferedImage image, boolean collision, CollisionBox hitbox) {
+    public Tile(int id, BufferedImage image, CollisionBox hitbox) {
+        this.id = id;
         this.image = image;
-        this.collision = collision;
         this.hitbox = hitbox;
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public boolean getCollision() {
-        return collision;
-    }
-
-    public CollisionBox getHitBox() {
-        return hitbox;
     }
 
     public void draw(Graphics2D g2d, int r, int c) {
@@ -40,6 +29,18 @@ public class Tile {
                         (int) hitbox.getWidth(), (int) hitbox.getHeight());
             }
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    public CollisionBox getHitBox() {
+        return hitbox;
     }
 
 }
