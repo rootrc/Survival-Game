@@ -237,7 +237,7 @@ class TileGridFactory extends Factory<TileGrid> {
             }
             if (cnt == 4) {
                 if (cnt2 == 4) {
-                    arr2[r][c] = 19;
+                    arr2[r][c] = 73;
                 } else if (cnt2 == 3) {
                     if (!layer1.contains(arr[r + 1][c - 1])) {
                         arr2[r][c] = 58;
@@ -372,14 +372,14 @@ class TileGridFactory extends Factory<TileGrid> {
                 }
             }
             rand += cnt / 30.0;
-            if (rand < 0.05) {
-                if (arr[r][c] == 5 && arr[r][c] == arr[r + 1][c] && arr[r][c] == arr[r + 1][c - 1]
-                        && arr[r][c] == arr[r][c - 1]) {
-                    if (arr2[r][c] == -1 && arr2[r - 1][c] == -1 && arr2[r][c + 1] == -1 && arr2[r - 1][c + 1] == -1) {
-                        arr2[r - 1][c] = 150;
-                        arr2[r - 1][c + 1] = 151;
-                        arr2[r][c] = 168;
-                        arr2[r][c + 1] = 169;
+            if (rand < 0.04) {
+                if ((arr[r][c] == 5 || arr[r][c] == 6) && arr[r][c] == arr[r + 1][c] && arr[r][c] == arr[r + 1][c + 1]
+                        && arr[r][c] == arr[r][c + 1]) {
+                    if (arr2[r][c] == -1 && arr2[r + 1][c] == -1 && arr2[r][c + 1] == -1 && arr2[r + 1][c + 1] == -1) {
+                        arr2[r][c] = 150;
+                        arr2[r][c + 1] = 151;
+                        arr2[r + 1][c] = 168;
+                        arr2[r + 1][c + 1] = 169;
                     }
                 }
             } else if (rand > 0.99) {

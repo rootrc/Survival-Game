@@ -11,20 +11,21 @@ public class TileFactory extends Factory<Tile> {
     private static final HashMap<Integer, CollisionBox> map = new HashMap<>() {
         {
             put(0, new CollisionBox(0, 0, 1, 1));
-            put(1, new CollisionBox(0, 0, 1, 0.25));
+            put(1, new CollisionBox(0, 0, 1, 1));
             put(2, new CollisionBox(0, 0, 1, 1));
             put(3, new CollisionBox(0, 0, 1, 1));
             put(4, new CollisionBox(0, 0, 1, 1));
             put(18, new CollisionBox(0, 0, 1, 1));
+            put(19, new CollisionBox(0, 0, 1, 1));
             put(20, new CollisionBox(0, 0, 1, 1));
             put(21, new CollisionBox(0.5, 0, 0.5, 0.25));
             put(22, new CollisionBox(0, 0, 0.5, 0.25));
             put(36, new CollisionBox(0, 0, 1, 1));
             put(37, new CollisionBox(0, 0, 1, 1));
             put(38, new CollisionBox(0, 0, 1, 1));
-            put(54, new CollisionBox(0.25, 0, 0.5, 1));
+            put(54, new CollisionBox(0, 0, 0.75, 1));
             put(55, new CollisionBox(0, 0, 1, 0.25));
-            put(56, new CollisionBox(0, 0, 0.5, 1));
+            put(56, new CollisionBox(0.25, 0, 0.75, 1));
             put(57, new CollisionBox(0.25, 0.25, 0.75, 0.75));
             put(58, new CollisionBox(0, 0.25, 0.75, 0.75));
             put(72, new CollisionBox(0, 0, 0.75, 1));
