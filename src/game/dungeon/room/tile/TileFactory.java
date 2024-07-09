@@ -18,8 +18,8 @@ public class TileFactory extends Factory<Tile> {
             put(18, new CollisionBox(0, 0, 1, 1));
             put(19, new CollisionBox(0, 0, 1, 1));
             put(20, new CollisionBox(0, 0, 1, 1));
-            put(21, new CollisionBox(0.5, 0, 0.5, 0.25));
-            put(22, new CollisionBox(0, 0, 0.5, 0.25));
+            put(21, new CollisionBox(0.25, 0, 0.75, 0.25));
+            put(22, new CollisionBox(0, 0, 0.75, 0.25));
             put(36, new CollisionBox(0, 0, 1, 1));
             put(37, new CollisionBox(0, 0, 1, 1));
             put(38, new CollisionBox(0, 0, 1, 1));
@@ -57,18 +57,18 @@ public class TileFactory extends Factory<Tile> {
 
             put(140, new CollisionBox(0, 0, 0.25, 1));
             put(142, new CollisionBox(0.75, 0, 0.25, 1));
-            put(158, new CollisionBox(0, 0, 0.25, 0.5625));
-            put(160, new CollisionBox(0.75, 0, 0.25, 0.5625));
-            put(176, new CollisionBox(0, 0, 0.25, 1));
-            put(178, new CollisionBox(0.75, 0, 0.25, 1));
+            put(158, new CollisionBox(0, 0, 0.25, 0.25));
+            put(160, new CollisionBox(0.75, 0, 0.25, 0.25));
+            put(176, new CollisionBox(0, 0.25, 0.25, 0.75));
+            put(178, new CollisionBox(0.75, 0.25, 0.25, 0.75));
             put(194, new CollisionBox(0, 0, 0.25, 1));
             put(196, new CollisionBox(0.75, 0, 0.25, 1));
-
-            // TEMP stairs
-            put(214, new CollisionBox(0, 0, 1, 1));
-            put(215, new CollisionBox(0, 0, 1, 1));
-            put(286, new CollisionBox(0, 0, 1, 1));
-            put(287, new CollisionBox(0, 0, 1, 1));
+            put(214, new CollisionBox(0.25, 0, 0.75, 1));
+            put(215, new CollisionBox(0, 0, 0.75, 1));
+            put(268, new CollisionBox(0.25, 0.5, 0.75, 0.5));
+            put(269, new CollisionBox(0, 0.5, 0.75, 0.5));
+            put(286, new CollisionBox(0.25, 0, 0.75, 1));
+            put(287, new CollisionBox(0, 0, 0.75, 1));
         }
     };
 

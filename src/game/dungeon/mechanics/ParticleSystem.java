@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import game.Game;
 import game.game_components.GameComponent;
 
 public abstract class ParticleSystem extends GameComponent {
@@ -21,6 +22,9 @@ public abstract class ParticleSystem extends GameComponent {
     }
 
     public final void drawComponent(Graphics2D g2d) {
+        if (Game.DEBUG) {
+            return;
+        }
         for (int i = 0; i < particles.size(); i++) {
             if (particles.get(i).isInvalid()) {
                 particles.remove(particles.get(i));
