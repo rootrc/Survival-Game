@@ -10,13 +10,13 @@ public class TileGrid {
     private TileGridFloor tileGridFloor;
     private TileGridCeiling tileGridCeiling;
 
-    public TileGrid(int N, int M, Tile[][][][] tileGrid, Player player, HeightHandler heightHandler) {
+    public TileGrid(int N, int M, Tile[][][][] tileGridArray, Player player, HeightHandler heightHandler) {
         this.N = N;
         this.M = M;
         height = Dungeon.TILESIZE * N;
         width = Dungeon.TILESIZE * M;
-        tileGridFloor = new TileGridFloor(N, M, tileGrid[0]);
-        tileGridCeiling = new TileGridCeiling(N, M, tileGrid[1], player, heightHandler);
+        tileGridFloor = new TileGridFloor(N, M, tileGridArray[0]);
+        tileGridCeiling = new TileGridCeiling(N, M, tileGridArray[1], player, heightHandler);
     }
 
     public TileGridFloor getTileGridFloor() {

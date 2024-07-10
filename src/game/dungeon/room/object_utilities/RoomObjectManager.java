@@ -50,7 +50,7 @@ public class RoomObjectManager extends GameComponent {
     }
 
     private void playerStairInteraction() {
-        int temp = heightHandler.onStair(player);
+        int temp = heightHandler.getLocation(player);
         if (temp == -1) {
             collisionHandler.handleCollision(player);
             return;
@@ -69,6 +69,9 @@ public class RoomObjectManager extends GameComponent {
             case HeightHandler.STAIR_RIGHT:
                 player.moveX(-Math.abs(player.getSpeedX()) / 2.0);
                 // player.moveY(-player.getSpeedX() / 2.0);
+                break;
+            case HeightHandler.SLIDE_WALL:
+                    player.moveY(Math.abs(player.getSpeedY()) + 2);
                 break;
         }
     }

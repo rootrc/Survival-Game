@@ -12,12 +12,12 @@ import game.game_components.GameComponent;
 public class TileGridFloor extends GameComponent {
     private BufferedImage image;
     private int N, M, layers;
-    private Tile[][][] tileGrid;
+    private Tile[][][] tileGridArray;
 
-    public TileGridFloor(int N, int M, Tile[][][] tileGrid) {
+    public TileGridFloor(int N, int M, Tile[][][] tileGridArray) {
         super(Dungeon.TILESIZE * M, Dungeon.TILESIZE * N);
-        this.tileGrid = tileGrid;
-        layers = tileGrid.length;
+        this.tileGridArray = tileGridArray;
+        layers = tileGridArray.length;
         this.N = N;
         this.M = M;
         buildImage();
@@ -37,10 +37,10 @@ public class TileGridFloor extends GameComponent {
         for (int i = 0; i < layers; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
-                    if (tileGrid[i][r][c] == null) {
+                    if (tileGridArray[i][r][c] == null) {
                         continue;
                     }
-                    tileGrid[i][r][c].draw(g2d, r, c);
+                    tileGridArray[i][r][c].draw(g2d, r, c);
                 }
             }
         }
@@ -48,7 +48,7 @@ public class TileGridFloor extends GameComponent {
     }
 
     public Tile[][][] getTileGridArray() {
-        return tileGrid;
+        return tileGridArray;
     }
 
 }

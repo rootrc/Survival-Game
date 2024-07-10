@@ -12,6 +12,7 @@ public class HeightHandler {
     public static final int STAIR_DOWN = 3;
     public static final int STAIR_LEFT = 4;
     public static final int STAIR_RIGHT = 5;
+    public static final int SLIDE_WALL = 6;
 
     private int[][] height;
 
@@ -36,7 +37,7 @@ public class HeightHandler {
         return BOTTOM;
     }
 
-    public int onStair(Entity entity) {
+    public int getLocation(Entity entity) {
         ArrayList<Integer> rows = new ArrayList<>();
         ArrayList<Integer> cols = new ArrayList<>();
         rows.add((int) ((entity.getY() + entity.getHitBox().getY()) / Dungeon.TILESIZE));
@@ -45,7 +46,7 @@ public class HeightHandler {
         cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
         for (int r : rows) {
             for (int c : cols) {
-                if (STAIR_UP <= height[r][c] && height[r][c] <= STAIR_RIGHT) {
+                if (STAIR_UP <= height[r][c]) {
                     return height[r][c];
                 }
             }

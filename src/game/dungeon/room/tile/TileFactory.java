@@ -55,6 +55,11 @@ public class TileFactory extends Factory<Tile> {
             put(163, new CollisionBox(0, 0, 1, 1));
             put(164, new CollisionBox(0, 0, 1, 1));
 
+            put(137, new CollisionBox(0, 0.25, 0.75, 0.75));
+            put(139, new CollisionBox(0.25, 0.25, 0.75, 0.75));
+            put(155, new CollisionBox(0, 0, 0.75, 1));
+            put(157, new CollisionBox(0.25, 0, 0.75, 1));
+
             put(140, new CollisionBox(0, 0, 0.25, 1));
             put(142, new CollisionBox(0.75, 0, 0.25, 1));
             put(158, new CollisionBox(0, 0, 0.25, 0.25));

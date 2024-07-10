@@ -16,14 +16,14 @@ import game.game_components.GameComponent;
 public class TileGridCeiling extends GameComponent {
     private BufferedImage[] image;
     private int N, M;
-    private Tile[][][] tileGrid;
+    private Tile[][][] tileGridArray;
     private Player player;
     private float opacity = 0;
     private HeightHandler heightHandler;
 
-    public TileGridCeiling(int N, int M, Tile[][][] tileGrid, Player player, HeightHandler heightHandler) {
+    public TileGridCeiling(int N, int M, Tile[][][] tileGridArray, Player player, HeightHandler heightHandler) {
         super(Dungeon.TILESIZE * M, Dungeon.TILESIZE * N);
-        this.tileGrid = tileGrid;
+        this.tileGridArray = tileGridArray;
         this.player = player;
         this.heightHandler = heightHandler;
         this.N = N;
@@ -70,11 +70,11 @@ public class TileGridCeiling extends GameComponent {
         Graphics2D g2d2 = image[1].createGraphics();
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
-                if (tileGrid[0][r][c] != null) {
-                    tileGrid[0][r][c].draw(g2d, r, c);
+                if (tileGridArray[0][r][c] != null) {
+                    tileGridArray[0][r][c].draw(g2d, r, c);
                 }
-                if (tileGrid[1][r][c] != null) {
-                    tileGrid[1][r][c].draw(g2d2, r, c);
+                if (tileGridArray[1][r][c] != null) {
+                    tileGridArray[1][r][c].draw(g2d2, r, c);
                 }
             }
         }

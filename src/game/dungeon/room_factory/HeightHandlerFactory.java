@@ -20,8 +20,11 @@ public class HeightHandlerFactory extends Factory<HeightHandler> {
                 if (height[r][c] != 0) {
                     continue;
                 }
-                if ((tileGridArray[r][c] == 1 || tileGridArray[r][c] == 3 || tileGridArray[r][c] == 6)) {
+                if (tileGridArray[r][c] == 1 || tileGridArray[r][c] == 3 || tileGridArray[r][c] == 6) {
                     height[r][c] = HeightHandler.BOTTOM;
+                }
+                if (tileGridArray[r][c] == 4) {
+                    height[r + 1][c] = HeightHandler.SLIDE_WALL;
                 }
                 if (tileGridArray[r][c] != 2) {
                     continue;
