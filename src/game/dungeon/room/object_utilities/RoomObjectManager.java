@@ -71,7 +71,11 @@ public class RoomObjectManager extends GameComponent {
                 // player.moveY(-player.getSpeedX() / 2.0);
                 break;
             case HeightHandler.SLIDE_WALL:
-                    player.moveY(Math.abs(player.getSpeedY()) + 2);
+                    if (player.getSpeedY() >= 0) {
+                        player.moveY(Math.abs(player.getSpeedY()) + 2);
+                    } else {
+                        player.moveY(Math.abs(player.getSpeedY()));
+                    }
                 break;
         }
     }
