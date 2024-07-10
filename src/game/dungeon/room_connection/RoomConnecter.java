@@ -5,8 +5,8 @@ import java.util.HashMap;
 import game.dungeon.room.object.Ladder;
 
 public class RoomConnecter {
-    HashMap<Ladder, Integer> ladderToRoom;
-    HashMap<Ladder, Ladder> ladderToLadder;
+    private HashMap<Ladder, Integer> ladderToRoom;
+    private HashMap<Ladder, Ladder> ladderToLadder;
 
     public RoomConnecter() {
         ladderToRoom = new HashMap<>();

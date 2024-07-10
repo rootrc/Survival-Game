@@ -2,6 +2,8 @@ package game.dungeon.room.object_utilities;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
@@ -22,6 +24,23 @@ public class RoomObjectManager extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
+        // Bandaid solution, but it works
+        RoomObject[] temp = Arrays.copyOf(getComponents(), getComponentCount(), RoomObject[].class);
+        Arrays.sort(temp, new Comparator<RoomObject>() {
+            public int compare(RoomObject a, RoomObject b) {
+                if (a.getY() + a.getHitBox().getY() < b.getY() + b.getHitBox().getY()) {
+                    return 1;
+                }
+                if (a.getY() + a.getHitBox().getY() > b.getY() + b.getHitBox().getY()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+        removeAll();
+        for (RoomObject roomObject: temp) {
+            add(roomObject, -1);
+        }
     }
 
     public void update() {
@@ -33,6 +52,9 @@ public class RoomObjectManager extends GameComponent {
     private void objectCollisions() {
         collisionHandler.handleCollision(player);
         for (Component object : getComponents()) {
+            if (object == player) {
+                continue;
+            }
             if (CollisionHandler.collides(player, (RoomObject) object)) {
                 CollisionHandler.handleCollision(player, (RoomObject) object);
             }
@@ -41,6 +63,9 @@ public class RoomObjectManager extends GameComponent {
 
     private void objectInteractions() {
         for (Component object : getComponents()) {
+            if (object == player) {
+                continue;
+            }
             if (player.interacts((RoomObject) object)) {
                 player.setInteractable((RoomObject) object);
                 return;
@@ -71,11 +96,11 @@ public class RoomObjectManager extends GameComponent {
                 // player.moveY(-player.getSpeedX() / 2.0);
                 break;
             case HeightHandler.SLIDE_WALL:
-                    if (player.getSpeedY() >= 0) {
-                        player.moveY(Math.abs(player.getSpeedY()) + 2);
-                    } else {
-                        player.moveY(Math.abs(player.getSpeedY()));
-                    }
+                if (player.getSpeedY() >= 0) {
+                    player.moveY(Math.abs(player.getSpeedY()) + 2);
+                } else {
+                    player.moveY(Math.abs(player.getSpeedY()));
+                }
                 break;
         }
     }

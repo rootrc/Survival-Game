@@ -21,11 +21,11 @@ public class ChestUI extends PopupUI {
 		super(UILayer, 320, 256, 8, "ChestFloor");
 		GetItemButton getItemButton = new GetItemButton(this, ActionUtilities.combineActions(flash, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "close");
+				getInputMap(2).put(KeyStroke.getKeyStroke("pressed F"), "close");
 			}
 		}), item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
 		add(getItemButton);	
-		getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "getAll");
+		getInputMap(2).put(KeyStroke.getKeyStroke("pressed F"), "getAll");
 		getActionMap().put("getAll", getItemButton.getAction());
 		check = UILayer.createAndOpenConfirmUI((Action) (new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {

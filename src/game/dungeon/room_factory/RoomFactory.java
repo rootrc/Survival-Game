@@ -120,8 +120,6 @@ public class RoomFactory extends Factory<Room> {
         nextRoom.addLadderConnection(ladder1, previousRoom.getId());
         nextRoom.addLadderConnection(ladder1, ladder0);
         previousRoom.addLadderConnection(ladder0, ladder1);
-        dungeonData.updateLadderConnections(ladder0, previousRoom.getId());
-        dungeonData.updateLadderConnections(ladder1, nextRoom.getId());
     }
 
     private void putRoom(int id, Room room) {
@@ -129,7 +127,7 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private Room getRoom(int id) {
-        rooms.get(id).add(player);
+        rooms.get(id).addRoomObject(player);
         rooms.get(id).add(lighting);
         rooms.get(id).add(UILayer);
         return rooms.get(id);

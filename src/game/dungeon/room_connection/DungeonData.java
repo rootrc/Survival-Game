@@ -44,13 +44,8 @@ public class DungeonData extends FileOpener {
         while (mapId == 1) {
             mapId = list.get(RNGUtilities.getInt(list.size()));
         }
+        list.remove((Integer) mapId);
         return mapId;
-    }
-
-    public void updateLadderConnections(Ladder ladder, int id) {
-        int hash = idToHash.get(id);
-        ArrayList<Integer> list = maps.get(hash);
-        list.remove((Integer) id);
     }
 
     public int getDepth() {

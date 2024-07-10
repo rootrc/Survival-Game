@@ -40,7 +40,7 @@ public class Room extends GameComponent {
         add(tileGrid.getTileGridFloor());
         add(walkingParticles);
         add(objectManager);
-        add(player);
+        addRoomObject(player);
         add(snowParticles);
         add(tileGrid.getTileGridCeiling());
         add(lighting);
@@ -53,7 +53,7 @@ public class Room extends GameComponent {
         this.objectManager = objectManager;
         add(tileGrid.getTileGridFloor());
         add(objectManager);
-        add(player);
+        addRoomObject(player);
         add(tileGrid.getTileGridCeiling());
     }
 
@@ -90,6 +90,10 @@ public class Room extends GameComponent {
 
     public RoomObject getRoomObject(int idx) {
         return (RoomObject) objectManager.getComponent(idx);
+    }
+
+    public void addRoomObject(RoomObject roomObject) {
+        objectManager.add(roomObject, -1);
     }
 
     public void addLadderConnection(Ladder ladder, int id) {
