@@ -11,8 +11,8 @@ public class TreasureChest extends RoomObject {
     private boolean isClosed;
     private BufferedImage chestClosed;
 
-    public TreasureChest(int x, int y, CollisionBox hitbox, CollisionBox interactbox, int id) {
-        super(ImageUtilities.getImage("objects", "chests", 0, id, 2), x, y, hitbox, interactbox);
+    public TreasureChest(int r, int c, CollisionBox hitbox, CollisionBox interactbox, int id) {
+        super(ImageUtilities.getImage("objects", "chests", 0, id, 2), r, c, hitbox, interactbox);
         chestClosed = ImageUtilities.getImage("objects", "chests", 1, id, 2);
     }
 

@@ -11,9 +11,9 @@ public class Ladder extends RoomObject {
     private int playerPlacementX;
     private int playerPlacementY;
 
-    public Ladder(BufferedImage image, int x, int y, int playerPlacementX, int playerPlacementY, CollisionBox hitbox,
+    public Ladder(BufferedImage image, int r, int c, int playerPlacementX, int playerPlacementY, CollisionBox hitbox,
             CollisionBox interactbox, int direction) {
-        super(image, x, y, hitbox, interactbox);
+        super(image, r, c, hitbox, interactbox);
         this.direction = direction;
         this.playerPlacementX = playerPlacementX;
         this.playerPlacementY = playerPlacementY;
