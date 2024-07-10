@@ -28,7 +28,6 @@ class RoomFileData extends FileOpener {
         }
         int objectDataSetCnt = nextInt();
         int setNum = RNGUtilities.getInt(objectDataSetCnt);
-        System.out.println(setNum);
         int K;
         for (int i = 0; i < setNum; i++) {
             K = nextInt();
