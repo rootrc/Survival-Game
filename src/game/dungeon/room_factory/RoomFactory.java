@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import game.Game;
 import game.dungeon.mechanics.CollisionHandler;
+import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
@@ -44,16 +45,18 @@ public class RoomFactory extends Factory<Room> {
     public Room createRandomRoom(int N, int M) {
         TileGrid tileGrid = tileFactory.createRandomGrid(N, M, player, null);
         CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(tileGrid);
-        return new Room(tileGrid, collisionHandler, objectManagerFactory.getRoomObjectManager(tileGrid, collisionHandler));
+        return new Room(tileGrid, collisionHandler,
+                objectManagerFactory.getRoomObjectManager(tileGrid, collisionHandler, null));
     }
 
     public Room getStartingRoom(int id) {
         RoomFileData file = new RoomFileData(id);
-        TileGrid tileGrid = tileFactory.createTileGrid(file, player, heightHandlerFactory.getHeightHandler(file));
+        HeightHandler heightHandler = heightHandlerFactory.getHeightHandler(file);
+        TileGrid tileGrid = tileFactory.createTileGrid(file, player, heightHandler);
         CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(tileGrid);
         player.set(312, 100);
         Room room = new Room(id, player, lighting, tileGrid, collisionHandler,
-        objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler), UILayer);
+                objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler, heightHandler), UILayer);
         if (!Game.DEBUG) {
             room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
         }
@@ -94,10 +97,11 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {
-        TileGrid tileGrid = tileFactory.createTileGrid(file, player, heightHandlerFactory.getHeightHandler(file));
+        HeightHandler heightHandler = heightHandlerFactory.getHeightHandler(file);
+        TileGrid tileGrid = tileFactory.createTileGrid(file, player, heightHandler);
         CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(tileGrid);
         Room room = new Room(id, player, lighting, tileGrid, collisionHandler,
-        objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler), UILayer);
+                objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler, heightHandler), UILayer);
         return room;
     }
 

@@ -4,20 +4,24 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 
 import game.dungeon.mechanics.CollisionHandler;
+import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 import game.game_components.GameComponent;
 
 public class RoomObjectManager extends GameComponent {
     private Player player;
     private CollisionHandler collisionHandler;
+    private HeightHandler heightHandler;
 
-    public RoomObjectManager(int width, int height, Player player, CollisionHandler collisionHandler) {
+    public RoomObjectManager(int width, int height, Player player, CollisionHandler collisionHandler,
+            HeightHandler heightHandler) {
         super(width, height);
         this.player = player;
         this.collisionHandler = collisionHandler;
+        this.heightHandler = heightHandler;
     }
 
-    public void drawComponent(Graphics2D g2d) {    
+    public void drawComponent(Graphics2D g2d) {
     }
 
     public void update() {
@@ -27,9 +31,26 @@ public class RoomObjectManager extends GameComponent {
                 CollisionHandler.handleCollision(player, (RoomObject) object);
             }
             collisionHandler.handleCollision(player);
-            // if (!player.getCollision().canMove(player, 0, 0)) {
-            //     System.out.println("hi");
-            // }
+        }
+        int temp = heightHandler.onStair(player);
+        if (temp == -1) {
+            return;
+        }
+        switch (temp) {
+            case HeightHandler.STAIR_UP:
+                player.moveY(Math.abs(player.getSpeedY()) / 2.0);
+                return;
+            case HeightHandler.STAIR_DOWN:
+                player.moveY(-Math.abs(player.getSpeedY()) / 2.0);
+                return;
+            case HeightHandler.STAIR_LEFT:
+                player.moveX(Math.abs(player.getSpeedX()) / 2.0);
+                player.moveY(player.getSpeedX() / 2.0);
+                return;
+            case HeightHandler.STAIR_RIGHT:
+                player.moveX(-Math.abs(player.getSpeedX()) / 2.0);
+                player.moveY(-player.getSpeedX() / 2.0);
+                return;
         }
     }
 

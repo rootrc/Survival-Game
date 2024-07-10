@@ -6,9 +6,16 @@ import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Entity;
 
 public class HeightHandler {
-    private boolean[][] height;
+    public static final int TOP = 0;
+    public static final int BOTTOM = 1;
+    public static final int STAIR_UP = 2;
+    public static final int STAIR_DOWN = 3;
+    public static final int STAIR_LEFT = 4;
+    public static final int STAIR_RIGHT = 5;
 
-    public HeightHandler(boolean[][] height) {
+    private int[][] height;
+
+    public HeightHandler(int[][] height) {
         this.height = height;
     }
 
@@ -21,11 +28,28 @@ public class HeightHandler {
         cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
         for (int r : rows) {
             for (int c : cols) {
-                if (height[r][c]) {
-                    return 0;
+                if (height[r][c] != 0) {
+                    return TOP;
                 }
             }
         }
-        return 1;
+        return BOTTOM;
+    }
+
+    public int onStair(Entity entity) {
+        ArrayList<Integer> rows = new ArrayList<>();
+        ArrayList<Integer> cols = new ArrayList<>();
+        rows.add((int) ((entity.getY() + entity.getHitBox().getY()) / Dungeon.TILESIZE));
+        rows.add((int) ((entity.getY() + entity.getHitBox().getMaxY() - 1) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getX()) / Dungeon.TILESIZE));
+        cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
+        for (int r : rows) {
+            for (int c : cols) {
+                if (STAIR_UP <= height[r][c] && height[r][c] <= STAIR_RIGHT) {
+                    return height[r][c];
+                }
+            }
+        }
+        return -1;
     }
 }
