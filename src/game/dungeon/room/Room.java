@@ -49,10 +49,12 @@ public class Room extends GameComponent {
         this.objectManager = objectManager;
         add(tileGrid.getTileGridFloor());
         add(objectManager);
+        add(player);
+        add(tileGrid.getTileGridCeiling());
     }
 
     public void drawComponent(Graphics2D g2d) {
-
+        
     }
 
     @Override

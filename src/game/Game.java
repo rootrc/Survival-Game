@@ -13,13 +13,13 @@ import game.game_panel.Menu;
 import game.game_panel.Options;
 
 public class Game extends JFrame implements Runnable {
-    public final static int screenWidth = Dungeon.TILESIZE * Dungeon.maxScreenCol; // 1024 pixels
-    public final static int screenHeight = Dungeon.TILESIZE * Dungeon.maxScreenRow; // 768 pixels
+    public static final int screenWidth = Dungeon.TILESIZE * Dungeon.maxScreenCol; // 1024 pixels
+    public static final int screenHeight = Dungeon.TILESIZE * Dungeon.maxScreenRow; // 768 pixels
 
     public static final int FPS = 60;
     public static final int UPS = 60;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private GamePanel gamePanel;
     private Dungeon dungeon;
@@ -51,6 +51,8 @@ public class Game extends JFrame implements Runnable {
             gamePanel = dungeon;
         }
         add(gamePanel);
+        gamePanel.fadeIn();
+        gamePanel.add(UILayer);
     }
 
     public Action changePanel(String str) {
@@ -81,27 +83,22 @@ public class Game extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = 1000000000 / FPS;
+        double drawInterval = 1000000000.0 / FPS;
+        double updateInterval = 1000000000.0 / UPS;
         double delta1 = 0;
-        long lastTime1 = System.nanoTime();
-        long currentTime1;
-        
-        double updateInterval = 1000000000 / UPS;
         double delta2 = 0;
-        long lastTime2 = System.nanoTime();
-        long currentTime2;
-        
+        long currentTime;
+        long lastTime = System.nanoTime();
+
         while (gameThread != null) {
-            currentTime1 = System.nanoTime();
-            delta1 += (currentTime1 - lastTime1) / drawInterval;
-            lastTime1 = currentTime1;
+            currentTime = System.nanoTime();
+            delta1 += (currentTime - lastTime) / drawInterval;
+            delta2 += (currentTime - lastTime) / updateInterval;
+            lastTime = currentTime;
             if (delta1 > 1) {
                 gamePanel.repaint();
                 delta1--;
             }
-            currentTime2 = System.nanoTime();
-            delta2 += (currentTime2 - lastTime2) / updateInterval;
-            lastTime2 = currentTime2;
             if (delta2 > 1) {
                 gamePanel.updateComponent();
                 delta2--;

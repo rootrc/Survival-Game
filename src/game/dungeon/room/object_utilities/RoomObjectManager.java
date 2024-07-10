@@ -25,36 +25,21 @@ public class RoomObjectManager extends GameComponent {
     }
 
     public void update() {
+        objectCollisions();
         objectInteractions();
+        playerStairInteraction();
+    }
+
+    private void objectCollisions() {
+        collisionHandler.handleCollision(player);
         for (Component object : getComponents()) {
             if (CollisionHandler.collides(player, (RoomObject) object)) {
                 CollisionHandler.handleCollision(player, (RoomObject) object);
             }
-            collisionHandler.handleCollision(player);
-        }
-        int temp = heightHandler.onStair(player);
-        if (temp == -1) {
-            return;
-        }
-        switch (temp) {
-            case HeightHandler.STAIR_UP:
-                player.moveY(Math.abs(player.getSpeedY()) / 2.0);
-                return;
-            case HeightHandler.STAIR_DOWN:
-                player.moveY(-Math.abs(player.getSpeedY()) / 2.0);
-                return;
-            case HeightHandler.STAIR_LEFT:
-                player.moveX(Math.abs(player.getSpeedX()) / 2.0);
-                player.moveY(player.getSpeedX() / 2.0);
-                return;
-            case HeightHandler.STAIR_RIGHT:
-                player.moveX(-Math.abs(player.getSpeedX()) / 2.0);
-                player.moveY(-player.getSpeedX() / 2.0);
-                return;
         }
     }
 
-    public void objectInteractions() {
+    private void objectInteractions() {
         for (Component object : getComponents()) {
             if (player.interacts((RoomObject) object)) {
                 player.setInteractable((RoomObject) object);
@@ -62,5 +47,29 @@ public class RoomObjectManager extends GameComponent {
             }
         }
         player.setInteractable(null);
+    }
+
+    private void playerStairInteraction() {
+        int temp = heightHandler.onStair(player);
+        if (temp == -1) {
+            collisionHandler.handleCollision(player);
+            return;
+        }
+        switch (temp) {
+            case HeightHandler.STAIR_UP:
+                player.moveY(Math.abs(player.getSpeedY()) / 2.0);
+                break;
+            case HeightHandler.STAIR_DOWN:
+                player.moveY(-Math.abs(player.getSpeedY()) / 2.0);
+                break;
+            case HeightHandler.STAIR_LEFT:
+                player.moveX(Math.abs(player.getSpeedX()) / 2.0);
+                // player.moveY(player.getSpeedX() / 2.0);
+                break;
+            case HeightHandler.STAIR_RIGHT:
+                player.moveX(-Math.abs(player.getSpeedX()) / 2.0);
+                // player.moveY(-player.getSpeedX() / 2.0);
+                break;
+        }
     }
 }

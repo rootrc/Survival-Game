@@ -41,17 +41,13 @@ public class HeightHandlerFactory extends Factory<HeightHandler> {
                     height[r][c] = HeightHandler.STAIR_DOWN;
                     height[r][c + 1] = HeightHandler.STAIR_DOWN;
                 } else if (tileGridArray[r][c + 1] == 5) {
-                    height[r - 2][c] = HeightHandler.STAIR_LEFT;
                     height[r - 1][c] = HeightHandler.STAIR_LEFT;
                     height[r][c] = HeightHandler.STAIR_LEFT;
                     height[r + 1][c] = HeightHandler.STAIR_LEFT;
-                    height[r + 2][c] = HeightHandler.STAIR_LEFT;
                 } else if (tileGridArray[r][c - 1] == 5) {
-                    height[r - 2][c] = HeightHandler.STAIR_RIGHT;
                     height[r - 1][c] = HeightHandler.STAIR_RIGHT;
                     height[r][c] = HeightHandler.STAIR_RIGHT;
                     height[r + 1][c] = HeightHandler.STAIR_RIGHT;
-                    height[r + 2][c] = HeightHandler.STAIR_RIGHT;
                 }
             }
         }
