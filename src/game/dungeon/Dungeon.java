@@ -2,6 +2,8 @@ package game.dungeon;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -70,6 +72,16 @@ public class Dungeon extends GamePanel {
         
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "debug screen");
         getActionMap().put("debug screen", UILayer.openPopupUI(debugScreen));
+        
+        if (Game.DEBUG) {
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    System.out.println(e.getY() / TILESIZE + " " + e.getX() / TILESIZE);
+                }
+            });
+        }
     }
 
     public final void reset() {

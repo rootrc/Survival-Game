@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import game.dungeon.room.object_utilities.RoomObjectFactory.RoomObjectData;
 import game.utilities.FileOpener;
+import game.utilities.RNGUtilities;
 
 class RoomFileData extends FileOpener {
     private int id;
@@ -25,7 +26,21 @@ class RoomFileData extends FileOpener {
                 arr[r][c] = nextInt();
             }
         }
-        int K = nextInt();
+        int objectDataSetCnt = nextInt();
+        int setNum = RNGUtilities.getInt(objectDataSetCnt);
+        System.out.println(setNum);
+        int K;
+        for (int i = 0; i < setNum; i++) {
+            K = nextInt();
+            for (int j = 0; j < K; j++) {
+                next(3);
+            }
+            K = nextInt();
+            for (int j = 0; j < K; j++) {
+                next(3);
+            }
+        }
+        K = nextInt();
         roomObjects = new ArrayList<>();
         for (int i = 0; i < K; i++) {
             int id2 = nextInt();

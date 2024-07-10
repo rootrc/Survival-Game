@@ -36,6 +36,12 @@ public abstract class FileOpener {
         return read().replace('_', ' ');
     }
 
+    protected final void next(int cnt) {
+        for (int i = 0; i < cnt; i++) {
+            read();
+        }
+    }
+
     protected final void closeFile() {
         try {
             br.close();

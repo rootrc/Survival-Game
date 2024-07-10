@@ -1,6 +1,5 @@
 package game.dungeon.room_connection;
 
-import game.Game;
 import game.dungeon.room.object.Ladder;
 import game.utilities.FileOpener;
 
@@ -22,10 +21,6 @@ public class DungeonLayoutGenerator extends FileOpener {
 
     public int getGeneratedId(Ladder ladder, DungeonData dungeonData) {
         int hash = hashes[dungeonData.getDepth()][dungeonData.getDepthCnt(dungeonData.getDepth())];
-        if (Game.DEBUG) {
-            System.out.println(
-                    hash + " " + dungeonData.getDepth() + " " + dungeonData.getDepthCnt(dungeonData.getDepth()));
-        }
         if (hash != 0) {
             return dungeonData.getMapId(ladder, hash / 10, hash % 10);
         } else if (ladder.getDirection() == 1) {
