@@ -23,6 +23,8 @@ public class Room extends GameComponent {
     private RoomConnecter connecter;
     private RoomObjectManager objectManager;
     private UILayer UILayer;
+    private WalkingParticles walkingParticles;
+    private SnowParticles snowParticles;
 
     public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, CollisionHandler collisionHandler,
             RoomObjectManager objectManager, UILayer UIlayer) {
@@ -31,13 +33,15 @@ public class Room extends GameComponent {
         this.player = player;
         this.UILayer = new UILayer();
         this.tileGrid = tileGrid;
-        connecter = new RoomConnecter();
         this.objectManager = objectManager;
+        connecter = new RoomConnecter();
+        walkingParticles = new WalkingParticles(getWidth(), getHeight(), player);
+        snowParticles = new SnowParticles(getWidth(), getHeight(), collisionHandler);
         add(tileGrid.getTileGridFloor());
-        add(new WalkingParticles(getWidth(), getHeight(), player));
+        add(walkingParticles);
         add(objectManager);
         add(player);
-        add(new SnowParticles(getWidth(), getHeight(), collisionHandler));
+        add(snowParticles);
         add(tileGrid.getTileGridCeiling());
         add(lighting);
     }
@@ -102,5 +106,18 @@ public class Room extends GameComponent {
 
     public Ladder getConnectedLadder(Ladder ladder) {
         return connecter.getLadder(ladder);
+    }
+
+    // For Debug Screen
+    public int getEntityCount() {
+        return objectManager.getComponentCount() + 1;
+    }
+
+    public int getParticleCount() {
+        return snowParticles.getParticleCount() + walkingParticles.getParticleCount();
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

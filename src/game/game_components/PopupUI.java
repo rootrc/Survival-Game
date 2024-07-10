@@ -27,7 +27,6 @@ public abstract class PopupUI extends GameComponent {
         setLocation((Game.screenWidth - getWidth()) / 2, (Game.screenHeight - getHeight()) / 2);
         buildImage(tileSet);
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
-        getInputMap(2).put(KeyStroke.getKeyStroke("pressed Z"), "close");
         getActionMap().put("close", close);
     }
 

@@ -8,6 +8,7 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import game.Game;
+import game.dungeon.debug.DebugScreen;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
@@ -31,12 +32,14 @@ public class Dungeon extends GamePanel {
     private RoomFactory roomFactory;
 
     private PauseMenu pauseMenu;
+    private DebugScreen debugScreen;
 
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             remove(room);
             room = roomFactory.getNextRoom(room);
             add(room, -1);
+            debugScreen.updateRoom(room);
             revalidate();
         }
     };
@@ -48,6 +51,7 @@ public class Dungeon extends GamePanel {
         roomFactory = new RoomFactory(player, UILayer);
         room = roomFactory.getStartingRoom(startingRoom);
         // room = roomFactory.createRandomRoom(63, 57);
+        debugScreen = new DebugScreen(UILayer, room);
         add(room);
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
@@ -63,6 +67,9 @@ public class Dungeon extends GamePanel {
         getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
         getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
+        
+        getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "debug screen");
+        getActionMap().put("debug screen", UILayer.openPopupUI(debugScreen));
     }
 
     public final void reset() {
