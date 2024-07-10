@@ -32,7 +32,7 @@ public class TileFactory extends Factory<Tile> {
             put(74, new CollisionBox(0.25, 0, 0.75, 1));
             put(75, new CollisionBox(0.25, 0, 0.75, 1));
             put(76, new CollisionBox(0, 0, 0.75, 1));
-            put(90, new CollisionBox(0, 0, 0.75, 0.75));
+            put(90, new CollisionBox(0, 0.25, 0.75, 0.75));
             put(91, new CollisionBox(0, 0.25, 1, 0.75));
             put(92, new CollisionBox(0.25, 0.25, 0.75, 0.75));
             put(93, new CollisionBox(0.25, 0.25, 0.75, 0.75));
