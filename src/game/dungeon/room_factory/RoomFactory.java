@@ -129,7 +129,6 @@ public class RoomFactory extends Factory<Room> {
     private Room getRoom(int id) {
         rooms.get(id).addRoomObject(player);
         rooms.get(id).add(lighting);
-        rooms.get(id).add(UILayer);
         return rooms.get(id);
     }
 

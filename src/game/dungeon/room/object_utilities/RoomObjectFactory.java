@@ -28,8 +28,8 @@ public class RoomObjectFactory extends Factory<RoomObject> {
         } else {
             return new Ladder(ImageUtilities.getImage("objects", "ladderdown"), data.r, data.c,
                     0, -Dungeon.TILESIZE * 3,
-                    new CollisionBox(0.5, 0.375, 1, 1.125),
-                    new CollisionBox(0.25, -0.25, 1.5, 2), -1);
+                    new CollisionBox(0.25, 0.125, 1.5, 1.625),
+                    new CollisionBox(0, -0.5, 2, 2.5), -1);
         }
     }
 
