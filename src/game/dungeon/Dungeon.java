@@ -78,7 +78,7 @@ public class Dungeon extends GamePanel {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    System.out.println(e.getY() / TILESIZE + " " + e.getX() / TILESIZE);
+                    System.out.println(5 + " " + e.getY() / TILESIZE + " " + e.getX() / TILESIZE);
                 }
             });
         }

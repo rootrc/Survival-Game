@@ -62,16 +62,15 @@ public class RoomObjectManager extends GameComponent {
     }
 
     private void objectInteractions() {
+        player.clearInteractable();
         for (Component object : getComponents()) {
             if (object == player) {
                 continue;
             }
             if (player.interacts((RoomObject) object)) {
-                player.setInteractable((RoomObject) object);
-                return;
+                player.addInteractable((RoomObject) object);
             }
         }
-        player.setInteractable(null);
     }
 
     private void playerStairInteraction() {

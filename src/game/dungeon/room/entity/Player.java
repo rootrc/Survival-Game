@@ -1,6 +1,7 @@
 package game.dungeon.room.entity;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.swing.AbstractAction;
@@ -16,7 +17,7 @@ import game.dungeon.room.object_utilities.RoomObject;
 public class Player extends Entity {
     private HashSet<String> movementKeys = new HashSet<>();
     private Inventory inventory;
-    private RoomObject interactable;
+    private ArrayList<RoomObject> interactables = new ArrayList<>();
     private Action nextRoom;
     private int interactionCooldown;
 
@@ -34,13 +35,15 @@ public class Player extends Entity {
 
     private final Action interact = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            if (interactable == null || interactionCooldown < 30) {
+            if (interactables == null || interactionCooldown < 30) {
                 return;
             }
             interactionCooldown = 0;
-            interactable.interaction(Player.this);
-            if (interactable.getClass() == Ladder.class) {
-                nextRoom.actionPerformed(e);
+            for (RoomObject interactable : interactables) {
+                interactable.interaction(Player.this);
+                if (interactable instanceof Ladder) {
+                    nextRoom.actionPerformed(e);
+                }
             }
         }
     };
@@ -118,8 +121,12 @@ public class Player extends Entity {
 
     }
 
-    public void setInteractable(RoomObject interactable) {
-        this.interactable = interactable;
+    public void clearInteractable() {
+        interactables.clear();
+    }
+
+    public void addInteractable(RoomObject object) {
+        interactables.add(object);
     }
 
     public HashSet<String> getMovementKeys() {
@@ -127,7 +134,13 @@ public class Player extends Entity {
     }
 
     public Ladder getLadder() {
-        return (Ladder) interactable;
+        for (RoomObject interactable : interactables) {
+            interactable.interaction(Player.this);
+            if (interactable instanceof Ladder) {
+                return (Ladder) interactable;
+            }
+        }
+        return null;
     }
 
     public Inventory getInventory() {
