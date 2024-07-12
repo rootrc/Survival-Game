@@ -87,6 +87,7 @@ public class Player extends Entity {
     public void update() {
         super.update();
         interactionCooldown++;
+        setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
     }
 
@@ -153,10 +154,6 @@ public class Player extends Entity {
 
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public double getLightRadius() {
-        return lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6);
     }
 
     public void addLightAmount(int delta) {

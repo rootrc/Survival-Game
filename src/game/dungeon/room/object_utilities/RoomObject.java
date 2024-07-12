@@ -14,6 +14,8 @@ public abstract class RoomObject extends GameComponent {
     private CollisionBox interactbox;
     private CollisionBox hitbox;
 
+    private double lightRadius;
+
     public RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
         this(image, r, c, hitbox);
         this.interactbox = interactbox;
@@ -68,6 +70,18 @@ public abstract class RoomObject extends GameComponent {
 
     public final CollisionBox getHitBox() {
         return hitbox;
+    }
+
+    public final double getLightRadius() {
+        return lightRadius;
+    }
+
+    public final void setLightRadius(double lightRadius) {
+        this.lightRadius = lightRadius;
+    }
+
+    public final void addLightRadius(double delta) {
+        lightRadius += delta;
     }
 
 }

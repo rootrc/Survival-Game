@@ -1,23 +1,24 @@
-package game.dungeon.mechanics;
+package game.dungeon.mechanics.lighting;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.RadialGradientPaint;
-import java.awt.Rectangle;
 import java.awt.Transparency;
-import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import game.Game;
+import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
+import game.dungeon.room.object_utilities.RoomObject;
+import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.game_components.GameComponent;
 import game.utilities.RNGUtilities;
 
 public class LightingEngine extends GameComponent {
-    private BufferedImage image;
     private static final Color color[] = new Color[] {
             new Color(0, 0, 0, 0.1f), new Color(0, 0, 0, 0.42f),
             new Color(0, 0, 0, 0.52f), new Color(0, 0, 0, 0.57f),
@@ -31,13 +32,20 @@ public class LightingEngine extends GameComponent {
     private static final HashMap<Integer, BufferedImage> darknessFilter = new HashMap<>();
     private static final double flickerDegree = 0.01;
     private static final double flickerSize = 0.1;
-    private static final int buffer = 1024;
-    private Player player;
+
+    private BufferedImage image;
     private double randomFactor;
 
-    public LightingEngine(Player player) {
-        super(4 * Game.screenWidth, 4 * Game.screenHeight);
+    private Player player;
+    private HeightHandler heightHandler;
+    private RoomObjectManager roomObjectManager;
+
+    public LightingEngine(int width, int height, Player player, HeightHandler HeightHandler,
+            RoomObjectManager roomObjectManager) {
+        super(width, height);
         this.player = player;
+        heightHandler = HeightHandler;
+        this.roomObjectManager = roomObjectManager;
         randomFactor = -0.99;
     }
 
@@ -49,22 +57,28 @@ public class LightingEngine extends GameComponent {
         if (Game.DEBUG) {
             return;
         }
-        image = getDarknessFilter((int) (player.getLightRadius() * (1 + randomFactor)));
-        if (image == null) {
-            Area a = new Area(new Rectangle(-Game.screenWidth / 2 - buffer, -Game.screenHeight / 2 - buffer,
-            Game.screenWidth + 2 * buffer, Game.screenHeight + 2 * buffer));
-            g2d.setColor(Color.black);
-            g2d.fill(a);
-            return;
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(), Transparency.TRANSLUCENT);
+        Graphics2D gl = (Graphics2D) image.getGraphics();
+        gl.setColor(Color.black);
+        gl.fillRect(0, 0, getWidth(), getHeight());
+        gl.setComposite(AlphaComposite.DstIn);
+        for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
+            int lightRadius = getEffectiveLightRadius(roomObject);
+            if (lightRadius <= 1 || heightHandler.getLayer(roomObject) < heightHandler.getLayer(player)) {
+                continue;
+            }
+            BufferedImage image = getDarknessFilter(lightRadius);
+            int x = roomObject.getX() + (roomObject.getWidth() - image.getWidth()) / 2;
+            int y = roomObject.getY() + (roomObject.getHeight() - image.getHeight()) / 2;
+            gl.drawImage(image, x, y, null);
         }
-        int x = (int) player.getX() + player.getWidth() / 2 - image.getWidth() / 2;
-        int y = (int) player.getY() + player.getHeight() / 2 - image.getHeight() / 2;
-        Area a = new Area(new Rectangle(-Game.screenWidth / 2 - buffer, -Game.screenHeight / 2 - buffer,
-        Game.screenWidth + 2 * buffer, Game.screenHeight + 2 * buffer));
-        a.subtract(new Area(new Rectangle(x, y, image.getWidth(), image.getHeight())));
-        g2d.setColor(Color.black);
-        g2d.fill(a);
-        g2d.drawImage(image, x, y, null);
+        gl.dispose();
+        g2d.drawImage(image, 0, 0, null);
+    }
+
+    private int getEffectiveLightRadius(RoomObject roomObject) {
+            return (int) (roomObject.getLightRadius() * (1 + randomFactor));
     }
 
     private BufferedImage getDarknessFilter(int i) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Entity;
+import game.dungeon.room.object_utilities.RoomObject;
 
 public class HeightHandler {
     public static final int TOP = 0;
@@ -20,13 +21,13 @@ public class HeightHandler {
         this.height = height;
     }
 
-    public int getLayer(Entity entity) {
+    public int getLayer(RoomObject roomObject) {
         ArrayList<Integer> rows = new ArrayList<>();
         ArrayList<Integer> cols = new ArrayList<>();
-        rows.add((int) ((entity.getY() + entity.getHitBox().getY()) / Dungeon.TILESIZE));
-        rows.add((int) ((entity.getY() + entity.getHitBox().getMaxY() - 1) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + entity.getHitBox().getX()) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
+        rows.add((int) ((roomObject.getY() + roomObject.getHitBox().getY()) / Dungeon.TILESIZE));
+        rows.add((int) ((roomObject.getY() + roomObject.getHitBox().getMaxY() - 1) / Dungeon.TILESIZE));
+        cols.add((int) ((roomObject.getX() + roomObject.getHitBox().getX()) / Dungeon.TILESIZE));
+        cols.add((int) ((roomObject.getX() + roomObject.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
         for (int r : rows) {
             for (int c : cols) {
                 if (height[r][c] != 0) {

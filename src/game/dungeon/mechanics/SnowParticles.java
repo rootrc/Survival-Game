@@ -8,11 +8,9 @@ import game.utilities.RNGUtilities;
 public class SnowParticles extends ParticleSystem {
     private static final int speed = 6;
     private int N;
-    private CollisionHandler collisionHandler;
 
-    public SnowParticles(int width, int height, CollisionHandler collision) {
+    public SnowParticles(int width, int height) {
         super(width, height);
-        this.collisionHandler = collision;
         for (int i = 0; i < 2 * height / speed; i++) {
             if (RNGUtilities.getBoolean(0.2)) {
                 addParticle(new SnowParticle());
@@ -41,7 +39,7 @@ public class SnowParticles extends ParticleSystem {
         }
 
         protected boolean shouldDraw() {
-            return collisionHandler.checkPoint(x, y);
+            return true;
         }
     }
 }

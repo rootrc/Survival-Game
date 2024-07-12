@@ -98,12 +98,4 @@ public class CollisionHandler {
         return true;
     }
 
-    public boolean checkPoint(double x, double y) {
-        // TODO
-        return true;
-        // int r = (int) (y / Dungeon.TILESIZE);
-        // int c = (int) (x / Dungeon.TILESIZE);
-        // return !collision[r][c];
-    }
-
 }

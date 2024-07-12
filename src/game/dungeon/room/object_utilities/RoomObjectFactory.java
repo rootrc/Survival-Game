@@ -64,28 +64,35 @@ public class RoomObjectFactory extends Factory<RoomObject> {
     }
 
     private LightRock getLightRock(RoomObjectData data) {
+        LightRock lightRock;
         switch (data.id) {
             case 15:
-                return new LightRock(
+                lightRock = new LightRock(
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(80, 64, 16, 32),
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(80, 16, 16, 32),
                         data.r, data.c,
                         new CollisionBox(0, 1.125, 1, 0.75),
                         new CollisionBox(-0.5, 0.625, 2, 1.75), 1 * lightFactor);
+                lightRock.setLightRadius(50);
+                return lightRock;
             case 16:
-                return new LightRock(
+                lightRock = new LightRock(
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(48, 64, 32, 32),
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(48, 16, 32, 32),
                         data.r, data.c,
                         new CollisionBox(0.125, 0.5, 1.75, 1.375),
                         new CollisionBox(-0.5, -0.125, 3, 2.625), 4 * lightFactor);
+                lightRock.setLightRadius(100);
+                return lightRock;
             case 17:
-                return new LightRock(
+                lightRock = new LightRock(
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(0, 48, 48, 48),
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(0, 0, 48, 48),
                         data.r, data.c,
                         new CollisionBox(0.5, 1.375, 2, 1.5),
                         new CollisionBox(-0.25, 0.625, 3.5, 3), 6 * lightFactor);
+                lightRock.setLightRadius(200);
+                return lightRock;
         }
         return null;
     }

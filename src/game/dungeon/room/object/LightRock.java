@@ -27,5 +27,6 @@ public class LightRock extends RoomObject {
         player.addLightAmount(lightAmount);
         isUsed = true;
         setImage(usedRock);
+        setLightRadius(0);
     }
 }

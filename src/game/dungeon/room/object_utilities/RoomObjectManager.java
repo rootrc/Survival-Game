@@ -103,4 +103,8 @@ public class RoomObjectManager extends GameComponent {
                 break;
         }
     }
+
+    public RoomObject[] getRoomObjects() {
+        return Arrays.copyOf(getComponents(), getComponentCount(), RoomObject[].class);
+    }
 }

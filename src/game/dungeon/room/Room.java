@@ -4,9 +4,9 @@ import java.awt.Graphics2D;
 
 import game.Game;
 import game.dungeon.mechanics.CollisionHandler;
-import game.dungeon.mechanics.LightingEngine;
 import game.dungeon.mechanics.SnowParticles;
 import game.dungeon.mechanics.WalkingParticles;
+import game.dungeon.mechanics.lighting.LightingEngine;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -26,8 +26,8 @@ public class Room extends GameComponent {
     private WalkingParticles walkingParticles;
     private SnowParticles snowParticles;
 
-    public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, CollisionHandler collisionHandler,
-            RoomObjectManager objectManager, UILayer UIlayer) {
+    public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, RoomObjectManager objectManager,
+            UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
         this.player = player;
@@ -36,7 +36,7 @@ public class Room extends GameComponent {
         this.objectManager = objectManager;
         connecter = new RoomConnecter();
         walkingParticles = new WalkingParticles(getWidth(), getHeight(), player);
-        snowParticles = new SnowParticles(getWidth(), getHeight(), collisionHandler);
+        snowParticles = new SnowParticles(getWidth(), getHeight());
         add(tileGrid.getTileGridFloor());
         add(walkingParticles);
         add(objectManager);
@@ -58,7 +58,7 @@ public class Room extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
-        
+
     }
 
     @Override
