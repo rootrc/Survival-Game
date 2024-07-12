@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import game.Game;
-import game.dungeon.room.entity.Entity;
+import game.dungeon.room.entity.Player;
 import game.game_components.GameComponent;
 import game.utilities.RNGUtilities;
 
@@ -32,12 +32,12 @@ public class LightingEngine extends GameComponent {
     private static final double flickerDegree = 0.01;
     private static final double flickerSize = 0.1;
     private static final int buffer = 1024;
-    private Entity entity;
+    private Player player;
     private double randomFactor;
 
-    public LightingEngine(Entity entity) {
+    public LightingEngine(Player player) {
         super(4 * Game.screenWidth, 4 * Game.screenHeight);
-        this.entity = entity;
+        this.player = player;
         randomFactor = -0.99;
     }
 
@@ -49,11 +49,18 @@ public class LightingEngine extends GameComponent {
         if (Game.DEBUG) {
             return;
         }
-        image = getDarknessFilter((int) (entity.getLightStrength() * (1 + randomFactor)));
-        int x = (int) entity.getX() + entity.getWidth() / 2 - image.getWidth() / 2;
-        int y = (int) entity.getY() + entity.getHeight() / 2 - image.getHeight() / 2;
+        image = getDarknessFilter((int) (player.getLightRadius() * (1 + randomFactor)));
+        if (image == null) {
+            Area a = new Area(new Rectangle(-Game.screenWidth / 2 - buffer, -Game.screenHeight / 2 - buffer,
+            Game.screenWidth + 2 * buffer, Game.screenHeight + 2 * buffer));
+            g2d.setColor(Color.black);
+            g2d.fill(a);
+            return;
+        }
+        int x = (int) player.getX() + player.getWidth() / 2 - image.getWidth() / 2;
+        int y = (int) player.getY() + player.getHeight() / 2 - image.getHeight() / 2;
         Area a = new Area(new Rectangle(-Game.screenWidth / 2 - buffer, -Game.screenHeight / 2 - buffer,
-                Game.screenWidth + 2 * buffer, Game.screenHeight + 2 * buffer));
+        Game.screenWidth + 2 * buffer, Game.screenHeight + 2 * buffer));
         a.subtract(new Area(new Rectangle(x, y, image.getWidth(), image.getHeight())));
         g2d.setColor(Color.black);
         g2d.fill(a);
@@ -61,6 +68,9 @@ public class LightingEngine extends GameComponent {
     }
 
     private BufferedImage getDarknessFilter(int i) {
+        if (i <= 1) {
+            return null;
+        }
         if (darknessFilter.get(i) != null) {
             return darknessFilter.get(i);
         }

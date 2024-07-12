@@ -9,9 +9,7 @@ import game.utilities.ImageUtilities;
 
 public abstract class Entity extends RoomObject {
     protected static final double a = Math.sqrt(2) / 2;
-    private static final int defaultLightStrength = 300;
     private BufferedImage tileset;
-    private int lightStrength;
     private int maxSpeed;
     private double speedX;
     private double speedY;
@@ -27,7 +25,6 @@ public abstract class Entity extends RoomObject {
         this.maxSpeed = maxSpeed;
         this.accFrameCnt = accFrames;
         this.deaccFrameCnt = deaccFrames;
-        lightStrength = defaultLightStrength;
     }
 
     public Entity(String tilesetName, CollisionBox hitbox, CollisionBox interactbox, int maxSpeed,
@@ -75,14 +72,6 @@ public abstract class Entity extends RoomObject {
         }
         direction = DirectionUtilities.getDirection(this);
         setImage(ImageUtilities.getImage(tileset, animationFrame / (2 * maxSpeed), direction, 3, 2));
-    }
-
-    public final void changeLightStrength(int delta) {
-        lightStrength += delta;
-    }
-
-    public final int getLightStrength() {
-        return lightStrength;
     }
 
     public final boolean isMoving() {

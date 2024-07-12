@@ -15,11 +15,17 @@ import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
 
 public class Player extends Entity {
+    private static final int lightStartAmount = 500;
+    private static final int lightRadiusFactor = 80;
+    private static final int lightDecreaseFactor = 75;
+
     private HashSet<String> movementKeys = new HashSet<>();
     private Inventory inventory;
     private ArrayList<RoomObject> interactables = new ArrayList<>();
     private Action nextRoom;
     private int interactionCooldown;
+
+    private double lightAmount;
 
     private final Action accelerate = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -54,6 +60,7 @@ public class Player extends Entity {
                 new CollisionBox(0, 1.25, 2, 2), Dungeon.TILESIZE / 4, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
+        lightAmount = lightStartAmount;
         setKeyBinds();
     }
 
@@ -80,6 +87,7 @@ public class Player extends Entity {
     public void update() {
         super.update();
         interactionCooldown++;
+        lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
     }
 
     @Override
@@ -145,5 +153,13 @@ public class Player extends Entity {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public double getLightRadius() {
+        return lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6);
+    }
+
+    public void addLightAmount(int delta) {
+        lightAmount += delta;
     }
 }

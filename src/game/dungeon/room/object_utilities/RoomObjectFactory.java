@@ -8,6 +8,8 @@ import game.game_components.Factory;
 import game.utilities.ImageUtilities;
 
 public class RoomObjectFactory extends Factory<RoomObject> {
+    private static final int lightFactor = 20;
+
     public RoomObject getRoomObject(RoomObjectData data) {
         if (data.id == 0 || data.id == 1) {
             return getLadder(data);
@@ -69,21 +71,21 @@ public class RoomObjectFactory extends Factory<RoomObject> {
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(80, 16, 16, 32),
                         data.r, data.c,
                         new CollisionBox(0, 1.125, 1, 0.75),
-                        new CollisionBox(-0.5, 0.625, 2, 1.75));
+                        new CollisionBox(-0.5, 0.625, 2, 1.75), 1 * lightFactor);
             case 16:
                 return new LightRock(
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(48, 64, 32, 32),
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(48, 16, 32, 32),
                         data.r, data.c,
                         new CollisionBox(0.125, 0.5, 1.75, 1.375),
-                        new CollisionBox(-0.5, -0.125, 3, 2.625));
+                        new CollisionBox(-0.5, -0.125, 3, 2.625), 4 * lightFactor);
             case 17:
                 return new LightRock(
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(0, 48, 48, 48),
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(0, 0, 48, 48),
                         data.r, data.c,
                         new CollisionBox(0.5, 1.375, 2, 1.5),
-                        new CollisionBox(-0.25, 0.625, 3.5, 3));
+                        new CollisionBox(-0.25, 0.625, 3.5, 3), 6 * lightFactor);
         }
         return null;
     }
