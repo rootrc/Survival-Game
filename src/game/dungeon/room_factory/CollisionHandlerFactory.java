@@ -18,7 +18,6 @@ class CollisionHandlerFactory extends Factory<CollisionHandler> {
                 if (tileGrid[2][r][c] != null) {
                     if (tileGrid[2][r][c].getHitBox() != null) {
                         res[r][c] = tileGrid[2][r][c];
-                    } else {
                     }
                     continue;
                 }

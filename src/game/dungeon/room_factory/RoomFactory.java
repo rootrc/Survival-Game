@@ -49,13 +49,15 @@ public class RoomFactory extends Factory<Room> {
     }
 
     public Room getStartingRoom(int id) {
+        player.set(312, 100);
         RoomFileData file = new RoomFileData(id);
         HeightHandler heightHandler = heightHandlerFactory.getHeightHandler(file);
         TileGrid tileGrid = tileFactory.createTileGrid(file, player, heightHandler);
         CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(tileGrid);
-        RoomObjectManager roomObjectManager = objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler, heightHandler);
-        LightingEngine lightingEngine = new LightingEngine(tileGrid.getWidth(), tileGrid.getHeight(), player, heightHandler, roomObjectManager);
-        player.set(312, 100);
+        RoomObjectManager roomObjectManager = objectManagerFactory.getRoomObjectManager(file, tileGrid,
+                collisionHandler, heightHandler);
+        LightingEngine lightingEngine = new LightingEngine(tileGrid.getWidth(), tileGrid.getHeight(), player,
+                collisionHandler, heightHandler, roomObjectManager);
         Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
         if (!Game.DEBUG) {
             room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
@@ -100,8 +102,10 @@ public class RoomFactory extends Factory<Room> {
         HeightHandler heightHandler = heightHandlerFactory.getHeightHandler(file);
         TileGrid tileGrid = tileFactory.createTileGrid(file, player, heightHandler);
         CollisionHandler collisionHandler = collisionHandlerFactory.getCollisionChecker(tileGrid);
-        RoomObjectManager roomObjectManager = objectManagerFactory.getRoomObjectManager(file, tileGrid, collisionHandler, heightHandler);
-        LightingEngine lightingEngine = new LightingEngine(tileGrid.getWidth(), tileGrid.getHeight(), player, heightHandler, roomObjectManager);
+        RoomObjectManager roomObjectManager = objectManagerFactory.getRoomObjectManager(file, tileGrid,
+                collisionHandler, heightHandler);
+        LightingEngine lightingEngine = new LightingEngine(tileGrid.getWidth(), tileGrid.getHeight(), player,
+                collisionHandler, heightHandler, roomObjectManager);
         Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
         return room;
     }

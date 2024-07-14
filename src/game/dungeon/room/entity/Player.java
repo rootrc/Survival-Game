@@ -18,6 +18,7 @@ public class Player extends Entity {
     private static final int lightStartAmount = 500;
     private static final int lightRadiusFactor = 80;
     private static final int lightDecreaseFactor = 75;
+    private static final int lightDetectionRadiusSquared = 400;
 
     private HashSet<String> movementKeys = new HashSet<>();
     private Inventory inventory;
@@ -158,5 +159,9 @@ public class Player extends Entity {
 
     public void addLightAmount(int delta) {
         lightAmount += delta;
+    }
+
+    public int getLightDetectionRadiusSquared() {
+        return lightDetectionRadiusSquared;
     }
 }

@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import game.Game;
+import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -36,16 +37,16 @@ public class LightingEngine extends GameComponent {
     private BufferedImage image;
     private double randomFactor;
 
-    private Player player;
     private HeightHandler heightHandler;
     private RoomObjectManager roomObjectManager;
+    private ShadowCasting shadowCasting;
 
-    public LightingEngine(int width, int height, Player player, HeightHandler HeightHandler,
+    public LightingEngine(int width, int height, Player player, CollisionHandler collisionHandler, HeightHandler HeightHandler,
             RoomObjectManager roomObjectManager) {
         super(width, height);
-        this.player = player;
-        heightHandler = HeightHandler;
+        this.heightHandler = HeightHandler;
         this.roomObjectManager = roomObjectManager;
+        this.shadowCasting = new ShadowCasting(player, collisionHandler, heightHandler);
         randomFactor = -0.99;
     }
 
@@ -65,7 +66,10 @@ public class LightingEngine extends GameComponent {
         gl.setComposite(AlphaComposite.DstIn);
         for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
             int lightRadius = getEffectiveLightRadius(roomObject);
-            if (lightRadius <= 1 || heightHandler.getLayer(roomObject) < heightHandler.getLayer(player)) {
+            if (lightRadius <= 1) {
+                continue;
+            }
+            if (!shadowCasting.isVisible(roomObject.getRow(), roomObject.getCol())) {
                 continue;
             }
             BufferedImage image = getDarknessFilter(lightRadius);

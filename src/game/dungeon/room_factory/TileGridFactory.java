@@ -165,13 +165,13 @@ class TileGridFactory extends Factory<TileGrid> {
                 }
             } else if (cnt2 == 2) {
                 if (!layer0.contains(arr[r - 1][c - 1]) && !layer0.contains(arr[r - 1][c + 1])) {
-                    arr2[r][c] = 288 - 18;
+                    arr2[r][c] = 270;
                 } else if (!layer0.contains(arr[r + 1][c - 1]) && !layer0.contains(arr[r + 1][c + 1])) {
-                    arr2[r][c] = 270 - 18;
+                    arr2[r][c] = 252;
                 } else if (!layer0.contains(arr[r - 1][c + 1]) && !layer0.contains(arr[r + 1][c + 1])) {
-                    arr2[r][c] = 272 - 18;
+                    arr2[r][c] = 254;
                 } else if (!layer0.contains(arr[r - 1][c - 1]) && !layer0.contains(arr[r + 1][c - 1])) {
-                    arr2[r][c] = 273 - 18;
+                    arr2[r][c] = 255;
                 }
             }
         }
@@ -187,18 +187,18 @@ class TileGridFactory extends Factory<TileGrid> {
             }
         } else if (cnt == 2) {
             if (cnt2 == 4) {
-
-            } else {
-                if (!layer0.contains(arr[r][c - 1]) && !layer0.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 198;
-                } else if (!layer0.contains(arr[r][c + 1]) && !layer0.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 200;
-                } else if (!layer0.contains(arr[r][c - 1]) && !layer0.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 234;
-                } else if (!layer0.contains(arr[r][c + 1]) && !layer0.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 236;
-                }
+                return;
             }
+            if (!layer0.contains(arr[r][c - 1]) && !layer0.contains(arr[r - 1][c])) {
+                arr2[r][c] = 198;
+            } else if (!layer0.contains(arr[r][c + 1]) && !layer0.contains(arr[r - 1][c])) {
+                arr2[r][c] = 200;
+            } else if (!layer0.contains(arr[r][c - 1]) && !layer0.contains(arr[r + 1][c])) {
+                arr2[r][c] = 234;
+            } else if (!layer0.contains(arr[r][c + 1]) && !layer0.contains(arr[r + 1][c])) {
+                arr2[r][c] = 236;
+            }
+
         } else if (cnt == 1) {
             if (layer0.contains(arr[r - 1][c])) {
                 arr2[r][c] = 253;
@@ -243,11 +243,11 @@ class TileGridFactory extends Factory<TileGrid> {
                     if (!layer1.contains(arr[r + 1][c - 1])) {
                         arr2[r][c] = 58;
                     } else if (!layer1.contains(arr[r - 1][c - 1])) {
-                        arr2[r][c] = 22;
+                        arr2[r][c] = 112;
                     } else if (!layer1.contains(arr[r + 1][c + 1])) {
                         arr2[r][c] = 57;
                     } else if (!layer1.contains(arr[r - 1][c + 1])) {
-                        arr2[r][c] = 21;
+                        arr2[r][c] = 111;
                     }
                 }
             } else if (cnt == 3) {

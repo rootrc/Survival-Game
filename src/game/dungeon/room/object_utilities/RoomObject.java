@@ -72,6 +72,14 @@ public abstract class RoomObject extends GameComponent {
         return hitbox;
     }
 
+    public final int getRow() {
+        return (int) ((getY() + hitbox.getY()) / Dungeon.TILESIZE);
+    }
+
+    public final int getCol() {
+        return (int) ((getX() + hitbox.getX()) / Dungeon.TILESIZE);
+    }
+
     public final double getLightRadius() {
         return lightRadius;
     }

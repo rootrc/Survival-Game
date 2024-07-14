@@ -98,4 +98,7 @@ public class CollisionHandler {
         return true;
     }
 
+    public Tile[][] getCollisionArray() {
+        return collisionArray;
+    }
 }

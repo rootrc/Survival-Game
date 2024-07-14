@@ -10,14 +10,20 @@ import game.dungeon.room.object_utilities.CollisionBox;
 
 public class Tile {
     private int id;
-
     private BufferedImage image;
     private CollisionBox hitbox;
+    
+    public static final int CLEAR = 0;
+    public static final int SOLID = 1;
+    public static final int WALL = 2;
+    private int opacity;
 
-    public Tile(int id, BufferedImage image, CollisionBox hitbox) {
+    public Tile(int id, BufferedImage image, CollisionBox hitbox, int opacity) {
         this.id = id;
         this.image = image;
         this.hitbox = hitbox;
+        this.opacity = opacity;
+        
     }
 
     public void draw(Graphics2D g2d, int r, int c) {
@@ -41,6 +47,10 @@ public class Tile {
 
     public CollisionBox getHitBox() {
         return hitbox;
+    }
+
+    public int getOpacity() {
+        return opacity;
     }
 
 }
