@@ -16,7 +16,7 @@ import game.dungeon.room.object_utilities.RoomObject;
 
 public class Player extends Entity {
     private static final int lightStartAmount = 500;
-    private static final int lightRadiusFactor = 80;
+    private static final int lightRadiusFactor = 30;
     private static final int lightDecreaseFactor = 75;
     private static final int lightDetectionRadiusSquared = 400;
 

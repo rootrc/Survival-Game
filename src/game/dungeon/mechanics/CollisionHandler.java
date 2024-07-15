@@ -1,7 +1,5 @@
 package game.dungeon.mechanics;
 
-import java.util.ArrayList;
-
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Entity;
 import game.dungeon.room.entity.Player;
@@ -80,22 +78,17 @@ public class CollisionHandler {
         }
     }
 
-    public boolean handleCollision(Player player) {
-        ArrayList<Integer> rows = new ArrayList<>();
-        ArrayList<Integer> cols = new ArrayList<>();
-        rows.add((int) ((player.getY() + player.getHitBox().getY()) / Dungeon.TILESIZE));
-        rows.add((int) ((player.getY() + player.getHitBox().getMaxY() - 1) / Dungeon.TILESIZE));
-        cols.add((int) ((player.getX() + player.getHitBox().getX()) / Dungeon.TILESIZE));
-        cols.add((int) ((player.getX() + player.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
+    public void handleCollision(Player player) {
+        int[] rows = { player.getMinRow(), player.getMaxRow() };
+        int[] cols = { player.getMinCol(), player.getMaxCol() };
         for (int r : rows) {
             for (int c : cols) {
                 if (collides(player, collisionArray[r][c], r, c)) {
                     CollisionHandler.handleCollision(player, collisionArray[r][c], r, c);
-                    return true;
+                    return;
                 }
             }
         }
-        return true;
     }
 
     public Tile[][] getCollisionArray() {

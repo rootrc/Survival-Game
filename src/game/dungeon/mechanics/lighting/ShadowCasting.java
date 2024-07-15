@@ -6,6 +6,7 @@ import java.util.Stack;
 import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
+import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.tile.Tile;
 
 public class ShadowCasting {
@@ -24,15 +25,26 @@ public class ShadowCasting {
         M = arr[0].length;
     }
 
+    public boolean isVisible(RoomObject roomObject) {
+        return isVisible(roomObject.getMinRow(), roomObject.getMinCol())
+                || isVisible(roomObject.getMaxRow(), roomObject.getMinCol())
+                || isVisible(roomObject.getMinRow(), roomObject.getMaxCol())
+                || isVisible(roomObject.getMaxRow(), roomObject.getMaxCol());
+    }
+
     public boolean isVisible(int r, int c) {
+        return getBooleanArray()[r][c];
+    }
+
+    public boolean[][] getBooleanArray() {
         int hash = 10000 * getOrigin().r + getOrigin().c;
         if (memo.containsKey(hash)) {
-            return memo.get(hash)[r][c];
+            return memo.get(hash);
         }
         boolean[][] res = new boolean[N][M];
         compute_fov(res);
         memo.put(hash, res);
-        return res[r][c];
+        return res;
     }
 
     public void compute_fov(boolean[][] res) {
@@ -76,7 +88,7 @@ public class ShadowCasting {
     }
 
     public Point getOrigin() {
-        return new Point(player.getRow(), player.getCol());
+        return new Point(player.getMinRow(), player.getMinCol());
     }
 
     public void markVisible(boolean[][] res, Point point) {

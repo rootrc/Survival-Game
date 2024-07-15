@@ -81,7 +81,7 @@ public class Room extends GameComponent {
 
     public void setPlayer(Ladder ladder) {
         player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY());
-        tileGrid.set(player);
+        tileGrid.setPlayer(player);
     }
 
     public int getId() {

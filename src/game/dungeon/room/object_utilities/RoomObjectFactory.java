@@ -73,7 +73,7 @@ public class RoomObjectFactory extends Factory<RoomObject> {
                         data.r, data.c,
                         new CollisionBox(0, 1.125, 1, 0.75),
                         new CollisionBox(-0.5, 0.625, 2, 1.75), 1 * lightFactor);
-                lightRock.setLightRadius(50);
+                lightRock.setLightRadius(25);
                 return lightRock;
             case 16:
                 lightRock = new LightRock(
@@ -82,7 +82,7 @@ public class RoomObjectFactory extends Factory<RoomObject> {
                         data.r, data.c,
                         new CollisionBox(0.125, 0.5, 1.75, 1.375),
                         new CollisionBox(-0.5, -0.125, 3, 2.625), 4 * lightFactor);
-                lightRock.setLightRadius(100);
+                lightRock.setLightRadius(50);
                 return lightRock;
             case 17:
                 lightRock = new LightRock(
@@ -91,7 +91,7 @@ public class RoomObjectFactory extends Factory<RoomObject> {
                         data.r, data.c,
                         new CollisionBox(0.5, 1.375, 2, 1.5),
                         new CollisionBox(-0.25, 0.625, 3.5, 3), 6 * lightFactor);
-                lightRock.setLightRadius(200);
+                lightRock.setLightRadius(150);
                 return lightRock;
         }
         return null;

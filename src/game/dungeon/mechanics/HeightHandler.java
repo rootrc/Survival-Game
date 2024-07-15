@@ -1,8 +1,5 @@
 package game.dungeon.mechanics;
 
-import java.util.ArrayList;
-
-import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Entity;
 import game.dungeon.room.object_utilities.RoomObject;
 
@@ -22,12 +19,8 @@ public class HeightHandler {
     }
 
     public int getLayer(RoomObject roomObject) {
-        ArrayList<Integer> rows = new ArrayList<>();
-        ArrayList<Integer> cols = new ArrayList<>();
-        rows.add((int) ((roomObject.getY() + roomObject.getHitBox().getY()) / Dungeon.TILESIZE));
-        rows.add((int) ((roomObject.getY() + roomObject.getHitBox().getMaxY() - 1) / Dungeon.TILESIZE));
-        cols.add((int) ((roomObject.getX() + roomObject.getHitBox().getX()) / Dungeon.TILESIZE));
-        cols.add((int) ((roomObject.getX() + roomObject.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
+        int[] rows = { roomObject.getMinRow(), roomObject.getMaxRow() };
+        int[] cols = { roomObject.getMinCol(), roomObject.getMaxCol() };
         for (int r : rows) {
             for (int c : cols) {
                 if (height[r][c] != 0) {
@@ -39,12 +32,8 @@ public class HeightHandler {
     }
 
     public int getLocation(Entity entity) {
-        ArrayList<Integer> rows = new ArrayList<>();
-        ArrayList<Integer> cols = new ArrayList<>();
-        rows.add((int) ((entity.getY() + entity.getHitBox().getY()) / Dungeon.TILESIZE));
-        rows.add((int) ((entity.getY() + entity.getHitBox().getMaxY() - 1) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + entity.getHitBox().getX()) / Dungeon.TILESIZE));
-        cols.add((int) ((entity.getX() + entity.getHitBox().getMaxX() - 1) / Dungeon.TILESIZE));
+        int[] rows = { entity.getMinRow(), entity.getMaxRow() };
+        int[] cols = { entity.getMinCol(), entity.getMaxCol() };
         for (int r : rows) {
             for (int c : cols) {
                 if (STAIR_UP <= height[r][c]) {
