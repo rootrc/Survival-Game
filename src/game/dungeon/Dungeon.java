@@ -52,6 +52,7 @@ public class Dungeon extends GamePanel {
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player, UILayer);
         room = roomFactory.getStartingRoom(startingRoom);
+        // room = roomFactory.getStartingRoom(8);
         // room = roomFactory.createRandomRoom(63, 57);
         debugScreen = new DebugScreen(UILayer, room);
         add(room);

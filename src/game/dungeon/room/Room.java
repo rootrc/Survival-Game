@@ -53,7 +53,6 @@ public class Room extends GameComponent {
         this.objectManager = objectManager;
         add(tileGrid.getTileGridFloor());
         add(objectManager);
-        addRoomObject(player);
         add(tileGrid.getTileGridCeiling());
     }
 
