@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import game.Game;
-import game.dungeon.Dungeon;
 import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
@@ -89,8 +88,7 @@ public class LightingEngine extends GameComponent {
         if (!lights.keySet().contains(roomObject)) {
             attachLight(roomObject);
         }
-        if (shadowCasting.isVisible(roomObject)
-                || (getDistance(roomObject) < getEffectiveLightRadius(player) - Dungeon.TILESIZE)) {
+        if (shadowCasting.isVisible(roomObject) || (getDistance(roomObject) < getEffectiveLightRadius(player))) {
             lights.get(roomObject).increaseVisibilityValue();
         } else {
             lights.get(roomObject).decreaseVisibilityValue();

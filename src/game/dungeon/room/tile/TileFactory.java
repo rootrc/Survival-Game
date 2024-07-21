@@ -81,26 +81,26 @@ public class TileFactory extends Factory<Tile> {
 
     private static final HashMap<Integer, Integer> height = new HashMap<>() {
         {
-            put(0, Tile.SOLID);
-            put(1, Tile.SOLID);
-            put(2, Tile.SOLID);
-            put(3, Tile.SOLID);
-            put(4, Tile.SOLID);
-            put(18, Tile.SOLID);
-            put(19, Tile.SOLID);
-            put(20, Tile.SOLID);
-            put(21, Tile.SOLID);
-            put(22, Tile.SOLID);
-            put(36, Tile.SOLID);
-            put(37, Tile.SOLID);
-            put(38, Tile.SOLID);
+            put(0, Tile.CEILING);
+            put(1, Tile.CEILING);
+            put(2, Tile.CEILING);
+            put(3, Tile.CEILING);
+            put(4, Tile.CEILING);
+            put(18, Tile.CEILING);
+            put(19, Tile.CEILING);
+            put(20, Tile.CEILING);
+            put(21, Tile.CEILING);
+            put(22, Tile.CEILING);
+            put(36, Tile.CEILING);
+            put(37, Tile.CEILING);
+            put(38, Tile.CEILING);
             put(54, Tile.WALL);
             put(55, Tile.WALL);
             put(56, Tile.WALL);
             put(57, Tile.WALL);
             put(58, Tile.WALL);
             put(72, Tile.WALL);
-            put(73, Tile.CLEAR);
+            put(73, Tile.FLOOR);
             put(74, Tile.WALL);
             put(75, Tile.WALL);
             put(76, Tile.WALL);
@@ -115,41 +115,41 @@ public class TileFactory extends Factory<Tile> {
             put(111, Tile.WALL);
             put(112, Tile.WALL);
 
-            put(126, Tile.SOLID);
-            put(127, Tile.SOLID);
-            put(128, Tile.SOLID);
-            put(129, Tile.SOLID);
-            put(130, Tile.SOLID);
-            put(144, Tile.SOLID);
-            put(145, Tile.SOLID);
-            put(146, Tile.SOLID);
-            put(147, Tile.SOLID);
-            put(148, Tile.SOLID);
-            put(162, Tile.SOLID);
-            put(163, Tile.SOLID);
-            put(164, Tile.SOLID);
+            put(126, Tile.CEILING);
+            put(127, Tile.CEILING);
+            put(128, Tile.CEILING);
+            put(129, Tile.CEILING);
+            put(130, Tile.CEILING);
+            put(144, Tile.CEILING);
+            put(145, Tile.CEILING);
+            put(146, Tile.CEILING);
+            put(147, Tile.CEILING);
+            put(148, Tile.CEILING);
+            put(162, Tile.CEILING);
+            put(163, Tile.CEILING);
+            put(164, Tile.CEILING);
 
-            put(198, Tile.CLEAR);
-            put(199, Tile.CLEAR);
-            put(200, Tile.CLEAR);
-            put(201, Tile.CLEAR);
-            put(202, Tile.CLEAR);
-            put(216, Tile.CLEAR);
-            put(217, Tile.CLEAR);
-            put(218, Tile.CLEAR);
-            put(219, Tile.CLEAR);
-            put(220, Tile.CLEAR);
-            put(234, Tile.CLEAR);
-            put(235, Tile.CLEAR);
-            put(236, Tile.CLEAR);
-            put(252, Tile.CLEAR);
-            put(253, Tile.CLEAR);
-            put(254, Tile.CLEAR);
-            put(255, Tile.CLEAR);
-            put(270, Tile.CLEAR);
-            put(271, Tile.CLEAR);
-            put(272, Tile.CLEAR);
-            put(273, Tile.CLEAR);
+            put(198, Tile.FLOOR);
+            put(199, Tile.FLOOR);
+            put(200, Tile.FLOOR);
+            put(201, Tile.FLOOR);
+            put(202, Tile.FLOOR);
+            put(216, Tile.FLOOR);
+            put(217, Tile.FLOOR);
+            put(218, Tile.FLOOR);
+            put(219, Tile.FLOOR);
+            put(220, Tile.FLOOR);
+            put(234, Tile.FLOOR);
+            put(235, Tile.FLOOR);
+            put(236, Tile.FLOOR);
+            put(252, Tile.FLOOR);
+            put(253, Tile.FLOOR);
+            put(254, Tile.FLOOR);
+            put(255, Tile.FLOOR);
+            put(270, Tile.FLOOR);
+            put(271, Tile.FLOOR);
+            put(272, Tile.FLOOR);
+            put(273, Tile.FLOOR);
 
             put(137, Tile.WALL);
             put(138, Tile.WALL);
@@ -183,11 +183,14 @@ public class TileFactory extends Factory<Tile> {
     };
 
     public Tile getTile(int r, int c) {
-        if (!height.containsKey(18 * c + r)) {
-            return new Tile(18 * c + r, ImageUtilities.getImage("tiles", name, c, r), collision.get(18 * c + r),
-                Tile.CLEAR);
+        if (18*c + r == 177) {
+            System.out.println(height.get(18 * c + r));
         }
-        return new Tile(18 * c + r, ImageUtilities.getImage("tiles", name, c, r), collision.get(18 * c + r),
+        if (!height.containsKey(18 * c + r)) {
+            return new Tile(ImageUtilities.getImage("tiles", name, c, r), collision.get(18 * c + r),
+                Tile.FLOOR);
+        }
+        return new Tile(ImageUtilities.getImage("tiles", name, c, r), collision.get(18 * c + r),
                 height.get(18 * c + r));
     }
 }

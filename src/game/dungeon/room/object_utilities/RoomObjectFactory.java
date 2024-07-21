@@ -81,7 +81,7 @@ public class RoomObjectFactory extends Factory<RoomObject> {
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(48, 16, 32, 32),
                         data.r, data.c,
                         new CollisionBox(0.125, 0.5, 1.75, 1.375),
-                        new CollisionBox(-0.5, -0.125, 3, 2.625), 4 * lightFactor);
+                        new CollisionBox(-0.375, 0, 2.75, 2.375), 4 * lightFactor);
                 lightRock.setLightRadius(50);
                 return lightRock;
             case 17:
@@ -90,7 +90,7 @@ public class RoomObjectFactory extends Factory<RoomObject> {
                         ImageUtilities.getImage("objects", "lightRocks").getSubimage(0, 0, 48, 48),
                         data.r, data.c,
                         new CollisionBox(0.5, 1.375, 2, 1.5),
-                        new CollisionBox(-0.25, 0.625, 3.5, 3), 6 * lightFactor);
+                        new CollisionBox(0, 0.875, 3, 2.5), 6 * lightFactor);
                 lightRock.setLightRadius(150);
                 return lightRock;
         }

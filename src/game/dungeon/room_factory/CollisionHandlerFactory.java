@@ -16,7 +16,7 @@ class CollisionHandlerFactory extends Factory<CollisionHandler> {
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
                 if (tileGrid[2][r][c] != null) {
-                    if (tileGrid[2][r][c].getHitBox() != null) {
+                    if (tileGrid[2][r][c].getHitBox() != null || tileGrid[2][r][c].getHeight() != Tile.FLOOR) {
                         res[r][c] = tileGrid[2][r][c];
                     }
                     continue;

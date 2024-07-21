@@ -100,9 +100,9 @@ public class ShadowCasting {
             return false;
         }
         if (heightHandler.getLayer(player) == HeightHandler.TOP) {
-            return arr[point.r][point.c].getOpacity() == 1;
+            return arr[point.r][point.c].getHeight() == Tile.CEILING;
         } else {
-            return arr[point.r][point.c].getOpacity() != 0;
+            return arr[point.r][point.c].getHeight() > Tile.FLOOR;
         }
     }
 
