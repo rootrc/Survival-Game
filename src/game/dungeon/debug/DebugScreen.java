@@ -2,11 +2,9 @@ package game.dungeon.debug;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-
-import javax.swing.KeyStroke;
 
 import game.dungeon.room.Room;
+import game.dungeon.settings.KeyBinds;
 import game.game_components.PopupUI;
 import game.game_components.UILayer;
 
@@ -16,7 +14,7 @@ public class DebugScreen extends PopupUI {
     public DebugScreen(UILayer UILayer, Room room) {
         super(UILayer, 640, 640, 4);
         this.room = room;
-        getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "close");
+        getInputMap(2).put(KeyBinds.debug, "close");
     }
 
     public void updateRoom(Room room) {

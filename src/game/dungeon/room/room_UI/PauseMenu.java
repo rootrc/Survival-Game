@@ -2,7 +2,6 @@ package game.dungeon.room.room_UI;
 
 import java.awt.Rectangle;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import game.game_components.PopupUI;
 import game.game_components.UIButton;
@@ -21,6 +20,5 @@ public class PauseMenu extends PopupUI {
 				ImageUtilities.getImage("UI", "MainMenuButton")));
 		add(new UIButton(UILayer.createAndOpenConfirmUI(title), new Rectangle(getWidth() / 2 - 224, 328, 448, 64),
 				ImageUtilities.getImage("UI", "TitleScreenButton")));
-		getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "close");
 	}
 }

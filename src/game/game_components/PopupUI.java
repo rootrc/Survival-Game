@@ -2,14 +2,13 @@ package game.game_components;
 
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import game.Game;
+import game.dungeon.settings.KeyBinds;
 import game.utilities.ImageUtilities;
 
 // A UI panel that appears and disappears
@@ -26,7 +25,7 @@ public abstract class PopupUI extends GameComponent {
         this.framesToEnter = framesToEnter;
         setLocation((Game.screenWidth - getWidth()) / 2, (Game.screenHeight - getHeight()) / 2);
         buildImage(tileSet);
-        getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "close");
+        getInputMap(2).put(KeyBinds.escape, "close");
         getActionMap().put("close", close);
     }
 

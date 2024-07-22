@@ -6,20 +6,16 @@ import java.util.HashSet;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import game.dungeon.Dungeon;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
+import game.dungeon.settings.DiffSettings;
+import game.dungeon.settings.KeyBinds;
 
 public class Player extends Entity {
-    private static final int lightStartAmount = 500;
-    private static final int lightRadiusFactor = 30;
-    private static final int lightDecreaseFactor = 75;
-    private static final int lightDetectionRadiusSquared = 300;
-
     private HashSet<String> movementKeys = new HashSet<>();
     private Inventory inventory;
     private ArrayList<RoomObject> interactables = new ArrayList<>();
@@ -27,16 +23,19 @@ public class Player extends Entity {
     private int interactionCooldown;
 
     private double lightAmount;
+    private int lightRadiusFactor;
+    private int lightDecreaseFactor;
+    private int lightDetectionRadiusSquared;
 
     private final Action accelerate = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            movementKeys.add(e.getActionCommand());
+            movementKeys.add(e.getActionCommand().toLowerCase());
         }
     };
 
     private final Action decelerate = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            movementKeys.remove(e.getActionCommand());
+            movementKeys.remove( e.getActionCommand().toLowerCase());
         }
     };
 
@@ -61,7 +60,10 @@ public class Player extends Entity {
                 new CollisionBox(0, 1.25, 2, 2), Dungeon.TILESIZE / 4, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
-        lightAmount = lightStartAmount;
+        lightAmount = DiffSettings.playerLightStartAmount;
+        lightRadiusFactor = DiffSettings.playerLightRadiusFactor;
+        lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
+        lightDetectionRadiusSquared = DiffSettings.playerLightDetectionRadiusSquared;
         setKeyBinds();
     }
 
@@ -70,18 +72,24 @@ public class Player extends Entity {
     }
 
     private void setKeyBinds() {
-        getInputMap(2).put(KeyStroke.getKeyStroke("pressed E"), "interact");
+        getInputMap(2).put(KeyBinds.interact, "interact");
         getActionMap().put("interact", interact);
-        for (char c : "WASD".toCharArray()) {
-            getInputMap(2).put(KeyStroke.getKeyStroke(
-                    new StringBuilder("pressed ").append(c).toString()),
-                    new StringBuilder("acc ").append(c).toString());
-            getInputMap(2).put(KeyStroke.getKeyStroke(
-                    new StringBuilder("released ").append(c).toString()),
-                    new StringBuilder("decel ").append(c).toString());
-            getActionMap().put(new StringBuilder("acc ").append(c).toString(), accelerate);
-            getActionMap().put(new StringBuilder("decel ").append(c).toString(), decelerate);
-        }
+        getInputMap(2).put(KeyBinds.upPressed, "acc up");
+        getInputMap(2).put(KeyBinds.upReleased, "decel up");
+        getInputMap(2).put(KeyBinds.leftPressed, "acc left");
+        getInputMap(2).put(KeyBinds.leftReleased, "decel left");
+        getInputMap(2).put(KeyBinds.downPressed, "acc down");
+        getInputMap(2).put(KeyBinds.downReleased, "decel down");
+        getInputMap(2).put(KeyBinds.rightPressed, "acc right");
+        getInputMap(2).put(KeyBinds.rightReleased, "decel right");
+        getActionMap().put("acc up", accelerate);
+        getActionMap().put("decel up", decelerate);
+        getActionMap().put("acc left", accelerate);
+        getActionMap().put("decel left", decelerate);
+        getActionMap().put("acc down", accelerate);
+        getActionMap().put("decel down", decelerate);
+        getActionMap().put("acc right", accelerate);
+        getActionMap().put("decel right", decelerate);
     }
 
     @Override

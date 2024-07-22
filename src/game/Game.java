@@ -7,6 +7,7 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 
 import game.dungeon.Dungeon;
+import game.dungeon.settings.DiffSettings;
 import game.game_components.GamePanel;
 import game.game_components.UILayer;
 import game.game_panel.Menu;
@@ -31,6 +32,7 @@ public class Game extends JFrame implements Runnable {
     private Thread gameThread;
 
     public Game() {
+        DiffSettings.setEasy();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setTitle("Survival Game");

@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import game.dungeon.items.Item;
+import game.dungeon.settings.KeyBinds;
 import game.game_components.PopupUI;
 import game.game_components.UILayer;
 import game.utilities.ActionUtilities;
@@ -21,11 +21,11 @@ public class ChestUI extends PopupUI {
 		super(UILayer, 320, 256, 8, "ChestFloor");
 		GetItemButton getItemButton = new GetItemButton(this, ActionUtilities.combineActions(flash, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				getInputMap(2).put(KeyStroke.getKeyStroke("pressed F"), "close");
+				getInputMap(2).put(KeyBinds.takeAll, "close");
 			}
 		}), item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
 		add(getItemButton);	
-		getInputMap(2).put(KeyStroke.getKeyStroke("pressed F"), "getAll");
+		getInputMap(2).put(KeyBinds.takeAll, "getAll");
 		getActionMap().put("getAll", getItemButton.getAction());
 		check = UILayer.createAndOpenConfirmUI((Action) (new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {

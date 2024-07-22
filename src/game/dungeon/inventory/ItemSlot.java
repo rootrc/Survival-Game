@@ -2,9 +2,8 @@ package game.dungeon.inventory;
 
 import java.awt.Rectangle;
 
-import javax.swing.KeyStroke;
-
 import game.dungeon.items.Item;
+import game.dungeon.settings.KeyBinds;
 import game.game_components.GameButton;
 
 public class ItemSlot extends GameButton {
@@ -14,8 +13,7 @@ public class ItemSlot extends GameButton {
     public ItemSlot(int idx, Rectangle rect) {
         super(null, rect);
         this.idx = idx;
-        getInputMap(2).put(
-                    KeyStroke.getKeyStroke((new StringBuilder("pressed ").append(idx % 10)).toString()), idx);
+        getInputMap(2).put(KeyBinds.useItem[idx], idx);
     }
 
     public void setItem(Item item) {

@@ -1,13 +1,11 @@
 package game.dungeon;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import game.Game;
 import game.dungeon.debug.DebugScreen;
@@ -16,6 +14,8 @@ import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.room_UI.PauseMenu;
 import game.dungeon.room_factory.RoomFactory;
+import game.dungeon.settings.DiffSettings;
+import game.dungeon.settings.KeyBinds;
 import game.game_components.GamePanel;
 import game.game_components.UILayer;
 import game.utilities.ActionUtilities;
@@ -26,7 +26,6 @@ public class Dungeon extends GamePanel {
     public static final int maxScreenCol = 64;
 
     private static final int startingRoom = 1;
-    private static final int startingInventorySize = 8;
 
     private Room room;
     private Inventory inventory;
@@ -48,7 +47,7 @@ public class Dungeon extends GamePanel {
 
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
-        inventory = new Inventory(UILayer, startingInventorySize);
+        inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player, UILayer);
         room = roomFactory.getStartingRoom(startingRoom);
@@ -67,12 +66,10 @@ public class Dungeon extends GamePanel {
                 reset();
             }
         }), game.changePanel("title"));
-        getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "pause");
-        getInputMap(2).put(KeyStroke.getKeyStroke("pressed P"), "pause");
+        getInputMap(2).put(KeyBinds.escape, "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
-        
-        getInputMap(2).put(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), "debug screen");
-        getActionMap().put("debug screen", UILayer.openPopupUI(debugScreen));
+        getInputMap(2).put(KeyBinds.debug, "debug");
+        getActionMap().put("debug", UILayer.openPopupUI(debugScreen));
         
         if (Game.DEBUG) {
             addMouseListener(new MouseAdapter() {
@@ -89,7 +86,7 @@ public class Dungeon extends GamePanel {
         remove(room);
         remove(inventory);
         remove(UILayer);
-        inventory = new Inventory(UILayer, startingInventorySize);
+        inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
         roomFactory = new RoomFactory(player, UILayer);
         room = roomFactory.getStartingRoom(startingRoom);

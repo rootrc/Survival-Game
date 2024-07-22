@@ -183,14 +183,12 @@ public class TileFactory extends Factory<Tile> {
     };
 
     public Tile getTile(int r, int c) {
-        if (18*c + r == 177) {
-            System.out.println(height.get(18 * c + r));
-        }
-        if (!height.containsKey(18 * c + r)) {
-            return new Tile(ImageUtilities.getImage("tiles", name, c, r), collision.get(18 * c + r),
+        int hash = 18 * c + r;
+        if (!height.containsKey(hash)) {
+            return new Tile(ImageUtilities.getImage("tiles", name, c, r), collision.get(hash),
                 Tile.FLOOR);
         }
-        return new Tile(ImageUtilities.getImage("tiles", name, c, r), collision.get(18 * c + r),
-                height.get(18 * c + r));
+        return new Tile(ImageUtilities.getImage("tiles", name, c, r), collision.get(hash),
+                height.get(hash));
     }
 }

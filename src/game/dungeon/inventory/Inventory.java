@@ -10,13 +10,13 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import game.Game;
 import game.dungeon.items.Item;
 import game.dungeon.items.ItemFactory;
 import game.dungeon.room.object.TreasureChest;
 import game.dungeon.room.room_UI.ChestUI;
+import game.dungeon.settings.KeyBinds;
 import game.game_components.GameComponent;
 import game.game_components.UILayer;
 import game.utilities.ImageUtilities;
@@ -56,7 +56,7 @@ public class Inventory extends GameComponent {
             add(inventorySlots[i]);
         }
         occupiedSlots = 1;
-        getInputMap(2).put(KeyStroke.getKeyStroke("pressed TAB"), "toggle moveUp");
+        getInputMap(2).put(KeyBinds.openUI, "toggle moveUp");
         getActionMap().put("toggle moveUp", moveUp);
         buildImage();
     }
