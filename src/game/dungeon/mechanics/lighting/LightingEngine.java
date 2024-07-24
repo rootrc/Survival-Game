@@ -96,7 +96,7 @@ public class LightingEngine extends GameComponent {
     }
 
     private int getEffectiveLightRadius(RoomObject roomObject) {
-        return (int) (roomObject.getLightRadius() * lights.get(roomObject).getFactor());
+        return (int) (lights.get(roomObject).getFactor(roomObject));
     }
 
     private void attachLight(RoomObject roomObject) {
@@ -140,6 +140,8 @@ public class LightingEngine extends GameComponent {
     private class Light {
         private static final double flickerDegree = 0.01;
         private static final double flickerSize = 0.1;
+        private static final double lightRadiusChangeSpeed = 0.03;
+        private double prevLightRadius;
         private double randomFactor;
         private double visibilityFactor;
 
@@ -147,19 +149,26 @@ public class LightingEngine extends GameComponent {
             randomFactor += RNGUtilities.getDouble(2 * flickerDegree) - flickerDegree - randomFactor * flickerSize;
         }
 
-        double getFactor() {
+        double getFactor(RoomObject roomObject) {
+            if (prevLightRadius == 0) {
+                prevLightRadius = roomObject.getLightRadius();
+            }
             if (visibilityFactor == 0) {
                 return visibilityFactor;
             }
-            return 1 - (1 - visibilityFactor) * (1 - visibilityFactor) + randomFactor;
+            if (roomObject.getLightRadius() > prevLightRadius){
+                visibilityFactor = 1 - Math.sqrt(roomObject.getLightRadius() * (roomObject.getLightRadius() - prevLightRadius)) / roomObject.getLightRadius();
+            }
+            prevLightRadius = roomObject.getLightRadius();
+            return roomObject.getLightRadius() * (1 - (1 - visibilityFactor) * (1 - visibilityFactor) + randomFactor);
         }
 
         void increaseVisibilityValue() {
-            visibilityFactor = Math.min(visibilityFactor + 0.03, 1);
+            visibilityFactor = Math.min(visibilityFactor + lightRadiusChangeSpeed, 1);
         }
 
         void decreaseVisibilityValue() {
-            visibilityFactor = Math.max(visibilityFactor - 0.03, 0);
+            visibilityFactor = Math.max(visibilityFactor - lightRadiusChangeSpeed, 0);
         }
     }
 }

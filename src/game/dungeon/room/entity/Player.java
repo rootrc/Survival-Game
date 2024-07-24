@@ -2,7 +2,6 @@ package game.dungeon.room.entity;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -16,7 +15,10 @@ import game.dungeon.settings.DiffSettings;
 import game.dungeon.settings.KeyBinds;
 
 public class Player extends Entity {
-    private HashSet<String> movementKeys = new HashSet<>();
+    private boolean movingUp;
+    private boolean movingLeft;
+    private boolean movingDown;
+    private boolean movingRight;
     private Inventory inventory;
     private ArrayList<RoomObject> interactables = new ArrayList<>();
     private Action nextRoom;
@@ -26,18 +28,6 @@ public class Player extends Entity {
     private int lightRadiusFactor;
     private int lightDecreaseFactor;
     private int lightDetectionRadiusSquared;
-
-    private final Action accelerate = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            movementKeys.add(e.getActionCommand().toLowerCase());
-        }
-    };
-
-    private final Action decelerate = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            movementKeys.remove( e.getActionCommand().toLowerCase());
-        }
-    };
 
     private final Action interact = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -82,14 +72,14 @@ public class Player extends Entity {
         getInputMap(2).put(KeyBinds.downReleased, "decel down");
         getInputMap(2).put(KeyBinds.rightPressed, "acc right");
         getInputMap(2).put(KeyBinds.rightReleased, "decel right");
-        getActionMap().put("acc up", accelerate);
-        getActionMap().put("decel up", decelerate);
-        getActionMap().put("acc left", accelerate);
-        getActionMap().put("decel left", decelerate);
-        getActionMap().put("acc down", accelerate);
-        getActionMap().put("decel down", decelerate);
-        getActionMap().put("acc right", accelerate);
-        getActionMap().put("decel right", decelerate);
+        getActionMap().put("acc up", accelerateUp);
+        getActionMap().put("decel up", decelerateUp);
+        getActionMap().put("acc left", accelerateLeft);
+        getActionMap().put("decel left", decelerateLeft);
+        getActionMap().put("acc down", accelerateDown);
+        getActionMap().put("decel down", decelerateDown);
+        getActionMap().put("acc right", accelerateRight);
+        getActionMap().put("decel right", decelerateRight);
     }
 
     @Override
@@ -104,16 +94,16 @@ public class Player extends Entity {
     public void move() {
         double ax = 0;
         double ay = 0;
-        if (movementKeys.contains("w") && Math.abs(getSpeedY()) < getMaxSpeed()) {
+        if (movingUp && Math.abs(getSpeedY()) < getMaxSpeed()) {
             ay -= getAcc();
         }
-        if (movementKeys.contains("a") && Math.abs(getSpeedX()) < getMaxSpeed()) {
+        if (movingLeft && Math.abs(getSpeedX()) < getMaxSpeed()) {
             ax -= getAcc();
         }
-        if (movementKeys.contains("s") && Math.abs(getSpeedY()) < getMaxSpeed()) {
+        if (movingDown && Math.abs(getSpeedY()) < getMaxSpeed()) {
             ay += getAcc();
         }
-        if (movementKeys.contains("d") && Math.abs(getSpeedX()) < getMaxSpeed()) {
+        if (movingRight && Math.abs(getSpeedX()) < getMaxSpeed()) {
             ax += getAcc();
         }
         if (ax == 0) {
@@ -147,10 +137,6 @@ public class Player extends Entity {
         interactables.add(object);
     }
 
-    public HashSet<String> getMovementKeys() {
-        return movementKeys;
-    }
-
     public Ladder getLadder() {
         for (RoomObject interactable : interactables) {
             interactable.interaction(Player.this);
@@ -172,4 +158,52 @@ public class Player extends Entity {
     public int getLightDetectionRadiusSquared() {
         return lightDetectionRadiusSquared;
     }
+
+    private final Action accelerateUp = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingUp = true;
+        }
+    };
+
+    private final Action decelerateUp = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingUp = false;
+        }
+    };
+
+    private final Action accelerateLeft = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingLeft = true;
+        }
+    };
+
+    private final Action decelerateLeft = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingLeft = false;
+        }
+    };
+
+    private final Action accelerateDown = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingDown = true;
+        }
+    };
+
+    private final Action decelerateDown = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingDown = false;
+        }
+    };
+
+    private final Action accelerateRight = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingRight = true;
+        }
+    };
+
+    private final Action decelerateRight = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            movingRight = false;
+        }
+    };
 }

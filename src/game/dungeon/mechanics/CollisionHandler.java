@@ -54,25 +54,25 @@ public class CollisionHandler {
         CollisionBox aH = player.getHitBox();
         if (aH.getX() + player.getX() < bH.getX() + bX
                 && aH.getMaxX() + player.getX() - bH.getX() - bX <= player.getSpeedX()
-                && (player.getSpeedX() > 0 || player.getMovementKeys().contains("d"))) {
+                && (player.getSpeedX() > 0)) {
             player.setX(bH.getX() + bX - aH.getMaxX());
             player.setSpeedX(0);
         }
         if (aH.getX() + player.getX() - bH.getMaxX() - bX >= player.getSpeedX()
                 && bH.getMaxX() + bX < aH.getMaxX() + player.getX()
-                && (player.getSpeedX() < 0 || player.getMovementKeys().contains("a"))) {
+                && (player.getSpeedX() < 0)) {
             player.setX(bH.getMaxX() + bX - aH.getX());
             player.setSpeedX(0);
         }
         if (aH.getY() + player.getY() < bH.getY() + bY
                 && aH.getMaxY() + player.getY() - bH.getY() - bY <= player.getSpeedY()
-                && (player.getSpeedY() > 0 || player.getMovementKeys().contains("s"))) {
+                && (player.getSpeedY() > 0)) {
             player.setY(bH.getY() + bY - aH.getMaxY());
             player.setSpeedY(0);
         }
         if (aH.getY() + player.getY() - bH.getMaxY() - bY >= player.getSpeedY()
                 && bH.getMaxY() + bY < aH.getMaxY() + player.getY()
-                && (player.getSpeedY() < 0 || player.getMovementKeys().contains("w"))) {
+                && (player.getSpeedY() < 0)) {
             player.setY(bH.getMaxY() + bY - aH.getY());
             player.setSpeedY(0);
         }
