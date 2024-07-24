@@ -6,13 +6,14 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import game.Game;
+import game.dungeon.room.tile.TileGrid;
 import game.game_components.GameComponent;
 
 public abstract class ParticleSystem extends GameComponent {
     private final ArrayList<Particle> particles = new ArrayList<>();
 
-    public ParticleSystem(int width, int height) {
-        super(width, height);
+    public ParticleSystem(TileGrid tileGrid) {
+        super(tileGrid.getWidth(), tileGrid.getHeight());
     }
 
     public void update() {

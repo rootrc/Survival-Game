@@ -8,10 +8,8 @@ import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.tile.Tile;
 
 public class CollisionHandler {
-    private Tile[][] collisionArray;
 
-    public CollisionHandler(Tile[][] collisionArray) {
-        this.collisionArray = collisionArray;
+    private CollisionHandler() {
     }
 
     public static boolean collides(RoomObject a, RoomObject b) {
@@ -76,22 +74,5 @@ public class CollisionHandler {
             player.setY(bH.getMaxY() + bY - aH.getY());
             player.setSpeedY(0);
         }
-    }
-
-    public void handleCollision(Player player) {
-        int[] rows = { player.getMinRow(), player.getMaxRow() };
-        int[] cols = { player.getMinCol(), player.getMaxCol() };
-        for (int r : rows) {
-            for (int c : cols) {
-                if (collides(player, collisionArray[r][c], r, c)) {
-                    CollisionHandler.handleCollision(player, collisionArray[r][c], r, c);
-                    return;
-                }
-            }
-        }
-    }
-
-    public Tile[][] getCollisionArray() {
-        return collisionArray;
     }
 }

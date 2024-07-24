@@ -14,12 +14,12 @@ public class TileGridFloor extends GameComponent {
     private int N, M, layers;
     private Tile[][][] tileGridArray;
 
-    public TileGridFloor(int N, int M, Tile[][][] tileGridArray) {
-        super(Dungeon.TILESIZE * M, Dungeon.TILESIZE * N);
-        this.tileGridArray = tileGridArray;
+    public TileGridFloor(Tile[][][] tileGridArray) {
+        super(Dungeon.TILESIZE * tileGridArray[0][0].length, Dungeon.TILESIZE * tileGridArray[0].length);
         layers = tileGridArray.length;
-        this.N = N;
-        this.M = M;
+        N = tileGridArray[0].length;
+        M = tileGridArray[0][0].length;
+        this.tileGridArray = tileGridArray;
         buildImage();
     }
 

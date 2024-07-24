@@ -3,26 +3,25 @@ package game.dungeon.mechanics.lighting;
 import java.util.HashMap;
 import java.util.Stack;
 
-import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.tile.Tile;
+import game.dungeon.room.tile.TileGrid;
 
 public class ShadowCasting {
     private final HashMap<Integer, boolean[][]> memo = new HashMap<>();
-    private int N;
-    private int M;
+    private int N, M;
     private Tile[][] arr;
     private Player player;
     private HeightHandler heightHandler;
 
-    public ShadowCasting(Player player, CollisionHandler collisionHandler, HeightHandler heightHandler) {
+    public ShadowCasting(Player player, TileGrid tileGrid) {
         this.player = player;
-        this.heightHandler = heightHandler;
-        arr = collisionHandler.getCollisionArray();
-        N = arr.length;
-        M = arr[0].length;
+        heightHandler = tileGrid.getHeightHandler();
+        arr = tileGrid.getCollisionChecker().getCollisionArray();
+        N = tileGrid.getN();
+        M = tileGrid.getM();
     }
 
     public boolean isVisible(RoomObject roomObject) {

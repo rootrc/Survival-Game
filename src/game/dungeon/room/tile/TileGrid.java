@@ -1,22 +1,27 @@
 package game.dungeon.room.tile;
 
-import game.dungeon.Dungeon;
+import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 
 public class TileGrid {
     private int N, M;
-    private int width, height;
     private TileGridFloor tileGridFloor;
     private TileGridCeiling tileGridCeiling;
+    private CollisionChecker collisionChecker;
+    private HeightHandler heightHandler;
 
-    public TileGrid(int N, int M, Tile[][][][] tileGridArray, Player player, HeightHandler heightHandler) {
-        this.N = N;
-        this.M = M;
-        height = Dungeon.TILESIZE * N;
-        width = Dungeon.TILESIZE * M;
-        tileGridFloor = new TileGridFloor(N, M, tileGridArray[0]);
-        tileGridCeiling = new TileGridCeiling(N, M, tileGridArray[1], player, heightHandler);
+    public TileGrid(Tile[][][][] tileGridArray, Player player, CollisionChecker collisionChecker, HeightHandler heightHandler) {
+        N = tileGridArray[0][0].length;
+        M = tileGridArray[0][0][0].length;
+        this.collisionChecker = collisionChecker;
+        this.heightHandler = heightHandler;
+        tileGridFloor = new TileGridFloor(tileGridArray[0]);
+        tileGridCeiling = new TileGridCeiling(tileGridArray[1], player, heightHandler);
+    }
+
+    public void setPlayer(Player player) {
+        tileGridCeiling.setOpacity(player);
     }
 
     public TileGridFloor getTileGridFloor() {
@@ -27,8 +32,12 @@ public class TileGrid {
         return tileGridCeiling;
     }
 
-    public void setPlayer(Player player) {
-        tileGridCeiling.setOpacity(player);
+    public CollisionChecker getCollisionChecker() {
+        return collisionChecker;
+    }
+
+    public HeightHandler getHeightHandler() {
+        return heightHandler;
     }
 
     public int getN() {
@@ -40,10 +49,11 @@ public class TileGrid {
     }
 
     public int getWidth() {
-        return width;
+        return tileGridFloor.getWidth();
     }
 
     public int getHeight() {
-        return height;
+        return tileGridFloor.getHeight();
     }
+   
 }

@@ -11,11 +11,10 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import game.Game;
-import game.dungeon.mechanics.CollisionHandler;
-import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.object_utilities.RoomObjectManager;
+import game.dungeon.room.tile.TileGrid;
 import game.game_components.GameComponent;
 import game.utilities.RNGUtilities;
 
@@ -35,18 +34,15 @@ public class LightingEngine extends GameComponent {
 
     private BufferedImage image;
     private Player player;
-    private HeightHandler heightHandler;
     private RoomObjectManager roomObjectManager;
     private HashMap<RoomObject, Light> lights = new HashMap<>();
     private ShadowCasting shadowCasting;
 
-    public LightingEngine(int width, int height, Player player, CollisionHandler collisionHandler,
-            HeightHandler HeightHandler, RoomObjectManager roomObjectManager) {
-        super(width, height);
+    public LightingEngine(Player player, TileGrid tileGrid, RoomObjectManager roomObjectManager) {
+        super(tileGrid.getWidth(), tileGrid.getHeight());
         this.player = player;
-        this.heightHandler = HeightHandler;
         this.roomObjectManager = roomObjectManager;
-        this.shadowCasting = new ShadowCasting(player, collisionHandler, heightHandler);
+        shadowCasting = new ShadowCasting(player, tileGrid);
         lights.put(player, new Light());
         lights.get(player).visibilityFactor = 1;
     }

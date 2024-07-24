@@ -3,7 +3,6 @@ package game.dungeon.room;
 import java.awt.Graphics2D;
 
 import game.Game;
-import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.SnowParticles;
 import game.dungeon.mechanics.WalkingParticles;
 import game.dungeon.mechanics.lighting.LightingEngine;
@@ -35,8 +34,8 @@ public class Room extends GameComponent {
         this.tileGrid = tileGrid;
         this.objectManager = objectManager;
         connecter = new RoomConnecter();
-        walkingParticles = new WalkingParticles(getWidth(), getHeight(), player);
-        snowParticles = new SnowParticles(getWidth(), getHeight());
+        walkingParticles = new WalkingParticles(tileGrid, player);
+        snowParticles = new SnowParticles(tileGrid);
         add(tileGrid.getTileGridFloor());
         add(walkingParticles);
         add(objectManager);
@@ -47,7 +46,7 @@ public class Room extends GameComponent {
     }
 
     // TEMP
-    public Room(TileGrid tileGrid, CollisionHandler collisionHandler, RoomObjectManager objectManager) {
+    public Room(TileGrid tileGrid, RoomObjectManager objectManager) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.tileGrid = tileGrid;
         this.objectManager = objectManager;

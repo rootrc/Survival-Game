@@ -5,22 +5,23 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
+import game.dungeon.room.tile.TileGrid;
 import game.game_components.GameComponent;
 
 public class RoomObjectManager extends GameComponent {
     private Player player;
-    private CollisionHandler collisionHandler;
+    private CollisionChecker collisionChecker;
     private HeightHandler heightHandler;
 
-    public RoomObjectManager(int width, int height, Player player, CollisionHandler collisionHandler,
-            HeightHandler heightHandler) {
-        super(width, height);
+    public RoomObjectManager(Player player, TileGrid tileGrid) {
+        super(tileGrid.getWidth(), tileGrid.getHeight());
         this.player = player;
-        this.collisionHandler = collisionHandler;
-        this.heightHandler = heightHandler;
+        collisionChecker = tileGrid.getCollisionChecker();
+        heightHandler = tileGrid.getHeightHandler();
     }
 
     public void drawComponent(Graphics2D g2d) {
@@ -50,7 +51,7 @@ public class RoomObjectManager extends GameComponent {
     }
 
     private void objectCollisions() {
-        collisionHandler.handleCollision(player);
+        collisionChecker.handleCollision(player);
         for (Component object : getComponents()) {
             if (object == player) {
                 continue;
@@ -76,7 +77,7 @@ public class RoomObjectManager extends GameComponent {
     private void playerStairInteraction() {
         int temp = heightHandler.getLocation(player);
         if (temp == -1) {
-            collisionHandler.handleCollision(player);
+            collisionChecker.handleCollision(player);
             return;
         }
         switch (temp) {

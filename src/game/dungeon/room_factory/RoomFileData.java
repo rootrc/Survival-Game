@@ -2,7 +2,7 @@ package game.dungeon.room_factory;
 
 import java.util.ArrayList;
 
-import game.dungeon.room.object_utilities.RoomObjectFactory.RoomObjectData;
+import game.dungeon.room.object_utilities.RoomObject.RoomObjectData;
 import game.utilities.FileOpener;
 import game.utilities.RNGUtilities;
 

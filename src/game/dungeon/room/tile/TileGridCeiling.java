@@ -21,13 +21,13 @@ public class TileGridCeiling extends GameComponent {
     private float opacity = 0;
     private HeightHandler heightHandler;
 
-    public TileGridCeiling(int N, int M, Tile[][][] tileGridArray, Player player, HeightHandler heightHandler) {
-        super(Dungeon.TILESIZE * M, Dungeon.TILESIZE * N);
+    public TileGridCeiling(Tile[][][] tileGridArray, Player player, HeightHandler heightHandler) {
+        super(Dungeon.TILESIZE * tileGridArray[0][0].length, Dungeon.TILESIZE * tileGridArray[0].length);
+        N = tileGridArray[0].length;
+        M = tileGridArray[0][0].length;
         this.tileGridArray = tileGridArray;
         this.player = player;
         this.heightHandler = heightHandler;
-        this.N = N;
-        this.M = M;
         buildImage();
     }
 

@@ -30,6 +30,9 @@ public class DirectionUtilities {
         }
     };
 
+    private DirectionUtilities() {
+    }
+
     public static int getDirection(double speedX, double speedY) {
         return HashToDirection.get((int) (10 * getDirectionOfSpeed(speedX) + getDirectionOfSpeed(speedY)));
     }

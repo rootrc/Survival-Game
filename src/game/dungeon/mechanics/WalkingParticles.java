@@ -5,13 +5,14 @@ import java.awt.Color;
 import game.Game;
 import game.dungeon.room.entity.Entity;
 import game.dungeon.room.object_utilities.DirectionUtilities;
+import game.dungeon.room.tile.TileGrid;
 import game.utilities.RNGUtilities;
 
 public class WalkingParticles extends ParticleSystem {
     private Entity entity;
 
-    public WalkingParticles(int width, int height, Entity entity) {
-        super(width, height);
+    public WalkingParticles(TileGrid tileGrid, Entity entity) {
+            super(tileGrid);
         this.entity = entity;
     }
 
