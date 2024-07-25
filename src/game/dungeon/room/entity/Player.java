@@ -35,7 +35,8 @@ public class Player extends Entity {
                 return;
             }
             interactionCooldown = 0;
-            for (RoomObject interactable : interactables) {
+            for (int i = 0; i < interactables.size(); i++) {
+                RoomObject interactable = interactables.get(i);
                 interactable.interaction(Player.this);
                 if (interactable instanceof Ladder) {
                     nextRoom.actionPerformed(e);

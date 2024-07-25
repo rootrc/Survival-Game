@@ -57,7 +57,8 @@ class TileGridFactory extends Factory<TileGrid> {
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
                 if (tileGridArray[2][r][c] != null) {
-                    if (tileGridArray[2][r][c].getHitBox() != null || tileGridArray[2][r][c].getHeight() != Tile.FLOOR) {
+                    if (tileGridArray[2][r][c].getHitBox() != null
+                            || tileGridArray[2][r][c].getHeight() != Tile.FLOOR) {
                         res[r][c] = tileGridArray[2][r][c];
                     }
                     continue;
@@ -260,8 +261,7 @@ class TileGridFactory extends Factory<TileGrid> {
                     arr2[r][c] = 255;
                 }
             }
-        }
-        if (cnt == 3) {
+        } else if (cnt == 3) {
             if (!layer0.contains(arr[r - 1][c])) {
                 arr2[r][c] = 199;
             } else if (!layer0.contains(arr[r + 1][c])) {
@@ -284,7 +284,6 @@ class TileGridFactory extends Factory<TileGrid> {
             } else if (!layer0.contains(arr[r][c + 1]) && !layer0.contains(arr[r + 1][c])) {
                 arr2[r][c] = 236;
             }
-
         } else if (cnt == 1) {
             if (layer0.contains(arr[r - 1][c])) {
                 arr2[r][c] = 253;
@@ -301,83 +300,85 @@ class TileGridFactory extends Factory<TileGrid> {
     private static final HashSet<Integer> layer1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 6));
 
     private void layer1(int[][] arr, int[][] arr2, int r, int c) {
-        if (layer1.contains(arr[r][c])) {
-            int cnt = 0;
-            for (int d[] : direct) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt++;
-                } else if (layer1.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
-                    cnt++;
-                }
+        if (!layer1.contains(arr[r][c])) {
+            return;
+        }
+        int cnt = 0;
+        for (int d[] : direct) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt++;
+            } else if (layer1.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
+                cnt++;
             }
-            int cnt2 = 0;
-            for (int d[] : direct2) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt2++;
-                } else if (layer1.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
-                    cnt2++;
-                }
+        }
+        int cnt2 = 0;
+        for (int d[] : direct2) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt2++;
+            } else if (layer1.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
+                cnt2++;
             }
-            if (arr[r][c] == 6) {
-                layer0(arr, arr2, r, c);
+        }
+        if (arr[r][c] == 6) {
+            layer0(arr, arr2, r, c);
+            return;
+        }
+        if (cnt == 4) {
+            if (cnt2 == 4) {
+                arr2[r][c] = 73;
+            } else if (cnt2 != 3) {
                 return;
             }
-            if (cnt == 4) {
-                if (cnt2 == 4) {
-                    arr2[r][c] = 73;
-                } else if (cnt2 == 3) {
-                    if (!layer1.contains(arr[r + 1][c - 1])) {
-                        arr2[r][c] = 58;
-                    } else if (!layer1.contains(arr[r - 1][c - 1])) {
-                        arr2[r][c] = 112;
-                    } else if (!layer1.contains(arr[r + 1][c + 1])) {
-                        arr2[r][c] = 57;
-                    } else if (!layer1.contains(arr[r - 1][c + 1])) {
-                        arr2[r][c] = 111;
-                    }
+            if (!layer1.contains(arr[r + 1][c - 1])) {
+                arr2[r][c] = 58;
+            } else if (!layer1.contains(arr[r - 1][c - 1])) {
+                arr2[r][c] = 112;
+            } else if (!layer1.contains(arr[r + 1][c + 1])) {
+                arr2[r][c] = 57;
+            } else if (!layer1.contains(arr[r - 1][c + 1])) {
+                arr2[r][c] = 111;
+            }
+        } else if (cnt == 3) {
+            if (!layer1.contains(arr[r - 1][c])) {
+                arr2[r][c] = 55;
+            } else if (!layer1.contains(arr[r + 1][c])) {
+                arr2[r][c] = 91;
+                arr[r + 1][c] = -1;
+                arr2[r + 1][c] = 109;
+            } else if (!layer1.contains(arr[r][c - 1])) {
+                if (!layer1.contains(arr[r - 1][c - 1])) {
+                    arr2[r][c] = 72;
+                } else {
+                    arr2[r][c] = 76;
                 }
-            } else if (cnt == 3) {
-                if (!layer1.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 55;
-                } else if (!layer1.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 91;
-                    arr[r + 1][c] = -1;
-                    arr2[r + 1][c] = 109;
-                } else if (!layer1.contains(arr[r][c - 1])) {
-                    if (!layer1.contains(arr[r - 1][c - 1])) {
-                        arr2[r][c] = 72;
-                    } else {
-                        arr2[r][c] = 76;
-                    }
-                } else if (!layer1.contains(arr[r][c + 1])) {
-                    if (!layer1.contains(arr[r - 1][c + 1])) {
-                        arr2[r][c] = 74;
-                    } else {
-                        arr2[r][c] = 75;
-                    }
+            } else if (!layer1.contains(arr[r][c + 1])) {
+                if (!layer1.contains(arr[r - 1][c + 1])) {
+                    arr2[r][c] = 74;
+                } else {
+                    arr2[r][c] = 75;
                 }
-            } else if (cnt == 2) {
-                if (layer1.contains(arr[r - 1][c]) && layer1.contains(arr[r][c + 1])) {
-                    if (!layer1.contains(arr[r - 1][c - 1])) {
-                        arr2[r][c] = 90;
-                    } else {
-                        arr2[r][c] = 94;
-                    }
-                    arr[r + 1][c] = -1;
-                    arr2[r + 1][c] = 108;
-                } else if (layer1.contains(arr[r - 1][c]) && layer1.contains(arr[r][c - 1])) {
-                    if (!layer1.contains(arr[r - 1][c + 1])) {
-                        arr2[r][c] = 92;
-                    } else {
-                        arr2[r][c] = 93;
-                    }
-                    arr[r + 1][c] = -1;
-                    arr2[r + 1][c] = 110;
-                } else if (layer1.contains(arr[r + 1][c]) && layer1.contains(arr[r][c + 1])) {
-                    arr2[r][c] = 54;
-                } else if (layer1.contains(arr[r + 1][c]) && layer1.contains(arr[r][c - 1])) {
-                    arr2[r][c] = 56;
+            }
+        } else if (cnt == 2) {
+            if (layer1.contains(arr[r - 1][c]) && layer1.contains(arr[r][c + 1])) {
+                if (!layer1.contains(arr[r - 1][c - 1])) {
+                    arr2[r][c] = 90;
+                } else {
+                    arr2[r][c] = 94;
                 }
+                arr[r + 1][c] = -1;
+                arr2[r + 1][c] = 108;
+            } else if (layer1.contains(arr[r - 1][c]) && layer1.contains(arr[r][c - 1])) {
+                if (!layer1.contains(arr[r - 1][c + 1])) {
+                    arr2[r][c] = 92;
+                } else {
+                    arr2[r][c] = 93;
+                }
+                arr[r + 1][c] = -1;
+                arr2[r + 1][c] = 110;
+            } else if (layer1.contains(arr[r + 1][c]) && layer1.contains(arr[r][c + 1])) {
+                arr2[r][c] = 54;
+            } else if (layer1.contains(arr[r + 1][c]) && layer1.contains(arr[r][c - 1])) {
+                arr2[r][c] = 56;
             }
         }
     }
@@ -420,8 +421,7 @@ class TileGridFactory extends Factory<TileGrid> {
                 arr2[r + 3][c] = 287;
             }
             return;
-        }
-        if (arr[r][c] == 4) {
+        } else if (arr[r][c] == 4) {
             arr2[r][c - 1] = 137;
             arr2[r][c] = 138;
             arr2[r][c + 1] = 139;
@@ -429,106 +429,108 @@ class TileGridFactory extends Factory<TileGrid> {
             arr2[r + 1][c] = 156;
             arr2[r + 1][c + 1] = 157;
             return;
+        } else if (!layer2.contains(arr[r][c])) {
+            return;
         }
-        if (layer2.contains(arr[r][c])) {
-            int cnt = 0;
-            for (int d[] : direct) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt++;
-                } else if (arr[r + d[0]][c + d[1]] == 1 || arr[r + d[0]][c + d[1]] == -1) {
-                    cnt++;
-                } else if (arr[r + d[0]][c + d[1]] == 2 || arr[r + d[0]][c + d[1]] == 4) {
-                    return;
+        int cnt = 0;
+        for (int d[] : direct) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt++;
+            } else if (arr[r + d[0]][c + d[1]] == 1 || arr[r + d[0]][c + d[1]] == -1) {
+                cnt++;
+            } else if (arr[r + d[0]][c + d[1]] == 2 || arr[r + d[0]][c + d[1]] == 4) {
+                return;
+            }
+        }
+        for (int d[] : direct2) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt++;
+            } else if (arr[r + d[0]][c + d[1]] == 1 || arr[r + d[0]][c + d[1]] == -1) {
+                cnt++;
+            } else if (arr[r + d[0]][c + d[1]] == 2) {
+                return;
+            }
+        }
+        double rand = RNGUtilities.getDouble();
+        if (arr[r][c] == 1) {
+            if (cnt == 8 && arr[r + 2][c] == 1) {
+                rand -= 0.5;
+            } else {
+                return;
+            }
+        }
+        rand += cnt / 30.0;
+        if (rand < 0.04) {
+            if ((arr[r][c] == 5 || arr[r][c] == 6) && arr[r][c] == arr[r + 1][c] && arr[r][c] == arr[r + 1][c + 1]
+                    && arr[r][c] == arr[r][c + 1]) {
+                if (arr2[r][c] == -1 && arr2[r + 1][c] == -1 && arr2[r][c + 1] == -1 && arr2[r + 1][c + 1] == -1) {
+                    arr2[r][c] = 150;
+                    arr2[r][c + 1] = 151;
+                    arr2[r + 1][c] = 168;
+                    arr2[r + 1][c + 1] = 169;
                 }
             }
-            for (int d[] : direct2) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt++;
-                } else if (arr[r + d[0]][c + d[1]] == 1 || arr[r + d[0]][c + d[1]] == -1) {
-                    cnt++;
-                } else if (arr[r + d[0]][c + d[1]] == 2) {
-                    return;
-                }
-            }
-            double rand = RNGUtilities.getDouble();
-            if (arr[r][c] == 1) {
-                if (cnt == 8 && arr[r + 2][c] == 1) {
-                    rand -= 0.5;
-                } else {
-                    return;
-                }
-            }
-            rand += cnt / 30.0;
-            if (rand < 0.04) {
-                if ((arr[r][c] == 5 || arr[r][c] == 6) && arr[r][c] == arr[r + 1][c] && arr[r][c] == arr[r + 1][c + 1]
-                        && arr[r][c] == arr[r][c + 1]) {
-                    if (arr2[r][c] == -1 && arr2[r + 1][c] == -1 && arr2[r][c + 1] == -1 && arr2[r + 1][c + 1] == -1) {
-                        arr2[r][c] = 150;
-                        arr2[r][c + 1] = 151;
-                        arr2[r + 1][c] = 168;
-                        arr2[r + 1][c + 1] = 169;
-                    }
-                }
-            } else if (rand > 0.99) {
-                arr2[r][c] = smallfeatures[RNGUtilities.getInt(smallfeatures.length)];
-            }
+        } else if (rand > 0.99) {
+            arr2[r][c] = smallfeatures[RNGUtilities.getInt(smallfeatures.length)];
         }
     }
 
     private final HashSet<Integer> layer3 = new HashSet<>(Arrays.asList(0, 3));
 
     private void layer3(int[][] arr, int[][] arr2, int r, int c) {
-        if (arr[r][c] == 3) {
-            int cnt = 0;
-            for (int d[] : direct) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt++;
-                } else if (layer3.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
-                    cnt++;
-                }
+        if (arr[r][c] != 3) {
+            return;
+        }
+        int cnt = 0;
+        for (int d[] : direct) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt++;
+            } else if (layer3.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
+                cnt++;
             }
-            int cnt2 = 0;
-            for (int d[] : direct2) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt2++;
-                } else if (layer3.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
-                    cnt2++;
-                }
+        }
+        int cnt2 = 0;
+        for (int d[] : direct2) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt2++;
+            } else if (layer3.contains(arr[r + d[0]][c + d[1]]) || arr[r + d[0]][c + d[1]] == 0) {
+                cnt2++;
             }
-            if (cnt == 4) {
-                if (cnt2 == 4) {
-                    arr2[r][c] = 19;
-                } else if (cnt2 == 3) {
-                    if (!layer3.contains(arr[r + 1][c - 1])) {
-                        arr2[r][c] = 4;
-                    } else if (!layer3.contains(arr[r - 1][c - 1])) {
-                        arr2[r][c] = 22;
-                    } else if (!layer3.contains(arr[r + 1][c + 1])) {
-                        arr2[r][c] = 3;
-                    } else if (!layer3.contains(arr[r - 1][c + 1])) {
-                        arr2[r][c] = 21;
-                    }
-                }
-            } else if (cnt == 3) {
-                if (!layer3.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 1;
-                } else if (!layer3.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 37;
-                } else if (!layer3.contains(arr[r][c - 1])) {
-                    arr2[r][c] = 18;
-                } else if (!layer3.contains(arr[r][c + 1])) {
-                    arr2[r][c] = 20;
-                }
-            } else if (cnt == 2) {
-                if (layer3.contains(arr[r][c - 1]) && layer3.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 2;
-                } else if (layer3.contains(arr[r][c - 1]) && layer3.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 38;
-                } else if (layer3.contains(arr[r][c + 1]) && layer3.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 0;
-                } else if (layer3.contains(arr[r][c + 1]) && layer3.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 36;
-                }
+        }
+        if (cnt == 4) {
+            if (cnt2 == 4) {
+                arr2[r][c] = 19;
+            } else if (cnt2 != 3) {
+                return;
+            }
+            if (!layer3.contains(arr[r + 1][c - 1])) {
+                arr2[r][c] = 4;
+            } else if (!layer3.contains(arr[r - 1][c - 1])) {
+                arr2[r][c] = 22;
+            } else if (!layer3.contains(arr[r + 1][c + 1])) {
+                arr2[r][c] = 3;
+            } else if (!layer3.contains(arr[r - 1][c + 1])) {
+                arr2[r][c] = 21;
+            }
+        } else if (cnt == 3) {
+            if (!layer3.contains(arr[r - 1][c])) {
+                arr2[r][c] = 1;
+            } else if (!layer3.contains(arr[r + 1][c])) {
+                arr2[r][c] = 37;
+            } else if (!layer3.contains(arr[r][c - 1])) {
+                arr2[r][c] = 18;
+            } else if (!layer3.contains(arr[r][c + 1])) {
+                arr2[r][c] = 20;
+            }
+        } else if (cnt == 2) {
+            if (layer3.contains(arr[r][c - 1]) && layer3.contains(arr[r + 1][c])) {
+                arr2[r][c] = 2;
+            } else if (layer3.contains(arr[r][c - 1]) && layer3.contains(arr[r - 1][c])) {
+                arr2[r][c] = 38;
+            } else if (layer3.contains(arr[r][c + 1]) && layer3.contains(arr[r + 1][c])) {
+                arr2[r][c] = 0;
+            } else if (layer3.contains(arr[r][c + 1]) && layer3.contains(arr[r - 1][c])) {
+                arr2[r][c] = 36;
             }
         }
     }
@@ -540,45 +542,46 @@ class TileGridFactory extends Factory<TileGrid> {
             arr2[r][c] = 145;
             return;
         }
-        if (layer4.contains(arr[r][c])) {
-            int cnt = 0;
-            for (int d[] : direct) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt++;
-                } else if (layer4.contains(arr[r + d[0]][c + d[1]])) {
-                    cnt++;
-                }
+        if (!layer4.contains(arr[r][c])) {
+            return;
+        }
+        int cnt = 0;
+        for (int d[] : direct) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt++;
+            } else if (layer4.contains(arr[r + d[0]][c + d[1]])) {
+                cnt++;
             }
-            if (cnt == 4) {
-                if (arr[r + 1][c - 1] == 0) {
-                    arr2[r][c] = 147;
-                } else if (arr[r + 1][c + 1] == 0) {
-                    arr2[r][c] = 148;
-                } else if (arr[r - 1][c - 1] == 0) {
-                    arr2[r][c] = 129;
-                } else if (arr[r - 1][c + 1] == 0) {
-                    arr2[r][c] = 130;
-                }
-            } else if (cnt == 3) {
-                if (arr[r - 1][c] == 0) {
-                    arr2[r][c] = 127;
-                } else if (arr[r + 1][c] == 0) {
-                    arr2[r][c] = 163;
-                } else if (arr[r][c - 1] == 0) {
-                    arr2[r][c] = 144;
-                } else if (arr[r][c + 1] == 0) {
-                    arr2[r][c] = 146;
-                }
-            } else if (cnt == 2) {
-                if (arr[r][c - 1] == 0 && arr[r - 1][c] == 0) {
-                    arr2[r][c] = 126;
-                } else if (arr[r][c + 1] == 0 && arr[r - 1][c] == 0) {
-                    arr2[r][c] = 128;
-                } else if (arr[r][c - 1] == 0 && arr[r + 1][c] == 0) {
-                    arr2[r][c] = 162;
-                } else if (arr[r][c + 1] == 0 && arr[r + 1][c] == 0) {
-                    arr2[r][c] = 164;
-                }
+        }
+        if (cnt == 4) {
+            if (arr[r + 1][c - 1] == 0) {
+                arr2[r][c] = 147;
+            } else if (arr[r + 1][c + 1] == 0) {
+                arr2[r][c] = 148;
+            } else if (arr[r - 1][c - 1] == 0) {
+                arr2[r][c] = 129;
+            } else if (arr[r - 1][c + 1] == 0) {
+                arr2[r][c] = 130;
+            }
+        } else if (cnt == 3) {
+            if (arr[r - 1][c] == 0) {
+                arr2[r][c] = 127;
+            } else if (arr[r + 1][c] == 0) {
+                arr2[r][c] = 163;
+            } else if (arr[r][c - 1] == 0) {
+                arr2[r][c] = 144;
+            } else if (arr[r][c + 1] == 0) {
+                arr2[r][c] = 146;
+            }
+        } else if (cnt == 2) {
+            if (arr[r][c - 1] == 0 && arr[r - 1][c] == 0) {
+                arr2[r][c] = 126;
+            } else if (arr[r][c + 1] == 0 && arr[r - 1][c] == 0) {
+                arr2[r][c] = 128;
+            } else if (arr[r][c - 1] == 0 && arr[r + 1][c] == 0) {
+                arr2[r][c] = 162;
+            } else if (arr[r][c + 1] == 0 && arr[r + 1][c] == 0) {
+                arr2[r][c] = 164;
             }
         }
     }
@@ -590,46 +593,47 @@ class TileGridFactory extends Factory<TileGrid> {
             arr2[r][c] = 145;
             return;
         }
-        if (arr[r][c] == 1 || arr[r][c] == 4 || arr[r][c] == 6) {
-            arr2[r][c] = 145;
-            int cnt = 0;
-            for (int d[] : direct) {
-                if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
-                    cnt++;
-                } else if (!layer41.contains(arr[r + d[0]][c + d[1]])) {
-                    cnt++;
-                }
+        if (arr[r][c] != 1 && arr[r][c] != 4 && arr[r][c] != 6) {
+            return;
+        }
+        arr2[r][c] = 145;
+        int cnt = 0;
+        for (int d[] : direct) {
+            if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
+                cnt++;
+            } else if (!layer41.contains(arr[r + d[0]][c + d[1]])) {
+                cnt++;
             }
-            if (cnt == 4) {
-                if (layer41.contains(arr[r + 1][c - 1])) {
-                    arr2[r][c] = 128;
-                } else if (layer41.contains(arr[r + 1][c + 1])) {
-                    arr2[r][c] = 126;
-                } else if (layer41.contains(arr[r - 1][c - 1])) {
-                    arr2[r][c] = 164;
-                } else if (layer41.contains(arr[r - 1][c + 1])) {
-                    arr2[r][c] = 162;
-                }
-            } else if (cnt == 3) {
-                if (layer41.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 163;
-                } else if (layer41.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 127;
-                } else if (layer41.contains(arr[r][c - 1])) {
-                    arr2[r][c] = 146;
-                } else if (layer41.contains(arr[r][c + 1])) {
-                    arr2[r][c] = 144;
-                }
-            } else if (cnt == 2) {
-                if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 148;
-                } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r - 1][c])) {
-                    arr2[r][c] = 147;
-                } else if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 130;
-                } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r + 1][c])) {
-                    arr2[r][c] = 129;
-                }
+        }
+        if (cnt == 4) {
+            if (layer41.contains(arr[r + 1][c - 1])) {
+                arr2[r][c] = 128;
+            } else if (layer41.contains(arr[r + 1][c + 1])) {
+                arr2[r][c] = 126;
+            } else if (layer41.contains(arr[r - 1][c - 1])) {
+                arr2[r][c] = 164;
+            } else if (layer41.contains(arr[r - 1][c + 1])) {
+                arr2[r][c] = 162;
+            }
+        } else if (cnt == 3) {
+            if (layer41.contains(arr[r - 1][c])) {
+                arr2[r][c] = 163;
+            } else if (layer41.contains(arr[r + 1][c])) {
+                arr2[r][c] = 127;
+            } else if (layer41.contains(arr[r][c - 1])) {
+                arr2[r][c] = 146;
+            } else if (layer41.contains(arr[r][c + 1])) {
+                arr2[r][c] = 144;
+            }
+        } else if (cnt == 2) {
+            if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r - 1][c])) {
+                arr2[r][c] = 148;
+            } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r - 1][c])) {
+                arr2[r][c] = 147;
+            } else if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r + 1][c])) {
+                arr2[r][c] = 130;
+            } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r + 1][c])) {
+                arr2[r][c] = 129;
             }
         }
     }
