@@ -68,8 +68,7 @@ public class RoomFactory extends Factory<Room> {
                 createLadderConnection(player.getLadder(), previousRoom, nextRoom);
             }
         } else {
-            RoomFileData file = new RoomFileData(id);
-            nextRoom = createRoom(file, id, previousRoom);
+            nextRoom = createRoom(new RoomFileData(id), id, previousRoom);
             putRoom(id, nextRoom);
             createLadderConnection(player.getLadder(), previousRoom, nextRoom);
         }
