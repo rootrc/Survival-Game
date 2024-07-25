@@ -20,25 +20,25 @@ public class Room extends GameComponent {
     private Player player;
     private TileGrid tileGrid;
     private RoomConnecter connecter;
-    private RoomObjectManager objectManager;
+    private RoomObjectManager roomObjectManager;
     private UILayer UILayer;
     private WalkingParticles walkingParticles;
     private SnowParticles snowParticles;
 
-    public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, RoomObjectManager objectManager,
+    public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, RoomObjectManager roomObjectManager,
             UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
         this.player = player;
         this.UILayer = new UILayer();
         this.tileGrid = tileGrid;
-        this.objectManager = objectManager;
+        this.roomObjectManager = roomObjectManager;
         connecter = new RoomConnecter();
         walkingParticles = new WalkingParticles(tileGrid, player);
         snowParticles = new SnowParticles(tileGrid);
         add(tileGrid.getTileGridFloor());
         add(walkingParticles);
-        add(objectManager);
+        add(roomObjectManager);
         addRoomObject(player);
         add(snowParticles);
         add(tileGrid.getTileGridCeiling());
@@ -46,12 +46,10 @@ public class Room extends GameComponent {
     }
 
     // TEMP
-    public Room(TileGrid tileGrid, RoomObjectManager objectManager) {
+    public Room(TileGrid tileGrid) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.tileGrid = tileGrid;
-        this.objectManager = objectManager;
         add(tileGrid.getTileGridFloor());
-        add(objectManager);
         add(tileGrid.getTileGridCeiling());
     }
 
@@ -87,11 +85,11 @@ public class Room extends GameComponent {
     }
 
     public RoomObject getRoomObject(int idx) {
-        return (RoomObject) objectManager.getComponent(idx);
+        return (RoomObject) roomObjectManager.getComponent(idx);
     }
 
     public void addRoomObject(RoomObject roomObject) {
-        objectManager.add(roomObject, -1);
+        roomObjectManager.add(roomObject, -1);
     }
 
     public void addLadderConnection(Ladder ladder, int id) {
@@ -110,9 +108,17 @@ public class Room extends GameComponent {
         return connecter.getLadder(ladder);
     }
 
+    public int getLadderUpCnt() {
+        return roomObjectManager.getLadderUpCnt();
+    }
+
+    public int getLadderDownCnt() {
+        return roomObjectManager.getLadderDownCnt();
+    }
+
     // For Debug Screen
     public int getEntityCount() {
-        return objectManager.getComponentCount() + 1;
+        return roomObjectManager.getComponentCount() + 1;
     }
 
     public int getParticleCount() {

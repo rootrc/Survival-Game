@@ -54,6 +54,10 @@ public abstract class GameComponent extends JComponent {
         add(gameComponent, 0);
     }
 
+    public void add(GameComponent gameComponent, int index) {
+        super.add(gameComponent, index);
+    }
+
     protected final boolean isMouseWithinComponent(int widthAllowance, int heightAllowance) {
         Point mousePos = MouseInfo.getPointerInfo().getLocation();
         Rectangle bounds = getBounds();

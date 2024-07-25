@@ -7,23 +7,37 @@ import game.utilities.FileOpener;
 import game.utilities.RNGUtilities;
 
 class RoomFileData extends FileOpener {
-    private int id;
     private int N, M;
     private int arr[][];
     private ArrayList<RoomObjectData> roomObjects;
-    private int ladderUpCnt;
-    private int ladderDownCnt;
+
+    public static final int NO_MODIFIER = 0;
+    public static final int REFLECTION_MODIFIER = 1;
+    private int modifier;
 
     RoomFileData(int id) {
         super(new StringBuilder("dungeongeneration/tileGrids/map")
                 .append(String.format("%02d", id)).toString());
-        this.id = id;
+        modifier = RNGUtilities.getInt(2);
+        readRoomData();
+        closeFile();
+    }
+
+    private void readRoomData() {
         N = nextInt();
         M = nextInt();
         arr = new int[N][M];
-        for (int r = 0; r < N; r++) {
-            for (int c = 0; c < M; c++) {
-                arr[r][c] = nextInt();
+        if (modifier == NO_MODIFIER) {
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < M; c++) {
+                    arr[r][c] = nextInt();
+                }
+            }
+        } else if (modifier == REFLECTION_MODIFIER) {
+            for (int r = 0; r < N; r++) {
+                for (int c = M - 1; c >= 0; c--) {
+                    arr[r][c] = nextInt();
+                }
             }
         }
         int objectDataSetCnt = nextInt();
@@ -41,26 +55,25 @@ class RoomFileData extends FileOpener {
         }
         K = nextInt();
         roomObjects = new ArrayList<>();
-        for (int i = 0; i < K; i++) {
-            int id2 = nextInt();
-            RoomObjectData temp = new RoomObjectData(id2, nextInt(), nextInt());
-            roomObjects.add(temp);
-            if (id2 == 0) {
-                ladderUpCnt++;
-            } else {
-                ladderDownCnt++;
+        if (modifier == NO_MODIFIER) {
+            for (int i = 0; i < K; i++) {
+                int id2 = nextInt();
+                roomObjects.add(new RoomObjectData(id2, nextInt(), nextInt()));
+            }
+            K = nextInt();
+            for (int i = 0; i < K; i++) {
+                roomObjects.add(new RoomObjectData(10 + nextInt(), nextInt(), nextInt()));
+            }
+        } else if (modifier == REFLECTION_MODIFIER) {
+            for (int i = 0; i < K; i++) {
+                int id2 = nextInt();
+                roomObjects.add(new RoomObjectData(id2, nextInt(), nextInt()));
+            }
+            K = nextInt();
+            for (int i = 0; i < K; i++) {
+                roomObjects.add(new RoomObjectData(10 + nextInt(), nextInt(), nextInt()));
             }
         }
-        K = nextInt();
-        for (int i = 0; i < K; i++) {
-            RoomObjectData temp = new RoomObjectData(10 + nextInt(), nextInt(), nextInt());
-            roomObjects.add(temp);
-        }
-        closeFile();
-    }
-
-    int getId() {
-        return id;
     }
 
     int getN() {
@@ -74,13 +87,9 @@ class RoomFileData extends FileOpener {
     int[][] getTileGridArray() {
         return arr;
     }
-
-    int getLadderUp() {
-        return ladderUpCnt;
-    }
-
-    int getLadderDown() {
-        return ladderDownCnt;
+    
+    int getModifier() {
+        return modifier;
     }
 
     ArrayList<RoomObjectData> getRoomObjects() {

@@ -23,10 +23,12 @@ public class DungeonLayoutGenerator extends FileOpener {
         int hash = hashes[dungeonData.getDepth()][dungeonData.getDepthCnt(dungeonData.getDepth())];
         if (hash != 0) {
             return dungeonData.getMapId(ladder, hash / 10, hash % 10);
-        } else if (ladder.getDirection() == 1) {
+        } else if (ladder.getDirection() == Ladder.UP_DIRECTION) {
             return dungeonData.getMapId(ladder, 0, 1);
-        } else {
+        } else if (ladder.getDirection() == Ladder.DOWN_DIRECTION) {
             return dungeonData.getMapId(ladder, 1, 0);
         }
+        return 0;
+        
     }
 }

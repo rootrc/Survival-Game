@@ -8,6 +8,7 @@ import game.Game;
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.*;
+import game.dungeon.room.tile.TileGrid;
 import game.dungeon.settings.DiffSettings;
 import game.game_components.GameComponent;
 import game.utilities.ImageUtilities;
@@ -61,6 +62,11 @@ public abstract class RoomObject extends GameComponent {
             return true;
         }
         return false;
+    }
+
+    public final RoomObject getHorizontialReflection(TileGrid tileGrid) {
+        setLocation(tileGrid.getWidth() - getX() - Dungeon.TILESIZE * (getMaxCol() - getMinCol() + 1), getY());
+        return this;
     }
 
     public final void setImage(BufferedImage image) {
@@ -193,17 +199,17 @@ public abstract class RoomObject extends GameComponent {
     }
 
     public static class RoomObjectData {
-        private static final int ladderUp = 0;
-        private static final int ladderDown = 1;
-        private static final int treasureChest0 = 10;
-        private static final int treasureChest1 = 11;
-        private static final int treasureChest2 = 12;
-        private static final int treasureChest3 = 13;
-        private static final int treasureChest4 = 14;
-        private static final int smallLightRock = 15;
-        private static final int mediumLightRock = 16;
-        private static final int largeLightRock = 17;
-        
+        public static final int ladderUp = 0;
+        public static final int ladderDown = 1;
+        public static final int treasureChest0 = 10;
+        public static final int treasureChest1 = 11;
+        public static final int treasureChest2 = 12;
+        public static final int treasureChest3 = 13;
+        public static final int treasureChest4 = 14;
+        public static final int smallLightRock = 15;
+        public static final int mediumLightRock = 16;
+        public static final int largeLightRock = 17;
+
         private int id;
         private int r;
         private int c;

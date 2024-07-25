@@ -9,6 +9,7 @@ import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
 import game.dungeon.room.entity.Player;
+import game.dungeon.room.object.Ladder;
 import game.dungeon.room.tile.TileGrid;
 import game.game_components.GameComponent;
 
@@ -16,6 +17,8 @@ public class RoomObjectManager extends GameComponent {
     private Player player;
     private CollisionChecker collisionChecker;
     private HeightHandler heightHandler;
+    private int ladderUpCnt;
+    private int ladderDownCnt;
 
     public RoomObjectManager(Player player, TileGrid tileGrid) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
@@ -39,7 +42,7 @@ public class RoomObjectManager extends GameComponent {
             }
         });
         removeAll();
-        for (RoomObject roomObject: temp) {
+        for (RoomObject roomObject : temp) {
             add(roomObject, -1);
         }
     }
@@ -105,7 +108,26 @@ public class RoomObjectManager extends GameComponent {
         }
     }
 
+    public void add(RoomObject roomObject) {
+        if (roomObject instanceof Ladder) {
+            if (((Ladder) roomObject).getDirection() == Ladder.UP_DIRECTION) {
+                ladderUpCnt++;
+            } else if (((Ladder) roomObject).getDirection() == Ladder.DOWN_DIRECTION) {
+                ladderDownCnt++;
+            }
+        }
+        add(roomObject, -1);
+    }
+
     public RoomObject[] getRoomObjects() {
         return Arrays.copyOf(getComponents(), getComponentCount(), RoomObject[].class);
+    }
+
+    public int getLadderUpCnt() {
+        return ladderUpCnt;
+    }
+
+    public int getLadderDownCnt() {
+        return ladderDownCnt;
     }
 }

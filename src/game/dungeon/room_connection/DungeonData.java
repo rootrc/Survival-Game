@@ -57,9 +57,9 @@ public class DungeonData extends FileOpener {
     }
 
     public void changeDepth(Ladder ladder) {
-        if (ladder.getDirection() == 1) {
+        if (ladder.getDirection() == Ladder.UP_DIRECTION) {
             depth--;
-        } else {
+        } else if (ladder.getDirection() == Ladder.DOWN_DIRECTION) {
             depth++;
         }
     }

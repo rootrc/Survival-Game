@@ -7,6 +7,8 @@ import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
 
 public class Ladder extends RoomObject {
+    public static final int UP_DIRECTION = 1;
+    public static final int DOWN_DIRECTION = -1;
     private int direction;
     private int playerPlacementX;
     private int playerPlacementY;

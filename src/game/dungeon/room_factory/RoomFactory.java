@@ -18,7 +18,7 @@ import game.utilities.RNGUtilities;
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
     private TileGridFactory tileFactory;
-    private RoomObjectManagerFactory objectManagerFactory;
+    private RoomObjectManagerFactory roomObjectManagerFactory;
     private DungeonData dungeonData;
     private DungeonLayoutGenerator dungeonGenerator;
     private Player player;
@@ -30,21 +30,21 @@ public class RoomFactory extends Factory<Room> {
         this.UILayer = UILayer;
         rooms = new HashMap<>();
         tileFactory = new TileGridFactory();
-        objectManagerFactory = new RoomObjectManagerFactory(player);
+        roomObjectManagerFactory = new RoomObjectManagerFactory(player);
         dungeonGenerator = new DungeonLayoutGenerator();
     }
 
     // TEMP
     public Room createRandomRoom(int N, int M) {
         TileGrid tileGrid = tileFactory.createRandomGrid(N, M, player);
-        return new Room(tileGrid, objectManagerFactory.getRoomObjectManager(tileGrid));
+        return new Room(tileGrid);
     }
 
     public Room getStartingRoom(int id) {
         player.set(312, 100);
         RoomFileData file = new RoomFileData(id);
         TileGrid tileGrid = tileFactory.createTileGrid(file, player);
-        RoomObjectManager roomObjectManager = objectManagerFactory.getRoomObjectManager(file, tileGrid);
+        RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
         Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
         if (!Game.DEBUG) {
@@ -60,23 +60,24 @@ public class RoomFactory extends Factory<Room> {
             previousRoom.addLadderConnection(player.getLadder(),
                     dungeonGenerator.getGeneratedId(player.getLadder(), dungeonData));
         }
-        RoomFileData file = new RoomFileData(previousRoom.getConnectedRoomId(player.getLadder()));
+        int id = previousRoom.getConnectedRoomId(player.getLadder());
         Room nextRoom;
-        if (rooms.containsKey(file.getId())) {
-            nextRoom = getRoom(file.getId());
+        if (rooms.containsKey(id)) {
+            nextRoom = getRoom(id);
             if (previousRoom.getConnectedLadder(player.getLadder()) == null) {
-                createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
+                createLadderConnection(player.getLadder(), previousRoom, nextRoom);
             }
         } else {
-            nextRoom = createRoom(file, file.getId(), previousRoom);
-            putRoom(file.getId(), nextRoom);
-            createLadderConnection(player.getLadder(), previousRoom, nextRoom, file);
+            RoomFileData file = new RoomFileData(id);
+            nextRoom = createRoom(file, id, previousRoom);
+            putRoom(id, nextRoom);
+            createLadderConnection(player.getLadder(), previousRoom, nextRoom);
         }
         setTransition(previousRoom, nextRoom);
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
-        if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == 1) {
+        if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == Ladder.UP_DIRECTION) {
             player.setDirection(4);
-        } else if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == -1) {
+        } else if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == Ladder.DOWN_DIRECTION) {
             player.setDirection(0);
         }
         return nextRoom;
@@ -88,22 +89,22 @@ public class RoomFactory extends Factory<Room> {
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {
         TileGrid tileGrid = tileFactory.createTileGrid(file, player);
-        RoomObjectManager roomObjectManager = objectManagerFactory.getRoomObjectManager(file, tileGrid);
+        RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
         Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
         return room;
     }
 
-    private void createLadderConnection(Ladder ladder0, Room previousRoom, Room nextRoom, RoomFileData file) {
+    private void createLadderConnection(Ladder ladder0, Room previousRoom, Room nextRoom) {
         Ladder ladder1 = null;
-        if (ladder0.getDirection() == 1) {
+        if (ladder0.getDirection() == Ladder.UP_DIRECTION) {
             while (ladder1 == null || nextRoom.getConnectedLadder(ladder1) != null) {
                 ladder1 = (Ladder) nextRoom
-                        .getRoomObject(file.getLadderUp() + RNGUtilities.getInt(file.getLadderDown()));
+                        .getRoomObject(nextRoom.getLadderUpCnt() + RNGUtilities.getInt(nextRoom.getLadderDownCnt()));
             }
-        } else {
+        } else if (ladder0.getDirection() == Ladder.DOWN_DIRECTION) {
             while (ladder1 == null || nextRoom.getConnectedLadder(ladder1) != null) {
-                ladder1 = (Ladder) nextRoom.getRoomObject(RNGUtilities.getInt(file.getLadderUp()));
+                ladder1 = (Ladder) nextRoom.getRoomObject(RNGUtilities.getInt(nextRoom.getLadderUpCnt()));
             }
         }
         nextRoom.addLadderConnection(ladder1, previousRoom.getId());
