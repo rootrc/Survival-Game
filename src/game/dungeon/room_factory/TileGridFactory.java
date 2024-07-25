@@ -383,7 +383,7 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     private static final HashSet<Integer> layer2 = new HashSet<>(Arrays.asList(1, 2, 4, 5, 6));
-    private static final int[] smallRocks = { 5, 6, 7, 23, 24, 25, 41, 42, 43 };
+    private static final int[] smallfeatures = { 5, 6, 7, 8, 23, 24, 25, 26, 41, 42, 43, 44 };
 
     private void layer2(int[][] arr, int[][] arr2, int r, int c) {
         if (arr2[r][c] != -1) {
@@ -470,7 +470,7 @@ class TileGridFactory extends Factory<TileGrid> {
                     }
                 }
             } else if (rand > 0.99) {
-                arr2[r][c] = smallRocks[RNGUtilities.getInt(smallRocks.length)];
+                arr2[r][c] = smallfeatures[RNGUtilities.getInt(smallfeatures.length)];
             }
         }
     }
