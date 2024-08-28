@@ -9,6 +9,7 @@ import java.awt.RadialGradientPaint;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import game.Game;
 import game.dungeon.room.entity.Player;
@@ -28,11 +29,22 @@ public class LightingEngine extends GameComponent {
             new Color(0, 0, 0, 0.91f), new Color(0, 0, 0, 0.94f),
             new Color(0, 0, 0, 0.96f), new Color(0, 0, 0, 0.98f),
             new Color(0, 0, 0, 1.00f) };
+    private static final Color color2[] = new Color[] {
+            new Color(0, 0, 0, (float) Math.pow(0.10, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.42, 0.01)),
+            new Color(0, 0, 0, (float) Math.pow(0.52, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.57, 0.01)),
+            new Color(0, 0, 0, (float) Math.pow(0.61, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.66, 0.01)),
+            new Color(0, 0, 0, (float) Math.pow(0.71, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.76, 0.01)),
+            new Color(0, 0, 0, (float) Math.pow(0.82, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.87, 0.01)),
+            new Color(0, 0, 0, (float) Math.pow(0.91, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.94, 0.01)),
+            new Color(0, 0, 0, (float) Math.pow(0.96, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.98, 0.01)),
+            new Color(0, 0, 0, (float) Math.pow(1.00, 0.01)) };
     private static final float fraction[] = new float[] { 0f, 0.3f, 0.4f, 0.45f, 0.5f, 0.55f, 0.6f, 0.65f, 0.7f, 0.75f,
             0.8f, 0.85f, 0.9f, 0.95f, 1f };
     private static final HashMap<Integer, BufferedImage> darknessFilter = new HashMap<>();
+    private static final HashMap<Integer, BufferedImage> darknessFilter2 = new HashMap<>();
 
-    private BufferedImage image;
+    private BufferedImage fogOfWar;
+    private HashSet<Integer> fogOfWarPoints = new HashSet<>();
     private Player player;
     private RoomObjectManager roomObjectManager;
     private HashMap<RoomObject, Light> lights = new HashMap<>();
@@ -45,6 +57,12 @@ public class LightingEngine extends GameComponent {
         shadowCasting = new ShadowCasting(player, tileGrid);
         lights.put(player, new Light());
         lights.get(player).visibilityFactor = 1;
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        fogOfWar = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+                Transparency.TRANSLUCENT);
+        Graphics2D gl = (Graphics2D) fogOfWar.getGraphics();
+        gl.setColor(Color.black);
+        gl.fillRect(0, 0, getWidth(), getHeight());
     }
 
     public void update() {
@@ -58,11 +76,21 @@ public class LightingEngine extends GameComponent {
             return;
         }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(), Transparency.TRANSLUCENT);
+        BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+                Transparency.TRANSLUCENT);
+        if (!fogOfWarPoints.contains(10000 * player.getX() + player.getY())) {
+            fogOfWarPoints.add(10000 * player.getX() + player.getY());
+            int lightRadius = getEffectiveLightRadius(player) / 2;
+            Graphics2D gl = (Graphics2D) fogOfWar.getGraphics();
+            gl.setComposite(AlphaComposite.DstIn);
+            gl.drawImage(getDarknessFilter2(lightRadius), player.getX() + player.getWidth() / 2 - lightRadius,
+                    player.getY() + player.getHeight() / 2 - lightRadius, null);
+            gl.dispose();
+        }
         Graphics2D gl = (Graphics2D) image.getGraphics();
-        gl.setColor(Color.black);
-        gl.fillRect(0, 0, getWidth(), getHeight());
+        gl.drawImage(fogOfWar, 0, 0, null);
         gl.setComposite(AlphaComposite.DstIn);
+
         for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
             if (roomObject.getLightRadius() <= 1) {
                 continue;
@@ -72,9 +100,9 @@ public class LightingEngine extends GameComponent {
             if (lightRadius <= 1) {
                 continue;
             }
-            BufferedImage image = getDarknessFilter(lightRadius);
-            gl.drawImage(image, roomObject.getX() + (roomObject.getWidth() - image.getWidth()) / 2,
-                    roomObject.getY() + (roomObject.getHeight() - image.getHeight()) / 2, null);
+            gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
+                    roomObject.getWidth() / 2 - lightRadius,
+                    roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
         }
         gl.dispose();
         g2d.drawImage(image, 0, 0, null);
@@ -133,6 +161,25 @@ public class LightingEngine extends GameComponent {
         return image;
     }
 
+    private BufferedImage getDarknessFilter2(int radius) {
+        if (radius == 0) {
+            return null;
+        }
+        if (darknessFilter2.get(radius) != null) {
+            return darknessFilter2.get(radius);
+        }
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(2 * radius,
+                2 * radius, Transparency.TRANSLUCENT);
+        Graphics2D g2d = (Graphics2D) image.getGraphics();
+        RadialGradientPaint gPaint = new RadialGradientPaint(radius, radius, radius, fraction, color2);
+        g2d.setPaint(gPaint);
+        g2d.fillRect(0, 0, 2 * radius, 2 * radius);
+        g2d.dispose();
+        darknessFilter2.put(radius, image);
+        return image;
+    }
+
     private class Light {
         private static final double flickerDegree = 0.01;
         private static final double flickerSize = 0.1;
@@ -152,8 +199,10 @@ public class LightingEngine extends GameComponent {
             if (visibilityFactor == 0) {
                 return visibilityFactor;
             }
-            if (roomObject.getLightRadius() > prevLightRadius){
-                visibilityFactor = 1 - Math.sqrt(roomObject.getLightRadius() * (roomObject.getLightRadius() - prevLightRadius)) / roomObject.getLightRadius();
+            if (roomObject.getLightRadius() > prevLightRadius) {
+                visibilityFactor = 1
+                        - Math.sqrt(roomObject.getLightRadius() * (roomObject.getLightRadius() - prevLightRadius))
+                                / roomObject.getLightRadius();
             }
             prevLightRadius = roomObject.getLightRadius();
             return roomObject.getLightRadius() * (1 - (1 - visibilityFactor) * (1 - visibilityFactor) + randomFactor);

@@ -16,6 +16,7 @@ public class KeyBinds {
     public static KeyStroke rightPressed = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, false);
     public static KeyStroke rightReleased = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, true);
 
+    public static KeyStroke dash = KeyStroke.getKeyStroke(KeyEvent.VK_J, defaultMask, false);
     public static KeyStroke interact = KeyStroke.getKeyStroke(KeyEvent.VK_E, defaultMask, false);
     public static KeyStroke[] useItem = new KeyStroke[10];
     static {

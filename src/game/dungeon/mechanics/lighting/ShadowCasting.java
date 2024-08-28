@@ -91,10 +91,16 @@ public class ShadowCasting {
     }
 
     public void markVisible(boolean[][] res, Point point) {
+        if (point.r < 0 || point.c < 0 || point.r > N || point.c > M) {
+            return;
+        }
         res[point.r][point.c] = true;
     }
 
     public boolean isBlocking(Point point) {
+        if (point.r < 0 || point.c < 0 || point.r > N || point.c > M) {
+            return true;
+        }
         if (arr[point.r][point.c] == null) {
             return false;
         }
