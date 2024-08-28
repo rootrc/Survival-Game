@@ -9,6 +9,7 @@ import javax.swing.Action;
 
 import game.Game;
 import game.dungeon.debug.DebugScreen;
+import game.dungeon.dungeon_ui.Timer;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.mechanics.SnowParticles;
 import game.dungeon.room.Room;
@@ -36,6 +37,9 @@ public class Dungeon extends GamePanel {
     private PauseMenu pauseMenu;
     private DebugScreen debugScreen;
 
+    private SnowParticles snowParticles;
+    private Timer timer;
+
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             remove(room);
@@ -56,7 +60,11 @@ public class Dungeon extends GamePanel {
         // room = roomFactory.createRandomRoom(21, 34);
         debugScreen = new DebugScreen(UILayer, room);
         add(room);
-        add(new SnowParticles());
+        snowParticles = new SnowParticles();
+        add(snowParticles);
+        timer = new Timer();
+        timer.setTime(599);
+        add(timer);
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {

@@ -27,7 +27,6 @@ public class DebugScreen extends PopupUI {
         g2d.setFont(new Font("Arial", Font.PLAIN, 18));
         g2d.drawString(new StringBuilder("Room Id: ").append(room.getId()).toString(), 64, 64);
         g2d.drawString(new StringBuilder("Entities: ").append(room.getEntityCount()).toString(), 64, 64 + 32);
-        g2d.drawString(new StringBuilder("Particles: ").append(room.getParticleCount()).toString(), 64, 64 + 2 * 32);
         g2d.drawString(new StringBuilder("Player Location: ").append(room.getPlayer().getX()).append(", ")
                 .append(room.getPlayer().getY()).toString(), 64, 64 + 3 * 32);
     }

@@ -12,7 +12,7 @@ public class SnowParticles extends ParticleSystem {
     public SnowParticles() {
         super();
         for (int i = 0; i < getHeight() / speed; i++) {
-            if (RNGUtilities.getBoolean(0.2)) {
+            if (RNGUtilities.getBoolean(0.1)) {
                 addParticle(new SnowParticle());
             }
             update();
