@@ -3,16 +3,15 @@ package game.dungeon.mechanics;
 import java.awt.Color;
 
 import game.dungeon.Dungeon;
-import game.dungeon.room.tile.TileGrid;
 import game.utilities.RNGUtilities;
 
 public class SnowParticles extends ParticleSystem {
-    private static final int speed = 6;
+    private static final double speed = 1.5;
     private int N;
 
-    public SnowParticles(TileGrid tileGrid) {
-        super(tileGrid);
-        for (int i = 0; i < 2 * getHeight() / speed; i++) {
+    public SnowParticles() {
+        super();
+        for (int i = 0; i < getHeight() / speed; i++) {
             if (RNGUtilities.getBoolean(0.2)) {
                 addParticle(new SnowParticle());
             }
@@ -31,7 +30,7 @@ public class SnowParticles extends ParticleSystem {
 
     private class SnowParticle extends Particle {
         SnowParticle() {
-            super(3, Color.white, 0.4, RNGUtilities.getInt(getWidth()), 0, 0, speed / 2 + RNGUtilities.getDouble(2),
+            super(3, Color.white, 0.1, RNGUtilities.getInt(getWidth()), 0, 0, speed + RNGUtilities.getDouble(1),
                     0, 0);
         }
 

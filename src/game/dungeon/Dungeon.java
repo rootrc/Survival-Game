@@ -10,6 +10,7 @@ import javax.swing.Action;
 import game.Game;
 import game.dungeon.debug.DebugScreen;
 import game.dungeon.inventory.Inventory;
+import game.dungeon.mechanics.SnowParticles;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.room_UI.PauseMenu;
@@ -55,6 +56,7 @@ public class Dungeon extends GamePanel {
         // room = roomFactory.createRandomRoom(21, 34);
         debugScreen = new DebugScreen(UILayer, room);
         add(room);
+        add(new SnowParticles());
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {

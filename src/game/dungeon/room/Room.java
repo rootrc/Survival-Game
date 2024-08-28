@@ -35,14 +35,14 @@ public class Room extends GameComponent {
         this.roomObjectManager = roomObjectManager;
         connecter = new RoomConnecter();
         walkingParticles = new WalkingParticles(tileGrid, player);
-        snowParticles = new SnowParticles(tileGrid);
+        // snowParticles = new SnowParticles();
         add(tileGrid.getTileGridFloor());
         add(walkingParticles);
         add(roomObjectManager);
         addRoomObject(player);
-        add(snowParticles);
         add(tileGrid.getTileGridCeiling());
         add(lighting);
+        // add(snowParticles);
     }
 
     // TEMP
