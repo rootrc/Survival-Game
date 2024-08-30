@@ -142,7 +142,7 @@ public class LightingEngine extends GameComponent {
                                 - roomObject.getHitBox().getCenterY()));
     }
 
-    private BufferedImage getDarknessFilter(int radius) {
+    public static BufferedImage getDarknessFilter(int radius) {
         if (radius == 0) {
             return null;
         }

@@ -9,6 +9,7 @@ import javax.swing.Action;
 
 import game.Game;
 import game.dungeon.debug.DebugScreen;
+import game.dungeon.dungeon_ui.MiniMap;
 import game.dungeon.dungeon_ui.Timer;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.mechanics.SnowParticles;
@@ -29,6 +30,9 @@ public class Dungeon extends GamePanel {
 
     private static final int startingRoom = 1;
 
+    private int depth = 0;
+    private int depthMapCnt[] = new int[12];;
+
     private Room room;
     private Inventory inventory;
     private Player player;
@@ -39,11 +43,15 @@ public class Dungeon extends GamePanel {
 
     private SnowParticles snowParticles;
     private Timer timer;
+    private MiniMap miniMap;
 
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             remove(room);
-            room = roomFactory.getNextRoom(room);
+
+            room = roomFactory.getNextRoom(room, depth, depthMapCnt);
+            depth += player.getDepthMovement();
+
             add(room, -1);
             debugScreen.updateRoom(room);
             revalidate();
@@ -54,17 +62,23 @@ public class Dungeon extends GamePanel {
         super(game, UILayer);
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(player, UILayer);
+        miniMap = new MiniMap(player);
+        
+        roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);
-        // room = roomFactory.getStartingRoom(84);
-        // room = roomFactory.createRandomRoom(21, 34);
-        debugScreen = new DebugScreen(UILayer, room);
-        add(room);
-        snowParticles = new SnowParticles();
-        add(snowParticles);
+        
+        miniMap.setStartingRoom(room);
         timer = new Timer();
         timer.setTime(599);
+        snowParticles = new SnowParticles();
+        debugScreen = new DebugScreen(UILayer, room);
+
+        // room = roomFactory.getStartingRoom(84);
+        // room = roomFactory.createRandomRoom(21, 34);
+        add(room);
+        add(snowParticles);
         add(timer);
+        add(miniMap);
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +112,7 @@ public class Dungeon extends GamePanel {
         remove(UILayer);
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
-        roomFactory = new RoomFactory(player, UILayer);
+        roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);
         add(room);
         add(inventory);

@@ -55,24 +55,13 @@ class RoomFileData extends FileOpener {
         }
         K = nextInt();
         roomObjects = new ArrayList<>();
-        if (modifier == NO_MODIFIER) {
-            for (int i = 0; i < K; i++) {
-                int id2 = nextInt();
-                roomObjects.add(new RoomObjectData(id2, nextInt(), nextInt()));
-            }
-            K = nextInt();
-            for (int i = 0; i < K; i++) {
-                roomObjects.add(new RoomObjectData(10 + nextInt(), nextInt(), nextInt()));
-            }
-        } else if (modifier == REFLECTION_MODIFIER) {
-            for (int i = 0; i < K; i++) {
-                int id2 = nextInt();
-                roomObjects.add(new RoomObjectData(id2, nextInt(), nextInt()));
-            }
-            K = nextInt();
-            for (int i = 0; i < K; i++) {
-                roomObjects.add(new RoomObjectData(10 + nextInt(), nextInt(), nextInt()));
-            }
+        for (int i = 0; i < K; i++) {
+            int id2 = nextInt();
+            roomObjects.add(new RoomObjectData(id2, nextInt(), nextInt()));
+        }
+        K = nextInt();
+        for (int i = 0; i < K; i++) {
+            roomObjects.add(new RoomObjectData(10 + nextInt(), nextInt(), nextInt()));
         }
     }
 
@@ -87,7 +76,7 @@ class RoomFileData extends FileOpener {
     int[][] getTileGridArray() {
         return arr;
     }
-    
+
     int getModifier() {
         return modifier;
     }

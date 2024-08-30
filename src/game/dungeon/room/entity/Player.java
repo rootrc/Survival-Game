@@ -168,6 +168,17 @@ public class Player extends Entity {
         return null;
     }
 
+    public int getDepthMovement() {
+        return -getLadderDirection();
+    }
+
+    public int getLadderDirection() {
+        if (getLadder() == null) {
+            return 0;
+        }
+        return getLadder().getDirection();
+    }
+
     public Inventory getInventory() {
         return inventory;
     }
