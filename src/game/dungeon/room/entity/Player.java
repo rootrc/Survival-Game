@@ -10,6 +10,7 @@ import game.dungeon.Dungeon;
 import game.dungeon.inventory.Inventory;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
+import game.dungeon.room.object_utilities.DirectionUtilities;
 import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.settings.DiffSettings;
 import game.dungeon.settings.KeyBinds;
@@ -22,12 +23,14 @@ public class Player extends Entity {
     private Inventory inventory;
     private ArrayList<RoomObject> interactables = new ArrayList<>();
     private Action nextRoom;
-    private int interactionCooldown;
 
     private double lightAmount;
     private int lightRadiusFactor;
     private int lightDecreaseFactor;
     private int lightDetectionRadiusSquared;
+
+    private int interactionCooldown;
+    private int dashCooldown;
 
     private final Action interact = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -48,7 +51,7 @@ public class Player extends Entity {
     public Player(Action nextRoom, Inventory inventory) {
         super("playerTileset",
                 new CollisionBox(0.5, 1.75, 1, 1),
-                new CollisionBox(0, 1.25, 2, 2), Dungeon.TILESIZE / 4, 10, 4);
+                new CollisionBox(0, 1.25, 2, 2), 3 * Dungeon.TILESIZE / 16, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;
@@ -65,6 +68,8 @@ public class Player extends Entity {
     private void setKeyBinds() {
         getInputMap(2).put(KeyBinds.interact, "interact");
         getActionMap().put("interact", interact);
+        getInputMap(2).put(KeyBinds.dash, "dash");
+        getActionMap().put("dash", dash);
         getInputMap(2).put(KeyBinds.upPressed, "acc up");
         getInputMap(2).put(KeyBinds.upReleased, "decel up");
         getInputMap(2).put(KeyBinds.leftPressed, "acc left");
@@ -87,6 +92,7 @@ public class Player extends Entity {
     public void update() {
         super.update();
         interactionCooldown++;
+        dashCooldown++;
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
     }
@@ -107,18 +113,32 @@ public class Player extends Entity {
         if (movingRight && Math.abs(getSpeedX()) < getMaxSpeed()) {
             ax += getAcc();
         }
-        if (ax == 0) {
+        if (ax == 0 && Math.abs(getSpeedX()) <= getMaxSpeed() + 1) {
             if (getSpeedX() > 0) {
                 setSpeedX(Math.max(getSpeedX() - getDeacc(), 0));
             } else if (getSpeedX() < 0) {
                 setSpeedX(Math.min(getSpeedX() + getDeacc(), 0));
             }
         }
-        if (ay == 0) {
+        if (ay == 0 && Math.abs(getSpeedY()) <= getMaxSpeed() + 1) {
             if (getSpeedY() > 0) {
                 setSpeedY(Math.max(getSpeedY() - getDeacc(), 0));
             } else if (getSpeedY() < 0) {
                 setSpeedY(Math.min(getSpeedY() + getDeacc(), 0));
+            }
+        }
+        if (Math.abs(getSpeedX()) > getMaxSpeed()) {
+            if (getSpeedX() > 0) {
+                setSpeedX(Math.max(getSpeedX() - 1, 0));
+            } else if (getSpeedX() < 0) {
+                setSpeedX(Math.min(getSpeedX() + 1, 0));
+            }
+        }
+        if (Math.abs(getSpeedY()) > getMaxSpeed()) {
+            if (getSpeedY() > 0) {
+                setSpeedY(Math.max(getSpeedY() - 1, 0));
+            } else if (getSpeedY() < 0) {
+                setSpeedY(Math.min(getSpeedY() + 1, 0));
             }
         }
         addSpeedX(ax);
@@ -146,6 +166,17 @@ public class Player extends Entity {
             }
         }
         return null;
+    }
+
+    public int getDepthMovement() {
+        return -getLadderDirection();
+    }
+
+    public int getLadderDirection() {
+        if (getLadder() == null) {
+            return 0;
+        }
+        return getLadder().getDirection();
     }
 
     public Inventory getInventory() {
@@ -205,6 +236,17 @@ public class Player extends Entity {
     private final Action decelerateRight = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             movingRight = false;
+        }
+    };
+
+    private final Action dash = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (dashCooldown < 25) {
+                return;
+            }
+            dashCooldown = 0;
+            addSpeedX(11 * DirectionUtilities.getXDirection(Player.this));
+            addSpeedY(11 * DirectionUtilities.getYDirection(Player.this));
         }
     };
 }

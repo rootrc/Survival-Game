@@ -3,6 +3,7 @@ package game.dungeon.room;
 import java.awt.Graphics2D;
 
 import game.Game;
+import game.dungeon.mechanics.WalkingParticles;
 import game.dungeon.mechanics.lighting.LightingEngine;
 import game.dungeon.mechanics.particles.SnowParticles;
 import game.dungeon.mechanics.particles.WalkingParticles;
@@ -23,7 +24,6 @@ public class Room extends GameComponent {
     private RoomObjectManager roomObjectManager;
     private UILayer UILayer;
     private WalkingParticles walkingParticles;
-    private SnowParticles snowParticles;
 
     public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, RoomObjectManager roomObjectManager,
             UILayer UIlayer) {
@@ -35,12 +35,10 @@ public class Room extends GameComponent {
         this.roomObjectManager = roomObjectManager;
         connecter = new RoomConnecter();
         walkingParticles = new WalkingParticles(tileGrid, player);
-        snowParticles = new SnowParticles(tileGrid);
         add(tileGrid.getTileGridFloor());
         add(walkingParticles);
         add(roomObjectManager);
         addRoomObject(player);
-        add(snowParticles);
         add(tileGrid.getTileGridCeiling());
         add(lighting);
     }
@@ -65,14 +63,15 @@ public class Room extends GameComponent {
     }
 
     public void update() {
-        if (!Game.DEBUG) {
-            int tx = Game.screenWidth / 2 - (int) player.getX();
-            int ty = Game.screenHeight / 2 - (int) player.getY();
-            int dx = tx - getX();
-            int dy = ty - getY();
-            moveX(Math.min(dx / 16, 16));
-            moveY(Math.min(dy / 16, 16));
+        if (Game.DEBUG) {
+            return;
         }
+        int tx = Game.screenWidth / 2 - (int) player.getX();
+        int ty = Game.screenHeight / 2 - (int) player.getY();
+        int dx = tx - getX();
+        int dy = ty - getY();
+        moveX(Math.min(dx / 16, 16));
+        moveY(Math.min(dy / 16, 16));
     }
 
     public void setPlayer(Ladder ladder) {
@@ -119,10 +118,6 @@ public class Room extends GameComponent {
     // For Debug Screen
     public int getEntityCount() {
         return roomObjectManager.getComponentCount() + 1;
-    }
-
-    public int getParticleCount() {
-        return snowParticles.getParticleCount() + walkingParticles.getParticleCount();
     }
 
     public Player getPlayer() {

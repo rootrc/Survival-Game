@@ -16,6 +16,10 @@ public abstract class ParticleSystem extends GameComponent {
         super(tileGrid.getWidth(), tileGrid.getHeight());
     }
 
+    public ParticleSystem() {
+        super(Game.screenWidth, Game.screenHeight);
+    }
+    
     public void update() {
         for (Particle particle : particles) {
             particle.update();

@@ -3,13 +3,13 @@ package game.dungeon.room_factory;
 import java.util.HashMap;
 
 import game.Game;
+import game.dungeon.dungeon_ui.MiniMap;
 import game.dungeon.mechanics.lighting.LightingEngine;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
-import game.dungeon.room_connection.DungeonData;
 import game.dungeon.room_connection.DungeonLayoutGenerator;
 import game.game_components.Factory;
 import game.game_components.UILayer;
@@ -19,15 +19,15 @@ public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
     private TileGridFactory tileFactory;
     private RoomObjectManagerFactory roomObjectManagerFactory;
-    private DungeonData dungeonData;
     private DungeonLayoutGenerator dungeonGenerator;
     private Player player;
     private UILayer UILayer;
+    private MiniMap miniMap;
 
-    public RoomFactory(Player player, UILayer UILayer) {
+    public RoomFactory(Player player, UILayer UILayer, MiniMap miniMap) {
         this.player = player;
-        dungeonData = new DungeonData();
         this.UILayer = UILayer;
+        this.miniMap = miniMap;
         rooms = new HashMap<>();
         tileFactory = new TileGridFactory();
         roomObjectManagerFactory = new RoomObjectManagerFactory(player);
@@ -54,11 +54,10 @@ public class RoomFactory extends Factory<Room> {
         return rooms.get(id);
     }
 
-    public Room getNextRoom(Room previousRoom) {
-        dungeonData.changeDepth(player.getLadder());
+    public Room getNextRoom(Room previousRoom, int depth, int[] depthMapCnt) {
         if (previousRoom.getConnectedRoomId(player.getLadder()) == -1) {
             previousRoom.addLadderConnection(player.getLadder(),
-                    dungeonGenerator.getGeneratedId(player.getLadder(), dungeonData));
+                    dungeonGenerator.getGeneratedId(player.getLadder(), depth + player.getDepthMovement(), depthMapCnt));
         }
         int id = previousRoom.getConnectedRoomId(player.getLadder());
         Room nextRoom;
@@ -71,7 +70,9 @@ public class RoomFactory extends Factory<Room> {
             nextRoom = createRoom(new RoomFileData(id), id, previousRoom);
             putRoom(id, nextRoom);
             createLadderConnection(player.getLadder(), previousRoom, nextRoom);
+            miniMap.updateNodeConnections(nextRoom, player.getLadder().getX(), previousRoom.getConnectedLadder(player.getLadder()).getX());
         }
+        miniMap.updateRoom(nextRoom);
         setTransition(previousRoom, nextRoom);
         nextRoom.setPlayer(previousRoom.getConnectedLadder(player.getLadder()));
         if (previousRoom.getConnectedLadder(player.getLadder()).getDirection() == Ladder.UP_DIRECTION) {

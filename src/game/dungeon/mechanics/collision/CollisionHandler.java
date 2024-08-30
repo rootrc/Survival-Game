@@ -13,6 +13,10 @@ public class CollisionHandler {
     }
 
     public static boolean collides(RoomObject a, RoomObject b) {
+        if (b == null) {
+            System.out.println("why");
+            System.exit(-1);
+        }
         return collides(a.getX(), a.getY(), a.getHitBox(), b.getX(), b.getY(), b.getHitBox());
     }
 
