@@ -24,9 +24,11 @@ public class KeyBinds {
         }
     }
 
-    public static KeyStroke takeAll = KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultMask, false);
     public static KeyStroke openUI = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, defaultMask, false);
     public static KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, defaultMask, false);
+    
+    public static KeyStroke takeAllItems = KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultMask, false);
+    public static KeyStroke openSkillTree = KeyStroke.getKeyStroke(KeyEvent.VK_T, defaultMask, false);
 
     public static KeyStroke debug = KeyStroke.getKeyStroke(KeyEvent.VK_F3, defaultMask, false);
 

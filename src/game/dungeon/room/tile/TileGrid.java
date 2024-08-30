@@ -1,7 +1,7 @@
 package game.dungeon.room.tile;
 
-import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.HeightHandler;
+import game.dungeon.mechanics.collision.CollisionChecker;
 import game.dungeon.room.entity.Player;
 
 public class TileGrid {

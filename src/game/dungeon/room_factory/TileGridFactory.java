@@ -3,8 +3,8 @@ package game.dungeon.room_factory;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import game.dungeon.mechanics.CollisionChecker;
 import game.dungeon.mechanics.HeightHandler;
+import game.dungeon.mechanics.collision.CollisionChecker;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.tile.Tile;
 import game.dungeon.room.tile.TileGrid;

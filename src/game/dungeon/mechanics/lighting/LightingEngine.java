@@ -16,6 +16,7 @@ import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.game_components.GameComponent;
+import game.utilities.AnimationUtilities;
 import game.utilities.RNGUtilities;
 
 public class LightingEngine extends GameComponent {
@@ -156,7 +157,7 @@ public class LightingEngine extends GameComponent {
                 visibilityFactor = 1 - Math.sqrt(roomObject.getLightRadius() * (roomObject.getLightRadius() - prevLightRadius)) / roomObject.getLightRadius();
             }
             prevLightRadius = roomObject.getLightRadius();
-            return roomObject.getLightRadius() * (1 - (1 - visibilityFactor) * (1 - visibilityFactor) + randomFactor);
+            return roomObject.getLightRadius() * (AnimationUtilities.easeOutQuad(visibilityFactor) + randomFactor);
         }
 
         void increaseVisibilityValue() {

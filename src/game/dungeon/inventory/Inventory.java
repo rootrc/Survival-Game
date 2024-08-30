@@ -62,6 +62,9 @@ public class Inventory extends GameComponent {
     }
 
     public void update() {
+        if (getParent() == null) {
+            return;
+        }
         if (isMouseWithinComponent(20, 50) || move) {
             setY(Math.max(Game.screenHeight - getHeight(), getY() - 8));
         } else {

@@ -10,6 +10,7 @@ import javax.swing.Action;
 import game.Game;
 import game.dungeon.debug.DebugScreen;
 import game.dungeon.inventory.Inventory;
+import game.dungeon.mechanics.SkillTree;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.room_UI.PauseMenu;
@@ -33,6 +34,7 @@ public class Dungeon extends GamePanel {
     private RoomFactory roomFactory;
 
     private PauseMenu pauseMenu;
+    private SkillTree skillTree;
     private DebugScreen debugScreen;
 
     private final Action nextRoom = new AbstractAction() {
@@ -53,7 +55,6 @@ public class Dungeon extends GamePanel {
         room = roomFactory.getStartingRoom(startingRoom);
         // room = roomFactory.getStartingRoom(84);
         // room = roomFactory.createRandomRoom(21, 34);
-        debugScreen = new DebugScreen(UILayer, room);
         add(room);
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
@@ -66,8 +67,13 @@ public class Dungeon extends GamePanel {
                 reset();
             }
         }), game.changePanel("title"));
+        skillTree = new SkillTree(UILayer);
+        debugScreen = new DebugScreen(UILayer, room);
+        
         getInputMap(2).put(KeyBinds.escape, "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
+        getInputMap(2).put(KeyBinds.openSkillTree, "skills");
+        getActionMap().put("skills", UILayer.openPopupUI(skillTree));
         getInputMap(2).put(KeyBinds.debug, "debug");
         getActionMap().put("debug", UILayer.openPopupUI(debugScreen));
         

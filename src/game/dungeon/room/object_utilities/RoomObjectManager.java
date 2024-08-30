@@ -5,9 +5,9 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import game.dungeon.mechanics.CollisionChecker;
-import game.dungeon.mechanics.CollisionHandler;
 import game.dungeon.mechanics.HeightHandler;
+import game.dungeon.mechanics.collision.CollisionChecker;
+import game.dungeon.mechanics.collision.CollisionHandler;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.tile.TileGrid;

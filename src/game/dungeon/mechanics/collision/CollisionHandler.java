@@ -1,4 +1,4 @@
-package game.dungeon.mechanics;
+package game.dungeon.mechanics.collision;
 
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Entity;

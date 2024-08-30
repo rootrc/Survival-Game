@@ -1,4 +1,4 @@
-package game.dungeon.mechanics;
+package game.dungeon.mechanics.particles;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
