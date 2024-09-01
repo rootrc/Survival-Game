@@ -112,45 +112,44 @@ public class LightingEngine extends GameComponent {
                 }
                 if (roomObject.getClass() == Player.class) {
                     gl.drawImage(getDarknessFilter(lightRadius), lastPlayerX +
-                        roomObject.getWidth() / 2 - lightRadius,
-                        lastPlayerY + roomObject.getHeight() / 2 - lightRadius, null);
-                        lights.get(player).decreaseVisibilityValue();
-                        continue;   
+                            roomObject.getWidth() / 2 - lightRadius,
+                            lastPlayerY + roomObject.getHeight() / 2 - lightRadius, null);
+                    lights.get(player).decreaseVisibilityValue();
+                    continue;
                 }
                 gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
                         roomObject.getWidth() / 2 - lightRadius,
                         roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
             }
             gl.dispose();
-            g2d.drawImage(image, 0, 0, null);
-            return;
-        }
-        if (!fogOfWarPoints.contains(10000 * player.getX() + player.getY())) {
-            fogOfWarPoints.add(10000 * player.getX() + player.getY());
-            int lightRadius = getEffectiveLightRadius(player) / 2;
-            Graphics2D gl = (Graphics2D) fogOfWar.getGraphics();
+        } else {
+            if (!fogOfWarPoints.contains(10000 * player.getX() + player.getY())) {
+                fogOfWarPoints.add(10000 * player.getX() + player.getY());
+                int lightRadius = getEffectiveLightRadius(player) / 2;
+                Graphics2D gl = (Graphics2D) fogOfWar.getGraphics();
+                gl.setComposite(AlphaComposite.DstIn);
+                gl.drawImage(getDarknessFilter2(lightRadius), player.getX() + player.getWidth() / 2 - lightRadius,
+                        player.getY() + player.getHeight() / 2 - lightRadius, null);
+                gl.dispose();
+            }
+            Graphics2D gl = (Graphics2D) image.getGraphics();
+            gl.drawImage(fogOfWar, 0, 0, null);
             gl.setComposite(AlphaComposite.DstIn);
-            gl.drawImage(getDarknessFilter2(lightRadius), player.getX() + player.getWidth() / 2 - lightRadius,
-                    player.getY() + player.getHeight() / 2 - lightRadius, null);
+
+            for (RoomObject roomObject : lights.keySet()) {
+                if (roomObject.getLightRadius() <= 1) {
+                    continue;
+                }
+                int lightRadius = getEffectiveLightRadius(roomObject);
+                if (lightRadius <= 1) {
+                    continue;
+                }
+                gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
+                        roomObject.getWidth() / 2 - lightRadius,
+                        roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
+            }
             gl.dispose();
         }
-        Graphics2D gl = (Graphics2D) image.getGraphics();
-        gl.drawImage(fogOfWar, 0, 0, null);
-        gl.setComposite(AlphaComposite.DstIn);
-
-        for (RoomObject roomObject : lights.keySet()) {
-            if (roomObject.getLightRadius() <= 1) {
-                continue;
-            }
-            int lightRadius = getEffectiveLightRadius(roomObject);
-            if (lightRadius <= 1) {
-                continue;
-            }
-            gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
-                    roomObject.getWidth() / 2 - lightRadius,
-                    roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
-        }
-        gl.dispose();
         g2d.drawImage(image, 0, 0, null);
     }
 

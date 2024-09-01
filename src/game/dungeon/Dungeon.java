@@ -55,6 +55,9 @@ public class Dungeon extends GamePanel {
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             // remove(room);
+            if (removalRoom != null) {
+                return;
+            }
             removalRoom = room;
             direction = -player.getDepthMovement();
 
@@ -66,21 +69,6 @@ public class Dungeon extends GamePanel {
             revalidate();
         }
     };
-
-    @Override
-    public void updateComponent() {
-        if (removalRoom != null) {
-            cnt++;
-            removalRoom.moveY(direction * 48 * AnimationUtilities.easeInOutQuad(cnt / 60.0));
-            if ((direction == -1 && removalRoom.getY() + removalRoom.getHeight() < 0) || (direction == 1 && removalRoom.getY() > getHeight())) {
-                remove(removalRoom);
-                removalRoom.setFreeze(false);
-                removalRoom = null;
-                cnt = 0;
-            }
-        }
-        super.updateComponent();
-    }
 
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
@@ -135,7 +123,22 @@ public class Dungeon extends GamePanel {
         }
     }
 
-    public final void reset() {
+    @Override
+    public void updateComponent() {
+        if (removalRoom != null) {
+            cnt++;
+            removalRoom.moveY(direction * 48 * AnimationUtilities.easeInOutQuad(cnt / 60.0));
+            if ((direction == -1 && removalRoom.getY() + removalRoom.getHeight() < 0) || (direction == 1 && removalRoom.getY() > getHeight())) {
+                remove(removalRoom);
+                removalRoom.setFreeze(false);
+                removalRoom = null;
+                cnt = 10;
+            }
+        }
+        super.updateComponent();
+    }
+
+    public void reset() {
         remove(room);
         remove(snowParticles);
         remove(timer);
