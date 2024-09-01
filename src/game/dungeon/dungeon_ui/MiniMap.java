@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import game.Game;
 import game.dungeon.room.Room;
 import game.game_components.GameComponent;
+import game.utilities.AnimationUtilities;
 
 public class MiniMap extends GameComponent {
     private Node currentNode;
@@ -29,7 +30,7 @@ public class MiniMap extends GameComponent {
         addStartingNodeToDisplay(nodes[startingRoom.getId()]);
         currentNode = nodes[startingRoom.getId()];
         currentNode.isCurrentNode = true;
-        internalMiniMapDisplay.updateCurrentNode();
+        currentNode.color = Node.COLOR1;
     }
 
     @Override
@@ -44,14 +45,17 @@ public class MiniMap extends GameComponent {
 
     public void updateRoom(Room nextRoom) {
         currentNode.isCurrentNode = false;
+        currentNode.cnt = 60 - currentNode.cnt;
         currentNode = nodes[nextRoom.getId()];
         currentNode.isCurrentNode = true;
+        currentNode.cnt = 60 - currentNode.cnt;
         internalMiniMapDisplay.updateCurrentNode();
     }
 
     private void addStartingNodeToDisplay(Node startingNode) {
         internalMiniMapDisplay.add(startingNode);
-        startingNode.setLocationBasedOnCenter(0, 0);
+        startingNode.setLocation((internalMiniMapDisplay.getWidth() - getWidth()) / 2,
+                (internalMiniMapDisplay.getHeight() - getHeight()) / 2);
     }
 
     public void updateNodeConnections(Room nextRoom, int connectingLadderXPos) {
@@ -133,10 +137,26 @@ public class MiniMap extends GameComponent {
     private class InternalMiniMapDisplay extends GameComponent {
         public InternalMiniMapDisplay() {
             super(1000, 1000);
+            setLocation(MiniMap.this.getWidth() + (-getWidth() - Node.SIZE) / 2,
+                    MiniMap.this.getHeight() + (-getHeight() - Node.SIZE) / 2);
+            x1 = getX();
+            y1 = getY();
         }
+
+        private int cnt;
+        private int x0;
+        private int y0;
+        private int x1;
+        private int y1;
 
         @Override
         public void update() {
+            if (x1 == getX() && y1 == getY()) {
+                return;
+            }
+            cnt++;
+            setX(x0 + (x1 - x0) * AnimationUtilities.easeInOutQuad(AnimationUtilities.easeInOutQuad(cnt / 60.0)));
+            setY(y0 + (y1 - y0) * AnimationUtilities.easeInOutQuad(AnimationUtilities.easeInOutQuad(cnt / 60.0)));
         }
 
         @Override
@@ -152,35 +172,56 @@ public class MiniMap extends GameComponent {
         }
 
         public void updateCurrentNode() {
-            setLocation((MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getX(),
-                    (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getY());
+            x0 = getX();
+            y0 = getY();
+            x1 = (MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getX();
+            y1 = (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getY();
+            cnt = 0;
+            // setLocation((MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getX(),
+            // (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getY());
         }
     }
 
     private class Node extends GameComponent {
         private static final int SIZE = 16;
         private static final int MIN_DISTANCE = 2 * SIZE;
+        private static final Color COLOR0 = Color.lightGray;
+        private static final Color COLOR1 = Color.yellow;
+
         private Node ansector;
         private int connectingLadderXPos;
         private ArrayList<Node> downConnections;
         private boolean isCurrentNode;
         private int depth;
 
+        private Color color;
+        private int cnt;
+
         private Node() {
             super(SIZE, SIZE);
             downConnections = new ArrayList<>();
+            color = COLOR0;
+            cnt = 60;
         }
 
         @Override
         public void update() {
+            if (isCurrentNode && !color.equals(COLOR1)) {
+                cnt++;
+                color = new Color(COLOR0.getRed() + (int) ((COLOR1.getRed() - COLOR0.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
+                        COLOR0.getGreen() + (int) ((COLOR1.getGreen() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
+                        COLOR0.getBlue() + (int) ((COLOR1.getBlue() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)));
+            } else if (!isCurrentNode && !color.equals(COLOR0)) {
+                cnt++;
+                color = new Color(COLOR1.getRed() + (int) ((COLOR0.getRed() - COLOR1.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
+                        COLOR1.getGreen() + (int) ((COLOR0.getGreen() - COLOR1.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
+                        COLOR1.getBlue() + (int) ((COLOR0.getBlue() - COLOR1.getBlue()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)));
+            }
         }
 
         @Override
         public void drawComponent(Graphics2D g2d) {
-            g2d.setColor(Color.lightGray);
-            if (isCurrentNode) {
-                g2d.setColor(Color.yellow);
-            }
+            g2d.setColor(color);
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
@@ -191,23 +232,12 @@ public class MiniMap extends GameComponent {
             node.depth = depth + 1;
         }
 
-        private void setLocationBasedOnCenter(int x, int y) {
-            setLocation((MiniMap.this.internalMiniMapDisplay.getWidth() - getWidth()) / 2 + x,
-                    (MiniMap.this.internalMiniMapDisplay.getHeight() - getHeight()) / 2 + y);
-        }
-
         private void moveXAndPropagate(int delta) {
             super.moveX(delta);
             for (Node node : downConnections) {
                 node.moveXAndPropagate(delta);
             }
         }
-
-        // private void getRelativeLocation(int x, int y) {
-        // setLocation((MiniMap.this.internalMiniMapDisplay.getWidth() - getWidth()) / 2
-        // + x, (MiniMap.this.internalMiniMapDisplay.getHeight()- getHeight() ) / 2 +
-        // y);
-        // }
     }
 
 }

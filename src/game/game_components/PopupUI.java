@@ -39,11 +39,11 @@ public abstract class PopupUI extends GameComponent {
             return;
         }
         if (getX() < (Game.screenWidth - getWidth()) / 2) {
-            setX(-getWidth() + (Game.screenWidth + getWidth()) / 2 * AnimationUtilities.easeOutQuad((double) timer / framesToEnter));
+            setX(-getWidth() + (Game.screenWidth + getWidth()) / 2 * AnimationUtilities.easeInOutQuad((double) timer / framesToEnter));
             timer++;
         } else {
             setX((Game.screenWidth - getWidth()) / 2
-                    + (Game.screenWidth + getWidth()) / 2 * AnimationUtilities.easeInQuad((double) timer / framesToEnter));
+                    + (Game.screenWidth + getWidth()) / 2 * AnimationUtilities.easeInOutQuad((double) timer / framesToEnter));
             timer++;
         }
         if (getX() == (Game.screenWidth - getWidth()) / 2) {
