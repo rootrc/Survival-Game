@@ -7,24 +7,20 @@ import java.util.ArrayList;
 
 import game.Game;
 import game.dungeon.room.Room;
-import game.dungeon.room.entity.Player;
-import game.dungeon.room.object.Ladder;
 import game.game_components.GameComponent;
 
 public class MiniMap extends GameComponent {
-    private Player player;
     private Node currentNode;
-    private Node nodes[] = new Node[101];
+    private Node nodes[] = new Node[100];
 
     private InternalMiniMapDisplay internalMiniMapDisplay;
 
-    public MiniMap(Player player) {
-        super(200, 200);
-        this.player = player;
+    public MiniMap() {
+        super(216, 216);
         setLocation(Game.screenWidth - getWidth() - 16, 16);
         internalMiniMapDisplay = new InternalMiniMapDisplay();
         add(internalMiniMapDisplay);
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 0; i < 100; i++) {
             nodes[i] = new Node();
         }
     }
@@ -53,48 +49,85 @@ public class MiniMap extends GameComponent {
         internalMiniMapDisplay.updateCurrentNode();
     }
 
-    public void updateNodeConnections(Room nextRoom, int connectingLadderXPos1, int connectingLadderXPos2) {
-        updateNodeConnections(nodes[nextRoom.getId()], connectingLadderXPos1, connectingLadderXPos2);
-    }
-
-    private void updateNodeConnections(Node nextNode, int connectingLadderXPos1, int connectingLadderXPos2) {
-        currentNode.connectToNode(nextNode, connectingLadderXPos1, connectingLadderXPos2);
-        addNodeToDisplay(nextNode);
-    }
-
     private void addStartingNodeToDisplay(Node startingNode) {
         internalMiniMapDisplay.add(startingNode);
         startingNode.setLocationBasedOnCenter(0, 0);
     }
 
+    public void updateNodeConnections(Room nextRoom, int connectingLadderXPos) {
+        currentNode.connectToNode(nodes[nextRoom.getId()], connectingLadderXPos);
+        addNodeToDisplay(nodes[nextRoom.getId()]);
+    }
+
     private void addNodeToDisplay(Node nextNode) {
-        if (nextNode.getParent() == this) {
-            // TODO
-            System.out.println("Issue");
-            return;
-        }
         internalMiniMapDisplay.add(nextNode);
         nextNode.setLocation(currentNode.getLocation());
 
-        if (currentNode.getConnections().size() == 1) {
-            nextNode.moveY(-player.getLadderDirection() * MiniMap.this.getHeight() / 4);
-        } else if (currentNode.getConnections().size() == 2) {
-            currentNode.getConnections().get(1).connectedNode
-                    .moveY(-currentNode.getConnections().get(1).direction * MiniMap.this.getHeight() / 4);
-            int direction;
-            if (currentNode.getConnections().get(0).connectingLadderXPos < currentNode.getConnections()
-                    .get(1).connectingLadderXPos) {
-                direction = -1;
+        if (currentNode.downConnections.size() == 1) {
+            nextNode.moveY(Node.MIN_DISTANCE);
+        } else if (currentNode.downConnections.size() == 2) {
+            Node a = currentNode.downConnections.get(0);
+            Node b = currentNode.downConnections.get(1);
+            b.moveY(Node.MIN_DISTANCE);
+            if (a.connectingLadderXPos < b.connectingLadderXPos) {
+                a.moveXAndPropagate(-Node.SIZE);
+                b.moveXAndPropagate(Node.SIZE);
             } else {
-                direction = 1;
+                a.moveXAndPropagate(Node.SIZE);
+                b.moveXAndPropagate(-Node.SIZE);
             }
-            if (currentNode.getConnections().get(0).connectedNode
-                    .getX() == currentNode.getConnections().get(1).connectedNode.getX()) {
-                currentNode.getConnections().get(0).connectedNode.adjustX(direction);
-            }
-            currentNode.getConnections().get(1).connectedNode.adjustX(-direction);
         }
+        resizeGraph();
+    }
 
+    private void resizeGraph() {
+        boolean flag = false;
+        for (int i = 0; i < 100; i++) {
+            for (int j = i + 1; j < 100; j++) {
+                Node v = nodes[i];
+                Node u = nodes[j];
+                if (v.getX() == 0 || u.getX() == 0) {
+                    continue;
+                }
+                Node LCA = getLCA(v, u);
+                if (LCA.downConnections.size() < 2) {
+                    continue;
+                }
+                if (!(Math.abs(v.getX() - u.getX()) < Node.MIN_DISTANCE && v.getY() == u.getY())) {
+                    continue;
+                }
+                int moveDistance = (Node.MIN_DISTANCE - Math.abs(v.getX() - u.getX())) / 2;
+                Node a = LCA.downConnections.get(0);
+                Node b = LCA.downConnections.get(1);
+                if (a.getX() < b.getX()) {
+                    a.moveXAndPropagate(-moveDistance);
+                    b.moveXAndPropagate(moveDistance);
+                } else {
+                    a.moveXAndPropagate(moveDistance);
+                    b.moveXAndPropagate(-moveDistance);
+                }
+                flag = true;
+            }
+        }
+        if (flag) {
+            resizeGraph();
+        }
+    }
+
+    private Node getLCA(Node a0, Node b0) {
+        Node a = a0;
+        Node b = b0;
+        while (a.depth > b.depth) {
+            a = a.ansector;
+        }
+        while (a.depth < b.depth) {
+            b = b.ansector;
+        }
+        while (a != b) {
+            a = a.ansector;
+            b = b.ansector;
+        }
+        return a;
     }
 
     private class InternalMiniMapDisplay extends GameComponent {
@@ -110,42 +143,31 @@ public class MiniMap extends GameComponent {
         public void drawComponent(Graphics2D g2d) {
             g2d.setStroke(new BasicStroke(2));
             g2d.setColor(new Color(155, 103, 60));
-            for (int i = 1; i <= 100; i++) {
-                for (Edge edge : nodes[i].getConnections(1)) {
-                    g2d.drawLine(nodes[i].getX() + nodes[i].getWidth() / 2,
-                            nodes[i].getY() + nodes[i].getHeight() / 2,
-                            edge.connectedNode.getX() + edge.connectedNode.getWidth() / 2,
-                            edge.connectedNode.getY() + edge.connectedNode.getHeight() / 2);
+            for (Node v : nodes) {
+                for (Node u : v.downConnections) {
+                    g2d.drawLine(v.getX() + Node.SIZE / 2, v.getY() + Node.SIZE / 2, u.getX() + Node.SIZE / 2,
+                            u.getY() + Node.SIZE / 2);
                 }
             }
-            // for (Edge edge : currentNode.getConnections(1)) {
-                // g2d.drawLine(currentNode.getX() + currentNode.getWidth() / 2,
-                // currentNode.getY() + currentNode.getHeight() / 2,
-                // edge.connectedNode.getX() + edge.connectedNode.getWidth() / 2,
-                // edge.connectedNode.getY() + edge.connectedNode.getHeight() / 2);
-                // }
-                // for (Edge edge : currentNode.getConnections(-1)) {
-                    // g2d.drawLine(currentNode.getX() + currentNode.getWidth() / 2,
-                    // currentNode.getY() + currentNode.getHeight() / 2,
-                    // edge.connectedNode.getX() + edge.connectedNode.getWidth() / 2,
-                    // edge.connectedNode.getY() + edge.connectedNode.getHeight() / 2);
-                    // }
         }
 
         public void updateCurrentNode() {
-            setLocation((MiniMap.this.getWidth() - currentNode.getWidth()) / 2 - currentNode.getX(),
-                    (MiniMap.this.getHeight() - currentNode.getHeight()) / 2 - currentNode.getY());
+            setLocation((MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getX(),
+                    (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getY());
         }
     }
 
     private class Node extends GameComponent {
-        private ArrayList<Edge> upConnections;
-        private ArrayList<Edge> downConnections;
+        private static final int SIZE = 16;
+        private static final int MIN_DISTANCE = 2 * SIZE;
+        private Node ansector;
+        private int connectingLadderXPos;
+        private ArrayList<Node> downConnections;
         private boolean isCurrentNode;
+        private int depth;
 
         private Node() {
-            super(MiniMap.this.getHeight() / 8 - 1, MiniMap.this.getHeight() / 8 - 1);
-            upConnections = new ArrayList<>();
+            super(SIZE, SIZE);
             downConnections = new ArrayList<>();
         }
 
@@ -162,29 +184,11 @@ public class MiniMap extends GameComponent {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        private void connectToNode(Node node, int connectingLadderXPos1, int connectingLadderXPos2) {
-            if (player.getLadderDirection() == Ladder.UP_DIRECTION) {
-                upConnections.add(new Edge(node, player.getLadderDirection(), connectingLadderXPos1));
-                node.downConnections.add(new Edge(this, -player.getLadderDirection(), connectingLadderXPos2));
-            }
-            if (player.getLadderDirection() == Ladder.DOWN_DIRECTION) {
-                downConnections.add(new Edge(node, player.getLadderDirection(), connectingLadderXPos1));
-                node.upConnections.add(new Edge(this, -player.getLadderDirection(), connectingLadderXPos1));
-            }
-        }
-
-        private ArrayList<Edge> getConnections() {
-            return getConnections(player.getLadderDirection());
-        }
-
-        private ArrayList<Edge> getConnections(int direction) {
-            if (direction == Ladder.UP_DIRECTION) {
-                return upConnections;
-            }
-            if (direction == Ladder.DOWN_DIRECTION) {
-                return downConnections;
-            }
-            return null;
+        private void connectToNode(Node node, int connectingLadderXPos) {
+            downConnections.add(node);
+            node.ansector = this;
+            node.connectingLadderXPos = connectingLadderXPos;
+            node.depth = depth + 1;
         }
 
         private void setLocationBasedOnCenter(int x, int y) {
@@ -192,10 +196,10 @@ public class MiniMap extends GameComponent {
                     (MiniMap.this.internalMiniMapDisplay.getHeight() - getHeight()) / 2 + y);
         }
 
-        public void adjustX(int delta) {
-            super.moveX(delta * MiniMap.this.getHeight() / 8);
-            for (Edge edge : downConnections) {
-                edge.connectedNode.adjustX(delta);
+        private void moveXAndPropagate(int delta) {
+            super.moveX(delta);
+            for (Node node : downConnections) {
+                node.moveXAndPropagate(delta);
             }
         }
 
@@ -204,18 +208,6 @@ public class MiniMap extends GameComponent {
         // + x, (MiniMap.this.internalMiniMapDisplay.getHeight()- getHeight() ) / 2 +
         // y);
         // }
-    }
-
-    private class Edge {
-        private Node connectedNode;
-        private int direction;
-        private int connectingLadderXPos;
-
-        private Edge(Node node, int direction, int connectingLadderXPos) {
-            connectedNode = node;
-            this.direction = direction;
-            this.connectingLadderXPos = connectingLadderXPos;
-        }
     }
 
 }

@@ -131,18 +131,6 @@ public class LightingEngine extends GameComponent {
         }
     }
 
-    // TEMP
-    private double getDistance(RoomObject roomObject) {
-        return Math.sqrt((player.getX() + player.getHitBox().getCenterX() - roomObject.getX()
-                - roomObject.getHitBox().getCenterX())
-                * (player.getX() + player.getHitBox().getCenterX() - roomObject.getX()
-                        - roomObject.getHitBox().getCenterX())
-                + (player.getY() + player.getHitBox().getCenterY() - roomObject.getY()
-                        - roomObject.getHitBox().getCenterY())
-                        * (player.getY() + player.getHitBox().getCenterY() - roomObject.getY()
-                                - roomObject.getHitBox().getCenterY()));
-    }
-
     public static BufferedImage getDarknessFilter(int radius) {
         if (radius == 0) {
             return null;

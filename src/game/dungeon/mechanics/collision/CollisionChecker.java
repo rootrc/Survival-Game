@@ -15,6 +15,9 @@ public class CollisionChecker {
         int[] cols = { player.getMinCol(), player.getMaxCol() };
         for (int r : rows) {
             for (int c : cols) {
+                if (r < 0 || c < 0 || r >= collisionArray.length || c >= collisionArray[0].length) {
+                    continue;
+                }
                 if (CollisionHandler.collides(player, collisionArray[r][c], r, c)) {
                     CollisionHandler.handleCollision(player, collisionArray[r][c], r, c);
                     return;

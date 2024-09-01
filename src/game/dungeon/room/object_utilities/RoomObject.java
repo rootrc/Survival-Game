@@ -109,6 +109,13 @@ public abstract class RoomObject extends GameComponent {
         lightRadius += delta;
     }
 
+    public final double getDistanceFromRoomObject(RoomObject o) {
+        return Math.sqrt((getX() + getHitBox().getCenterX() - o.getX() - o.getHitBox().getCenterX())
+                * (getX() + getHitBox().getCenterX() - o.getX() - o.getHitBox().getCenterX())
+                + (getY() + getHitBox().getCenterY() - o.getY() - o.getHitBox().getCenterY())
+                        * (getY() + getHitBox().getCenterY() - o.getY() - o.getHitBox().getCenterY()));
+    }
+
     public static RoomObject getRoomObject(RoomObjectData data) {
         if (data.id <= RoomObjectData.ladderDown) {
             return getLadder(data);

@@ -23,6 +23,9 @@ public class HeightHandler {
         int[] cols = { roomObject.getMinCol(), roomObject.getMaxCol() };
         for (int r : rows) {
             for (int c : cols) {
+                if (r < 0 || c < 0 || r >= height.length || c >= height[0].length) {
+                    continue;
+                }
                 if (height[r][c] != 0) {
                     return TOP;
                 }
@@ -36,6 +39,9 @@ public class HeightHandler {
         int[] cols = { entity.getMinCol(), entity.getMaxCol() };
         for (int r : rows) {
             for (int c : cols) {
+                if (r < 0 || c < 0 || r >= height.length || c >= height[0].length) {
+                    continue;
+                }
                 if (STAIR_UP <= height[r][c]) {
                     return height[r][c];
                 }

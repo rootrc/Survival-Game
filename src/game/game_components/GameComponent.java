@@ -107,4 +107,8 @@ public abstract class GameComponent extends JComponent {
     public final void setLocation(double x, double y) {
         setLocation((int) x, (int) y);
     }
+
+    public final double getDistance(GameComponent o) {
+        return Math.sqrt((getX() - o.getX()) * (getX() - o.getX()) + (getY() - o.getY()) * (getY() - o.getY()));
+    }
 }

@@ -3,9 +3,7 @@ package game.dungeon.room;
 import java.awt.Graphics2D;
 
 import game.Game;
-import game.dungeon.mechanics.WalkingParticles;
 import game.dungeon.mechanics.lighting.LightingEngine;
-import game.dungeon.mechanics.particles.SnowParticles;
 import game.dungeon.mechanics.particles.WalkingParticles;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.Ladder;

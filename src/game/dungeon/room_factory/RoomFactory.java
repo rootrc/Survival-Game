@@ -70,7 +70,7 @@ public class RoomFactory extends Factory<Room> {
             nextRoom = createRoom(new RoomFileData(id), id, previousRoom);
             putRoom(id, nextRoom);
             createLadderConnection(player.getLadder(), previousRoom, nextRoom);
-            miniMap.updateNodeConnections(nextRoom, player.getLadder().getX(), previousRoom.getConnectedLadder(player.getLadder()).getX());
+            miniMap.updateNodeConnections(nextRoom, player.getLadder().getX());
         }
         miniMap.updateRoom(nextRoom);
         setTransition(previousRoom, nextRoom);

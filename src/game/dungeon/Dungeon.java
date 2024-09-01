@@ -12,7 +12,8 @@ import game.dungeon.debug.DebugScreen;
 import game.dungeon.dungeon_ui.MiniMap;
 import game.dungeon.dungeon_ui.Timer;
 import game.dungeon.inventory.Inventory;
-import game.dungeon.mechanics.SnowParticles;
+import game.dungeon.mechanics.SkillTree;
+import game.dungeon.mechanics.particles.SnowParticles;
 import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.room_UI.PauseMenu;
@@ -63,7 +64,7 @@ public class Dungeon extends GamePanel {
         super(game, UILayer);
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
-        miniMap = new MiniMap(player);
+        miniMap = new MiniMap();
         
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);
@@ -114,13 +115,26 @@ public class Dungeon extends GamePanel {
 
     public final void reset() {
         remove(room);
+        remove(snowParticles);
+        remove(timer);
+        remove(miniMap);
         remove(inventory);
-        remove(UILayer);
+
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
+        miniMap = new MiniMap();
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);
+        miniMap.setStartingRoom(room);
+        timer = new Timer();
+        timer.setTime(599);
+        snowParticles = new SnowParticles();
+        debugScreen = new DebugScreen(UILayer, room);
+
         add(room);
+        add(snowParticles);
+        add(timer);
+        add(miniMap);
         add(inventory);
         UILayer.removeAll();
         add(UILayer);
