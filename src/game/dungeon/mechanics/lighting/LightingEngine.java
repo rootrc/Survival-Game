@@ -45,31 +45,49 @@ public class LightingEngine extends GameComponent {
     private static final HashMap<Integer, BufferedImage> darknessFilter2 = new HashMap<>();
 
     private BufferedImage fogOfWar;
+    private BufferedImage image;
     private HashSet<Integer> fogOfWarPoints = new HashSet<>();
     private Player player;
-    private RoomObjectManager roomObjectManager;
     private HashMap<RoomObject, Light> lights = new HashMap<>();
     private ShadowCasting shadowCasting;
+    private boolean isPlayerPresent;
 
     public LightingEngine(Player player, TileGrid tileGrid, RoomObjectManager roomObjectManager) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.player = player;
-        this.roomObjectManager = roomObjectManager;
         shadowCasting = new ShadowCasting(player, tileGrid);
         lights.put(player, new Light());
         lights.get(player).visibilityFactor = 1;
+        for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
+            updateLight(roomObject);
+        }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         fogOfWar = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+                Transparency.TRANSLUCENT);
+        image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
         Graphics2D gl = (Graphics2D) fogOfWar.getGraphics();
         gl.setColor(Color.black);
         gl.fillRect(0, 0, getWidth(), getHeight());
+        isPlayerPresent = true;
     }
 
     public void update() {
         for (Light light : lights.values()) {
             light.update();
         }
+        for (RoomObject roomObject : lights.keySet()) {
+            if (roomObject.getLightRadius() <= 1) {
+                continue;
+            }
+            updateLight(roomObject);
+        }
+        // for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
+        // if (roomObject.getLightRadius() <= 1) {
+        // continue;
+        // }
+        // updateLight(roomObject);
+        // }
     }
 
     public void drawComponent(Graphics2D g2d) {
@@ -77,8 +95,36 @@ public class LightingEngine extends GameComponent {
             return;
         }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+        image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
+        if (!isPlayerPresent) {
+            Graphics2D gl = (Graphics2D) image.getGraphics();
+            gl.drawImage(fogOfWar, 0, 0, null);
+            gl.setComposite(AlphaComposite.DstIn);
+
+            for (RoomObject roomObject : lights.keySet()) {
+                if (roomObject.getLightRadius() <= 1) {
+                    continue;
+                }
+                int lightRadius = getEffectiveLightRadius(roomObject);
+                if (lightRadius <= 1) {
+                    continue;
+                }
+                if (roomObject.getClass() == Player.class) {
+                    gl.drawImage(getDarknessFilter(lightRadius), lastPlayerX +
+                        roomObject.getWidth() / 2 - lightRadius,
+                        lastPlayerY + roomObject.getHeight() / 2 - lightRadius, null);
+                        lights.get(player).decreaseVisibilityValue();
+                        continue;   
+                }
+                gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
+                        roomObject.getWidth() / 2 - lightRadius,
+                        roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
+            }
+            gl.dispose();
+            g2d.drawImage(image, 0, 0, null);
+            return;
+        }
         if (!fogOfWarPoints.contains(10000 * player.getX() + player.getY())) {
             fogOfWarPoints.add(10000 * player.getX() + player.getY());
             int lightRadius = getEffectiveLightRadius(player) / 2;
@@ -92,11 +138,10 @@ public class LightingEngine extends GameComponent {
         gl.drawImage(fogOfWar, 0, 0, null);
         gl.setComposite(AlphaComposite.DstIn);
 
-        for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
+        for (RoomObject roomObject : lights.keySet()) {
             if (roomObject.getLightRadius() <= 1) {
                 continue;
             }
-            updateLight(roomObject);
             int lightRadius = getEffectiveLightRadius(roomObject);
             if (lightRadius <= 1) {
                 continue;
@@ -205,4 +250,17 @@ public class LightingEngine extends GameComponent {
             visibilityFactor = Math.max(visibilityFactor - lightRadiusChangeSpeed, 0);
         }
     }
+
+    private int lastPlayerX;
+    private int lastPlayerY;
+
+    public void setPlayerPresent(boolean isPlayerPresent) {
+        this.isPlayerPresent = isPlayerPresent;
+        lastPlayerX = player.getX();
+        lastPlayerY = player.getY();
+        if (isPlayerPresent) {
+            lights.get(player).visibilityFactor = 1;
+        }
+    }
+
 }

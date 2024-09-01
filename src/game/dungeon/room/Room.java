@@ -17,20 +17,24 @@ import game.game_components.UILayer;
 public class Room extends GameComponent {
     private int id;
     private Player player;
+    private LightingEngine lightingEngine;
     private TileGrid tileGrid;
     private RoomConnecter connecter;
     private RoomObjectManager roomObjectManager;
     private UILayer UILayer;
     private WalkingParticles walkingParticles;
 
-    public Room(int id, Player player, LightingEngine lighting, TileGrid tileGrid, RoomObjectManager roomObjectManager,
+    private boolean isFrozen;
+
+    public Room(int id, Player player, LightingEngine lightingEngine, TileGrid tileGrid, RoomObjectManager roomObjectManager,
             UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
         this.player = player;
-        this.UILayer = new UILayer();
+        this.lightingEngine = lightingEngine;
         this.tileGrid = tileGrid;
         this.roomObjectManager = roomObjectManager;
+        this.UILayer = new UILayer();
         connecter = new RoomConnecter();
         walkingParticles = new WalkingParticles(tileGrid, player);
         add(tileGrid.getTileGridFloor());
@@ -38,7 +42,7 @@ public class Room extends GameComponent {
         add(roomObjectManager);
         addRoomObject(player);
         add(tileGrid.getTileGridCeiling());
-        add(lighting);
+        add(lightingEngine);
     }
 
     // TEMP
@@ -55,11 +59,11 @@ public class Room extends GameComponent {
 
     @Override
     public void updateComponent() {
-        if (UILayer.getComponentCount() == 0) {
-            super.updateComponent();
+        if (UILayer.getComponentCount() != 0 || isFrozen) {
+            return;
         }
+        super.updateComponent();
     }
-
     public void update() {
         if (Game.DEBUG) {
             return;
@@ -68,8 +72,16 @@ public class Room extends GameComponent {
         int ty = Game.screenHeight / 2 - (int) player.getY();
         int dx = tx - getX();
         int dy = ty - getY();
-        moveX(Math.min(dx / 16, 16));
-        moveY(Math.min(dy / 16, 16));
+        if (dx > 0) {
+            moveX(Math.min(dx / 16, 48));
+        } else {
+            moveX(Math.max(dx / 16, -48));
+        }
+        if (dy > 0) {
+            moveY(Math.min(dy / 16, 48));
+        } else {
+            moveY(Math.max(dy / 16, -48));
+        }
     }
 
     public void setPlayer(Ladder ladder) {
@@ -111,6 +123,11 @@ public class Room extends GameComponent {
 
     public int getLadderDownCnt() {
         return roomObjectManager.getLadderDownCnt();
+    }
+
+    public void setFreeze(boolean isFrozen) {
+        this.isFrozen = isFrozen;
+        lightingEngine.setPlayerPresent(!isFrozen);
     }
 
     // For Debug Screen

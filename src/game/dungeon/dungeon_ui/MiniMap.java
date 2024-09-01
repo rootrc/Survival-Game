@@ -45,10 +45,10 @@ public class MiniMap extends GameComponent {
 
     public void updateRoom(Room nextRoom) {
         currentNode.isCurrentNode = false;
-        currentNode.cnt = 60 - currentNode.cnt;
+        currentNode.cnt = 70 - currentNode.cnt;
         currentNode = nodes[nextRoom.getId()];
         currentNode.isCurrentNode = true;
-        currentNode.cnt = 60 - currentNode.cnt;
+        currentNode.cnt = 70 - currentNode.cnt;
         internalMiniMapDisplay.updateCurrentNode();
     }
 
@@ -155,8 +155,8 @@ public class MiniMap extends GameComponent {
                 return;
             }
             cnt++;
-            setX(x0 + (x1 - x0) * AnimationUtilities.easeInOutQuad(AnimationUtilities.easeInOutQuad(cnt / 60.0)));
-            setY(y0 + (y1 - y0) * AnimationUtilities.easeInOutQuad(AnimationUtilities.easeInOutQuad(cnt / 60.0)));
+            setX(x0 + (x1 - x0) * AnimationUtilities.easeInOutQuad(AnimationUtilities.easeInOutQuad(cnt / 70.0)));
+            setY(y0 + (y1 - y0) * AnimationUtilities.easeInOutQuad(AnimationUtilities.easeInOutQuad(cnt / 70.0)));
         }
 
         @Override
@@ -201,21 +201,21 @@ public class MiniMap extends GameComponent {
             super(SIZE, SIZE);
             downConnections = new ArrayList<>();
             color = COLOR0;
-            cnt = 60;
+            cnt = 70;
         }
 
         @Override
         public void update() {
             if (isCurrentNode && !color.equals(COLOR1)) {
                 cnt++;
-                color = new Color(COLOR0.getRed() + (int) ((COLOR1.getRed() - COLOR0.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
-                        COLOR0.getGreen() + (int) ((COLOR1.getGreen() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
-                        COLOR0.getBlue() + (int) ((COLOR1.getBlue() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)));
+                color = new Color(COLOR0.getRed() + (int) ((COLOR1.getRed() - COLOR0.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR0.getGreen() + (int) ((COLOR1.getGreen() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR0.getBlue() + (int) ((COLOR1.getBlue() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)));
             } else if (!isCurrentNode && !color.equals(COLOR0)) {
                 cnt++;
-                color = new Color(COLOR1.getRed() + (int) ((COLOR0.getRed() - COLOR1.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
-                        COLOR1.getGreen() + (int) ((COLOR0.getGreen() - COLOR1.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)),
-                        COLOR1.getBlue() + (int) ((COLOR0.getBlue() - COLOR1.getBlue()) * AnimationUtilities.easeInOutQuad(cnt / 60.0)));
+                color = new Color(COLOR1.getRed() + (int) ((COLOR0.getRed() - COLOR1.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR1.getGreen() + (int) ((COLOR0.getGreen() - COLOR1.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR1.getBlue() + (int) ((COLOR0.getBlue() - COLOR1.getBlue()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)));
             }
         }
 

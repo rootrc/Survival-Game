@@ -57,7 +57,8 @@ public class RoomFactory extends Factory<Room> {
     public Room getNextRoom(Room previousRoom, int depth, int[] depthMapCnt) {
         if (previousRoom.getConnectedRoomId(player.getLadder()) == -1) {
             previousRoom.addLadderConnection(player.getLadder(),
-                    dungeonGenerator.getGeneratedId(player.getLadder(), depth + player.getDepthMovement(), depthMapCnt));
+                    dungeonGenerator.getGeneratedId(player.getLadder(), depth + player.getDepthMovement(),
+                            depthMapCnt));
         }
         int id = previousRoom.getConnectedRoomId(player.getLadder());
         Room nextRoom;
@@ -84,7 +85,12 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private void setTransition(Room previousRoom, Room nextRoom) {
-        nextRoom.setLocation(previousRoom.getX(), previousRoom.getY());
+        if (Game.DEBUG) {
+            return;
+        }
+        previousRoom.setFreeze(true);
+        nextRoom.setLocation(Game.screenWidth / 2 - previousRoom.getConnectedLadder(player.getLadder()).getX(),
+        Game.screenHeight / 2 - previousRoom.getConnectedLadder(player.getLadder()).getY() + 2048 * player.getDepthMovement());
     }
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {

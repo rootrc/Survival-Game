@@ -23,6 +23,7 @@ import game.dungeon.settings.KeyBinds;
 import game.game_components.GamePanel;
 import game.game_components.UILayer;
 import game.utilities.ActionUtilities;
+import game.utilities.AnimationUtilities;
 
 public class Dungeon extends GamePanel {
     public static final int TILESIZE = 16;
@@ -47,9 +48,15 @@ public class Dungeon extends GamePanel {
     private Timer timer;
     private MiniMap miniMap;
 
+    private Room removalRoom;
+    private int direction;
+    private int cnt;
+
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            remove(room);
+            // remove(room);
+            removalRoom = room;
+            direction = -player.getDepthMovement();
 
             room = roomFactory.getNextRoom(room, depth, depthMapCnt);
             depth += player.getDepthMovement();
@@ -59,6 +66,21 @@ public class Dungeon extends GamePanel {
             revalidate();
         }
     };
+
+    @Override
+    public void updateComponent() {
+        if (removalRoom != null) {
+            cnt++;
+            removalRoom.moveY(direction * 48 * AnimationUtilities.easeInOutQuad(cnt / 60.0));
+            if ((direction == -1 && removalRoom.getY() + removalRoom.getHeight() < 0) || (direction == 1 && removalRoom.getY() > getHeight())) {
+                remove(removalRoom);
+                removalRoom.setFreeze(false);
+                removalRoom = null;
+                cnt = 0;
+            }
+        }
+        super.updateComponent();
+    }
 
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
