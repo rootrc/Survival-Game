@@ -33,7 +33,7 @@ public class Dungeon extends GamePanel {
     private static final int startingRoom = 1;
 
     private int depth = 0;
-    private int depthMapCnt[] = new int[12];;
+    private int depthMapCnt[] = new int[12];
 
     private Room room;
     private Inventory inventory;
@@ -54,12 +54,16 @@ public class Dungeon extends GamePanel {
 
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            // remove(room);
             if (removalRoom != null) {
                 return;
             }
-            removalRoom = room;
-            direction = -player.getDepthMovement();
+            
+            if (Game.DEBUG) {
+                remove(room);
+            } else {
+                removalRoom = room;
+                direction = -player.getDepthMovement();
+            }
 
             room = roomFactory.getNextRoom(room, depth, depthMapCnt);
             depth += player.getDepthMovement();
@@ -75,18 +79,18 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
         miniMap = new MiniMap();
-        
+
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);
-        
+        // room = roomFactory.getStartingRoom(46);
+        // room = roomFactory.createRandomRoom(21, 34);
+
         miniMap.setStartingRoom(room);
         timer = new Timer();
         timer.setTime(599);
         snowParticles = new SnowParticles();
         debugScreen = new DebugScreen(UILayer, room);
 
-        // room = roomFactory.getStartingRoom(84);
-        // room = roomFactory.createRandomRoom(21, 34);
         add(room);
         add(snowParticles);
         add(timer);
@@ -104,14 +108,14 @@ public class Dungeon extends GamePanel {
         }), game.changePanel("title"));
         skillTree = new SkillTree(UILayer);
         debugScreen = new DebugScreen(UILayer, room);
-        
+
         getInputMap(2).put(KeyBinds.escape, "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
         getInputMap(2).put(KeyBinds.openSkillTree, "skills");
         getActionMap().put("skills", UILayer.openPopupUI(skillTree));
         getInputMap(2).put(KeyBinds.debug, "debug");
         getActionMap().put("debug", UILayer.openPopupUI(debugScreen));
-        
+
         if (Game.DEBUG) {
             addMouseListener(new MouseAdapter() {
                 @Override
@@ -128,7 +132,8 @@ public class Dungeon extends GamePanel {
         if (removalRoom != null) {
             cnt++;
             removalRoom.moveY(direction * 48 * AnimationUtilities.easeInOutQuad(cnt / 60.0));
-            if ((direction == -1 && removalRoom.getY() + removalRoom.getHeight() < 0) || (direction == 1 && removalRoom.getY() > getHeight())) {
+            if ((direction == -1 && removalRoom.getY() + removalRoom.getHeight() < 0)
+                    || (direction == 1 && removalRoom.getY() > getHeight())) {
                 remove(removalRoom);
                 removalRoom.setFreeze(false);
                 removalRoom = null;

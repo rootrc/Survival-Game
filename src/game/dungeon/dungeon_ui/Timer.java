@@ -38,6 +38,9 @@ public class Timer extends GameComponent {
 
     @Override
     public void drawComponent(Graphics2D g2d) {
+        if (Game.DEBUG) {
+            return;
+        }
         // TEMP
         g2d.setColor(Color.blue);
         g2d.fillRect(0, 0, getWidth(), getHeight());

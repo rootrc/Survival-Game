@@ -67,18 +67,44 @@ public class MiniMap extends GameComponent {
         internalMiniMapDisplay.add(nextNode);
         nextNode.setLocation(currentNode.getLocation());
 
-        if (currentNode.downConnections.size() == 1) {
-            nextNode.moveY(Node.MIN_DISTANCE);
-        } else if (currentNode.downConnections.size() == 2) {
+        nextNode.moveY(Node.MIN_DISTANCE);
+        if (currentNode.downConnections.size() == 2) {
             Node a = currentNode.downConnections.get(0);
-            Node b = currentNode.downConnections.get(1);
-            b.moveY(Node.MIN_DISTANCE);
+            Node b = nextNode;
             if (a.connectingLadderXPos < b.connectingLadderXPos) {
                 a.moveXAndPropagate(-Node.SIZE);
                 b.moveXAndPropagate(Node.SIZE);
-            } else {
+            } else if (a.connectingLadderXPos > b.connectingLadderXPos) {
                 a.moveXAndPropagate(Node.SIZE);
                 b.moveXAndPropagate(-Node.SIZE);
+            }
+        } else if (currentNode.downConnections.size() == 3) {
+            Node a = currentNode.downConnections.get(0);
+            Node b = currentNode.downConnections.get(1);
+            Node c = nextNode;
+            int distance = Math.max(a.getX(), b.getX()) - c.getX();
+            if (a.connectingLadderXPos < c.connectingLadderXPos
+                    && b.connectingLadderXPos < c.connectingLadderXPos) {
+                a.moveXAndPropagate(-distance);
+                b.moveXAndPropagate(-distance);
+                c.moveXAndPropagate(2 * Node.SIZE);
+            } else if (a.connectingLadderXPos > c.connectingLadderXPos
+                    && b.connectingLadderXPos > c.connectingLadderXPos) {
+                a.moveXAndPropagate(distance);
+                b.moveXAndPropagate(distance);
+                c.moveXAndPropagate(-2 * Node.SIZE);
+            } else if (a.connectingLadderXPos < c.connectingLadderXPos
+                    && b.connectingLadderXPos > c.connectingLadderXPos) {
+                if (distance < 2 * Node.SIZE) {
+                    a.moveXAndPropagate(-(2 * Node.SIZE - distance));
+                    b.moveXAndPropagate(2 * Node.SIZE - distance);
+                }
+            } else if (a.connectingLadderXPos > c.connectingLadderXPos
+                    && b.connectingLadderXPos < c.connectingLadderXPos) {
+                if (distance < 2 * Node.SIZE) {
+                    a.moveXAndPropagate(2 * Node.SIZE - distance);
+                    b.moveXAndPropagate(-(2 * Node.SIZE - distance));
+                }
             }
         }
         resizeGraph();
@@ -101,15 +127,43 @@ public class MiniMap extends GameComponent {
                     continue;
                 }
                 int moveDistance = (Node.MIN_DISTANCE - Math.abs(v.getX() - u.getX())) / 2;
-                Node a = LCA.downConnections.get(0);
-                Node b = LCA.downConnections.get(1);
-                if (a.getX() < b.getX()) {
-                    a.moveXAndPropagate(-moveDistance);
-                    b.moveXAndPropagate(moveDistance);
-                } else {
-                    a.moveXAndPropagate(moveDistance);
-                    b.moveXAndPropagate(-moveDistance);
+                if (LCA.downConnections.size() == 2) {
+                    Node a = LCA.downConnections.get(0);
+                    Node b = LCA.downConnections.get(1);
+                    if (a.getX() < b.getX()) {
+                        a.moveXAndPropagate(-moveDistance);
+                        b.moveXAndPropagate(moveDistance);
+                    } else if (a.getX() > b.getX()) {
+                        a.moveXAndPropagate(moveDistance);
+                        b.moveXAndPropagate(-moveDistance);
+                    }
                 }
+                if (LCA.downConnections.size() == 3) {
+                    Node a = getLCAa(v, u);
+                    Node b = getLCAb(v, u);
+                    Node c = LCA.downConnections.get(0);
+                    if (LCA.downConnections.get(1) != a && LCA.downConnections.get(1) != b) {
+                        c = LCA.downConnections.get(1);
+                    } else if (LCA.downConnections.get(2) != a && LCA.downConnections.get(2) != b) {
+                        c = LCA.downConnections.get(2);
+                    }
+                    if (a.getX() < b.getX()
+                            && b.getX() < c.getX()) {
+                        a.moveXAndPropagate(-2 * moveDistance);
+                    } else if (a.getX() > b.getX()
+                            && b.getX() > c.getX()) {
+                        a.moveXAndPropagate(2 * moveDistance);
+                    } else if (a.getX() < c.getX()
+                            && b.getX() > c.getX()) {
+                        a.moveXAndPropagate(-moveDistance);
+                        b.moveXAndPropagate(moveDistance);
+                    } else if (a.getX() < c.getX()
+                    && b.getX() < c.getX()) {
+                        a.moveXAndPropagate(moveDistance);
+                        b.moveXAndPropagate(-moveDistance);
+                    }
+                }
+
                 flag = true;
             }
         }
@@ -132,6 +186,38 @@ public class MiniMap extends GameComponent {
             b = b.ansector;
         }
         return a;
+    }
+
+    private Node getLCAa(Node a0, Node b0) {
+        Node a = a0;
+        Node b = b0;
+        while (a.depth > b.depth) {
+            a = a.ansector;
+        }
+        while (a.depth < b.depth) {
+            b = b.ansector;
+        }
+        while (a.ansector != b.ansector) {
+            a = a.ansector;
+            b = b.ansector;
+        }
+        return a;
+    }
+
+    private Node getLCAb(Node a0, Node b0) {
+        Node a = a0;
+        Node b = b0;
+        while (a.depth > b.depth) {
+            a = a.ansector;
+        }
+        while (a.depth < b.depth) {
+            b = b.ansector;
+        }
+        while (a.ansector != b.ansector) {
+            a = a.ansector;
+            b = b.ansector;
+        }
+        return b;
     }
 
     private class InternalMiniMapDisplay extends GameComponent {
@@ -208,14 +294,20 @@ public class MiniMap extends GameComponent {
         public void update() {
             if (isCurrentNode && !color.equals(COLOR1)) {
                 cnt++;
-                color = new Color(COLOR0.getRed() + (int) ((COLOR1.getRed() - COLOR0.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
-                        COLOR0.getGreen() + (int) ((COLOR1.getGreen() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
-                        COLOR0.getBlue() + (int) ((COLOR1.getBlue() - COLOR0.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)));
+                color = new Color(COLOR0.getRed()
+                        + (int) ((COLOR1.getRed() - COLOR0.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR0.getGreen() + (int) ((COLOR1.getGreen() - COLOR0.getGreen())
+                                * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR0.getBlue() + (int) ((COLOR1.getBlue() - COLOR0.getGreen())
+                                * AnimationUtilities.easeInOutQuad(cnt / 70.0)));
             } else if (!isCurrentNode && !color.equals(COLOR0)) {
                 cnt++;
-                color = new Color(COLOR1.getRed() + (int) ((COLOR0.getRed() - COLOR1.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
-                        COLOR1.getGreen() + (int) ((COLOR0.getGreen() - COLOR1.getGreen()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
-                        COLOR1.getBlue() + (int) ((COLOR0.getBlue() - COLOR1.getBlue()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)));
+                color = new Color(COLOR1.getRed()
+                        + (int) ((COLOR0.getRed() - COLOR1.getRed()) * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR1.getGreen() + (int) ((COLOR0.getGreen() - COLOR1.getGreen())
+                                * AnimationUtilities.easeInOutQuad(cnt / 70.0)),
+                        COLOR1.getBlue() + (int) ((COLOR0.getBlue() - COLOR1.getBlue())
+                                * AnimationUtilities.easeInOutQuad(cnt / 70.0)));
             }
         }
 

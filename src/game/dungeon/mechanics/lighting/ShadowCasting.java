@@ -32,6 +32,9 @@ public class ShadowCasting {
     }
 
     public boolean isVisible(int r, int c) {
+        if (r < 0 || c < 0 || r >= N || c >= M) {
+            return false;
+        }
         return getBooleanArray()[r][c];
     }
 

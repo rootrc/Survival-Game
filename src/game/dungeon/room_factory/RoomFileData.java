@@ -2,6 +2,7 @@ package game.dungeon.room_factory;
 
 import java.util.ArrayList;
 
+import game.Game;
 import game.dungeon.room.object_utilities.RoomObject.RoomObjectData;
 import game.utilities.FileOpener;
 import game.utilities.RNGUtilities;
@@ -19,6 +20,9 @@ class RoomFileData extends FileOpener {
         super(new StringBuilder("dungeongeneration/tileGrids/map")
                 .append(String.format("%02d", id)).toString());
         modifier = RNGUtilities.getInt(2);
+        if (Game.DEBUG) {
+            modifier = 0;
+        }
         readRoomData();
         closeFile();
     }
@@ -42,6 +46,7 @@ class RoomFileData extends FileOpener {
         }
         int objectDataSetCnt = nextInt();
         int setNum = RNGUtilities.getInt(objectDataSetCnt);
+        // setNum = 1;
         int K;
         for (int i = 0; i < setNum; i++) {
             K = nextInt();
