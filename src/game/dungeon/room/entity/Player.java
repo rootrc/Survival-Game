@@ -51,7 +51,7 @@ public class Player extends Entity {
     public Player(Action nextRoom, Inventory inventory) {
         super("playerTileset",
                 new CollisionBox(0.5, 1.75, 1, 1),
-                new CollisionBox(0, 1.25, 2, 2), 3 * Dungeon.TILESIZE / 16, 10, 4);
+                new CollisionBox(0, 1.25, 2, 2), 10 * Dungeon.TILESIZE / 16, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;

@@ -17,7 +17,7 @@ import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.object_utilities.RoomObjectManager;
 import game.dungeon.room.tile.TileGrid;
 import game.game_components.GameComponent;
-import game.utilities.AnimationUtilities;
+import game.utilities.Easing;
 import game.utilities.RNGUtilities;
 
 public class LightingEngine extends GameComponent {
@@ -135,7 +135,6 @@ public class LightingEngine extends GameComponent {
             Graphics2D gl = (Graphics2D) image.getGraphics();
             gl.drawImage(fogOfWar, 0, 0, null);
             gl.setComposite(AlphaComposite.DstIn);
-
             for (RoomObject roomObject : lights.keySet()) {
                 if (roomObject.getLightRadius() <= 1) {
                     continue;
@@ -150,7 +149,7 @@ public class LightingEngine extends GameComponent {
             }
             gl.dispose();
         }
-        g2d.drawImage(image, 0, 0, null);
+        // g2d.drawImage(image, 0, 0, null);
     }
 
     private void updateLight(RoomObject roomObject) {
@@ -238,7 +237,7 @@ public class LightingEngine extends GameComponent {
                                 / roomObject.getLightRadius();
             }
             prevLightRadius = roomObject.getLightRadius();
-            return roomObject.getLightRadius() * (AnimationUtilities.easeOutQuad(visibilityFactor) + randomFactor);
+            return roomObject.getLightRadius() * (Easing.easeOutQuad(visibilityFactor) + randomFactor);
         }
 
         void increaseVisibilityValue() {

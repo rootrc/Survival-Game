@@ -1,5 +1,6 @@
 package game.dungeon;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,7 +24,7 @@ import game.dungeon.settings.KeyBinds;
 import game.game_components.GamePanel;
 import game.game_components.UILayer;
 import game.utilities.ActionUtilities;
-import game.utilities.AnimationUtilities;
+import game.utilities.Easing;
 
 public class Dungeon extends GamePanel {
     public static final int TILESIZE = 16;
@@ -49,7 +50,7 @@ public class Dungeon extends GamePanel {
     private MiniMap miniMap;
 
     private Room removalRoom;
-    private int direction;
+    private Easing easing;
     private int cnt;
 
     private final Action nextRoom = new AbstractAction() {
@@ -57,12 +58,16 @@ public class Dungeon extends GamePanel {
             if (removalRoom != null) {
                 return;
             }
-            
+
             if (Game.DEBUG) {
                 remove(room);
             } else {
                 removalRoom = room;
-                direction = -player.getDepthMovement();
+                if (player.getDepthMovement() == 1) {
+                    easing.set(room.getLocation(), new Point(room.getX(), -removalRoom.getHeight()), 60);
+                } else if (player.getDepthMovement() == -1) {
+                    easing.set(room.getLocation(), new Point(room.getX(), getHeight()), 60);
+                }
             }
 
             room = roomFactory.getNextRoom(room, depth, depthMapCnt);
@@ -79,6 +84,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
         miniMap = new MiniMap();
+        easing = new Easing();
 
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);
@@ -131,13 +137,12 @@ public class Dungeon extends GamePanel {
     public void updateComponent() {
         if (removalRoom != null) {
             cnt++;
-            removalRoom.moveY(direction * 48 * AnimationUtilities.easeInOutQuad(cnt / 60.0));
-            if ((direction == -1 && removalRoom.getY() + removalRoom.getHeight() < 0)
-                    || (direction == 1 && removalRoom.getY() > getHeight())) {
+            removalRoom.setLocation(easing.easeInOutQuad(cnt));
+            if (easing.getP1().equals(removalRoom.getLocation())) {
                 remove(removalRoom);
                 removalRoom.setFreeze(false);
                 removalRoom = null;
-                cnt = 10;
+                cnt = 0;
             }
         }
         super.updateComponent();
