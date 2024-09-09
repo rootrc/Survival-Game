@@ -64,9 +64,9 @@ public class Dungeon extends GamePanel {
             } else {
                 removalRoom = room;
                 if (player.getDepthMovement() == 1) {
-                    easing.set(room.getLocation(), new Point(room.getX(), -removalRoom.getHeight()), 60);
+                    easing.set(room.getLocation(), new Point(room.getX(), -removalRoom.getHeight()));
                 } else if (player.getDepthMovement() == -1) {
-                    easing.set(room.getLocation(), new Point(room.getX(), getHeight()), 60);
+                    easing.set(room.getLocation(), new Point(room.getX(), getHeight()));
                 }
             }
 
@@ -84,7 +84,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
         miniMap = new MiniMap();
-        easing = new Easing();
+        easing = new Easing(60);
 
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);

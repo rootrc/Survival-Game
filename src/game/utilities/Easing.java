@@ -7,13 +7,15 @@ public class Easing {
     private Point p1;
     private double frames;
 
-    public Easing() {
+    public Easing(int frames) {
+        this.frames = frames;
+        p0 = new Point();
+        p1 = new Point();
     }
 
-    public void set(Point p0, Point p1, int frames) {
+    public void set(Point p0, Point p1) {
         this.p0 = p0;
         this.p1 = p1;
-        this.frames = frames;
     }
 
     public Point getP0() {
