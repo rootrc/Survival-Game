@@ -1,19 +1,15 @@
 package game.dungeon.room.object;
 
-import java.awt.image.BufferedImage;
-
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
+import game.dungeon.room.object_utilities.SpriteSheet;
 
 public class LightRock extends RoomObject {
-    private boolean isUsed;
-    private BufferedImage usedRock;
     private int lightAmount;
 
-    public LightRock(BufferedImage unusedRock, BufferedImage usedRock, int r, int c, CollisionBox hitbox, CollisionBox interactbox, int lightAmount) {
-        super(unusedRock, r, c, hitbox, interactbox);
-        this.usedRock = usedRock;
+    public LightRock(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox, int lightAmount) {
+        super(spriteSheet, r, c, hitbox, interactbox);
         this.lightAmount = lightAmount;
     }
 
@@ -21,12 +17,12 @@ public class LightRock extends RoomObject {
     }
 
     public void interaction(Player player) {
-        if (isUsed) {
+        if (getSpriteSheet().getFrame() == 1) {
             return;
         }
         player.addLightAmount(lightAmount);
-        isUsed = true;
-        setImage(usedRock);
+        getSpriteSheet().nextFrame();
+        getSpriteSheet().getImage();
         setLightRadius(0);
     }
 }

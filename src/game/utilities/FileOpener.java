@@ -24,6 +24,7 @@ public abstract class FileOpener {
                     new FileReader(new StringBuilder().append("res/").append(fileName).append(".txt").toString()));
         } catch (FileNotFoundException e) {
             System.err.println(new StringBuilder("File \"").append(fileName).append("\" not found").toString());
+            e.printStackTrace();
             System.exit(-1);
         }
     }

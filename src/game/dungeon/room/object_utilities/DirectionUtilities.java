@@ -5,7 +5,7 @@ import java.util.HashMap;
 import game.dungeon.room.entity.Entity;
 
 public class DirectionUtilities {
-    private static final HashMap<Integer, Integer> HashToDirection = new HashMap<>() {
+    private static final HashMap<Integer, Integer> HashToDirection8 = new HashMap<>() {
         {
             put(-1, 0);
             put(9, 1);
@@ -17,7 +17,7 @@ public class DirectionUtilities {
             put(-11, 7);
         }
     };
-    private static final HashMap<Integer, Integer> directionToHash = new HashMap<>() {
+    private static final HashMap<Integer, Integer> direction8ToHash = new HashMap<>() {
         {
             put(0, -1);
             put(1, 9);
@@ -33,10 +33,6 @@ public class DirectionUtilities {
     private DirectionUtilities() {
     }
 
-    public static int getDirection(double speedX, double speedY) {
-        return HashToDirection.get((int) (10 * getDirectionOfSpeed(speedX) + getDirectionOfSpeed(speedY)));
-    }
-
     public static int getDirection(Entity entity) {
         if (!entity.isMoving()) {
             return entity.getDirection();
@@ -44,29 +40,29 @@ public class DirectionUtilities {
         return getDirection(entity.getSpeedX(), entity.getSpeedY());
     }
 
-    public static int getHash(int direction) {
-        return directionToHash.get(direction);
+    private static int getDirection(double speedX, double speedY) {
+        return HashToDirection8.get((int) (10 * getDirectionOfSpeed(speedX) + getDirectionOfSpeed(speedY)));
     }
 
-    public static int getHash(Entity entity) {
-        return getHash(entity.getDirection());
+    private static int getHash(int direction) {
+        return direction8ToHash.get(direction);
     }
 
-    public static int getXDirection(int direction) {
+    private static int getXMovement(int direction) {
         return (int) Math.round((getHash(direction) + getDirectionOfSpeed(getHash(direction))) / 10);
     }
 
-    public static int getXDirection(Entity entity) {
-        return getXDirection(entity.getDirection());
+    public static int getXMovement(Entity entity) {
+        return getXMovement(entity.getDirection());
     }
 
-    public static int getYDirection(int direction) {
+    private static int getYMovement(int direction) {
         return (getHash(direction) + getDirectionOfSpeed(getHash(direction))) % 10
                 - getDirectionOfSpeed(getHash(direction));
     }
 
-    public static int getYDirection(Entity entity) {
-        return getYDirection(entity.getDirection());
+    public static int getYMovement(Entity entity) {
+        return getYMovement(entity.getDirection());
     }
 
     private static int getDirectionOfSpeed(double speed) {
@@ -74,5 +70,29 @@ public class DirectionUtilities {
             return 0;
         }
         return (int) (speed / Math.abs(speed));
+    }
+
+    public static int getMovingDirection(boolean movingUp, boolean movingLeft, boolean movingDown,
+            boolean movingRight) {
+        if (movingUp && movingDown || movingLeft && movingRight) {
+            return -1;
+        } else if (movingRight && movingUp) {
+            return 1;
+        } else if (movingDown && movingRight) {
+            return 3;
+        } else if (movingLeft && movingDown) {
+            return 5;
+        } else if (movingUp && movingLeft) {
+            return 7;
+        } else if (movingUp) {
+            return 0;
+        } else if (movingRight) {
+            return 2;
+        } else if (movingDown) {
+            return 4;
+        } else if (movingLeft) {
+            return 6;
+        }
+        return -1;
     }
 }

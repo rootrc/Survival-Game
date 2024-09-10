@@ -12,8 +12,10 @@ import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.DirectionUtilities;
 import game.dungeon.room.object_utilities.RoomObject;
+import game.dungeon.room.object_utilities.SpriteSheet;
 import game.dungeon.settings.DiffSettings;
 import game.dungeon.settings.KeyBinds;
+import game.utilities.ImageUtilities;
 
 public class Player extends Entity {
     private boolean movingUp;
@@ -49,9 +51,9 @@ public class Player extends Entity {
     };
 
     public Player(Action nextRoom, Inventory inventory) {
-        super("playerTileset",
+        super(new SpriteSheet(ImageUtilities.getImage("entities", "playerTileset"), 4, 8, 8),
                 new CollisionBox(0.5, 1.75, 1, 1),
-                new CollisionBox(0, 1.25, 2, 2), 10 * Dungeon.TILESIZE / 16, 10, 4);
+                new CollisionBox(0, 1.25, 2, 2), 1 * Dungeon.TILESIZE / 4, 10, 4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;
@@ -59,6 +61,8 @@ public class Player extends Entity {
         lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
         lightDetectionRadiusSquared = DiffSettings.playerLightDetectionRadiusSquared;
         setKeyBinds();
+        interactionCooldown = 1000;
+        dashCooldown = 1000;
     }
 
     public void set(double x, double y) {
@@ -90,15 +94,33 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        super.update();
         interactionCooldown++;
         dashCooldown++;
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
+        if (isMoving()) {
+            getSpriteSheet().next();
+        } else {
+            getSpriteSheet().setFrame(getSpriteSheet().getFrame() / 2);
+        }
+
+        if (dashCooldown < 10) {
+            setSpeedX(getMaxSpeed() * DirectionUtilities.getXMovement(Player.this));
+            setSpeedY(getMaxSpeed() * DirectionUtilities.getYMovement(Player.this));
+        } else {
+            setDirection(DirectionUtilities.getMovingDirection(movingUp, movingLeft, movingDown, movingRight));
+        }
+        if (dashCooldown == 10) {
+            setMaxSpeed(getMaxSpeed() / 3);
+        }
+        super.update();
     }
 
     @Override
     public void move() {
+        if (dashCooldown < 4) {
+            return;
+        }
         double ax = 0;
         double ay = 0;
         if (movingUp && Math.abs(getSpeedY()) < getMaxSpeed()) {
@@ -244,9 +266,12 @@ public class Player extends Entity {
             if (dashCooldown < 25) {
                 return;
             }
+            if (movingUp && movingDown || movingLeft && movingRight) {
+                return;
+            }
             dashCooldown = 0;
-            addSpeedX(11 * DirectionUtilities.getXDirection(Player.this));
-            addSpeedY(11 * DirectionUtilities.getYDirection(Player.this));
+            setMaxSpeed(3 * getMaxSpeed());
         }
     };
+
 }

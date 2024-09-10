@@ -18,8 +18,8 @@ public class Item {
     private Action useItem;
 
     public Item(Inventory inventory, int r, int c, String name, String description) {
-        imageIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet", r, c, 2));
-        rolloverIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet1", r, c, 2));
+        imageIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet", r, c, 32, 32));
+        rolloverIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet1", r, c, 32, 32));
         this.name = name;
         this.description = description;
         acquireItem = new AbstractAction() {

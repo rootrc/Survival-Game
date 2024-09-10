@@ -68,7 +68,7 @@ public class UIButton extends GameButton {
                 } else if (j == cols - 1) {
                     r++;
                 }
-                g2d.drawImage(ImageUtilities.getImage("UI", "ButtonTileSet", r, c + 4 * id, 2),
+                g2d.drawImage(ImageUtilities.getImage("UI", "ButtonTileSet", r, c + 4 * id, 32, 32),
                         ImageUtilities.default3x3TilesetScale * i, ImageUtilities.default3x3TilesetScale * j, null);
             }
         }

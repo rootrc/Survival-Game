@@ -13,8 +13,6 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import game.dungeon.Dungeon;
-
 // Opens, edits, and processes images
 public class ImageUtilities {
     private static final HashMap<String, BufferedImage> map = new HashMap<>();
@@ -32,35 +30,18 @@ public class ImageUtilities {
         } catch (IOException e) {
             System.err.println(new StringBuilder("Image \"").append(folder).append('\\').append(name)
                     .append("\" not found").toString());
+                e.printStackTrace();
             System.exit(-1);
         }
         return null;
     }
 
-    public static BufferedImage getImage(BufferedImage image, int r, int c, double scaleR, double scaleC) {
-        return image.getSubimage((int) (scaleC * Dungeon.TILESIZE * c),
-                (int) (scaleR * Dungeon.TILESIZE * r), (int) (scaleC * Dungeon.TILESIZE),
-                (int) (scaleR * Dungeon.TILESIZE));
+    public static BufferedImage getImage(BufferedImage image, int r, int c, int width, int height) {
+        return image.getSubimage(width * c, height * r, width   , height);
     }
 
-    public static BufferedImage getImage(BufferedImage image, int r, int c, double scale) {
-        return getImage(image, r, c, scale, scale);
-    }
-
-    public static BufferedImage getImage(BufferedImage image, int r, int c) {
-        return getImage(image, r, c, 1);
-    }
-
-    public static BufferedImage getImage(String folder, String name, int r, int c, double scaleR, double scaleC) {
-        return getImage(getImage(folder, name), r, c, scaleR, scaleC);
-    }
-
-    public static BufferedImage getImage(String folder, String name, int r, int c, double scale) {
-        return getImage(getImage(folder, name), r, c, scale, scale);
-    }
-
-    public static BufferedImage getImage(String folder, String name, int r, int c) {
-        return getImage(getImage(folder, name), r, c, 1);
+    public static BufferedImage getImage(String folder, String name, int r, int c, int width, int height) {
+        return getImage(getImage(folder, name), r, c, width, height);
     }
 
     public static BufferedImage getImageFrom3x3Tileset(String folder, String name, int width, int height, int size) {
@@ -82,7 +63,7 @@ public class ImageUtilities {
                 } else if (j == height / size - 1) {
                     r++;
                 }
-                g2d.drawImage(ImageUtilities.getImage(folder, name, r, c, 2), size * i, size * j, null);
+                g2d.drawImage(ImageUtilities.getImage(folder, name, r, c, 32, 32), size * i, size * j, null);
             }
         }
         g2d.dispose();

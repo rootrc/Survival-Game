@@ -225,10 +225,10 @@ public class Tile {
     public static Tile getTile(int r, int c) {
         int hash = 18 * c + r;
         if (!heightSet.containsKey(hash)) {
-            return new Tile(ImageUtilities.getImage("tiles", tileSetName, c, r), collisionSet.get(hash),
+            return new Tile(ImageUtilities.getImage("tiles", tileSetName, c, r, Dungeon.TILESIZE, Dungeon.TILESIZE), collisionSet.get(hash),
                 Tile.FLOOR);
         }
-        return new Tile(ImageUtilities.getImage("tiles", tileSetName, c, r), collisionSet.get(hash),
+        return new Tile(ImageUtilities.getImage("tiles", tileSetName, c, r, Dungeon.TILESIZE, Dungeon.TILESIZE), collisionSet.get(hash),
                 heightSet.get(hash));
     }
 

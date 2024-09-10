@@ -1,5 +1,6 @@
 package game.dungeon.room_factory;
 
+import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.object_utilities.RoomObjectManager;
@@ -22,9 +23,15 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
             }
         } else if (file.getModifier() == RoomFileData.REFLECTION_MODIFIER) {
             for (RoomObjectData data : file.getRoomObjects()) {
-                roomObjectManager.add(RoomObject.getRoomObject(data).getHorizontialReflection(tileGrid));
+                roomObjectManager.add(getHorizontialReflection(tileGrid, RoomObject.getRoomObject(data)));
             }
         }
         return roomObjectManager;
+    }
+
+    private RoomObject getHorizontialReflection(TileGrid tileGrid, RoomObject roomObject) {
+        roomObject.setLocation(tileGrid.getWidth() - roomObject.getX()
+                - Dungeon.TILESIZE * (roomObject.getMaxCol() - roomObject.getMinCol() + 1), roomObject.getY());
+        return roomObject;
     }
 }

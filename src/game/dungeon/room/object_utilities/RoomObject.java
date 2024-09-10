@@ -8,32 +8,39 @@ import game.Game;
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object.*;
-import game.dungeon.room.tile.TileGrid;
 import game.dungeon.settings.DiffSettings;
 import game.game_components.GameComponent;
 import game.utilities.ImageUtilities;
 
 public abstract class RoomObject extends GameComponent {
-    private BufferedImage image;
+    private SpriteSheet spriteSheet;
     private CollisionBox interactbox;
     private CollisionBox hitbox;
 
     private double lightRadius;
 
-    protected RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
-        this(image, r, c, hitbox);
-        this.interactbox = interactbox;
-    }
-
-    protected RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox) {
-        super(image.getWidth(), image.getHeight());
-        this.image = image;
+    protected RoomObject(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox) {
+        super(spriteSheet.getWidth(), spriteSheet.getHeight());
+        this.spriteSheet = spriteSheet;
         setLocation(c * Dungeon.TILESIZE, r * Dungeon.TILESIZE);
         this.hitbox = hitbox;
     }
 
+    protected RoomObject(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
+        this(spriteSheet, r, c, hitbox);
+        this.interactbox = interactbox;
+    }
+
+    protected RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
+        this(new SpriteSheet(image), r, c, hitbox, interactbox);
+    }
+
+    protected RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox) {
+        this(new SpriteSheet(image), r, c, hitbox);
+    }
+
     public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(image, 0, 0, null);
+        g2d.drawImage(spriteSheet.getImage(), 0, 0, null);
         if (!Game.DEBUG) {
             return;
         }
@@ -64,13 +71,8 @@ public abstract class RoomObject extends GameComponent {
         return false;
     }
 
-    public final RoomObject getHorizontialReflection(TileGrid tileGrid) {
-        setLocation(tileGrid.getWidth() - getX() - Dungeon.TILESIZE * (getMaxCol() - getMinCol() + 1), getY());
-        return this;
-    }
-
-    public final void setImage(BufferedImage image) {
-        this.image = image;
+    public final SpriteSheet getSpriteSheet() {
+        return spriteSheet;
     }
 
     public final CollisionBox getInteractbox() {
@@ -146,23 +148,23 @@ public abstract class RoomObject extends GameComponent {
     private static TreasureChest getTreasureChest(RoomObjectData data) {
         switch (data.id) {
             case RoomObjectData.treasureChest0:
-                return new TreasureChest(data.r, data.c,
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest0"), 2), data.r, data.c,
                         new CollisionBox(0.375, 1, 1.25, 0.8125),
                         new CollisionBox(0.375, 1.5, 1.25, 1.0625), 0);
             case RoomObjectData.treasureChest1:
-                return new TreasureChest(data.r, data.c,
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest1"), 2), data.r, data.c,
                         new CollisionBox(0.3125, 0.8125, 1.375, 1),
                         new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 1);
             case RoomObjectData.treasureChest2:
-                return new TreasureChest(data.r, data.c,
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest2"), 2), data.r, data.c,
                         new CollisionBox(0.3125, 0.8125, 1.375, 1),
                         new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 2);
             case RoomObjectData.treasureChest3:
-                return new TreasureChest(data.r, data.c,
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest3"), 2), data.r, data.c,
                         new CollisionBox(0.125, 0.6875, 1.75, 1.125),
                         new CollisionBox(0.125, 1.1875, 1.75, 1.375), 3);
             case RoomObjectData.treasureChest4:
-                return new TreasureChest(data.r, data.c,
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest4"), 2), data.r, data.c,
                         new CollisionBox(0.3125, 0.8125, 1.375, 1),
                         new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 4);
 
@@ -175,27 +177,21 @@ public abstract class RoomObject extends GameComponent {
         LightRock lightRock;
         switch (data.id) {
             case RoomObjectData.smallLightRock:
-                lightRock = new LightRock(
-                        ImageUtilities.getImage("objects", "lightRocks").getSubimage(80, 64, 16, 32),
-                        ImageUtilities.getImage("objects", "lightRocks").getSubimage(80, 16, 16, 32),
+                lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock0"), 2),
                         data.r, data.c,
                         new CollisionBox(0, 1.125, 1, 0.75),
                         new CollisionBox(-0.5, 0.625, 2, 1.75), DiffSettings.lightRockValue);
                 lightRock.setLightRadius(DiffSettings.lightRockLightRadius);
                 return lightRock;
             case RoomObjectData.mediumLightRock:
-                lightRock = new LightRock(
-                        ImageUtilities.getImage("objects", "lightRocks").getSubimage(48, 64, 32, 32),
-                        ImageUtilities.getImage("objects", "lightRocks").getSubimage(48, 16, 32, 32),
+                lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock1"), 2),
                         data.r, data.c,
                         new CollisionBox(0.125, 0.5, 1.75, 1.375),
                         new CollisionBox(-0.375, 0, 2.75, 2.375), 4 * DiffSettings.lightRockValue);
                 lightRock.setLightRadius(2 * DiffSettings.lightRockLightRadius);
                 return lightRock;
             case RoomObjectData.largeLightRock:
-                lightRock = new LightRock(
-                        ImageUtilities.getImage("objects", "lightRocks").getSubimage(0, 48, 48, 48),
-                        ImageUtilities.getImage("objects", "lightRocks").getSubimage(0, 0, 48, 48),
+                lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock2"), 2),
                         data.r, data.c,
                         new CollisionBox(0.5, 1.375, 2, 1.5),
                         new CollisionBox(0, 0.875, 3, 2.5), 6 * DiffSettings.lightRockValue);
