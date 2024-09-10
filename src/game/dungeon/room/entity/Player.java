@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import game.Game;
 import game.dungeon.Dungeon;
 import game.dungeon.inventory.Inventory;
+import game.dungeon.room.Room;
 import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.DirectionUtilities;
@@ -265,12 +267,15 @@ public class Player extends Entity {
         public void actionPerformed(ActionEvent e) {
             if (dashCooldown < 25) {
                 return;
-            }
+            }   
             if (movingUp && movingDown || movingLeft && movingRight) {
                 return;
             }
             dashCooldown = 0;
             setMaxSpeed(3 * getMaxSpeed());
+            Game.setFreezeFrame(2);
+            Room.setScreenShakeDuration(2);
+            Room.setScreenShakeStrength(2);
         }
     };
 

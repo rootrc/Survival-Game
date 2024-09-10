@@ -82,16 +82,13 @@ public class LightingEngine extends GameComponent {
             }
             updateLight(roomObject);
         }
-        // for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
-        // if (roomObject.getLightRadius() <= 1) {
-        // continue;
-        // }
-        // updateLight(roomObject);
-        // }
     }
 
     public void drawComponent(Graphics2D g2d) {
         if (Game.DEBUG) {
+            return;
+        }
+        if (!Game.LIGHTING) {
             return;
         }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -149,7 +146,7 @@ public class LightingEngine extends GameComponent {
             }
             gl.dispose();
         }
-        // g2d.drawImage(image, 0, 0, null);
+        g2d.drawImage(image, 0, 0, null);
     }
 
     private void updateLight(RoomObject roomObject) {

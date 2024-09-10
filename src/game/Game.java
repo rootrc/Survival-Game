@@ -21,12 +21,13 @@ public class Game extends JFrame implements Runnable {
     public static final int UPS = 60;
 
     public static final boolean DEBUG = false;
+    public static final boolean LIGHTING = false;
 
     private GamePanel gamePanel;
     private Dungeon dungeon;
     private Menu menu;
     private Options options;
-    
+
     private UILayer UILayer;
 
     private Thread gameThread;
@@ -98,13 +99,25 @@ public class Game extends JFrame implements Runnable {
             delta2 += (currentTime - lastTime) / updateInterval;
             lastTime = currentTime;
             if (delta1 > 1) {
-                gamePanel.repaint();
+                if (freezeFrameCnt == 0) {
+                    gamePanel.repaint();
+                }
                 delta1--;
             }
             if (delta2 > 1) {
-                gamePanel.updateComponent();
+                if (freezeFrameCnt == 0) {
+                    gamePanel.updateComponent();
+                } else {
+                    freezeFrameCnt--;
+                }
                 delta2--;
             }
         }
+    }
+
+    private static int freezeFrameCnt;
+
+    public static void setFreezeFrame(int freezeFrame) {
+        freezeFrameCnt = freezeFrame;
     }
 }

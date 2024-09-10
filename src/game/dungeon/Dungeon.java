@@ -76,6 +76,7 @@ public class Dungeon extends GamePanel {
             add(room, -1);
             debugScreen.updateRoom(room);
             revalidate();
+            Game.setFreezeFrame(10);
         }
     };
 

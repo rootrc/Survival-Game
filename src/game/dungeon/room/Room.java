@@ -13,6 +13,7 @@ import game.dungeon.room.tile.TileGrid;
 import game.dungeon.room_connection.RoomConnecter;
 import game.game_components.GameComponent;
 import game.game_components.UILayer;
+import game.utilities.RNGUtilities;
 
 public class Room extends GameComponent {
     private int id;
@@ -26,7 +27,8 @@ public class Room extends GameComponent {
 
     private boolean isFrozen;
 
-    public Room(int id, Player player, LightingEngine lightingEngine, TileGrid tileGrid, RoomObjectManager roomObjectManager,
+    public Room(int id, Player player, LightingEngine lightingEngine, TileGrid tileGrid,
+            RoomObjectManager roomObjectManager,
             UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
@@ -64,6 +66,7 @@ public class Room extends GameComponent {
         }
         super.updateComponent();
     }
+
     public void update() {
         if (Game.DEBUG) {
             return;
@@ -81,6 +84,12 @@ public class Room extends GameComponent {
             moveY(Math.min(dy / 16, 48));
         } else {
             moveY(Math.max(dy / 16, -48));
+        }
+
+        if (screenShakeCnt != 0) {
+            moveX(RNGUtilities.getInt(-screenShakeStrength, screenShakeStrength + 1));
+            moveY(RNGUtilities.getInt(-screenShakeStrength, screenShakeStrength + 1));
+            screenShakeCnt--;
         }
     }
 
@@ -128,6 +137,17 @@ public class Room extends GameComponent {
     public void setFreeze(boolean isFrozen) {
         this.isFrozen = isFrozen;
         lightingEngine.setPlayerPresent(!isFrozen);
+    }
+
+    private static int screenShakeCnt;
+    private static int screenShakeStrength;
+
+    public static void setScreenShakeDuration(int screenShakeDuration) {
+        screenShakeCnt = screenShakeDuration;
+    }
+
+    public static void setScreenShakeStrength(int screenShakeStrength) {
+        Room.screenShakeStrength = screenShakeStrength;
     }
 
     // For Debug Screen
