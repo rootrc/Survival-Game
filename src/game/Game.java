@@ -21,7 +21,7 @@ public class Game extends JFrame implements Runnable {
     public static final int UPS = 60;
 
     public static final boolean DEBUG = false;
-    public static final boolean LIGHTING = false;
+    public static final boolean LIGHTING = true;
 
     private GamePanel gamePanel;
     private Dungeon dungeon;

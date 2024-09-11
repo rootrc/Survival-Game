@@ -7,7 +7,7 @@ import game.dungeon.room.object_utilities.RoomObject.RoomObjectData;
 import game.utilities.FileOpener;
 import game.utilities.RNGUtilities;
 
-class RoomFileData extends FileOpener {
+public class RoomFileData extends FileOpener {
     private int N, M;
     private int arr[][];
     private ArrayList<RoomObjectData> roomObjects;
@@ -16,7 +16,7 @@ class RoomFileData extends FileOpener {
     public static final int REFLECTION_MODIFIER = 1;
     private int modifier;
 
-    RoomFileData(int id) {
+    public RoomFileData(int id) {
         super(new StringBuilder("dungeongeneration/tileGrids/map")
                 .append(String.format("%02d", id)).toString());
         modifier = RNGUtilities.getInt(2);
@@ -48,45 +48,38 @@ class RoomFileData extends FileOpener {
         int setNum = RNGUtilities.getInt(objectDataSetCnt);
         // setNum = 1;
         int K;
-        for (int i = 0; i < setNum; i++) {
+        for (int i = 0; i < 3 * setNum; i++) {
             K = nextInt();
-            for (int j = 0; j < K; j++) {
-                next(3);
-            }
-            K = nextInt();
-            for (int j = 0; j < K; j++) {
+            for (int k = 0; k < K; k++) {
                 next(3);
             }
         }
-        K = nextInt();
         roomObjects = new ArrayList<>();
-        for (int i = 0; i < K; i++) {
-            int id2 = nextInt();
-            roomObjects.add(new RoomObjectData(id2, nextInt(), nextInt()));
-        }
-        K = nextInt();
-        for (int i = 0; i < K; i++) {
-            roomObjects.add(new RoomObjectData(10 + nextInt(), nextInt(), nextInt()));
+        for (int i = 0; i < 3; i++) {
+            K = nextInt();
+            for (int j = 0; j < K; j++) {
+                roomObjects.add(new RoomObjectData(10 * i + nextInt(), nextInt(), nextInt()));
+            }
         }
     }
 
-    int getN() {
+    public int getN() {
         return N;
     }
 
-    int getM() {
+    public int getM() {
         return M;
     }
 
-    int[][] getTileGridArray() {
+    public int[][] getTileGridArray() {
         return arr;
     }
 
-    int getModifier() {
+    public int getModifier() {
         return modifier;
     }
 
-    ArrayList<RoomObjectData> getRoomObjects() {
+    public ArrayList<RoomObjectData> getRoomObjects() {
         return roomObjects;
     }
 }

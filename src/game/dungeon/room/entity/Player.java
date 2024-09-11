@@ -53,7 +53,7 @@ public class Player extends Entity {
     };
 
     public Player(Action nextRoom, Inventory inventory) {
-        super(new SpriteSheet(ImageUtilities.getImage("entities", "playerTileset"), 4, 8, 8),
+        super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 new CollisionBox(0.5, 1.75, 1, 1),
                 new CollisionBox(0, 1.25, 2, 2), 1 * Dungeon.TILESIZE / 4, 10, 4);
         this.nextRoom = nextRoom;
@@ -170,8 +170,10 @@ public class Player extends Entity {
         super.move();
     }
 
+    public void collides(Player player) {
+    }
+    
     public void interaction(Player player) {
-
     }
 
     public void clearInteractable() {

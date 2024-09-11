@@ -4,6 +4,7 @@ import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.object_utilities.SpriteSheet;
+import game.utilities.ImageUtilities;
 
 public class TreasureChest extends RoomObject {
     public TreasureChest(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox, int id) {
@@ -12,12 +13,48 @@ public class TreasureChest extends RoomObject {
 
     public void update() {
     }
-
+   
+    public void collides(Player player) {
+        
+    }
+    
     public void interaction(Player player) {
         if (getSpriteSheet().getFrame() == 1) {
             return;
         }
         getSpriteSheet().nextFrame();
         player.getInventory().openChest(this);
+    }
+
+    public static TreasureChest getTreasureChest(RoomObjectData data) {
+        switch (data.id) {
+            case RoomObjectData.treasureChest0:
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest0"), 2), data.r,
+                        data.c,
+                        new CollisionBox(0.375, 1, 1.25, 0.8125),
+                        new CollisionBox(0.375, 1.5, 1.25, 1.0625), 0);
+            case RoomObjectData.treasureChest1:
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest1"), 2), data.r,
+                        data.c,
+                        new CollisionBox(0.3125, 0.8125, 1.375, 1),
+                        new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 1);
+            case RoomObjectData.treasureChest2:
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest2"), 2), data.r,
+                        data.c,
+                        new CollisionBox(0.3125, 0.8125, 1.375, 1),
+                        new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 2);
+            case RoomObjectData.treasureChest3:
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest3"), 2), data.r,
+                        data.c,
+                        new CollisionBox(0.125, 0.6875, 1.75, 1.125),
+                        new CollisionBox(0.125, 1.1875, 1.75, 1.375), 3);
+            case RoomObjectData.treasureChest4:
+                return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest4"), 2), data.r,
+                        data.c,
+                        new CollisionBox(0.3125, 0.8125, 1.375, 1),
+                        new CollisionBox(0.3125, 1.3125, 1.375, 1.25), 4);
+            default:
+                return null;
+        }
     }
 }

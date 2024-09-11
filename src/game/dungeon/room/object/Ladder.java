@@ -2,9 +2,11 @@ package game.dungeon.room.object;
 
 import java.awt.image.BufferedImage;
 
+import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
+import game.utilities.ImageUtilities;
 
 public class Ladder extends RoomObject {
     public static final int UP_DIRECTION = 1;
@@ -24,6 +26,9 @@ public class Ladder extends RoomObject {
     public void update() {
     }
 
+    public void collides(Player player) {
+    }
+    
     public void interaction(Player player) {
     }
 
@@ -37,5 +42,22 @@ public class Ladder extends RoomObject {
 
     public int getDirection() {
         return direction;
+    }
+
+    public static Ladder getLadder(RoomObjectData data) {
+        switch (data.id) {
+            case RoomObjectData.ladderUp:
+                return new Ladder(ImageUtilities.getImage("objects", "ladderup"), data.r, data.c,
+                        -Dungeon.TILESIZE / 2, Dungeon.TILESIZE,
+                        new CollisionBox(0, 1.25, 1, 0.75),
+                        new CollisionBox(-0.25, 1, 1.5, 1.75), 1);
+            case RoomObjectData.ladderDown:
+                return new Ladder(ImageUtilities.getImage("objects", "ladderdown"), data.r, data.c,
+                        0, -Dungeon.TILESIZE * 3,
+                        new CollisionBox(0.25, 0.125, 1.5, 1.625),
+                        new CollisionBox(0, -0.5, 2, 2.5), -1);
+            default:
+                return null;
+        }
     }
 }

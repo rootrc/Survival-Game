@@ -60,6 +60,7 @@ public class RoomObjectManager extends GameComponent {
                 continue;
             }
             if (CollisionHandler.collides(player, (RoomObject) object)) {
+                ((RoomObject) object).collides(player);
                 CollisionHandler.handleCollision(player, (RoomObject) object);
             }
         }
