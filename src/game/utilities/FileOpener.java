@@ -37,12 +37,6 @@ public abstract class FileOpener {
         return read().replace('_', ' ');
     }
 
-    protected final void next(int cnt) {
-        for (int i = 0; i < cnt; i++) {
-            read();
-        }
-    }
-
     protected final void closeFile() {
         try {
             br.close();
@@ -63,5 +57,15 @@ public abstract class FileOpener {
             System.exit(-1);
         }
         return st.nextToken();
+    }
+
+    public String readLine() {
+        try {
+            return br.readLine();
+        } catch (IOException e) {
+            System.err.println(new StringBuilder("IOException in").append(fileName).toString());
+            System.exit(-1);
+        }
+        return "";
     }
 }

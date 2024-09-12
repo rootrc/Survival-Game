@@ -51,14 +51,21 @@ public class RoomFileData extends FileOpener {
         for (int i = 0; i < 3 * setNum; i++) {
             K = nextInt();
             for (int k = 0; k < K; k++) {
-                next(3);
+                readLine();
             }
         }
         roomObjects = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             K = nextInt();
             for (int j = 0; j < K; j++) {
-                roomObjects.add(new RoomObjectData(10 * i + nextInt(), nextInt(), nextInt()));
+                int id = 10 * i + nextInt();
+                if (RoomObjectData.fiveSet.contains(id)) {
+                    roomObjects.add(new RoomObjectData(id, nextInt(), nextInt(), nextInt(), nextInt()));
+                } else if (RoomObjectData.fourSet.contains(id)) {
+                    roomObjects.add(new RoomObjectData(id, nextInt(), nextInt(), nextInt()));
+                } else {
+                    roomObjects.add(new RoomObjectData(id, nextInt(), nextInt()));
+                }
             }
         }
     }

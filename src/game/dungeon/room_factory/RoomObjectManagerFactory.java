@@ -19,17 +19,26 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
         RoomObjectManager roomObjectManager = new RoomObjectManager(player, tileGrid);
         if (file.getModifier() == RoomFileData.NO_MODIFIER) {
             for (RoomObjectData data : file.getRoomObjects()) {
-                roomObjectManager.add(RoomObject.getRoomObject(data));
+                RoomObject roomObject = RoomObject.getRoomObject(data);
+                if (roomObject != null) {
+                    roomObjectManager.add(roomObject);
+                }
             }
         } else if (file.getModifier() == RoomFileData.REFLECTION_MODIFIER) {
             for (RoomObjectData data : file.getRoomObjects()) {
-                roomObjectManager.add(getHorizontialReflection(tileGrid, RoomObject.getRoomObject(data)));
+                RoomObject roomObject = getHorizontialReflection(tileGrid, RoomObject.getRoomObject(data));
+                if (roomObject != null) {
+                    roomObjectManager.add(roomObject);
+                }
             }
         }
         return roomObjectManager;
     }
 
     private RoomObject getHorizontialReflection(TileGrid tileGrid, RoomObject roomObject) {
+        if (roomObject == null) {
+            return roomObject;
+        }
         roomObject.setLocation(tileGrid.getWidth() - roomObject.getX()
                 - Dungeon.TILESIZE * (roomObject.getMaxCol() - roomObject.getMinCol() + 1), roomObject.getY());
         return roomObject;

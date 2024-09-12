@@ -3,6 +3,7 @@ package game.dungeon.room.object_utilities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
 
 import game.Game;
 import game.dungeon.Dungeon;
@@ -17,6 +18,7 @@ public abstract class RoomObject extends GameComponent {
     private SpriteSheet spriteSheet;
     private CollisionBox interactbox;
     private CollisionBox hitbox;
+    private boolean onFloor;
 
     private double lightRadius;
 
@@ -32,14 +34,6 @@ public abstract class RoomObject extends GameComponent {
         this(new SpriteSheet(image), r, c, hitbox, interactbox);
     }
 
-    protected RoomObject(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox) {
-        this(spriteSheet, r, c, hitbox, hitbox);
-    }
-
-    protected RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox) {
-        this(new SpriteSheet(image), r, c, hitbox, hitbox);
-    }
-
     public void drawComponent(Graphics2D g2d) {
         g2d.drawImage(spriteSheet.getImage(), 0, 0, null);
         if (!Game.DEBUG) {
@@ -51,8 +45,10 @@ public abstract class RoomObject extends GameComponent {
                     (int) interactbox.getWidth(), (int) interactbox.getHeight());
         }
         g2d.setColor(Color.red);
-        g2d.drawRect((int) (hitbox.getX()), (int) (hitbox.getY()),
-                (int) hitbox.getWidth(), (int) hitbox.getHeight());
+        if (hitbox != null) {
+            g2d.drawRect((int) (hitbox.getX()), (int) (hitbox.getY()),
+            (int) hitbox.getWidth(), (int) hitbox.getHeight());
+        }
     }
 
     public abstract void collides(Player player);
@@ -87,19 +83,39 @@ public abstract class RoomObject extends GameComponent {
     }
 
     public final int getMinRow() {
+        if (hitbox == null) {
+            return (int) (getY() / Dungeon.TILESIZE);
+        }
         return (int) ((getY() + hitbox.getY()) / Dungeon.TILESIZE);
     }
-
+    
     public final int getMinCol() {
+        if (hitbox == null) {
+            return (int) (getX() / Dungeon.TILESIZE);
+        }
         return (int) ((getX() + hitbox.getX()) / Dungeon.TILESIZE);
     }
-
+    
     public final int getMaxRow() {
+        if (hitbox == null) {
+            return (int) ((getY() - 1) / Dungeon.TILESIZE);
+        }
         return (int) ((getY() + hitbox.getMaxY() - 1) / Dungeon.TILESIZE);
     }
-
+    
     public final int getMaxCol() {
+        if (hitbox == null) {
+            return (int) ((getX() - 1) / Dungeon.TILESIZE);
+        }
         return (int) ((getX() + hitbox.getMaxX() - 1) / Dungeon.TILESIZE);
+    }
+
+    public final boolean isOnFloor() {
+        return onFloor;
+    }
+
+    public final void setOnFloor(boolean onFloor) {
+        this.onFloor = onFloor;
     }
 
     public final double getLightRadius() {
@@ -115,6 +131,9 @@ public abstract class RoomObject extends GameComponent {
     }
 
     public final double getDistanceFromRoomObject(RoomObject o) {
+        if (hitbox == null) {
+            return getDistance(o);
+        }
         return Math.sqrt((getX() + getHitBox().getCenterX() - o.getX() - o.getHitBox().getCenterX())
                 * (getX() + getHitBox().getCenterX() - o.getX() - o.getHitBox().getCenterX())
                 + (getY() + getHitBox().getCenterY() - o.getY() - o.getHitBox().getCenterY())
@@ -147,16 +166,42 @@ public abstract class RoomObject extends GameComponent {
         public static final int largeLightRock = 17;
         public static final int saw0 = 20;
         public static final int saw1 = 21;
+        public static final int movingSaw0 = 22;
+
+        public static final HashSet<Integer> fourSet = new HashSet<>() {
+            {
+
+            }
+        };
+
+        public static final HashSet<Integer> fiveSet = new HashSet<>() {
+            {
+                add(movingSaw0);
+            }
+        };
 
         public int id;
         public int r;
         public int c;
+        public int a;
+        public int b;
 
-        public RoomObjectData(int id, int r, int c) {
+        public RoomObjectData(int id, int r, int c, int a, int b) {
             this.id = id;
             this.r = r;
             this.c = c;
+            this.a = a;
+            this.b = b;
         }
+
+        public RoomObjectData(int id, int r, int c, int a) {
+            this(id, r, c, a, 0);
+        }
+
+        public RoomObjectData(int id, int r, int c) {
+            this(id, r, c, 0, 0);
+        }
+
     }
 
 }

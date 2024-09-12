@@ -32,10 +32,23 @@ public class RoomObjectManager extends GameComponent {
         RoomObject[] temp = Arrays.copyOf(getComponents(), getComponentCount(), RoomObject[].class);
         Arrays.sort(temp, new Comparator<RoomObject>() {
             public int compare(RoomObject a, RoomObject b) {
-                if (a.getY() + a.getHitBox().getY() < b.getY() + b.getHitBox().getY()) {
+                if (a.isOnFloor() && !b.isOnFloor()) {
+                    return 1;
+                } else if (!a.isOnFloor() && b.isOnFloor()) {
+                    return -1;
+                }
+                double ay = a.getHeight() / 2;
+                double by = b.getHeight() / 2;
+                if (a.getHitBox() != null) {
+                    ay = a.getHitBox().getY();
+                }
+                if (b.getHitBox() != null) {
+                    by = b.getHitBox().getY();
+                }
+                if (a.getY() + ay < b.getY() + by) {
                     return 1;
                 }
-                if (a.getY() + a.getHitBox().getY() > b.getY() + b.getHitBox().getY()) {
+                if (a.getY() + ay > b.getY() + by) {
                     return -1;
                 }
                 return 0;
