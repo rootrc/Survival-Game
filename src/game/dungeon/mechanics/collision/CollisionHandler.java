@@ -14,8 +14,7 @@ public class CollisionHandler {
 
     public static boolean collides(RoomObject a, RoomObject b) {
         if (b == null) {
-            System.out.println("why");
-            System.exit(-1);
+            return false;
         }
         return collides(a.getX(), a.getY(), a.getHitBox(), b.getX(), b.getY(), b.getHitBox());
     }
@@ -54,29 +53,56 @@ public class CollisionHandler {
 
     private static void handleCollision(Player player, int bX, int bY, CollisionBox bH) {
         CollisionBox aH = player.getHitBox();
-        if (aH.getX() + player.getX() < bH.getX() + bX
-                && aH.getMaxX() + player.getX() - bH.getX() - bX <= player.getSpeedX()
-                && (player.getSpeedX() > 0)) {
-            player.setX(bH.getX() + bX - aH.getMaxX());
-            player.setSpeedX(0);
+        int aX0 = (int) (player.getX() + aH.getX());
+        int aY0 = (int) (player.getY() + aH.getY());
+        int aX1 = (int) (player.getX() + aH.getMaxX());
+        int aY1 = (int) (player.getY() + aH.getMaxY());
+
+        int bX0 = (int) (bX + bH.getX());
+        int bY0 = (int) (bY + bH.getY());
+        int bX1 = (int) (bX + bH.getMaxX());
+        int bY1 = (int) (bY + bH.getMaxY());
+
+        if (player.getSpeedY() != 0 && player.getSpeedY() == 0) {
+            if (bX0 < aX1 && aX1 < bX1) {
+                player.setX(bX0 - aH.getMaxX());
+            } else if (bX0 < aX0 && aX0 < bX1) {
+                player.setX(bX1 - aH.getX());
+            }
         }
-        if (aH.getX() + player.getX() - bH.getMaxX() - bX >= player.getSpeedX()
-                && bH.getMaxX() + bX < aH.getMaxX() + player.getX()
-                && (player.getSpeedX() < 0)) {
-            player.setX(bH.getMaxX() + bX - aH.getX());
-            player.setSpeedX(0);
+        if (player.getSpeedX() == 0 && player.getSpeedY() != 0) {
+            if (bY0 < aY1 && aY1 < bY1) {
+                player.setY(bY0 - aH.getMaxY());
+            } else if (bY0 < aY0 && aY0 < bY1) {
+                player.setY(bY1 - aH.getY());
+            }
         }
-        if (aH.getY() + player.getY() < bH.getY() + bY
-                && aH.getMaxY() + player.getY() - bH.getY() - bY <= player.getSpeedY()
-                && (player.getSpeedY() > 0)) {
-            player.setY(bH.getY() + bY - aH.getMaxY());
-            player.setSpeedY(0);
+
+        double xDist = Integer.MAX_VALUE;
+        if (bX0 < aX1 && aX1 < bX1) {
+            xDist = bX0 - aH.getMaxX() - player.getX();
+        } else if (bX0 < aX0 && aX0 < bX1) {
+            xDist = bX1 - aH.getX() - player.getX();
         }
-        if (aH.getY() + player.getY() - bH.getMaxY() - bY >= player.getSpeedY()
-                && bH.getMaxY() + bY < aH.getMaxY() + player.getY()
-                && (player.getSpeedY() < 0)) {
-            player.setY(bH.getMaxY() + bY - aH.getY());
-            player.setSpeedY(0);
+        double yDist = Integer.MAX_VALUE;
+        if (bY0 < aY1 && aY1 < bY1) {
+            yDist = bY0 - aH.getMaxY() - player.getY();
+        } else if (bY0 < aY0 && aY0 < bY1) {
+            yDist = bY1 - aH.getY() - player.getY();
         }
+        if (Math.abs(xDist) < Math.abs(yDist)) {
+            player.moveX(xDist);
+        } else if (Math.abs(xDist) > Math.abs(yDist)) {
+            player.moveY(yDist);
+        } else {
+            player.moveX(xDist);
+            if (collides(player.getX(), player.getY(), aH, bX, bY, bH)) {
+                player.moveX(xDist);
+                player.moveY(yDist);
+                System.out.println("akdsjflkajdslkfja");
+            }
+        }
+
+
     }
 }

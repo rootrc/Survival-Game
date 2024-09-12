@@ -1,9 +1,11 @@
 package game.dungeon.room.tile;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import game.Game;
 import game.dungeon.Dungeon;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.utilities.ImageUtilities;
@@ -25,14 +27,14 @@ public class Tile {
 
     public void draw(Graphics2D g2d, int r, int c) {
         g2d.drawImage(image, Dungeon.TILESIZE * c, Dungeon.TILESIZE * r, null);
-        // if (Game.DEBUG) {
-        //     if (hitbox != null) {
-        //         g2d.setColor(Color.red);
-        //         g2d.drawRect(Dungeon.TILESIZE * c + (int) hitbox.getX(), Dungeon.TILESIZE * r
-        //                 + (int) hitbox.getY(),
-        //                 (int) hitbox.getWidth(), (int) hitbox.getHeight());
-        //     }
-        // }
+        if (Game.DEBUG) {
+            if (hitbox != null) {
+                g2d.setColor(Color.red);
+                g2d.drawRect(Dungeon.TILESIZE * c + (int) hitbox.getX(), Dungeon.TILESIZE * r
+                        + (int) hitbox.getY(),
+                        (int) hitbox.getWidth(), (int) hitbox.getHeight());
+            }
+        }
     }
 
     public BufferedImage getImage() {

@@ -71,11 +71,11 @@ class MovingSaw extends Trap {
         saw = new Saw(sawSpriteSheet, 0, 0, null);
         add(saw);
         if (direction == 0) {
-            int startingSawLocation = RNGUtilities.getInt(getHeight() - saw.getHeight() + 1);
+            int startingSawLocation = RNGUtilities.getInt(1, getHeight() - saw.getHeight());
             saw.setY(startingSawLocation);
             getHitBox().setLocation(getHitBox().x, getHitBox().y + startingSawLocation);
         } else if (direction == 1) {
-            int startingSawLocation = RNGUtilities.getInt(getWidth() - saw.getWidth() + 1);
+            int startingSawLocation = RNGUtilities.getInt(1, getWidth() - saw.getWidth());
             saw.setX(startingSawLocation);
             getHitBox().setLocation(getHitBox().x + startingSawLocation, getHitBox().y);
         }
