@@ -8,31 +8,31 @@ public abstract class Entity extends RoomObject {
     private int maxSpeed;
     private double speedX;
     private double speedY;
-    private double accFrameCnt;
-    private double deaccFrameCnt;
+    private double accSpeed;
+    private double deaccSpeed;
     private int direction;
 
     public Entity(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox, int maxSpeed,
-            double accFrames, double deaccFrames) {
+            double accSpeed, double deaccSpeed) {
         super(spriteSheet, r, c, hitbox, interactbox);
         this.maxSpeed = maxSpeed;
-        this.accFrameCnt = accFrames;
-        this.deaccFrameCnt = deaccFrames;
+        this.accSpeed = accSpeed;
+        this.deaccSpeed = deaccSpeed;
     }
 
     public Entity(SpriteSheet spriteSheet, CollisionBox hitbox, CollisionBox interactbox, int maxSpeed,
-            double accFrames, double deaccFrames) {
-        this(spriteSheet, 0, 0, hitbox, interactbox, maxSpeed, accFrames, deaccFrames);
+            double accSpeed, double deaccSpeed) {
+        this(spriteSheet, 0, 0, hitbox, interactbox, maxSpeed, accSpeed, deaccSpeed);
     }
 
-    public Entity(SpriteSheet spriteSheet, CollisionBox hitbox, int maxSpeed, double accFrames,
-            double deaccFrames) {
-        this(spriteSheet, 0, 0, hitbox, maxSpeed, accFrames, deaccFrames);
+    public Entity(SpriteSheet spriteSheet, CollisionBox hitbox, int maxSpeed, double accSpeed,
+            double deaccSpeed) {
+        this(spriteSheet, 0, 0, hitbox, maxSpeed, accSpeed, deaccSpeed);
     }
 
     public Entity(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, int maxSpeed,
-            double accFrames, double deaccFrames) {
-        this(spriteSheet, r, c, hitbox, null, maxSpeed, accFrames, deaccFrames);
+            double accSpeed, double deaccSpeed) {
+        this(spriteSheet, r, c, hitbox, null, maxSpeed, accSpeed, deaccSpeed);
     }
 
     public void update() {
@@ -40,12 +40,8 @@ public abstract class Entity extends RoomObject {
     }
 
     public void move() {
-        if (!isMoving()) {
-            return;
-        }
-        double a = Math.min(1, maxSpeed / Math.sqrt(speedX * speedX + speedY * speedY));
-        moveX(a * speedX);
-        moveY(a * speedY);
+        moveX(speedX);
+        moveY(speedY);
     }
 
     public final boolean isMoving() {
@@ -68,10 +64,6 @@ public abstract class Entity extends RoomObject {
         this.speedX = speedX;
     }
 
-    public final void addSpeedX(double delta) {
-        speedX += delta;
-    }
-
     public final double getSpeedY() {
         return speedY;
     }
@@ -80,16 +72,12 @@ public abstract class Entity extends RoomObject {
         this.speedY = speedY;
     }
 
-    public final void addSpeedY(double delta) {
-        speedY += delta;
+    public final double getAccSpeed() {
+        return accSpeed;
     }
 
-    public final double getAcc() {
-        return maxSpeed / accFrameCnt;
-    }
-
-    public final double getDeacc() {
-        return maxSpeed / deaccFrameCnt;
+    public final double getDeaccSpeed() {
+        return deaccSpeed;
     }
 
     public final int getDirection() {

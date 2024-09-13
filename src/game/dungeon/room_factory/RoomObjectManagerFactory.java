@@ -40,7 +40,10 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
             return roomObject;
         }
         roomObject.setLocation(tileGrid.getWidth() - roomObject.getX()
-                - Dungeon.TILESIZE * (roomObject.getMaxCol() - roomObject.getMinCol() + 1), roomObject.getY());
+                - Dungeon.TILESIZE * ((roomObject.getX() + roomObject.getWidth() - 1) / Dungeon.TILESIZE
+                        - roomObject.getX() / Dungeon.TILESIZE + 1),
+                roomObject.getY());
+
         return roomObject;
     }
 }

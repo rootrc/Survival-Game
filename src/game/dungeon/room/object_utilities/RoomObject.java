@@ -56,6 +56,9 @@ public abstract class RoomObject extends GameComponent {
     public abstract void interaction(Player player);
 
     public final boolean interacts(RoomObject object) {
+        if (object == null) {
+            return false;
+        }
         CollisionBox h1 = interactbox;
         CollisionBox h2 = object.getInteractbox();
         if (h1 == null || h2 == null) {

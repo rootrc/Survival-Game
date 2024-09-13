@@ -43,6 +43,9 @@ public class Player extends Entity {
             }
             interactionCooldown = 0;
             for (int i = 0; i < interactables.size(); i++) {
+                if (interactables.size() == 0) {
+                    break;
+                }
                 RoomObject interactable = interactables.get(i);
                 interactable.interaction(Player.this);
                 if (interactable instanceof Ladder) {
@@ -55,7 +58,7 @@ public class Player extends Entity {
     public Player(Action nextRoom, Inventory inventory) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 new CollisionBox(0.5, 1.75, 1, 1),
-                new CollisionBox(0, 1.25, 2, 2), 1 * Dungeon.TILESIZE / 4, 10, 4);
+                new CollisionBox(0, 1.25, 2, 2), 1 * Dungeon.TILESIZE / 4, 0.2, 0.4);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;
@@ -113,10 +116,12 @@ public class Player extends Entity {
             setDirection(DirectionUtilities.getMovingDirection(movingUp, movingLeft, movingDown, movingRight));
         }
         if (dashCooldown == 10) {
-            setMaxSpeed(getMaxSpeed() / 3);
+            setMaxSpeed(getMaxSpeed() / 2);
         }
         super.update();
     }
+
+    private static final double a = Math.sqrt(2) / 2;
 
     @Override
     public void move() {
@@ -126,53 +131,45 @@ public class Player extends Entity {
         double ax = 0;
         double ay = 0;
         if (movingUp && Math.abs(getSpeedY()) < getMaxSpeed()) {
-            ay -= getAcc();
+            ay -= getAccSpeed();
         }
         if (movingLeft && Math.abs(getSpeedX()) < getMaxSpeed()) {
-            ax -= getAcc();
+            ax -= getAccSpeed();
         }
         if (movingDown && Math.abs(getSpeedY()) < getMaxSpeed()) {
-            ay += getAcc();
+            ay += getAccSpeed();
         }
         if (movingRight && Math.abs(getSpeedX()) < getMaxSpeed()) {
-            ax += getAcc();
+            ax += getAccSpeed();
         }
-        if (ax == 0 && Math.abs(getSpeedX()) <= getMaxSpeed() + 1) {
+        if (ax == 0) {
             if (getSpeedX() > 0) {
-                setSpeedX(Math.max(getSpeedX() - getDeacc(), 0));
+                setSpeedX(Math.max(getSpeedX() - getDeaccSpeed(), 0));
             } else if (getSpeedX() < 0) {
-                setSpeedX(Math.min(getSpeedX() + getDeacc(), 0));
+                setSpeedX(Math.min(getSpeedX() + getDeaccSpeed(), 0));
             }
         }
-        if (ay == 0 && Math.abs(getSpeedY()) <= getMaxSpeed() + 1) {
+        if (ay == 0) {
             if (getSpeedY() > 0) {
-                setSpeedY(Math.max(getSpeedY() - getDeacc(), 0));
+                setSpeedY(Math.max(getSpeedY() - getDeaccSpeed(), 0));
             } else if (getSpeedY() < 0) {
-                setSpeedY(Math.min(getSpeedY() + getDeacc(), 0));
+                setSpeedY(Math.min(getSpeedY() + getDeaccSpeed(), 0));
             }
         }
-        if (Math.abs(getSpeedX()) > getMaxSpeed()) {
-            if (getSpeedX() > 0) {
-                setSpeedX(Math.max(getSpeedX() - 1, 0));
-            } else if (getSpeedX() < 0) {
-                setSpeedX(Math.min(getSpeedX() + 1, 0));
-            }
+        if (ax != 0 && ay == 0) {
+            setSpeedX(Math.max(Math.min(getSpeedX() + ax, getMaxSpeed()), -getMaxSpeed()));
+        } else if (ax == 0 && ay != 0) {
+            setSpeedY(Math.max(Math.min(getSpeedY() + ay, getMaxSpeed()), -getMaxSpeed()));
+        } else if (ax != 0 && ay != 0) {
+            setSpeedX(Math.max(Math.min(getSpeedX() + a * ax, a * getMaxSpeed()), -a * getMaxSpeed()));
+            setSpeedY(Math.max(Math.min(getSpeedY() + a * ay, a * getMaxSpeed()), -a * getMaxSpeed()));
         }
-        if (Math.abs(getSpeedY()) > getMaxSpeed()) {
-            if (getSpeedY() > 0) {
-                setSpeedY(Math.max(getSpeedY() - 1, 0));
-            } else if (getSpeedY() < 0) {
-                setSpeedY(Math.min(getSpeedY() + 1, 0));
-            }
-        }
-        addSpeedX(ax);
-        addSpeedY(ay);
         super.move();
     }
 
     public void collides(Player player) {
     }
-    
+
     public void interaction(Player player) {
     }
 
@@ -269,13 +266,13 @@ public class Player extends Entity {
         public void actionPerformed(ActionEvent e) {
             if (dashCooldown < 25) {
                 return;
-            }   
+            }
             if (movingUp && movingDown || movingLeft && movingRight) {
                 return;
             }
             dashCooldown = 0;
-            setMaxSpeed(3 * getMaxSpeed());
-            Game.setFreezeFrame(2);
+            setMaxSpeed(2 * getMaxSpeed());
+            Game.setFreezeFrame(3);
             Room.setScreenShakeDuration(2);
             Room.setScreenShakeStrength(2);
         }
