@@ -48,21 +48,13 @@ public class DirectionUtilities {
         return direction8ToHash.get(direction);
     }
 
-    private static int getXMovement(int direction) {
+    public static int getXMovement(int direction) {
         return (int) Math.round((getHash(direction) + getDirectionOfSpeed(getHash(direction))) / 10);
     }
 
-    public static int getXMovement(Entity entity) {
-        return getXMovement(entity.getDirection());
-    }
-
-    private static int getYMovement(int direction) {
+    public static int getYMovement(int direction) {
         return (getHash(direction) + getDirectionOfSpeed(getHash(direction))) % 10
                 - getDirectionOfSpeed(getHash(direction));
-    }
-
-    public static int getYMovement(Entity entity) {
-        return getYMovement(entity.getDirection());
     }
 
     private static int getDirectionOfSpeed(double speed) {
@@ -94,5 +86,9 @@ public class DirectionUtilities {
             return 6;
         }
         return -1;
+    }
+
+    public static int reverseDirection(int direction) {
+        return (direction + 4) % 8;
     }
 }

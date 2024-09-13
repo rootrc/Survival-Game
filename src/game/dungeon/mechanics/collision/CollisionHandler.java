@@ -69,15 +69,15 @@ public class CollisionHandler {
             } else if (bX0 < aX0 && aX0 < bX1) {
                 player.setX(bX1 - aH.getX());
             }
-        }
-        if (player.getSpeedX() == 0 && player.getSpeedY() != 0) {
+            return;
+        } else if (player.getSpeedX() == 0 && player.getSpeedY() != 0) {
             if (bY0 < aY1 && aY1 < bY1) {
                 player.setY(bY0 - aH.getMaxY());
             } else if (bY0 < aY0 && aY0 < bY1) {
                 player.setY(bY1 - aH.getY());
             }
+            return;
         }
-
         double xDist = Integer.MAX_VALUE;
         if (bX0 < aX1 && aX1 < bX1) {
             xDist = bX0 - aH.getMaxX() - player.getX();
@@ -94,15 +94,16 @@ public class CollisionHandler {
             player.moveX(xDist);
         } else if (Math.abs(xDist) > Math.abs(yDist)) {
             player.moveY(yDist);
-        } else {
+        } else if (xDist != Integer.MAX_VALUE) {   
             player.moveX(xDist);
             if (collides(player.getX(), player.getY(), aH, bX, bY, bH)) {
                 player.moveX(xDist);
                 player.moveY(yDist);
-                System.out.println("akdsjflkajdslkfja");
             }
         }
-
-
+        if (collides(player.getX(), player.getY(), aH, bX, bY, bH)) {
+            player.moveX(-player.getSpeedX());
+            player.moveY(-player.getSpeedY());
+        }
     }
 }

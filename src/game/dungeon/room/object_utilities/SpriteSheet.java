@@ -8,14 +8,16 @@ public class SpriteSheet {
     private BufferedImage[][] images;
     private int width;
     private int height;
-    private int frames;
+    private int frameCnt;
+    private int directionCnt;
     private int frameLength;
 
     private int currentDirection;
     private int currentFrame;
 
     public SpriteSheet(BufferedImage bufferedImage, int frameCnt, int directionCnt, int frameLength) {
-        this.frames = frameCnt;
+        this.frameCnt = frameCnt;
+        this.directionCnt = directionCnt;
         this.frameLength = frameLength;
         width = bufferedImage.getWidth() / frameCnt;
         height = bufferedImage.getHeight() / directionCnt;
@@ -51,12 +53,24 @@ public class SpriteSheet {
         return height;
     }
 
+    public int getDirectionCnt() {
+        return directionCnt;
+    }
+    
     public void setDirection(int direction) {
         currentDirection = direction;
     }
 
+    public int getDirection() {
+        return currentDirection;
+    }
+
     public int getFrame() {
         return currentFrame;
+    }
+    
+    public int getFrameCnt() {
+        return frameCnt;
     }
 
     public void setFrame(int frame) {
@@ -64,7 +78,11 @@ public class SpriteSheet {
     }
 
     public void nextFrame() {
-        currentFrame = (currentFrame + 1) % frames;
+        currentFrame = (currentFrame + 1) % frameCnt;
+    }
+
+    public int getFrameLength() {
+        return frameLength;
     }
 
     private int cnt;

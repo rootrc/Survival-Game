@@ -23,7 +23,7 @@ public class Trap extends RoomObject {
     }
 
     public void collides(Player player) {
-        System.out.println("ow");
+        player.takeDamage();
     }
 
     public void interaction(Player player) {

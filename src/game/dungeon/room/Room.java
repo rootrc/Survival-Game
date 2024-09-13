@@ -90,6 +90,7 @@ public class Room extends GameComponent {
             moveX(RNGUtilities.getInt(-screenShakeStrength, screenShakeStrength + 1));
             moveY(RNGUtilities.getInt(-screenShakeStrength, screenShakeStrength + 1));
             screenShakeCnt--;
+            screenShakeStrength--;
         }
     }
 

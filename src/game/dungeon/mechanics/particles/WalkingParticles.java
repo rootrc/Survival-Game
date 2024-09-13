@@ -33,8 +33,8 @@ public class WalkingParticles extends ParticleSystem {
             super(1, Color.gray, 1,
                     entity.getX() + entity.getHitBox().getX() + RNGUtilities.getDouble(entity.getHitBox().getWidth()),
                     entity.getY() + entity.getHitBox().getY() + RNGUtilities.getDouble(entity.getHitBox().getHeight()),
-                    -2 * DirectionUtilities.getXMovement(entity), -2 * DirectionUtilities.getYMovement(entity),
-                    DirectionUtilities.getXMovement(entity) / 10.0, DirectionUtilities.getYMovement(entity) / 10.0);
+                    -2 * DirectionUtilities.getXMovement(entity.getDirection()), -2 * DirectionUtilities.getYMovement(entity.getDirection()),
+                    DirectionUtilities.getXMovement(entity.getDirection()) / 10.0, DirectionUtilities.getYMovement(entity.getDirection()) / 10.0);
             lifespan = 5 * Game.UPS + RNGUtilities.getInt(8 * Game.UPS);
         }
 

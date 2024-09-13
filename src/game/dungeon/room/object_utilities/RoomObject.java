@@ -77,6 +77,16 @@ public abstract class RoomObject extends GameComponent {
         return spriteSheet;
     }
 
+    public final void replaceSpriteSheet(BufferedImage bufferedImage) {
+        replaceSpriteSheet(new SpriteSheet(bufferedImage, this.spriteSheet.getFrameCnt(), this.spriteSheet.getDirectionCnt(), this.spriteSheet.getFrameLength()));
+    }
+    
+    public final void replaceSpriteSheet(SpriteSheet spriteSheet) {
+        spriteSheet.setFrame(this.spriteSheet.getFrame());
+        spriteSheet.setDirection(this.spriteSheet.getDirection());
+        this.spriteSheet = spriteSheet;
+    }
+
     public final CollisionBox getInteractbox() {
         return interactbox;
     }

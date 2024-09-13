@@ -36,6 +36,12 @@ public class Player extends Entity {
     private int interactionCooldown;
     private int dashCooldown;
 
+    private int health;
+    private int hitDirection;
+    private int hitCnt;
+
+    private SpriteSheet lastSpriteSheet;
+
     private final Action interact = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             if (interactables == null || interactionCooldown < 30) {
@@ -58,13 +64,15 @@ public class Player extends Entity {
     public Player(Action nextRoom, Inventory inventory) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 new CollisionBox(0.5, 1.75, 1, 1),
-                new CollisionBox(0, 1.25, 2, 2), 1 * Dungeon.TILESIZE / 4, 0.2, 0.4);
+                new CollisionBox(0, 1.25, 2, 2),
+                3 * Dungeon.TILESIZE / 16, 3 * Dungeon.TILESIZE / 160.0, 3 * Dungeon.TILESIZE / 80.0);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;
         lightRadiusFactor = DiffSettings.playerLightRadiusFactor;
         lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
         lightDetectionRadiusSquared = DiffSettings.playerLightDetectionRadiusSquared;
+        health = 5;
         setKeyBinds();
         interactionCooldown = 1000;
         dashCooldown = 1000;
@@ -104,19 +112,38 @@ public class Player extends Entity {
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
         if (isMoving()) {
-            getSpriteSheet().next();
+            if (hitCnt <= 40) {
+                getSpriteSheet().next();
+            }
         } else {
             getSpriteSheet().setFrame(getSpriteSheet().getFrame() / 2);
         }
 
         if (dashCooldown < 10) {
-            setSpeedX(getMaxSpeed() * DirectionUtilities.getXMovement(Player.this));
-            setSpeedY(getMaxSpeed() * DirectionUtilities.getYMovement(Player.this));
+            setSpeedX(a * getMaxSpeed() * DirectionUtilities.getXMovement(Player.this.getDirection()));
+            setSpeedY(a * getMaxSpeed() * DirectionUtilities.getYMovement(Player.this.getDirection()));
         } else {
             setDirection(DirectionUtilities.getMovingDirection(movingUp, movingLeft, movingDown, movingRight));
         }
         if (dashCooldown == 10) {
-            setMaxSpeed(getMaxSpeed() / 2);
+            setMaxSpeed(getMaxSpeed() / 3);
+        }
+
+        if (hitCnt > 0) {
+            if (hitCnt == 40) {
+                replaceSpriteSheet(lastSpriteSheet);
+            }
+            hitCnt--;
+            if (hitCnt > 35) {
+                moveX(3 * getMaxSpeed() * DirectionUtilities.getXMovement(hitDirection));
+                moveY(3 * getMaxSpeed() * DirectionUtilities.getYMovement(hitDirection));
+            } else {
+                if (hitCnt % 10 == 5) {
+                    replaceSpriteSheet(ImageUtilities.getImage("entities", "playerWhiteFill"));
+                } else if (hitCnt % 10 == 0) {
+                    replaceSpriteSheet(lastSpriteSheet);
+                }
+            }
         }
         super.update();
     }
@@ -125,7 +152,7 @@ public class Player extends Entity {
 
     @Override
     public void move() {
-        if (dashCooldown < 4) {
+        if (dashCooldown < 4 | hitCnt >= 35) {
             return;
         }
         double ax = 0;
@@ -179,6 +206,29 @@ public class Player extends Entity {
 
     public void addInteractable(RoomObject object) {
         interactables.add(object);
+    }
+
+    public void takeDamage() {
+        if (hitCnt > 0) {
+            return;
+        }
+        health--;
+        if (health == 1) {
+            replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
+        }
+        setSpeedX(0);
+        setSpeedY(0);
+        Game.setFreezeFrame(5);
+        Room.setScreenShakeDuration(20);
+        Room.setScreenShakeStrength(20);
+        if (dashCooldown <= 10) {
+            setMaxSpeed(getMaxSpeed() / 3);
+        }
+        dashCooldown = 1000;
+        hitCnt = 40;
+        hitDirection = DirectionUtilities.reverseDirection(getDirection());
+        lastSpriteSheet = getSpriteSheet();
+        replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
     }
 
     public Ladder getLadder() {
@@ -271,7 +321,7 @@ public class Player extends Entity {
                 return;
             }
             dashCooldown = 0;
-            setMaxSpeed(2 * getMaxSpeed());
+            setMaxSpeed(3 * getMaxSpeed());
             Game.setFreezeFrame(3);
             Room.setScreenShakeDuration(2);
             Room.setScreenShakeStrength(2);
