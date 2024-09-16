@@ -126,7 +126,7 @@ public class Player extends Entity {
             setDirection(DirectionUtilities.getMovingDirection(movingUp, movingLeft, movingDown, movingRight));
         }
         if (dashCooldown == 10) {
-            setMaxSpeed(getMaxSpeed() / 3);
+            setMaxSpeed(getMaxSpeed() / 2);
         }
 
         if (hitCnt > 0) {
@@ -157,16 +157,16 @@ public class Player extends Entity {
         }
         double ax = 0;
         double ay = 0;
-        if (movingUp && Math.abs(getSpeedY()) < getMaxSpeed()) {
+        if (movingUp && Math.abs(getSpeedY()) <= getMaxSpeed()) {
             ay -= getAccSpeed();
         }
-        if (movingLeft && Math.abs(getSpeedX()) < getMaxSpeed()) {
+        if (movingLeft && Math.abs(getSpeedX()) <= getMaxSpeed()) {
             ax -= getAccSpeed();
         }
-        if (movingDown && Math.abs(getSpeedY()) < getMaxSpeed()) {
+        if (movingDown && Math.abs(getSpeedY()) <= getMaxSpeed()) {
             ay += getAccSpeed();
         }
-        if (movingRight && Math.abs(getSpeedX()) < getMaxSpeed()) {
+        if (movingRight && Math.abs(getSpeedX()) <= getMaxSpeed()) {
             ax += getAccSpeed();
         }
         if (ax == 0) {
@@ -191,7 +191,6 @@ public class Player extends Entity {
             setSpeedX(Math.max(Math.min(getSpeedX() + a * ax, a * getMaxSpeed()), -a * getMaxSpeed()));
             setSpeedY(Math.max(Math.min(getSpeedY() + a * ay, a * getMaxSpeed()), -a * getMaxSpeed()));
         }
-        super.move();
     }
 
     public void collides(Player player) {
@@ -221,8 +220,8 @@ public class Player extends Entity {
         Game.setFreezeFrame(5);
         Room.setScreenShakeDuration(20);
         Room.setScreenShakeStrength(20);
-        if (dashCooldown <= 10) {
-            setMaxSpeed(getMaxSpeed() / 3);
+        if (dashCooldown < 10) {
+            setMaxSpeed((int) (getMaxSpeed() / 3));
         }
         dashCooldown = 1000;
         hitCnt = 40;
@@ -321,7 +320,7 @@ public class Player extends Entity {
                 return;
             }
             dashCooldown = 0;
-            setMaxSpeed(3 * getMaxSpeed());
+            setMaxSpeed((int) (3 * getMaxSpeed()));
             Game.setFreezeFrame(3);
             Room.setScreenShakeDuration(2);
             Room.setScreenShakeStrength(2);

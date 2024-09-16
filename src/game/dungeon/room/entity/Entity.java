@@ -39,10 +39,7 @@ public abstract class Entity extends RoomObject {
         move();
     }
 
-    public void move() {
-        moveX(speedX);
-        moveY(speedY);
-    }
+    public abstract void move();
 
     public final boolean isMoving() {
         return speedX != 0 || speedY != 0;

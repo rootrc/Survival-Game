@@ -61,6 +61,22 @@ public class RoomObjectManager extends GameComponent {
     }
 
     public void update() {
+        for (int i = 1; i <= Math.abs(player.getSpeedX()); i += 1) {
+            if (player.getSpeedX() > 0) {
+                player.moveX(1);
+            } else if (player.getSpeedX() < 0) {
+                player.moveX(-1);
+            }
+            objectCollisions();
+        }
+        for (int i = 1; i <= Math.abs(player.getSpeedY()); i += 1) {
+            if (player.getSpeedY() > 0) {
+                player.moveY(1);
+            } else if (player.getSpeedY() < 0) {
+                player.moveY(-1);
+            }
+            objectCollisions();
+        }
         objectCollisions();
         objectInteractions();
         playerStairInteraction();

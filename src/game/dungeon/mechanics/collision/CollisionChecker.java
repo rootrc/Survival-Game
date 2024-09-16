@@ -19,7 +19,7 @@ public class CollisionChecker {
                     continue;
                 }
                 if (CollisionHandler.collides(player, collisionArray[r][c], r, c)) {
-                    CollisionHandler.handleCollision(player, collisionArray[r][c], r, c);
+                    CollisionHandler.handleCollision(player, collisionArray, r, c);
                     return;
                 }
             }
