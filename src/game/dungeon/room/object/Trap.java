@@ -30,16 +30,24 @@ public class Trap extends RoomObject {
     }
 
     public static Trap getTrap(RoomObjectData data) {
+        Trap trap;
         switch (data.id) {
             case RoomObjectData.saw0:
-                return new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
+                trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
                         data.r, data.c, new CollisionBox(0.375, 0.3125, 1.25, 1));
+                trap.setLightRadius(20);
+                trap.setLightVisibility(120);
+                return trap;
             case RoomObjectData.saw1:
-                return new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw1"), 8, 3),
+                trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw1"), 8, 3),
                         data.r, data.c, new CollisionBox(0.625, 0.3125, 2.75, 2.5));
+                trap.setLightRadius(40);
+                trap.setLightVisibility(160);
+                return trap;
             case RoomObjectData.movingSaw0:
-                return new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
+                trap = new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
                         data.r, data.c, data.a, data.b, new CollisionBox(0.375, 0.3125, 1.25, 1));
+                return trap;
             default:
                 return null;
         }
@@ -69,6 +77,8 @@ class MovingSaw extends Trap {
         this.direction = direction;
         setOnFloor(true);
         saw = new Saw(sawSpriteSheet, 0, 0, null);
+        saw.setLightRadius(20);
+        saw.setLightVisibility(160);
         add(saw);
         if (direction == 0) {
             int startingSawLocation = RNGUtilities.getInt(1, getHeight() - saw.getHeight());

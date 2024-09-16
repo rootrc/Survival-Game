@@ -21,6 +21,7 @@ public abstract class RoomObject extends GameComponent {
     private boolean onFloor;
 
     private double lightRadius;
+    private double lightVisibility;
 
     protected RoomObject(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
         super(spriteSheet.getWidth(), spriteSheet.getHeight());
@@ -28,6 +29,7 @@ public abstract class RoomObject extends GameComponent {
         setLocation(c * Dungeon.TILESIZE, r * Dungeon.TILESIZE);
         this.hitbox = hitbox;
         this.interactbox = interactbox;
+        setLightVisibility(1000000000);
     }
 
     protected RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
@@ -143,8 +145,16 @@ public abstract class RoomObject extends GameComponent {
         lightRadius += delta;
     }
 
+    public final void setLightVisibility(double lightVisibility) {
+        this.lightVisibility = lightVisibility;
+    }
+
+    public final double getLightVisibility() {
+        return lightVisibility;
+    }
+
     public final double getDistanceFromRoomObject(RoomObject o) {
-        if (hitbox == null) {
+        if (hitbox == null || o.getHitBox() == null) {
             return getDistance(o);
         }
         return Math.sqrt((getX() + getHitBox().getCenterX() - o.getX() - o.getHitBox().getCenterX())

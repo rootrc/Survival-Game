@@ -2,6 +2,7 @@ package game.dungeon.mechanics.lighting;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -114,9 +115,17 @@ public class LightingEngine extends GameComponent {
                     lights.get(player).decreaseVisibilityValue();
                     continue;
                 }
-                gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
-                        roomObject.getWidth() / 2 - lightRadius,
-                        roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
+                if (roomObject.getParent() instanceof RoomObject) {
+                    gl.drawImage(getDarknessFilter(lightRadius), roomObject.getParent().getX() + roomObject.getX() +
+                            roomObject.getWidth() / 2 - lightRadius,
+                            roomObject.getParent().getY() + roomObject.getY() + roomObject.getHeight() / 2
+                                    - lightRadius,
+                            null);
+                } else {
+                    gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
+                            roomObject.getWidth() / 2 - lightRadius,
+                            roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
+                }
             }
             gl.dispose();
         } else {
@@ -140,9 +149,17 @@ public class LightingEngine extends GameComponent {
                 if (lightRadius <= 1) {
                     continue;
                 }
-                gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
-                        roomObject.getWidth() / 2 - lightRadius,
-                        roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
+                if (roomObject.getParent() instanceof RoomObject) {
+                    gl.drawImage(getDarknessFilter(lightRadius), roomObject.getParent().getX() + roomObject.getX() +
+                            roomObject.getWidth() / 2 - lightRadius,
+                            roomObject.getParent().getY() + roomObject.getY() + roomObject.getHeight() / 2
+                                    - lightRadius,
+                            null);
+                } else {
+                    gl.drawImage(getDarknessFilter(lightRadius), roomObject.getX() +
+                            roomObject.getWidth() / 2 - lightRadius,
+                            roomObject.getY() + roomObject.getHeight() / 2 - lightRadius, null);
+                }
             }
             gl.dispose();
         }
@@ -150,13 +167,34 @@ public class LightingEngine extends GameComponent {
     }
 
     private void updateLight(RoomObject roomObject) {
+        for (Component component : roomObject.getComponents()) {
+            if (component instanceof RoomObject) {
+                updateLight((RoomObject) component);
+            }
+        }
         if (!lights.keySet().contains(roomObject)) {
             attachLight(roomObject);
         }
-        if (shadowCasting.isVisible(roomObject) || (getDistance(roomObject) < getEffectiveLightRadius(player))) {
-            lights.get(roomObject).increaseVisibilityValue();
+        if (roomObject.getParent() instanceof RoomObject) {
+            roomObject.moveX(roomObject.getParent().getX());
+            roomObject.moveY(roomObject.getParent().getY());
+            if ((shadowCasting.isVisible(roomObject)
+            && player.getDistanceFromRoomObject(roomObject) < roomObject.getLightVisibility())
+            || (player.getDistanceFromRoomObject(roomObject) < getEffectiveLightRadius(player))) {
+                lights.get(roomObject).increaseVisibilityValue();
+            } else {
+                lights.get(roomObject).decreaseVisibilityValue();
+            }
+            roomObject.moveX(-roomObject.getParent().getX());
+            roomObject.moveY(-roomObject.getParent().getY());
         } else {
-            lights.get(roomObject).decreaseVisibilityValue();
+            if ((shadowCasting.isVisible(roomObject)
+                    && player.getDistanceFromRoomObject(roomObject) < roomObject.getLightVisibility())
+                    || (player.getDistanceFromRoomObject(roomObject) < getEffectiveLightRadius(player))) {
+                lights.get(roomObject).increaseVisibilityValue();
+            } else {
+                lights.get(roomObject).decreaseVisibilityValue();
+            }
         }
     }
 

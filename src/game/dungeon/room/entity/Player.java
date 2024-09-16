@@ -126,7 +126,7 @@ public class Player extends Entity {
             setDirection(DirectionUtilities.getMovingDirection(movingUp, movingLeft, movingDown, movingRight));
         }
         if (dashCooldown == 10) {
-            setMaxSpeed(getMaxSpeed() / 2);
+            setMaxSpeed(getMaxSpeed() / 3);
         }
 
         if (hitCnt > 0) {
