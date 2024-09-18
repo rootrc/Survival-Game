@@ -84,25 +84,35 @@ public class RoomObjectManager extends GameComponent {
 
     private void objectCollisions() {
         collisionChecker.handleCollision(player);
-        for (Component object : getComponents()) {
-            if (object == player) {
+        for (Component roomObject : getComponents()) {
+            if (roomObject == player) {
                 continue;
             }
-            if (CollisionHandler.collides(player, (RoomObject) object)) {
-                ((RoomObject) object).collides(player);
-                CollisionHandler.handleCollision(player, (RoomObject) object);
+            if (CollisionHandler.collides(player, (RoomObject) roomObject)) {
+                ((RoomObject) roomObject).collides(player);
+                CollisionHandler.handleCollision(player, (RoomObject) roomObject);
+            }
+            for (Component subRoomObject : ((RoomObject) roomObject).getComponents()) {
+                ((RoomObject) subRoomObject).moveX(roomObject.getX());
+                ((RoomObject) subRoomObject).moveY(roomObject.getY());
+                if (CollisionHandler.collides(player, (RoomObject) subRoomObject)) {
+                    ((RoomObject) subRoomObject).collides(player);
+                    CollisionHandler.handleCollision(player, (RoomObject) subRoomObject);
+                }
+                ((RoomObject) subRoomObject).moveX(-roomObject.getX());
+                ((RoomObject) subRoomObject).moveY(-roomObject.getY());
             }
         }
     }
 
     private void objectInteractions() {
         player.clearInteractable();
-        for (Component object : getComponents()) {
-            if (object == player) {
+        for (Component roomObject : getComponents()) {
+            if (roomObject == player) {
                 continue;
             }
-            if (player.interacts((RoomObject) object)) {
-                player.addInteractable((RoomObject) object);
+            if (player.interacts((RoomObject) roomObject)) {
+                player.addInteractable((RoomObject) roomObject);
             }
         }
     }

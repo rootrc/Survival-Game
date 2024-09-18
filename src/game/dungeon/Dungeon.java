@@ -88,8 +88,8 @@ public class Dungeon extends GamePanel {
         easing = new Easing(60);
 
         roomFactory = new RoomFactory(player, UILayer, miniMap);
-        room = roomFactory.getStartingRoom(startingRoom);
-        // room = roomFactory.getStartingRoom(46);
+        // room = roomFactory.getStartingRoom(startingRoom);
+        room = roomFactory.getStartingRoom(2);
         // room = roomFactory.createRandomRoom(21, 34);
 
         miniMap.setStartingRoom(room);

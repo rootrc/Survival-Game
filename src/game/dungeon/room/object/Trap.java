@@ -36,18 +36,20 @@ public class Trap extends RoomObject {
                 trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
                         data.r, data.c, new CollisionBox(0.375, 0.3125, 1.25, 1));
                 trap.setLightRadius(20);
-                trap.setLightVisibility(120);
+                trap.setLightVisibility(150);
                 return trap;
             case RoomObjectData.saw1:
                 trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw1"), 8, 3),
                         data.r, data.c, new CollisionBox(0.625, 0.3125, 2.75, 2.5));
                 trap.setLightRadius(40);
-                trap.setLightVisibility(160);
+                trap.setLightVisibility(200);
                 return trap;
-            case RoomObjectData.movingSaw0:
-                trap = new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
-                        data.r, data.c, data.a, data.b, new CollisionBox(0.375, 0.3125, 1.25, 1));
-                return trap;
+            case RoomObjectData.movingVerticalSaw:
+                return new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
+                        data.r, data.c, 0, data.a, data.b, new CollisionBox(0.375, 0.3125, 1.25, 1));
+            case RoomObjectData.movingHorizontalSaw:
+                return new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
+                        data.r, data.c, 1, data.a, data.b, new CollisionBox(0.375, 0.3125, 1.25, 1));
             default:
                 return null;
         }
@@ -58,6 +60,11 @@ public class Trap extends RoomObject {
 class Saw extends Trap {
     public Saw(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox) {
         super(spriteSheet, r, c, hitbox);
+        if (spriteSheet.getHeight() / 16 == 1) {
+            moveY((32 - spriteSheet.getHeight()) / 2);
+        } else if (spriteSheet.getHeight() / 16 == 3) {
+            moveY((64 - spriteSheet.getHeight()) / 2);
+        }
         setOnFloor(true);
     }
 
@@ -69,44 +76,48 @@ class Saw extends Trap {
 class MovingSaw extends Trap {
     private Saw saw;
     private int direction;
+    private int speed;
     private int movementDirection;
-
-    public MovingSaw(SpriteSheet sawSpriteSheet, int r, int c, int direction, int length,
+    @Override
+    public void drawComponent(Graphics2D g2d) {
+        super.drawComponent(g2d);
+        g2d.drawRect(0, 0, getWidth(), getHeight());
+    }
+    public MovingSaw(SpriteSheet sawSpriteSheet, int r, int c, int direction, int length, int speed,
             CollisionBox hitbox) {
-        super(getBase(sawSpriteSheet, direction, length), r, c, hitbox);
+        super(getBase(sawSpriteSheet, direction, length), r, c, null);
         this.direction = direction;
+        this.speed = speed;
         setOnFloor(true);
-        saw = new Saw(sawSpriteSheet, 0, 0, null);
+        saw = new Saw(sawSpriteSheet, 0, 0, hitbox);
+        saw.moveY((sawSpriteSheet.getHeight() - getHeight()) / 2);
         saw.setLightRadius(20);
-        saw.setLightVisibility(160);
+        saw.setLightVisibility(200);
         add(saw);
         if (direction == 0) {
             int startingSawLocation = RNGUtilities.getInt(1, getHeight() - saw.getHeight());
             saw.setY(startingSawLocation);
-            getHitBox().setLocation(getHitBox().x, getHitBox().y + startingSawLocation);
         } else if (direction == 1) {
             int startingSawLocation = RNGUtilities.getInt(1, getWidth() - saw.getWidth());
             saw.setX(startingSawLocation);
-            getHitBox().setLocation(getHitBox().x + startingSawLocation, getHitBox().y);
+            moveY((getHeight() - sawSpriteSheet.getHeight()) /2);
         }
         if (RNGUtilities.getBoolean()) {
-            movementDirection = 1;
+            movementDirection = speed;
         } else {
-            movementDirection = -1;
+            movementDirection = -speed;
         }
     }
 
     public void update() {
         if (direction == 0) {
             saw.moveY(movementDirection);
-            getHitBox().setLocation(getHitBox().x, getHitBox().y + movementDirection);
-            if (saw.getY() == 0 || saw.getY() + saw.getHeight() == getHeight()) {
+            if (saw.getY() < speed || saw.getY() + saw.getHeight() + speed > getHeight()) {
                 movementDirection *= -1;
             }
         } else if (direction == 1) {
             saw.moveX(movementDirection);
-            getHitBox().setLocation(getHitBox().x + movementDirection, getHitBox().y);
-            if (saw.getX() == 0 || saw.getX() + saw.getWidth() == getWidth()) {
+            if (saw.getX() < speed || saw.getX() + saw.getWidth() + speed > getWidth()) {
                 movementDirection *= -1;
             }
         }
@@ -135,7 +146,7 @@ class MovingSaw extends Trap {
             int x0 = (sawSpriteSheet.getWidth() - spriteSheet.getWidth()) / 2;
             int y0 = (sawSpriteSheet.getHeight() - spriteSheet.getHeight()) / 2;
             BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(
-                    length * spriteSheet.getWidth() + 2 * x0, sawSpriteSheet.getHeight(), Transparency.TRANSLUCENT);
+                    length * spriteSheet.getWidth() + 2 * x0, sawSpriteSheet.getWidth(), Transparency.TRANSLUCENT);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
             g2d.drawImage(spriteSheet.getImage(), x0, y0, null);
             spriteSheet.nextFrame();

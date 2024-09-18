@@ -189,7 +189,8 @@ public abstract class RoomObject extends GameComponent {
         public static final int largeLightRock = 17;
         public static final int saw0 = 20;
         public static final int saw1 = 21;
-        public static final int movingSaw0 = 22;
+        public static final int movingVerticalSaw = 22;
+        public static final int movingHorizontalSaw = 23;
 
         public static final HashSet<Integer> fourSet = new HashSet<>() {
             {
@@ -199,7 +200,8 @@ public abstract class RoomObject extends GameComponent {
 
         public static final HashSet<Integer> fiveSet = new HashSet<>() {
             {
-                add(movingSaw0);
+                add(movingVerticalSaw);
+                add(movingHorizontalSaw);
             }
         };
 
