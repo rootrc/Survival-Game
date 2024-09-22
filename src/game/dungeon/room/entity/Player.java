@@ -112,7 +112,7 @@ public class Player extends Entity {
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
         if (isMoving()) {
-            if (hitCnt <= 40) {
+            if (hitCnt <= 60) {
                 getSpriteSheet().next();
             }
         } else {
@@ -130,11 +130,11 @@ public class Player extends Entity {
         }
 
         if (hitCnt > 0) {
-            if (hitCnt == 40) {
+            if (hitCnt == 60) {
                 replaceSpriteSheet(lastSpriteSheet);
             }
             hitCnt--;
-            if (hitCnt > 35) {
+            if (hitCnt > 55) {
                 moveX(3 * getMaxSpeed() * DirectionUtilities.getXMovement(hitDirection));
                 moveY(3 * getMaxSpeed() * DirectionUtilities.getYMovement(hitDirection));
             } else {
@@ -152,7 +152,7 @@ public class Player extends Entity {
 
     @Override
     public void move() {
-        if (dashCooldown < 4 | hitCnt >= 35) {
+        if (dashCooldown < 4 | hitCnt >= 55) {
             return;
         }
         double ax = 0;
@@ -217,14 +217,14 @@ public class Player extends Entity {
         }
         setSpeedX(0);
         setSpeedY(0);
-        Game.setFreezeFrame(5);
+        Game.setFreezeFrame(6);
         Room.setScreenShakeDuration(20);
         Room.setScreenShakeStrength(20);
         if (dashCooldown < 10) {
             setMaxSpeed((int) (getMaxSpeed() / 3));
         }
         dashCooldown = 1000;
-        hitCnt = 40;
+        hitCnt = 60;
         hitDirection = DirectionUtilities.reverseDirection(getDirection());
         lastSpriteSheet = getSpriteSheet();
         replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));

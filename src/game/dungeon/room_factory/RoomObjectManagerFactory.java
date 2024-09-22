@@ -19,14 +19,14 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
         RoomObjectManager roomObjectManager = new RoomObjectManager(player, tileGrid);
         if (file.getModifier() == RoomFileData.NO_MODIFIER) {
             for (RoomObjectData data : file.getRoomObjects()) {
-                RoomObject roomObject = RoomObject.getRoomObject(data);
+                RoomObject roomObject = RoomObject.getRoomObject(data, player);
                 if (roomObject != null) {
                     roomObjectManager.add(roomObject);
                 }
             }
         } else if (file.getModifier() == RoomFileData.REFLECTION_MODIFIER) {
             for (RoomObjectData data : file.getRoomObjects()) {
-                RoomObject roomObject = getHorizontialReflection(tileGrid, RoomObject.getRoomObject(data));
+                RoomObject roomObject = getHorizontialReflection(tileGrid, RoomObject.getRoomObject(data, player));
                 if (roomObject != null) {
                     roomObjectManager.add(roomObject);
                 }

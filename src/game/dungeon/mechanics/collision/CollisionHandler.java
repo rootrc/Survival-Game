@@ -1,5 +1,7 @@
 package game.dungeon.mechanics.collision;
 
+import java.awt.Rectangle;
+
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Entity;
 import game.dungeon.room.entity.Player;
@@ -28,7 +30,7 @@ public class CollisionHandler {
                 tile.getHitBox());
     }
 
-    private static boolean collides(int aX, int aY, CollisionBox aH, int bX, int bY, CollisionBox bH) {
+    public static boolean collides(int aX, int aY, Rectangle aH, int bX, int bY, Rectangle bH) {
         if (aH == null || bH == null) {
             return false;
         }
@@ -53,7 +55,7 @@ public class CollisionHandler {
         }
     }
 
-    private static void handleCollision(Player player, int bX, int bY, CollisionBox bH) {
+    private static void handleCollision(Player player, int bX, int bY, Rectangle bH) {
         CollisionBox aH = player.getHitBox();
         double aX0 = (player.getX() + aH.getX());
         double aY0 = (player.getY() + aH.getY());

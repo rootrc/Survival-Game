@@ -75,6 +75,7 @@ public class SpriteSheet {
 
     public void setFrame(int frame) {
         currentFrame = frame;
+        cnt = 0;
     }
 
     public void nextFrame() {

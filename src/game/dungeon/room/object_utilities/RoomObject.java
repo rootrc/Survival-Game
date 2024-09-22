@@ -163,7 +163,7 @@ public abstract class RoomObject extends GameComponent {
                         * (getY() + getHitBox().getCenterY() - o.getY() - o.getHitBox().getCenterY()));
     }
 
-    public static RoomObject getRoomObject(RoomObjectData data) {
+    public static RoomObject getRoomObject(RoomObjectData data, Player player) {
         if (data.id <= RoomObjectData.ladderDown) {
             return Ladder.getLadder(data);
         } else if (RoomObjectData.treasureChest0 <= data.id && data.id <= RoomObjectData.treasureChest4) {
@@ -171,7 +171,7 @@ public abstract class RoomObject extends GameComponent {
         } else if (RoomObjectData.smallLightRock <= data.id && data.id <= RoomObjectData.largeLightRock) {
             return LightRock.getLightRock(data);
         } else if (RoomObjectData.saw0 <= data.id) {
-            return Trap.getTrap(data);
+            return Trap.getTrap(data, player);
         }
         return null;
     }
@@ -191,6 +191,7 @@ public abstract class RoomObject extends GameComponent {
         public static final int saw1 = 21;
         public static final int movingVerticalSaw = 22;
         public static final int movingHorizontalSaw = 23;
+        public static final int spike = 24;
 
         public static final HashSet<Integer> fourSet = new HashSet<>() {
             {
