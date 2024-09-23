@@ -170,18 +170,10 @@ public class Player extends Entity {
             ax += getAccSpeed();
         }
         if (ax == 0) {
-            if (getSpeedX() > 0) {
-                setSpeedX(Math.max(getSpeedX() - getDeaccSpeed(), 0));
-            } else if (getSpeedX() < 0) {
-                setSpeedX(Math.min(getSpeedX() + getDeaccSpeed(), 0));
-            }
+            setSpeedX(Math.min(getSpeedX() - (int) Math.signum(getSpeedX()) * getDeaccSpeed(), 0));
         }
         if (ay == 0) {
-            if (getSpeedY() > 0) {
-                setSpeedY(Math.max(getSpeedY() - getDeaccSpeed(), 0));
-            } else if (getSpeedY() < 0) {
-                setSpeedY(Math.min(getSpeedY() + getDeaccSpeed(), 0));
-            }
+            setSpeedY(Math.min(getSpeedY() - (int) Math.signum(getSpeedY()) * getDeaccSpeed(), 0));
         }
         if (ax != 0 && ay == 0) {
             setSpeedX(Math.max(Math.min(getSpeedX() + ax, getMaxSpeed()), -getMaxSpeed()));

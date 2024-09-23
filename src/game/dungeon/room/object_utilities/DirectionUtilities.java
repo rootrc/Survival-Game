@@ -41,7 +41,7 @@ public class DirectionUtilities {
     }
 
     private static int getDirection(double speedX, double speedY) {
-        return HashToDirection8.get((int) (10 * getDirectionOfSpeed(speedX) + getDirectionOfSpeed(speedY)));
+        return HashToDirection8.get((int) (10 * Math.signum(speedX) + Math.signum(speedY)));
     }
 
     private static int getHash(int direction) {
@@ -49,19 +49,12 @@ public class DirectionUtilities {
     }
 
     public static int getXMovement(int direction) {
-        return (int) Math.round((getHash(direction) + getDirectionOfSpeed(getHash(direction))) / 10);
+        return (int) Math.round((getHash(direction) + Math.signum(getHash(direction))) / 10);
     }
 
     public static int getYMovement(int direction) {
-        return (getHash(direction) + getDirectionOfSpeed(getHash(direction))) % 10
-                - getDirectionOfSpeed(getHash(direction));
-    }
-
-    private static int getDirectionOfSpeed(double speed) {
-        if (speed == 0) {
-            return 0;
-        }
-        return (int) (speed / Math.abs(speed));
+        return (getHash(direction) + (int) Math.signum(getHash(direction))) % 10
+                - (int) Math.signum(getHash(direction));
     }
 
     public static int getMovingDirection(boolean movingUp, boolean movingLeft, boolean movingDown,

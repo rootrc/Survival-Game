@@ -97,7 +97,7 @@ public abstract class RoomObject extends GameComponent {
         return hitbox;
     }
 
-    public final void setHitBox(CollisionBox hitBox) {
+    public final void setHitBox(CollisionBox hitbox) {
         this.hitbox = hitbox;
     }
 
