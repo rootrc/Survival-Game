@@ -94,6 +94,10 @@ public class SpriteSheet {
             nextFrame();
         }
     }
+
+    public boolean isNewFrame() {
+        return cnt == 0;
+    }
     
     public void setFrameLength(int frameLength) {
         this.frameLength = frameLength;

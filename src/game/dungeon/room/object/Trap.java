@@ -8,6 +8,7 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
 import game.dungeon.mechanics.collision.CollisionHandler;
+import game.dungeon.room.Room;
 import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -48,6 +49,12 @@ public abstract class Trap extends RoomObject {
                 trap = new Spike(new SpriteSheet(ImageUtilities.getImage("objects", "spike"), 12, 6),
                         data.r - 3, data.c - 3, new CollisionBox(3, 3, 2, 2), player);
                 trap.setLightRadius(32);
+                trap.setLightVisibility(150);
+                return trap;
+            case RoomObjectData.explosive:
+                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
+                        data.r - 3, data.c - 3, player);
+                trap.setLightRadius(24);
                 trap.setLightVisibility(150);
                 return trap;
             default:
@@ -197,11 +204,10 @@ class Spike extends Trap {
     }
 
     public void update() {
-        int currentFrame = getSpriteSheet().getFrame();
         if (canHitPlayer() || getSpriteSheet().getFrame() != 0) {
             getSpriteSheet().next();
         }
-        if (currentFrame == getSpriteSheet().getFrame()) {
+        if (!getSpriteSheet().isNewFrame()) {
             return;
         }
         downBlade.getHitBox().setBounds(0, 0, (int) downBlade.getHitBox().getWidth(),
@@ -258,4 +264,49 @@ class Spike extends Trap {
         }
 
     }
+}
+
+class Explosive extends Trap {
+    private Player player;
+    private static final int hitFrame = 6;
+
+    public Explosive(SpriteSheet spriteSheet, int r, int c, Player player) {
+        super(spriteSheet, r, c, null);
+        this.player = player;
+    }
+
+    public void update() {
+        if ((canHitPlayer() || getSpriteSheet().getFrame() != 0)
+                && getSpriteSheet().getFrame() != getSpriteSheet().getFrameCnt() - 1) {
+            getSpriteSheet().next();
+            if (!getSpriteSheet().isNewFrame()) {
+                return;
+            }
+            if (getSpriteSheet().getFrame() == hitFrame) {
+                setHitBox(hitbox);
+                Room.setScreenShakeDuration(10);
+                Room.setScreenShakeStrength(10);
+            } else if (getSpriteSheet().getFrame() == hitFrame + 3) {
+                setHitBox(null);
+                setLightRadius(0);
+            }
+        }
+    }
+
+    private CollisionBox hitbox = new CollisionBox(1, 1, 4, 4);
+
+    private boolean canHitPlayer() {
+        int futurePlayerX = (int) (player.getX());
+        int futurePlayerY = (int) (player.getY());
+        if (CollisionHandler.collides(futurePlayerX, futurePlayerY, player.getHitBox(), getX(),
+                getY(), hitbox)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void collides(Player player) {
+        player.takeDamage();
+    }
+
 }

@@ -97,6 +97,10 @@ public abstract class RoomObject extends GameComponent {
         return hitbox;
     }
 
+    public final void setHitBox(CollisionBox hitBox) {
+        this.hitbox = hitbox;
+    }
+
     public final int getMinRow() {
         if (hitbox == null) {
             return (int) (getY() / Dungeon.TILESIZE);
@@ -192,6 +196,7 @@ public abstract class RoomObject extends GameComponent {
         public static final int movingVerticalSaw = 22;
         public static final int movingHorizontalSaw = 23;
         public static final int spike = 24;
+        public static final int explosive = 25;
 
         public static final HashSet<Integer> fourSet = new HashSet<>() {
             {
