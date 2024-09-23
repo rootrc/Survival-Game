@@ -23,13 +23,17 @@ public abstract class RoomObject extends GameComponent {
     private double lightRadius;
     private double lightVisibility;
 
-    protected RoomObject(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
-        super(spriteSheet.getWidth(), spriteSheet.getHeight());
-        this.spriteSheet = spriteSheet;
+    protected RoomObject(int width, int height, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
+        super(width, height);
         setLocation(c * Dungeon.TILESIZE, r * Dungeon.TILESIZE);
         this.hitbox = hitbox;
         this.interactbox = interactbox;
-        setLightVisibility(1000000000);
+        setLightVisibility(10000);
+    }
+
+    protected RoomObject(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
+        this(spriteSheet.getWidth(), spriteSheet.getHeight(), r, c, hitbox, interactbox);
+        this.spriteSheet = spriteSheet;
     }
 
     protected RoomObject(BufferedImage image, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {
@@ -37,7 +41,9 @@ public abstract class RoomObject extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(spriteSheet.getImage(), 0, 0, null);
+        if (spriteSheet != null) {
+            g2d.drawImage(spriteSheet.getImage(), 0, 0, null);
+        }
         if (!Game.DEBUG) {
             return;
         }
@@ -93,11 +99,11 @@ public abstract class RoomObject extends GameComponent {
         return interactbox;
     }
 
-    public final CollisionBox getHitBox() {
+    public final CollisionBox getHitbox() {
         return hitbox;
     }
 
-    public final void setHitBox(CollisionBox hitbox) {
+    public final void setHitbox(CollisionBox hitbox) {
         this.hitbox = hitbox;
     }
 
@@ -158,13 +164,13 @@ public abstract class RoomObject extends GameComponent {
     }
 
     public final double getDistanceFromRoomObject(RoomObject o) {
-        if (hitbox == null || o.getHitBox() == null) {
+        if (hitbox == null || o.getHitbox() == null) {
             return getDistance(o);
         }
-        return Math.sqrt((getX() + getHitBox().getCenterX() - o.getX() - o.getHitBox().getCenterX())
-                * (getX() + getHitBox().getCenterX() - o.getX() - o.getHitBox().getCenterX())
-                + (getY() + getHitBox().getCenterY() - o.getY() - o.getHitBox().getCenterY())
-                        * (getY() + getHitBox().getCenterY() - o.getY() - o.getHitBox().getCenterY()));
+        return Math.sqrt((getX() + getHitbox().getCenterX() - o.getX() - o.getHitbox().getCenterX())
+                * (getX() + getHitbox().getCenterX() - o.getX() - o.getHitbox().getCenterX())
+                + (getY() + getHitbox().getCenterY() - o.getY() - o.getHitbox().getCenterY())
+                        * (getY() + getHitbox().getCenterY() - o.getY() - o.getHitbox().getCenterY()));
     }
 
     public static RoomObject getRoomObject(RoomObjectData data, Player player) {
@@ -197,6 +203,7 @@ public abstract class RoomObject extends GameComponent {
         public static final int movingHorizontalSaw = 23;
         public static final int spike = 24;
         public static final int explosive = 25;
+        public static final int explosiveDud = 26;
 
         public static final HashSet<Integer> fourSet = new HashSet<>() {
             {

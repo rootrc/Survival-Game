@@ -19,15 +19,15 @@ public class CollisionHandler {
         if (b == null) {
             return false;
         }
-        return collides(a.getX(), a.getY(), a.getHitBox(), b.getX(), b.getY(), b.getHitBox());
+        return collides(a.getX(), a.getY(), a.getHitbox(), b.getX(), b.getY(), b.getHitbox());
     }
 
     public static boolean collides(Entity entity, Tile tile, int r, int c) {
         if (tile == null) {
             return false;
         }
-        return collides(entity.getX(), entity.getY(), entity.getHitBox(), c * Dungeon.TILESIZE, r * Dungeon.TILESIZE,
-                tile.getHitBox());
+        return collides(entity.getX(), entity.getY(), entity.getHitbox(), c * Dungeon.TILESIZE, r * Dungeon.TILESIZE,
+                tile.getHitnox());
     }
 
     public static boolean collides(int aX, int aY, Rectangle aH, int bX, int bY, Rectangle bH) {
@@ -44,19 +44,19 @@ public class CollisionHandler {
     }
 
     public static void handleCollision(Player player, RoomObject roomObject) {
-        handleCollision(player, roomObject.getX(), roomObject.getY(), roomObject.getHitBox());
+        handleCollision(player, roomObject.getX(), roomObject.getY(), roomObject.getHitbox());
     }
 
     public static void handleCollision(Player player, Tile[][] collisionArray, int r, int c) {
         if (DirectionUtilities.getXMovement(player.getDirection()) == -1 && CollisionHandler.collides(player, collisionArray[r][c + 1], r, c + 1)) {
-            handleCollision(player, (c + 1) * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c + 1].getHitBox());
+            handleCollision(player, (c + 1) * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c + 1].getHitnox());
         } else {
-            handleCollision(player, c * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c].getHitBox());
+            handleCollision(player, c * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c].getHitnox());
         }
     }
 
     private static void handleCollision(Player player, int bX, int bY, Rectangle bH) {
-        CollisionBox aH = player.getHitBox();
+        CollisionBox aH = player.getHitbox();
         double aX0 = (player.getX() + aH.getX());
         double aY0 = (player.getY() + aH.getY());
         double aX1 = (player.getX() + aH.getMaxX());

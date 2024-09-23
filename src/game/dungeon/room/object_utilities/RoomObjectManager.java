@@ -39,11 +39,11 @@ public class RoomObjectManager extends GameComponent {
                 }
                 double ay = a.getHeight() / 2;
                 double by = b.getHeight() / 2;
-                if (a.getHitBox() != null) {
-                    ay = a.getHitBox().getY();
+                if (a.getHitbox() != null) {
+                    ay = a.getHitbox().getY();
                 }
-                if (b.getHitBox() != null) {
-                    by = b.getHitBox().getY();
+                if (b.getHitbox() != null) {
+                    by = b.getHitbox().getY();
                 }
                 if (a.getY() + ay < b.getY() + by) {
                     return 1;

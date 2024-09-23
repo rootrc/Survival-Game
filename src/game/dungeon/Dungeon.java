@@ -32,6 +32,7 @@ public class Dungeon extends GamePanel {
     public static final int maxScreenCol = 64;
 
     private static final int startingRoom = 1;
+    public static final int setNum = 0;
 
     private int depth = 0;
     private int depthMapCnt[] = new int[12];
@@ -89,7 +90,6 @@ public class Dungeon extends GamePanel {
 
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(startingRoom);
-        // room = roomFactory.getStartingRoom(2);
         // room = roomFactory.createRandomRoom(21, 34);
 
         miniMap.setStartingRoom(room);

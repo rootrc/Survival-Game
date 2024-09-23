@@ -95,7 +95,7 @@ public class SpriteSheet {
         }
     }
 
-    public boolean isNewFrame() {
+    public boolean isStartofFrame() {
         return cnt == 0;
     }
     

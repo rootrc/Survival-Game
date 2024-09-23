@@ -49,13 +49,13 @@ public class Ladder extends RoomObject {
             case RoomObjectData.ladderUp:
                 return new Ladder(ImageUtilities.getImage("objects", "ladderup"), data.r, data.c,
                         -Dungeon.TILESIZE / 2, Dungeon.TILESIZE,
-                        new CollisionBox(0, 1.25, 1, 0.75),
-                        new CollisionBox(-0.25, 1, 1.5, 1.75), 1);
+                        CollisionBox.getCollisionBox(0, 1.25, 1, 0.75),
+                        CollisionBox.getCollisionBox(-0.25, 1, 1.5, 1.75), 1);
             case RoomObjectData.ladderDown:
                 return new Ladder(ImageUtilities.getImage("objects", "ladderdown"), data.r, data.c,
                         0, -Dungeon.TILESIZE * 3,
-                        new CollisionBox(0.25, 0.125, 1.5, 1.625),
-                        new CollisionBox(0, -0.5, 2, 2.5), -1);
+                        CollisionBox.getCollisionBox(0.25, 0.125, 1.5, 1.625),
+                        CollisionBox.getCollisionBox(0, -0.5, 2, 2.5), -1);
             default:
                 return null;
         }

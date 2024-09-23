@@ -37,22 +37,22 @@ public class LightRock extends RoomObject {
             case RoomObjectData.smallLightRock:
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock0"), 2),
                         data.r, data.c,
-                        new CollisionBox(0, 1.125, 1, 0.75),
-                        new CollisionBox(-0.5, 0.625, 2, 1.75), DiffSettings.lightRockValue);
+                        CollisionBox.getCollisionBox(0, 1.125, 1, 0.75),
+                        CollisionBox.getCollisionBox(-0.5, 0.625, 2, 1.75), DiffSettings.lightRockValue);
                 lightRock.setLightRadius(DiffSettings.lightRockLightRadius);
                 return lightRock;
             case RoomObjectData.mediumLightRock:
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock1"), 2),
                         data.r, data.c,
-                        new CollisionBox(0.125, 0.5, 1.75, 1.375),
-                        new CollisionBox(-0.375, 0, 2.75, 2.375), 4 * DiffSettings.lightRockValue);
+                        CollisionBox.getCollisionBox(0.125, 0.5, 1.75, 1.375),
+                        CollisionBox.getCollisionBox(-0.375, 0, 2.75, 2.375), 4 * DiffSettings.lightRockValue);
                 lightRock.setLightRadius(2 * DiffSettings.lightRockLightRadius);
                 return lightRock;
             case RoomObjectData.largeLightRock:
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock2"), 2),
                         data.r, data.c,
-                        new CollisionBox(0.5, 1.375, 2, 1.5),
-                        new CollisionBox(0, 0.875, 3, 2.5), 6 * DiffSettings.lightRockValue);
+                        CollisionBox.getCollisionBox(0.5, 1.375, 2, 1.5),
+                        CollisionBox.getCollisionBox(0, 0.875, 3, 2.5), 6 * DiffSettings.lightRockValue);
                 lightRock.setLightRadius(4 * DiffSettings.lightRockLightRadius);
                 return lightRock;
             default:

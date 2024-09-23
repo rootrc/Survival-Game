@@ -63,8 +63,8 @@ public class Player extends Entity {
 
     public Player(Action nextRoom, Inventory inventory) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
-                new CollisionBox(0.5, 1.75, 1, 1),
-                new CollisionBox(0, 1.25, 2, 2),
+                CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
+                CollisionBox.getCollisionBox(0, 1.25, 2, 2),
                 3 * Dungeon.TILESIZE / 16, 3 * Dungeon.TILESIZE / 160.0, 3 * Dungeon.TILESIZE / 80.0);
         this.nextRoom = nextRoom;
         this.inventory = inventory;

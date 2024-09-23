@@ -3,6 +3,7 @@ package game.dungeon.room_factory;
 import java.util.ArrayList;
 
 import game.Game;
+import game.dungeon.Dungeon;
 import game.dungeon.room.object_utilities.RoomObject.RoomObjectData;
 import game.utilities.FileOpener;
 import game.utilities.RNGUtilities;
@@ -46,7 +47,9 @@ public class RoomFileData extends FileOpener {
         }
         int objectDataSetCnt = nextInt();
         int setNum = RNGUtilities.getInt(objectDataSetCnt);
-        // setNum = 1;
+        if (Game.DEBUG) {
+            setNum = Dungeon.setNum;
+        }
         int K;
         for (int i = 0; i < 3 * setNum; i++) {
             K = nextInt();

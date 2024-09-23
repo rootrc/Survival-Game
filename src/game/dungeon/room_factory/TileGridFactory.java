@@ -57,20 +57,20 @@ class TileGridFactory extends Factory<TileGrid> {
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
                 if (tileGridArray[2][r][c] != null) {
-                    if (tileGridArray[2][r][c].getHitBox() != null
+                    if (tileGridArray[2][r][c].getHitnox() != null
                             || tileGridArray[2][r][c].getHeight() != Tile.FLOOR) {
                         res[r][c] = tileGridArray[2][r][c];
                     }
                     continue;
                 }
                 if (tileGridArray[1][r][c] != null) {
-                    if (tileGridArray[1][r][c].getHitBox() != null) {
+                    if (tileGridArray[1][r][c].getHitnox() != null) {
                         res[r][c] = tileGridArray[1][r][c];
                         continue;
                     }
                 }
                 if (tileGridArray[3][r][c] != null) {
-                    if (tileGridArray[3][r][c].getHitBox() != null) {
+                    if (tileGridArray[3][r][c].getHitnox() != null) {
                         res[r][c] = tileGridArray[3][r][c];
                         continue;
                     }
