@@ -11,7 +11,7 @@ import game.Game;
 // A layer to put UIComponents
 public class UILayer extends GameComponent {
     public UILayer() {
-        super(Game.screenWidth, Game.screenHeight);
+        super(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
     }
 
     public void update() {

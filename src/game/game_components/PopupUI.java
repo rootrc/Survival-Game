@@ -24,7 +24,7 @@ public abstract class PopupUI extends GameComponent {
         super(width, height);
         this.UILayer = UILayer;
         this.framesToEnter = framesToEnter;
-        setLocation((Game.screenWidth - getWidth()) / 2, (Game.screenHeight - getHeight()) / 2);
+        setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, (Game.SCREEN_HEIGHT - getHeight()) / 2);
         buildImage(tileSet);
         getInputMap(2).put(KeyBinds.escape, "close");
         getActionMap().put("close", close);
@@ -38,18 +38,18 @@ public abstract class PopupUI extends GameComponent {
         if (!moving) {
             return;
         }
-        if (getX() < (Game.screenWidth - getWidth()) / 2) {
-            setX(-getWidth() + (Game.screenWidth + getWidth()) / 2 * Easing.easeInOutQuad((double) timer / framesToEnter));
+        if (getX() < (Game.SCREEN_WIDTH - getWidth()) / 2) {
+            setX(-getWidth() + (Game.SCREEN_WIDTH + getWidth()) / 2 * Easing.easeInOutQuad((double) timer / framesToEnter));
             timer++;
         } else {
-            setX((Game.screenWidth - getWidth()) / 2
-                    + (Game.screenWidth + getWidth()) / 2 * Easing.easeInOutQuad((double) timer / framesToEnter));
+            setX((Game.SCREEN_WIDTH - getWidth()) / 2
+                    + (Game.SCREEN_WIDTH + getWidth()) / 2 * Easing.easeInOutQuad((double) timer / framesToEnter));
             timer++;
         }
-        if (getX() == (Game.screenWidth - getWidth()) / 2) {
+        if (getX() == (Game.SCREEN_WIDTH - getWidth()) / 2) {
             moving = false;
             timer = 1;
-        } else if (getX() == Game.screenWidth) {
+        } else if (getX() == Game.SCREEN_WIDTH) {
             UILayer.remove(this);
         }
     }

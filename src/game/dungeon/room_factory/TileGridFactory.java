@@ -15,25 +15,39 @@ import game.utilities.roomgenerator.MapGenerator;
 // When I wrote this only God and I knew how it was worked
 // Now only God knows
 class TileGridFactory extends Factory<TileGrid> {
-    private static final int layers = 4;
-    private static final int tileN = 18;
-    private static final int tileM = 16;
-    private static final Tile tileMap[][] = new Tile[tileN][tileM];
+    private static final int LAYERS = 4;
+    private static final int TILE_N = 18;
+    private static final int TILE_M = 16;
+    private static final Tile TILEMAP[][] = new Tile[TILE_N][TILE_M];
 
-    TileGridFactory() {
-        for (int r = 0; r < tileN; r++) {
-            for (int c = 0; c < tileM; c++) {
-                tileMap[r][c] = Tile.getTile(r, c);
+    private static final int direct[][] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+    private static final int direct2[][] = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 } };
+
+    private static final int[] smallfeatures = { 5, 6, 7, 8, 23, 24, 25, 26, 41, 42, 43, 44 };
+    private static final HashSet<Integer> layer0 = new HashSet<>(Arrays.asList(5, 6));
+    private static final HashSet<Integer> layer1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 6));
+    private static final HashSet<Integer> layer2 = new HashSet<>(Arrays.asList(1, 2, 4, 5, 6));
+    private static final HashSet<Integer> layer3 = new HashSet<>(Arrays.asList(0, 3));
+    private static final HashSet<Integer> layer4 = new HashSet<>(Arrays.asList(3));
+    private static final HashSet<Integer> layer5 = new HashSet<>(Arrays.asList(-1, 2, 5));
+
+    static {
+        for (int r = 0; r < TILE_N; r++) {
+            for (int c = 0; c < TILE_M; c++) {
+                TILEMAP[r][c] = Tile.getTile(r, c);
             }
         }
     }
 
-    TileGrid createRandomGrid(int N, int M, Player player) {
+    private TileGridFactory() {
+    }
+
+    static TileGrid createRandomGrid(int N, int M, Player player) {
         Tile[][][][] tileGridArray = createTileGridArray(MapGenerator.getRandomMap(N, M));
         return new TileGrid(tileGridArray, player, getCollisionChecker(tileGridArray), null);
     }
 
-    TileGrid createTileGrid(RoomFileData file, Player player) {
+    static TileGrid createTileGrid(RoomFileData file, Player player) {
         int[][] fileTileGridClone = new int[file.getN()][];
         for (int i = 0; i < file.getN(); i++) {
             fileTileGridClone[i] = file.getTileGridArray()[i].clone();
@@ -42,15 +56,15 @@ class TileGridFactory extends Factory<TileGrid> {
         return new TileGrid(tileGridArray, player, getCollisionChecker(tileGridArray), getHeightHandler(file));
     }
 
-    private CollisionChecker getCollisionChecker(Tile[][][][] tileGridArray) {
+    private static CollisionChecker getCollisionChecker(Tile[][][][] tileGridArray) {
         return new CollisionChecker(getCollisionTiles(tileGridArray[0], tileGridArray[1]));
     }
 
-    private HeightHandler getHeightHandler(RoomFileData roomFileData) {
+    private static HeightHandler getHeightHandler(RoomFileData roomFileData) {
         return new HeightHandler(getHeightArray(roomFileData.getTileGridArray()));
     }
 
-    private Tile[][] getCollisionTiles(Tile[][][] tileGridArray, Tile[][][] tileGridArray1) {
+    private static Tile[][] getCollisionTiles(Tile[][][] tileGridArray, Tile[][][] tileGridArray1) {
         int N = tileGridArray[0].length;
         int M = tileGridArray[0][0].length;
         Tile[][] res = new Tile[N][M];
@@ -80,7 +94,7 @@ class TileGridFactory extends Factory<TileGrid> {
 
     }
 
-    private int[][] getHeightArray(int[][] tileGridArray) {
+    private static int[][] getHeightArray(int[][] tileGridArray) {
         int N = tileGridArray.length;
         int M = tileGridArray[0].length;
         int[][] height = new int[N][M];
@@ -126,13 +140,13 @@ class TileGridFactory extends Factory<TileGrid> {
         return height;
     }
 
-    private Tile[][][][] createTileGridArray(int fileTileGrid[][]) {
+    private static Tile[][][][] createTileGridArray(int fileTileGrid[][]) {
         int N = fileTileGrid.length;
         int M = fileTileGrid[0].length;
         int arr2[][][][] = new int[2][][][];
-        arr2[0] = new int[layers][N][M];
+        arr2[0] = new int[LAYERS][N][M];
         arr2[1] = new int[2][N][M];
-        for (int i = 1; i < layers; i++) {
+        for (int i = 1; i < LAYERS; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
                     arr2[0][i][r][c] = -1;
@@ -179,17 +193,17 @@ class TileGridFactory extends Factory<TileGrid> {
         }
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
-                layer41(clone, arr2[1][1], r, c);
+                layer5(clone, arr2[1][1], r, c);
             }
         }
         Tile[][][][] res = new Tile[2][][][];
-        res[0] = new Tile[layers][N][M];
+        res[0] = new Tile[LAYERS][N][M];
         res[1] = new Tile[2][N][M];
-        for (int i = 0; i < layers; i++) {
+        for (int i = 0; i < LAYERS; i++) {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
                     if (arr2[0][i][r][c] != -1) {
-                        res[0][i][r][c] = tileMap[arr2[0][i][r][c] % tileN][arr2[0][i][r][c] / tileN];
+                        res[0][i][r][c] = TILEMAP[arr2[0][i][r][c] % TILE_N][arr2[0][i][r][c] / TILE_N];
                     } else {
                         res[0][i][r][c] = null;
                     }
@@ -200,7 +214,7 @@ class TileGridFactory extends Factory<TileGrid> {
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
                     if (arr2[1][i][r][c] != -1) {
-                        res[1][i][r][c] = tileMap[arr2[1][i][r][c] % tileN][arr2[1][i][r][c] / tileN];
+                        res[1][i][r][c] = TILEMAP[arr2[1][i][r][c] % TILE_N][arr2[1][i][r][c] / TILE_N];
                     } else {
                         res[1][i][r][c] = null;
                     }
@@ -210,12 +224,7 @@ class TileGridFactory extends Factory<TileGrid> {
         return res;
     }
 
-    private static final int direct[][] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-    private static final int direct2[][] = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 } };
-
-    private static final HashSet<Integer> layer0 = new HashSet<>(Arrays.asList(5, 6));
-
-    private void layer0(int[][] arr, int[][] arr2, int r, int c) {
+    private static void layer0(int[][] arr, int[][] arr2, int r, int c) {
         if (!layer0.contains(arr[r][c])) {
             arr2[r][c] = 73;
             return;
@@ -296,9 +305,7 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    private static final HashSet<Integer> layer1 = new HashSet<>(Arrays.asList(1, 2, 3, 4, 6));
-
-    private void layer1(int[][] arr, int[][] arr2, int r, int c) {
+    private static void layer1(int[][] arr, int[][] arr2, int r, int c) {
         if (!layer1.contains(arr[r][c])) {
             return;
         }
@@ -382,10 +389,7 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    private static final HashSet<Integer> layer2 = new HashSet<>(Arrays.asList(1, 2, 4, 5, 6));
-    private static final int[] smallfeatures = { 5, 6, 7, 8, 23, 24, 25, 26, 41, 42, 43, 44 };
-
-    private void layer2(int[][] arr, int[][] arr2, int r, int c) {
+    private static void layer2(int[][] arr, int[][] arr2, int r, int c) {
         if (arr2[r][c] != -1) {
             return;
         }
@@ -474,9 +478,7 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    private final HashSet<Integer> layer3 = new HashSet<>(Arrays.asList(0, 3));
-
-    private void layer3(int[][] arr, int[][] arr2, int r, int c) {
+    private static void layer3(int[][] arr, int[][] arr2, int r, int c) {
         if (arr[r][c] != 3) {
             return;
         }
@@ -534,9 +536,7 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    private final HashSet<Integer> layer4 = new HashSet<>(Arrays.asList(3));
-
-    private void layer4(int[][] arr, int[][] arr2, int r, int c) {
+    private static void layer4(int[][] arr, int[][] arr2, int r, int c) {
         if (arr[r][c] == 0) {
             arr2[r][c] = 145;
             return;
@@ -585,9 +585,7 @@ class TileGridFactory extends Factory<TileGrid> {
         }
     }
 
-    private final HashSet<Integer> layer41 = new HashSet<>(Arrays.asList(-1, 2, 5));
-
-    private void layer41(int[][] arr, int[][] arr2, int r, int c) {
+    private static void layer5(int[][] arr, int[][] arr2, int r, int c) {
         if (arr[r][c] == 0 || arr[r][c] == 3) {
             arr2[r][c] = 145;
             return;
@@ -600,38 +598,38 @@ class TileGridFactory extends Factory<TileGrid> {
         for (int d[] : direct) {
             if (r + d[0] == -1 || r + d[0] == arr.length || c + d[1] == -1 || c + d[1] == arr[0].length) {
                 cnt++;
-            } else if (!layer41.contains(arr[r + d[0]][c + d[1]])) {
+            } else if (!layer5.contains(arr[r + d[0]][c + d[1]])) {
                 cnt++;
             }
         }
         if (cnt == 4) {
-            if (layer41.contains(arr[r + 1][c - 1])) {
+            if (layer5.contains(arr[r + 1][c - 1])) {
                 arr2[r][c] = 128;
-            } else if (layer41.contains(arr[r + 1][c + 1])) {
+            } else if (layer5.contains(arr[r + 1][c + 1])) {
                 arr2[r][c] = 126;
-            } else if (layer41.contains(arr[r - 1][c - 1])) {
+            } else if (layer5.contains(arr[r - 1][c - 1])) {
                 arr2[r][c] = 164;
-            } else if (layer41.contains(arr[r - 1][c + 1])) {
+            } else if (layer5.contains(arr[r - 1][c + 1])) {
                 arr2[r][c] = 162;
             }
         } else if (cnt == 3) {
-            if (layer41.contains(arr[r - 1][c])) {
+            if (layer5.contains(arr[r - 1][c])) {
                 arr2[r][c] = 163;
-            } else if (layer41.contains(arr[r + 1][c])) {
+            } else if (layer5.contains(arr[r + 1][c])) {
                 arr2[r][c] = 127;
-            } else if (layer41.contains(arr[r][c - 1])) {
+            } else if (layer5.contains(arr[r][c - 1])) {
                 arr2[r][c] = 146;
-            } else if (layer41.contains(arr[r][c + 1])) {
+            } else if (layer5.contains(arr[r][c + 1])) {
                 arr2[r][c] = 144;
             }
         } else if (cnt == 2) {
-            if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r - 1][c])) {
+            if (layer5.contains(arr[r][c - 1]) && layer5.contains(arr[r - 1][c])) {
                 arr2[r][c] = 148;
-            } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r - 1][c])) {
+            } else if (layer5.contains(arr[r][c + 1]) && layer5.contains(arr[r - 1][c])) {
                 arr2[r][c] = 147;
-            } else if (layer41.contains(arr[r][c - 1]) && layer41.contains(arr[r + 1][c])) {
+            } else if (layer5.contains(arr[r][c - 1]) && layer5.contains(arr[r + 1][c])) {
                 arr2[r][c] = 130;
-            } else if (layer41.contains(arr[r][c + 1]) && layer41.contains(arr[r + 1][c])) {
+            } else if (layer5.contains(arr[r][c + 1]) && layer5.contains(arr[r + 1][c])) {
                 arr2[r][c] = 129;
             }
         }

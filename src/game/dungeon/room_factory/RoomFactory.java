@@ -17,7 +17,6 @@ import game.utilities.RNGUtilities;
 
 public class RoomFactory extends Factory<Room> {
     private HashMap<Integer, Room> rooms;
-    private TileGridFactory tileFactory;
     private RoomObjectManagerFactory roomObjectManagerFactory;
     private DungeonLayoutGenerator dungeonGenerator;
     private Player player;
@@ -29,26 +28,25 @@ public class RoomFactory extends Factory<Room> {
         this.UILayer = UILayer;
         this.miniMap = miniMap;
         rooms = new HashMap<>();
-        tileFactory = new TileGridFactory();
         roomObjectManagerFactory = new RoomObjectManagerFactory(player);
         dungeonGenerator = new DungeonLayoutGenerator();
     }
 
     // TEMP
     public Room createRandomRoom(int N, int M) {
-        TileGrid tileGrid = tileFactory.createRandomGrid(N, M, player);
+        TileGrid tileGrid = TileGridFactory.createRandomGrid(N, M, player);
         return new Room(tileGrid);
     }
 
     public Room getStartingRoom(int id) {
         player.set(312, 100);
         RoomFileData file = new RoomFileData(id);
-        TileGrid tileGrid = tileFactory.createTileGrid(file, player);
+        TileGrid tileGrid = TileGridFactory.createTileGrid(file, player);
         RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
         Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
         if (!Game.DEBUG) {
-            room.setLocation(Game.screenWidth / 2 - player.getX(), Game.screenHeight / 2 - player.getY());
+            room.setLocation(Game.SCREEN_WIDTH / 2 - player.getX(), Game.SCREEN_HEIGHT / 2 - player.getY());
         }
         putRoom(id, room);
         return rooms.get(id);
@@ -89,12 +87,12 @@ public class RoomFactory extends Factory<Room> {
             return;
         }
         previousRoom.setFreeze(true);
-        nextRoom.setLocation(Game.screenWidth / 2 - previousRoom.getConnectedLadder(player.getLadder()).getX(),
-        Game.screenHeight / 2 - previousRoom.getConnectedLadder(player.getLadder()).getY() + 2048 * player.getDepthMovement());
+        nextRoom.setLocation(Game.SCREEN_WIDTH / 2 - previousRoom.getConnectedLadder(player.getLadder()).getX(),
+        Game.SCREEN_HEIGHT / 2 - previousRoom.getConnectedLadder(player.getLadder()).getY() + 2048 * player.getDepthMovement());
     }
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {
-        TileGrid tileGrid = tileFactory.createTileGrid(file, player);
+        TileGrid tileGrid = TileGridFactory.createTileGrid(file, player);
         RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
         Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
@@ -126,5 +124,4 @@ public class RoomFactory extends Factory<Room> {
         rooms.get(id).addRoomObject(player);
         return rooms.get(id);
     }
-
 }

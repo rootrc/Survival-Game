@@ -120,8 +120,8 @@ public class Player extends Entity {
         }
 
         if (dashCooldown < 10) {
-            setSpeedX(a * getMaxSpeed() * DirectionUtilities.getXMovement(Player.this.getDirection()));
-            setSpeedY(a * getMaxSpeed() * DirectionUtilities.getYMovement(Player.this.getDirection()));
+            setSpeedX(A * getMaxSpeed() * DirectionUtilities.getXMovement(Player.this.getDirection()));
+            setSpeedY(A * getMaxSpeed() * DirectionUtilities.getYMovement(Player.this.getDirection()));
         } else {
             setDirection(DirectionUtilities.getMovingDirection(movingUp, movingLeft, movingDown, movingRight));
         }
@@ -148,7 +148,7 @@ public class Player extends Entity {
         super.update();
     }
 
-    private static final double a = Math.sqrt(2) / 2;
+    private static final double A = Math.sqrt(2) / 2;
 
     @Override
     public void move() {
@@ -180,8 +180,8 @@ public class Player extends Entity {
         } else if (ax == 0 && ay != 0) {
             setSpeedY(Math.max(Math.min(getSpeedY() + ay, getMaxSpeed()), -getMaxSpeed()));
         } else if (ax != 0 && ay != 0) {
-            setSpeedX(Math.max(Math.min(getSpeedX() + a * ax, a * getMaxSpeed()), -a * getMaxSpeed()));
-            setSpeedY(Math.max(Math.min(getSpeedY() + a * ay, a * getMaxSpeed()), -a * getMaxSpeed()));
+            setSpeedX(Math.max(Math.min(getSpeedX() + A * ax, A * getMaxSpeed()), -A * getMaxSpeed()));
+            setSpeedY(Math.max(Math.min(getSpeedY() + A * ay, A * getMaxSpeed()), -A * getMaxSpeed()));
         }
     }
 

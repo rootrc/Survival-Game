@@ -19,7 +19,7 @@ public class MiniMap extends GameComponent {
 
     public MiniMap() {
         super(216, 216);
-        setLocation(Game.screenWidth - getWidth() - 16, 16);
+        setLocation(Game.SCREEN_WIDTH - getWidth() - 16, 16);
         internalMiniMapDisplay = new InternalMiniMapDisplay();
         add(internalMiniMapDisplay);
         for (int i = 0; i < 100; i++) {
@@ -264,7 +264,7 @@ public class MiniMap extends GameComponent {
         }
     }
 
-    private class Node extends GameComponent {
+    private static class Node extends GameComponent {
         private static final int SIZE = 16;
         private static final int MIN_DISTANCE = 2 * SIZE;
         private static final Color COLOR0 = Color.lightGray;

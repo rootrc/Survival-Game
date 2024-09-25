@@ -6,12 +6,13 @@ import game.dungeon.Dungeon;
 import game.utilities.RNGUtilities;
 
 public class SnowParticles extends ParticleSystem {
-    private static final double speed = 1.5;
+    private static final double SPEED = 1.5;
+    
     private int N;
 
     public SnowParticles() {
         super();
-        for (int i = 0; i < getHeight() / speed; i++) {
+        for (int i = 0; i < getHeight() / SPEED; i++) {
             if (RNGUtilities.getBoolean(0.1)) {
                 addParticle(new SnowParticle());
             }
@@ -30,7 +31,7 @@ public class SnowParticles extends ParticleSystem {
 
     private class SnowParticle extends Particle {
         SnowParticle() {
-            super(3, Color.white, 0.1, RNGUtilities.getInt(getWidth()), 0, 0, speed + RNGUtilities.getDouble(1),
+            super(3, Color.white, 0.1, RNGUtilities.getInt(getWidth()), 0, 0, SPEED + RNGUtilities.getDouble(1),
                     0, 0);
         }
 

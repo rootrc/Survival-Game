@@ -28,11 +28,9 @@ import game.utilities.Easing;
 
 public class Dungeon extends GamePanel {
     public static final int TILESIZE = 16;
-    public static final int maxScreenRow = 48;
-    public static final int maxScreenCol = 64;
 
-    private static final int startingRoom = 1;
-    public static final int setNum = 0;
+    public static final int SETNUM = 0;
+    private static final int STARTING_ROOM = 1;
 
     private int depth = 0;
     private int depthMapCnt[] = new int[12];
@@ -89,7 +87,7 @@ public class Dungeon extends GamePanel {
         easing = new Easing(60);
 
         roomFactory = new RoomFactory(player, UILayer, miniMap);
-        room = roomFactory.getStartingRoom(startingRoom);
+        room = roomFactory.getStartingRoom(STARTING_ROOM);
         // room = roomFactory.createRandomRoom(21, 34);
 
         miniMap.setStartingRoom(room);
@@ -160,7 +158,7 @@ public class Dungeon extends GamePanel {
         player = new Player(nextRoom, inventory);
         miniMap = new MiniMap();
         roomFactory = new RoomFactory(player, UILayer, miniMap);
-        room = roomFactory.getStartingRoom(startingRoom);
+        room = roomFactory.getStartingRoom(STARTING_ROOM);
         miniMap.setStartingRoom(room);
         timer = new Timer();
         timer.setTime(599);

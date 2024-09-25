@@ -7,6 +7,7 @@ import game.dungeon.Dungeon;
 
 public class CollisionBox extends Rectangle {
     private static final HashMap<java.lang.Double, CollisionBox> map = new HashMap<>();
+    
     public static CollisionBox getCollisionBox(double x, double y, double width, double height) {
         double hash = getHash(x, y, width, height);
         if (map.containsKey(hash)) {

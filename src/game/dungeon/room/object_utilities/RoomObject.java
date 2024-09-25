@@ -175,37 +175,37 @@ public abstract class RoomObject extends GameComponent {
     }
 
     public static RoomObject getRoomObject(RoomObjectData data, Player player, TileGrid tileGrid) {
-        if (data.id <= RoomObjectData.ladderDown) {
+        if (data.id <= RoomObjectData.LADDER_DOWN) {
             return Ladder.getLadder(data);
-        } else if (RoomObjectData.treasureChest0 <= data.id && data.id <= RoomObjectData.treasureChest4) {
+        } else if (RoomObjectData.TREASURE_CHEST_0 <= data.id && data.id <= RoomObjectData.TREASURE_CHEST_4) {
             return TreasureChest.getTreasureChest(data);
-        } else if (RoomObjectData.smallLightRock <= data.id && data.id <= RoomObjectData.largeLightRock) {
+        } else if (RoomObjectData.SMALL_LIGHTROCK <= data.id && data.id <= RoomObjectData.LARGE_LIGHTROCK) {
             return LightRock.getLightRock(data);
-        } else if (RoomObjectData.saw0 <= data.id) {
+        } else if (RoomObjectData.SAW_0 <= data.id) {
             return Trap.getTrap(data, player, tileGrid);
         }
         return null;
     }
 
     public static class RoomObjectData {
-        public static final int ladderUp = 0;
-        public static final int ladderDown = 1;
-        public static final int treasureChest0 = 10;
-        public static final int treasureChest1 = 11;
-        public static final int treasureChest2 = 12;
-        public static final int treasureChest3 = 13;
-        public static final int treasureChest4 = 14;
-        public static final int smallLightRock = 15;
-        public static final int mediumLightRock = 16;
-        public static final int largeLightRock = 17;
-        public static final int saw0 = 20;
-        public static final int saw1 = 21;
-        public static final int movingVerticalSaw = 22;
-        public static final int movingHorizontalSaw = 23;
-        public static final int spike = 24;
-        public static final int explosive = 25;
-        public static final int explosiveDud = 26;
-        public static final int teleportation = 27;
+        public static final int LADDER_UP = 0;
+        public static final int LADDER_DOWN = 1;
+        public static final int TREASURE_CHEST_0 = 10;
+        public static final int TREASURE_CHEST_1 = 11;
+        public static final int TREASURE_CHEST_2 = 12;
+        public static final int TREASURE_CHEST_3 = 13;
+        public static final int TREASURE_CHEST_4 = 14;
+        public static final int SMALL_LIGHTROCK = 15;
+        public static final int MEDIUM_LIGHTROCK = 16;
+        public static final int LARGE_LIGHTROCK = 17;
+        public static final int SAW_0 = 20;
+        public static final int SAW_1 = 21;
+        public static final int VERTICAL_SAW = 22;
+        public static final int HORIZONTAL_SAW = 23;
+        public static final int SPIKE = 24;
+        public static final int EXPLOSIVE = 25;
+        public static final int EXPLOSIVE_DUD = 26;
+        public static final int TELEPORTATION = 27;
 
         public static final HashSet<Integer> fourSet = new HashSet<>() {
             {
@@ -215,8 +215,8 @@ public abstract class RoomObject extends GameComponent {
 
         public static final HashSet<Integer> fiveSet = new HashSet<>() {
             {
-                add(movingVerticalSaw);
-                add(movingHorizontalSaw);
+                add(VERTICAL_SAW);
+                add(HORIZONTAL_SAW);
             }
         };
 

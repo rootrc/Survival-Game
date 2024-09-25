@@ -17,7 +17,7 @@ public abstract class GamePanel extends JPanel {
 
     public GamePanel(Game game, UILayer UILayer) {
         this.UILayer = UILayer;
-        setPreferredSize(new Dimension(Game.screenWidth, Game.screenHeight));
+        setPreferredSize(new Dimension(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT));
         if (!Game.DEBUG) {
             setBackground(Color.black);
         }
@@ -50,12 +50,12 @@ public abstract class GamePanel extends JPanel {
     }
 
     // Fading effect
-    private class FadingEffect extends GameComponent {
+    private static class FadingEffect extends GameComponent {
         private int alpha;
         private static int speed = 10;
 
         public FadingEffect() {
-            super(Game.screenWidth, Game.screenWidth);
+            super(Game.SCREEN_WIDTH, Game.SCREEN_WIDTH);
         }
 
         public void update() {
@@ -64,7 +64,7 @@ public abstract class GamePanel extends JPanel {
 
         public void drawComponent(Graphics2D g2d) {
             g2d.setColor(new Color(0, 0, 0, alpha));
-            g2d.fillRect(0, 0, Game.screenWidth, Game.screenWidth);
+            g2d.fillRect(0, 0, Game.SCREEN_WIDTH, Game.SCREEN_WIDTH);
         }
 
         public void fadeIn() {

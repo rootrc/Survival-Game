@@ -15,7 +15,7 @@ class RoomObjectManagerFactory extends Factory<RoomObjectManager> {
         this.player = player;
     }
 
-    public RoomObjectManager getRoomObjectManager(RoomFileData file, TileGrid tileGrid) {
+    RoomObjectManager getRoomObjectManager(RoomFileData file, TileGrid tileGrid) {
         RoomObjectManager roomObjectManager = new RoomObjectManager(player, tileGrid);
         if (file.getModifier() == RoomFileData.NO_MODIFIER) {
             for (RoomObjectData data : file.getRoomObjects()) {

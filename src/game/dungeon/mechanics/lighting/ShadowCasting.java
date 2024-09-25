@@ -114,7 +114,7 @@ public class ShadowCasting {
         }
     }
 
-    private class Quadrant {
+    private static class Quadrant {
         private static final int NORTH = 0;
         private static final int EAST = 1;
         private static final int SOUTH = 2;
@@ -142,7 +142,7 @@ public class ShadowCasting {
         }
     }
 
-    private class Row {
+    private static class Row {
         private int depth;
         private double startSlope;
         private double endSlope;
@@ -154,7 +154,7 @@ public class ShadowCasting {
         }
     }
 
-    private class Point {
+    private static class Point {
         private int r;
         private int c;
 

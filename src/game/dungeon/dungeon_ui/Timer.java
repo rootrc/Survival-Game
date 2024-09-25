@@ -20,7 +20,7 @@ public class Timer extends GameComponent {
 
     public Timer() {
         super(160, 96);
-        setLocation((Game.screenWidth - getWidth()) / 2, 16);
+        setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, 16);
         setTime(0);
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/amiga.ttf")).deriveFont(36.0f);

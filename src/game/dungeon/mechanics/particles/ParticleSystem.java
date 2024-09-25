@@ -17,7 +17,7 @@ public abstract class ParticleSystem extends GameComponent {
     }
 
     public ParticleSystem() {
-        super(Game.screenWidth, Game.screenHeight);
+        super(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
     }
     
     public void update() {

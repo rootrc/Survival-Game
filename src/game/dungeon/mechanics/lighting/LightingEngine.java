@@ -247,7 +247,7 @@ public class LightingEngine extends GameComponent {
         return image;
     }
 
-    private class Light {
+    private static class Light {
         private static final double flickerDegree = 0.01;
         private static final double flickerSize = 0.1;
         private static final double lightRadiusChangeSpeed = 0.03;

@@ -11,12 +11,12 @@ import game.dungeon.room.object_utilities.CollisionBox;
 import game.utilities.ImageUtilities;
 
 public class Tile {
-    private BufferedImage image;
-    private CollisionBox hitbox;
-
     public static final int FLOOR = 0;
     public static final int WALL = 1;
     public static final int CEILING = 2;
+
+    private BufferedImage image;
+    private CollisionBox hitbox;
     private int height;
 
     private Tile(BufferedImage image, CollisionBox hitbox, int height) {

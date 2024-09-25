@@ -8,16 +8,16 @@ import game.dungeon.room.object_utilities.RoomObject.RoomObjectData;
 import game.utilities.FileOpener;
 import game.utilities.RNGUtilities;
 
-public class RoomFileData extends FileOpener {
+class RoomFileData extends FileOpener {
     private int N, M;
     private int arr[][];
     private ArrayList<RoomObjectData> roomObjects;
+    private int modifier;
 
     public static final int NO_MODIFIER = 0;
     public static final int REFLECTION_MODIFIER = 1;
-    private int modifier;
 
-    public RoomFileData(int id) {
+    RoomFileData(int id) {
         super(new StringBuilder("dungeongeneration/tileGrids/map")
                 .append(String.format("%02d", id)).toString());
         modifier = RNGUtilities.getInt(2);
@@ -48,7 +48,7 @@ public class RoomFileData extends FileOpener {
         int objectDataSetCnt = nextInt();
         int setNum = RNGUtilities.getInt(objectDataSetCnt);
         if (Game.DEBUG) {
-            setNum = Dungeon.setNum;
+            setNum = Dungeon.SETNUM;
         }
         int K;
         for (int i = 0; i < 3 * setNum; i++) {
@@ -85,11 +85,11 @@ public class RoomFileData extends FileOpener {
         return arr;
     }
 
-    public int getModifier() {
-        return modifier;
-    }
-
     public ArrayList<RoomObjectData> getRoomObjects() {
         return roomObjects;
+    }
+
+    public int getModifier() {
+        return modifier;
     }
 }

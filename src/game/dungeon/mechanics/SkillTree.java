@@ -31,7 +31,7 @@ public class SkillTree extends PopupUI {
         g2d.drawRect((getWidth() - SKILL_SIZE) / 2, (getHeight() - SKILL_SIZE) / 2, SKILL_SIZE, SKILL_SIZE);
     }
 
-    private class SkillButton extends GameButton {
+    private static class SkillButton extends GameButton {
         public SkillButton(Action action, Rectangle rect) {
             super(action, rect);
         }

@@ -33,32 +33,32 @@ public abstract class Trap extends RoomObject {
     public static Trap getTrap(RoomObjectData data, Player player, TileGrid tileGrid) {
         Trap trap;
         switch (data.id) {
-            case RoomObjectData.saw0:
+            case RoomObjectData.SAW_0:
                 trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
                         data.r, data.c, CollisionBox.getCollisionBox(0.375, 0.3125, 1.25, 1));
                 trap.setLightRadius(20);
                 trap.setLightVisibility(150);
                 return trap;
-            case RoomObjectData.saw1:
+            case RoomObjectData.SAW_1:
                 trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw1"), 8, 3),
                         data.r, data.c, CollisionBox.getCollisionBox(0.625, 0.3125, 2.75, 2.5));
                 trap.setLightRadius(40);
                 trap.setLightVisibility(200);
                 return trap;
-            case RoomObjectData.movingVerticalSaw:
+            case RoomObjectData.VERTICAL_SAW:
                 System.out.println(data.r + " " + data.c + " " + data.a + " " + data.b);
                 return new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
                         data.r, data.c, 0, data.a, data.b, CollisionBox.getCollisionBox(0.375, 0.3125, 1.25, 1));
-            case RoomObjectData.movingHorizontalSaw:
+            case RoomObjectData.HORIZONTAL_SAW:
                 return new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
                         data.r, data.c, 1, data.a, data.b, CollisionBox.getCollisionBox(0.375, 0.3125, 1.25, 1));
-            case RoomObjectData.spike:
+            case RoomObjectData.SPIKE:
                 trap = new Spike(new SpriteSheet(ImageUtilities.getImage("objects", "spike"), 12, 6),
                         data.r - 3, data.c - 3, CollisionBox.getCollisionBox(3, 3, 2, 2), player);
                 trap.setLightRadius(32);
                 trap.setLightVisibility(150);
                 return trap;
-            case RoomObjectData.explosive:
+            case RoomObjectData.EXPLOSIVE:
                 trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 5),
                         data.r - 3, data.c - 3, CollisionBox.getCollisionBox(2.5, 2.75, 1, 1),
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
@@ -66,7 +66,7 @@ public abstract class Trap extends RoomObject {
                 trap.setLightRadius(24);
                 trap.setLightVisibility(150);
                 return trap;
-            case RoomObjectData.explosiveDud:
+            case RoomObjectData.EXPLOSIVE_DUD:
                 trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 5),
                         data.r - 3, data.c - 3, CollisionBox.getCollisionBox(2.5, 2.75, 1, 1),
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
@@ -74,7 +74,7 @@ public abstract class Trap extends RoomObject {
                 trap.setLightRadius(24);
                 trap.setLightVisibility(150);
                 return trap;
-            case RoomObjectData.teleportation:
+            case RoomObjectData.TELEPORTATION:
                 trap = new Teleportation(new SpriteSheet(ImageUtilities.getImage("objects", "teleportation"), 5, 9),
                         data.r, data.c, CollisionBox.getCollisionBox(0.375, 0.375, 1.25, 1.25), tileGrid);
                 trap.setLightRadius(24);
@@ -196,31 +196,31 @@ class MovingSaw extends Trap {
 }
 
 class Spike extends Trap {
+    private static final int[] UPBLADE_LENGTHS = { 0, 0, 2, 0, 2, 2, 2, 38, 8, 6, 2, 0 };
+    private static final int[] DOWNBLADE_LENGTHS = { 0, 0, 2, 0, 2, 2, 2, 36, 6, 4, 2, 0 };
+    private static final int[] SIDEBLADE_LENGTHS = { 0, 2, 4, 2, 4, 4, 4, 44, 10, 8, 4, 0 };
+    private static final int HITFRAME = 7;
+
     private Player player;
     private SawBlade upBlade;
     private SawBlade downBlade;
     private SawBlade leftBlade;
     private SawBlade rightBlade;
-    private static final int[] upBladeLengths = { 0, 0, 2, 0, 2, 2, 2, 38, 8, 6, 2, 0 };
-    private static final int[] downBladeLengths = { 0, 0, 2, 0, 2, 2, 2, 36, 6, 4, 2, 0 };
-    private static final int[] sideBladeLengths = { 0, 2, 4, 2, 4, 4, 4, 44, 10, 8, 4, 0 };
-
-    private static final int hitFrame = 7;
 
     Spike(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, Player player) {
         super(spriteSheet, r, c, hitbox);
         this.player = player;
-        upBlade = new SawBlade(24, upBladeLengths[hitFrame], 0, 3,
-                CollisionBox.getCollisionBox(0, (double) upBladeLengths[hitFrame] / Dungeon.TILESIZE, 1.5, 0));
+        upBlade = new SawBlade(24, UPBLADE_LENGTHS[HITFRAME], 0, 3,
+                CollisionBox.getCollisionBox(0, (double) UPBLADE_LENGTHS[HITFRAME] / Dungeon.TILESIZE, 1.5, 0));
         upBlade.moveX(4);
         upBlade.moveY(12);
-        downBlade = new SawBlade(24, downBladeLengths[hitFrame], 5, 3, CollisionBox.getCollisionBox(0, 0, 1.5, 0));
+        downBlade = new SawBlade(24, DOWNBLADE_LENGTHS[HITFRAME], 5, 3, CollisionBox.getCollisionBox(0, 0, 1.5, 0));
         downBlade.moveX(4);
-        leftBlade = new SawBlade(sideBladeLengths[hitFrame], 18, 3, 0,
-                CollisionBox.getCollisionBox((double) sideBladeLengths[hitFrame] / Dungeon.TILESIZE, 0, 0, 1.125));
+        leftBlade = new SawBlade(SIDEBLADE_LENGTHS[HITFRAME], 18, 3, 0,
+                CollisionBox.getCollisionBox((double) SIDEBLADE_LENGTHS[HITFRAME] / Dungeon.TILESIZE, 0, 0, 1.125));
         leftBlade.moveX(4);
         leftBlade.moveY(6);
-        rightBlade = new SawBlade(sideBladeLengths[hitFrame], 18, 3, 5, CollisionBox.getCollisionBox(0, 0, 0, 1.125));
+        rightBlade = new SawBlade(SIDEBLADE_LENGTHS[HITFRAME], 18, 3, 5, CollisionBox.getCollisionBox(0, 0, 0, 1.125));
         rightBlade.moveY(6);
         add(upBlade);
         add(downBlade);
@@ -236,17 +236,17 @@ class Spike extends Trap {
             return;
         }
         downBlade.setHitbox(CollisionBox.getCollisionBox(0, 0, downBlade.getHitbox().getWidth() / Dungeon.TILESIZE,
-                (double) downBladeLengths[getSpriteSheet().getFrame()] / Dungeon.TILESIZE));
+                (double) DOWNBLADE_LENGTHS[getSpriteSheet().getFrame()] / Dungeon.TILESIZE));
         upBlade.setHitbox(CollisionBox.getCollisionBox(0,
-                (double) (downBlade.getHeight() - upBladeLengths[getSpriteSheet().getFrame()]) / Dungeon.TILESIZE,
+                (double) (downBlade.getHeight() - UPBLADE_LENGTHS[getSpriteSheet().getFrame()]) / Dungeon.TILESIZE,
                 upBlade.getHitbox().getWidth() / Dungeon.TILESIZE,
-                (double) upBladeLengths[getSpriteSheet().getFrame()] / Dungeon.TILESIZE));
+                (double) UPBLADE_LENGTHS[getSpriteSheet().getFrame()] / Dungeon.TILESIZE));
         rightBlade.setHitbox(CollisionBox.getCollisionBox(0, 0,
-                (double) sideBladeLengths[getSpriteSheet().getFrame()] / Dungeon.TILESIZE,
+                (double) SIDEBLADE_LENGTHS[getSpriteSheet().getFrame()] / Dungeon.TILESIZE,
                 (double) rightBlade.getHitbox().getHeight() / Dungeon.TILESIZE));
         leftBlade.setHitbox(CollisionBox.getCollisionBox(
-                (double) (leftBlade.getWidth() - sideBladeLengths[getSpriteSheet().getFrame()]) / Dungeon.TILESIZE, 0,
-                (double) sideBladeLengths[getSpriteSheet().getFrame()] / Dungeon.TILESIZE,
+                (double) (leftBlade.getWidth() - SIDEBLADE_LENGTHS[getSpriteSheet().getFrame()]) / Dungeon.TILESIZE, 0,
+                (double) SIDEBLADE_LENGTHS[getSpriteSheet().getFrame()] / Dungeon.TILESIZE,
                 leftBlade.getHitbox().getHeight() / Dungeon.TILESIZE));
     }
 
@@ -255,30 +255,30 @@ class Spike extends Trap {
 
     private boolean canHitPlayer() {
         int futurePlayerX = (int) (player.getX()
-                + (hitFrame + 0.5) * getSpriteSheet().getFrameLength() * player.getSpeedX());
+                + (HITFRAME + 0.5) * getSpriteSheet().getFrameLength() * player.getSpeedX());
         int futurePlayerY = (int) (player.getY()
-                + (hitFrame + 0.5) * getSpriteSheet().getFrameLength() * player.getSpeedY());
+                + (HITFRAME + 0.5) * getSpriteSheet().getFrameLength() * player.getSpeedY());
         if (CollisionHandler.collides(futurePlayerX, futurePlayerY, player.getHitbox(), getX() + upBlade.getX(),
-                getY() + upBlade.getY(), new Rectangle(0, 0, upBlade.getWidth(), upBladeLengths[hitFrame]))) {
+                getY() + upBlade.getY(), new Rectangle(0, 0, upBlade.getWidth(), UPBLADE_LENGTHS[HITFRAME]))) {
             return true;
         }
         if (CollisionHandler.collides(futurePlayerX, futurePlayerY, player.getHitbox(), getX() + downBlade.getX(),
-                getY() + downBlade.getY(), new Rectangle(0, 0, downBlade.getWidth(), downBladeLengths[hitFrame]))) {
+                getY() + downBlade.getY(), new Rectangle(0, 0, downBlade.getWidth(), DOWNBLADE_LENGTHS[HITFRAME]))) {
             return true;
         }
         if (CollisionHandler.collides(futurePlayerX, futurePlayerY, player.getHitbox(), getX() + leftBlade.getX(),
-                getY() + leftBlade.getY(), new Rectangle(0, 0, sideBladeLengths[hitFrame], leftBlade.getHeight()))) {
+                getY() + leftBlade.getY(), new Rectangle(0, 0, SIDEBLADE_LENGTHS[HITFRAME], leftBlade.getHeight()))) {
             return true;
         }
         if (CollisionHandler.collides(futurePlayerX, futurePlayerY, player.getHitbox(), getX() + rightBlade.getX(),
-                getY() + rightBlade.getY(), new Rectangle(0, 0, sideBladeLengths[hitFrame], rightBlade.getHeight()))) {
+                getY() + rightBlade.getY(), new Rectangle(0, 0, SIDEBLADE_LENGTHS[HITFRAME], rightBlade.getHeight()))) {
             return true;
         }
 
         return false;
     }
 
-    private class SawBlade extends Trap {
+    private static class SawBlade extends Trap {
         public SawBlade(int width, int height, int r, int c, CollisionBox hitbox) {
             super(width, height, r, c, hitbox);
         }
@@ -293,11 +293,11 @@ class Spike extends Trap {
 }
 
 class Explosive extends Trap {
+    private static final int HITFRAME = 6;
+    
     private Player player;
     private Explosion explosion;
     private CollisionBox explosionHitbox;
-
-    private static final int hitFrame = 6;
 
     Explosive(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox explosionHitbox,
             Player player, boolean isWorking) {
@@ -317,12 +317,12 @@ class Explosive extends Trap {
             if (getSpriteSheet().getFrame() == 0 || !getSpriteSheet().isStartofFrame()) {
                 return;
             }
-            if (getSpriteSheet().getFrame() == hitFrame) {
+            if (getSpriteSheet().getFrame() == HITFRAME) {
                 explosion.setHitbox(explosionHitbox);
                 setHitbox(null);
                 Room.setScreenShakeDuration(10);
                 Room.setScreenShakeStrength(10);
-            } else if (getSpriteSheet().getFrame() == hitFrame + 3) {
+            } else if (getSpriteSheet().getFrame() == HITFRAME + 3) {
                 explosion.setHitbox(null);
                 setLightRadius(0);
             }
@@ -337,7 +337,7 @@ class Explosive extends Trap {
                 explosionHitbox);
     }
 
-    private class Explosion extends Trap {
+    private static class Explosion extends Trap {
         public Explosion(int width, int height) {
             super(width, height, 0, 0, null);
         }

@@ -11,6 +11,7 @@ import game.utilities.ImageUtilities;
 public class Ladder extends RoomObject {
     public static final int UP_DIRECTION = 1;
     public static final int DOWN_DIRECTION = -1;
+
     private int direction;
     private int playerPlacementX;
     private int playerPlacementY;
@@ -46,12 +47,12 @@ public class Ladder extends RoomObject {
 
     public static Ladder getLadder(RoomObjectData data) {
         switch (data.id) {
-            case RoomObjectData.ladderUp:
+            case RoomObjectData.LADDER_UP:
                 return new Ladder(ImageUtilities.getImage("objects", "ladderup"), data.r, data.c,
                         -Dungeon.TILESIZE / 2, Dungeon.TILESIZE,
                         CollisionBox.getCollisionBox(0, 1.25, 1, 0.75),
                         CollisionBox.getCollisionBox(-0.25, 1, 1.5, 1.75), 1);
-            case RoomObjectData.ladderDown:
+            case RoomObjectData.LADDER_DOWN:
                 return new Ladder(ImageUtilities.getImage("objects", "ladderdown"), data.r, data.c,
                         0, -Dungeon.TILESIZE * 3,
                         CollisionBox.getCollisionBox(0.25, 0.125, 1.5, 1.625),

@@ -71,8 +71,8 @@ public class Room extends GameComponent {
         if (Game.DEBUG) {
             return;
         }
-        int tx = Game.screenWidth / 2 - (int) player.getX();
-        int ty = Game.screenHeight / 2 - (int) player.getY();
+        int tx = Game.SCREEN_WIDTH / 2 - (int) player.getX();
+        int ty = Game.SCREEN_HEIGHT / 2 - (int) player.getY();
         int dx = tx - getX();
         int dy = ty - getY();
         if (dx > 0) {
