@@ -43,42 +43,41 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     private CollisionChecker getCollisionChecker(Tile[][][][] tileGridArray) {
-        return new CollisionChecker(getCollisionTiles(tileGridArray[0]));
+        return new CollisionChecker(getCollisionTiles(tileGridArray[0], tileGridArray[1]));
     }
 
     private HeightHandler getHeightHandler(RoomFileData roomFileData) {
         return new HeightHandler(getHeightArray(roomFileData.getTileGridArray()));
     }
 
-    private Tile[][] getCollisionTiles(Tile[][][] tileGridArray) {
+    private Tile[][] getCollisionTiles(Tile[][][] tileGridArray, Tile[][][] tileGridArray1) {
         int N = tileGridArray[0].length;
         int M = tileGridArray[0][0].length;
         Tile[][] res = new Tile[N][M];
         for (int r = 0; r < N; r++) {
             for (int c = 0; c < M; c++) {
-                if (tileGridArray[2][r][c] != null) {
-                    if (tileGridArray[2][r][c].getHitnox() != null
-                            || tileGridArray[2][r][c].getHeight() != Tile.FLOOR) {
-                        res[r][c] = tileGridArray[2][r][c];
-                    }
+                if (tileGridArray[2][r][c] != null && (tileGridArray[2][r][c].getHitbox() != null
+                        || tileGridArray[2][r][c].getHeight() != Tile.FLOOR)) {
+                    res[r][c] = tileGridArray[2][r][c];
                     continue;
                 }
-                if (tileGridArray[1][r][c] != null) {
-                    if (tileGridArray[1][r][c].getHitnox() != null) {
-                        res[r][c] = tileGridArray[1][r][c];
-                        continue;
-                    }
+                if (tileGridArray[1][r][c] != null && tileGridArray[1][r][c].getHitbox() != null) {
+                    res[r][c] = tileGridArray[1][r][c];
+                    continue;
                 }
-                if (tileGridArray[3][r][c] != null) {
-                    if (tileGridArray[3][r][c].getHitnox() != null) {
-                        res[r][c] = tileGridArray[3][r][c];
-                        continue;
-                    }
+                if (tileGridArray[3][r][c] != null && tileGridArray[3][r][c].getHitbox() != null) {
+                    res[r][c] = tileGridArray[3][r][c];
+                    continue;
+                }
+                if (tileGridArray1[0][r][c] != null && tileGridArray1[0][r][c].getHitbox() != null) {
+                    res[r][c] = tileGridArray1[0][r][c];
+                    continue;
                 }
                 res[r][c] = tileGridArray[0][r][c];
             }
         }
         return res;
+
     }
 
     private int[][] getHeightArray(int[][] tileGridArray) {

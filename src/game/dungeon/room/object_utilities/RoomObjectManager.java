@@ -84,6 +84,9 @@ public class RoomObjectManager extends GameComponent {
                 ((RoomObject) roomObject).collides(player);
                 CollisionHandler.handleCollision(player, (RoomObject) roomObject);
             }
+            if (roomObject == null) {
+                continue;
+            }
             for (Component subRoomObject : ((RoomObject) roomObject).getComponents()) {
                 ((RoomObject) subRoomObject).moveX(roomObject.getX());
                 ((RoomObject) subRoomObject).moveY(roomObject.getY());

@@ -14,6 +14,7 @@ import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.RoomObject;
 import game.dungeon.room.object_utilities.SpriteSheet;
+import game.dungeon.room.tile.TileGrid;
 import game.utilities.ImageUtilities;
 import game.utilities.RNGUtilities;
 
@@ -29,7 +30,7 @@ public abstract class Trap extends RoomObject {
     public final void interaction(Player player) {
     }
 
-    public static Trap getTrap(RoomObjectData data, Player player) {
+    public static Trap getTrap(RoomObjectData data, Player player, TileGrid tileGrid) {
         Trap trap;
         switch (data.id) {
             case RoomObjectData.saw0:
@@ -58,7 +59,7 @@ public abstract class Trap extends RoomObject {
                 trap.setLightVisibility(150);
                 return trap;
             case RoomObjectData.explosive:
-                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
+                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 5),
                         data.r - 3, data.c - 3, CollisionBox.getCollisionBox(2.5, 2.75, 1, 1),
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
                         player, true);
@@ -66,10 +67,16 @@ public abstract class Trap extends RoomObject {
                 trap.setLightVisibility(150);
                 return trap;
             case RoomObjectData.explosiveDud:
-                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
+                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 5),
                         data.r - 3, data.c - 3, CollisionBox.getCollisionBox(2.5, 2.75, 1, 1),
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
                         player, false);
+                trap.setLightRadius(24);
+                trap.setLightVisibility(150);
+                return trap;
+            case RoomObjectData.teleportation:
+                trap = new Teleportation(new SpriteSheet(ImageUtilities.getImage("objects", "teleportation"), 5, 9),
+                        data.r, data.c, CollisionBox.getCollisionBox(0.375, 0.375, 1.25, 1.25), tileGrid);
                 trap.setLightRadius(24);
                 trap.setLightVisibility(150);
                 return trap;
@@ -81,7 +88,7 @@ public abstract class Trap extends RoomObject {
 }
 
 class Saw extends Trap {
-    public Saw(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox) {
+    Saw(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox) {
         super(spriteSheet, r, c, hitbox);
         if (spriteSheet.getHeight() / 16 == 1) {
             moveY((32 - spriteSheet.getHeight()) / 2);
@@ -106,7 +113,7 @@ class MovingSaw extends Trap {
     private int speed;
     private int movementDirection;
 
-    public MovingSaw(SpriteSheet sawSpriteSheet, int r, int c, int direction, int length, int speed,
+    MovingSaw(SpriteSheet sawSpriteSheet, int r, int c, int direction, int length, int speed,
             CollisionBox hitbox) {
         super(getBase(sawSpriteSheet, direction, length), r, c, null);
         this.direction = direction;
@@ -200,7 +207,7 @@ class Spike extends Trap {
 
     private static final int hitFrame = 7;
 
-    public Spike(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, Player player) {
+    Spike(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, Player player) {
         super(spriteSheet, r, c, hitbox);
         this.player = player;
         upBlade = new SawBlade(24, upBladeLengths[hitFrame], 0, 3,
@@ -292,7 +299,7 @@ class Explosive extends Trap {
 
     private static final int hitFrame = 6;
 
-    public Explosive(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox explosionHitbox,
+    Explosive(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox explosionHitbox,
             Player player, boolean isWorking) {
         super(spriteSheet, r, c, hitbox);
         this.explosionHitbox = explosionHitbox;
@@ -343,4 +350,47 @@ class Explosive extends Trap {
         }
     }
 
+}
+
+class Teleportation extends Trap {
+    private TileGrid tileGrid;
+
+    Teleportation(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox,
+            TileGrid tileGrid) {
+        super(spriteSheet, r, c, hitbox);
+        this.tileGrid = tileGrid;
+    }
+
+    public void update() {
+        if (getHitbox() != null) {
+            getSpriteSheet().next();
+            if (getSpriteSheet().getFrame() == getSpriteSheet().getFrameCnt() - 1) {
+                getSpriteSheet().nextFrame();
+            }
+        }
+    }
+
+    public void collides(Player player) {
+        if (getSpriteSheet().getFrame() == getSpriteSheet().getFrameCnt() - 1) {
+            return;
+        }
+        int r, c;
+        while (true) {
+            r = RNGUtilities.getInt(tileGrid.getN());
+            c = RNGUtilities.getInt(tileGrid.getM());
+            if ((r < player.getMinRow() - tileGrid.getN() / 4 || player.getMaxRow() + tileGrid.getN() / 4 < r) &&
+                    (c < player.getMinCol() - tileGrid.getM() / 4 || player.getMaxCol() + tileGrid.getM() / 4 < c) &&
+                    tileGrid.getCollisionChecker().getCollisionArray()[r][c].getHitbox() == null) {
+                break;
+            }
+        }
+        
+        player.setLocation(c * Dungeon.TILESIZE - player.getHitbox().getX(),
+                r * Dungeon.TILESIZE - player.getHitbox().getY());
+        Room.setScreenShakeDuration(10);
+        Room.setScreenShakeStrength(10);
+        setHitbox(null);
+        setLightRadius(0);
+        getSpriteSheet().setFrame(getSpriteSheet().getFrameCnt() - 1);
+    }
 }

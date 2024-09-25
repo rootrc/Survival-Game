@@ -12,6 +12,7 @@ import game.dungeon.room.object.Ladder;
 import game.dungeon.room.object.LightRock;
 import game.dungeon.room.object.Trap;
 import game.dungeon.room.object.TreasureChest;
+import game.dungeon.room.tile.TileGrid;
 import game.game_components.GameComponent;
 
 public abstract class RoomObject extends GameComponent {
@@ -173,7 +174,7 @@ public abstract class RoomObject extends GameComponent {
                         * (getY() + getHitbox().getCenterY() - o.getY() - o.getHitbox().getCenterY()));
     }
 
-    public static RoomObject getRoomObject(RoomObjectData data, Player player) {
+    public static RoomObject getRoomObject(RoomObjectData data, Player player, TileGrid tileGrid) {
         if (data.id <= RoomObjectData.ladderDown) {
             return Ladder.getLadder(data);
         } else if (RoomObjectData.treasureChest0 <= data.id && data.id <= RoomObjectData.treasureChest4) {
@@ -181,7 +182,7 @@ public abstract class RoomObject extends GameComponent {
         } else if (RoomObjectData.smallLightRock <= data.id && data.id <= RoomObjectData.largeLightRock) {
             return LightRock.getLightRock(data);
         } else if (RoomObjectData.saw0 <= data.id) {
-            return Trap.getTrap(data, player);
+            return Trap.getTrap(data, player, tileGrid);
         }
         return null;
     }
@@ -204,6 +205,7 @@ public abstract class RoomObject extends GameComponent {
         public static final int spike = 24;
         public static final int explosive = 25;
         public static final int explosiveDud = 26;
+        public static final int teleportation = 27;
 
         public static final HashSet<Integer> fourSet = new HashSet<>() {
             {

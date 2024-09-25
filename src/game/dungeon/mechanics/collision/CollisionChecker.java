@@ -1,6 +1,6 @@
 package game.dungeon.mechanics.collision;
 
-import game.dungeon.room.entity.Player;
+import game.dungeon.room.entity.Entity;
 import game.dungeon.room.tile.Tile;
 
 public class CollisionChecker {
@@ -10,16 +10,16 @@ public class CollisionChecker {
         this.collisionArray = collisionArray;
     }
 
-    public void handleCollision(Player player) {
-        int[] rows = { player.getMinRow(), player.getMaxRow() };
-        int[] cols = { player.getMinCol(), player.getMaxCol() };
+    public void handleCollision(Entity entity) {
+        int[] rows = { entity.getMinRow(), entity.getMaxRow() };
+        int[] cols = { entity.getMinCol(), entity.getMaxCol() };
         for (int r : rows) {
             for (int c : cols) {
                 if (r < 0 || c < 0 || r >= collisionArray.length || c >= collisionArray[0].length) {
                     continue;
                 }
-                if (CollisionHandler.collides(player, collisionArray[r][c], r, c)) {
-                    CollisionHandler.handleCollision(player, collisionArray, r, c);
+                if (CollisionHandler.collides(entity, collisionArray[r][c], r, c)) {
+                    CollisionHandler.handleCollision(entity, collisionArray, r, c);
                     return;
                 }
             }

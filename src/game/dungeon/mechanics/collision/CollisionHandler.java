@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 
 import game.dungeon.Dungeon;
 import game.dungeon.room.entity.Entity;
-import game.dungeon.room.entity.Player;
 import game.dungeon.room.object_utilities.CollisionBox;
 import game.dungeon.room.object_utilities.DirectionUtilities;
 import game.dungeon.room.object_utilities.RoomObject;
@@ -27,7 +26,7 @@ public class CollisionHandler {
             return false;
         }
         return collides(entity.getX(), entity.getY(), entity.getHitbox(), c * Dungeon.TILESIZE, r * Dungeon.TILESIZE,
-                tile.getHitnox());
+                tile.getHitbox());
     }
 
     public static boolean collides(int aX, int aY, Rectangle aH, int bX, int bY, Rectangle bH) {
@@ -43,73 +42,76 @@ public class CollisionHandler {
         return false;
     }
 
-    public static void handleCollision(Player player, RoomObject roomObject) {
-        handleCollision(player, roomObject.getX(), roomObject.getY(), roomObject.getHitbox());
+    public static void handleCollision(Entity entity, RoomObject roomObject) {
+        handleCollision(entity, roomObject.getX(), roomObject.getY(), roomObject.getHitbox());
     }
 
-    public static void handleCollision(Player player, Tile[][] collisionArray, int r, int c) {
-        if (DirectionUtilities.getXMovement(player.getDirection()) == -1 && CollisionHandler.collides(player, collisionArray[r][c + 1], r, c + 1)) {
-            handleCollision(player, (c + 1) * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c + 1].getHitnox());
+    public static void handleCollision(Entity entity, Tile[][] collisionArray, int r, int c) {
+        if (DirectionUtilities.getXMovement(entity.getDirection()) == -1 && CollisionHandler.collides(entity, collisionArray[r][c + 1], r, c + 1)) {
+            handleCollision(entity, (c + 1) * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c + 1].getHitbox());
         } else {
-            handleCollision(player, c * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c].getHitnox());
+            handleCollision(entity, c * Dungeon.TILESIZE, r * Dungeon.TILESIZE, collisionArray[r][c].getHitbox());
         }
     }
 
-    private static void handleCollision(Player player, int bX, int bY, Rectangle bH) {
-        CollisionBox aH = player.getHitbox();
-        double aX0 = (player.getX() + aH.getX());
-        double aY0 = (player.getY() + aH.getY());
-        double aX1 = (player.getX() + aH.getMaxX());
-        double aY1 = (player.getY() + aH.getMaxY());
+    private static void handleCollision(Entity entity, int bX, int bY, Rectangle bH) {
+        if (bH == null) {
+            return;
+        }
+        CollisionBox aH = entity.getHitbox();
+        double aX0 = (entity.getX() + aH.getX());
+        double aY0 = (entity.getY() + aH.getY());
+        double aX1 = (entity.getX() + aH.getMaxX());
+        double aY1 = (entity.getY() + aH.getMaxY());
 
         double bX0 = (bX + bH.getX());
         double bY0 = (bY + bH.getY());
         double bX1 = (bX + bH.getMaxX());
         double bY1 = (bY + bH.getMaxY());
 
-        if (player.getSpeedY() != 0 && player.getSpeedY() == 0) {
+        if (entity.getSpeedY() != 0 && entity.getSpeedY() == 0) {
             if (bX0 < aX1 && aX1 < bX1) {
-                player.setX(bX0 - aH.getMaxX());
+                entity.setX(bX0 - aH.getMaxX());
             } else if (bX0 < aX0 && aX0 < bX1) {
-                player.setX(bX1 - aH.getX());
+                entity.setX(bX1 - aH.getX());
             }
-            player.setSpeedX(0);
+            entity.setSpeedX(0);
             return;
-        } else if (player.getSpeedX() == 0 && player.getSpeedY() != 0) {
+        } else if (entity.getSpeedX() == 0 && entity.getSpeedY() != 0) {
             if (bY0 < aY1 && aY1 < bY1) {
-                player.setY(bY0 - aH.getMaxY());
+                entity.setY(bY0 - aH.getMaxY());
             } else if (bY0 < aY0 && aY0 < bY1) {
-                player.setY(bY1 - aH.getY());
+                entity.setY(bY1 - aH.getY());
             }
-            player.setSpeedY(0);
+            entity.setSpeedY(0);
             return;
         }
         double xDist = Integer.MAX_VALUE;
         if (bX0 < aX1 && aX1 < bX1) {
-            xDist = bX0 - aH.getMaxX() - player.getX();
+            xDist = bX0 - aH.getMaxX() - entity.getX();
         } else if (bX0 < aX0 && aX0 < bX1) {
-            xDist = bX1 - aH.getX() - player.getX();
+            xDist = bX1 - aH.getX() - entity.getX();
         }
         double yDist = Integer.MAX_VALUE;
         if (bY0 < aY1 && aY1 < bY1) {
-            yDist = bY0 - aH.getMaxY() - player.getY();
+            yDist = bY0 - aH.getMaxY() - entity.getY();
         } else if (bY0 < aY0 && aY0 < bY1) {
-            yDist = bY1 - aH.getY() - player.getY();
+            yDist = bY1 - aH.getY() - entity.getY();
         }
         if (Math.abs(xDist) < Math.abs(yDist)) {
-            player.moveX(xDist);
-            player.setSpeedX(0);
+            entity.moveX(xDist);
+            entity.setSpeedX(0);
         } else if (Math.abs(xDist) > Math.abs(yDist)) {
-            player.moveY(yDist);
-            player.setSpeedY(0);
+            entity.moveY(yDist);
+            entity.setSpeedY(0);
         } else if (xDist != Integer.MAX_VALUE) {
-            player.moveX(xDist);
-            if (collides(player.getX(), player.getY(), aH, bX, bY, bH)) {
-                player.moveX(-xDist);
-                player.moveY(yDist);
-                player.setSpeedY(0);
+            entity.moveX(xDist);
+            if (collides(entity.getX(), entity.getY(), aH, bX, bY, bH)) {
+                entity.moveX(-xDist);
+                entity.moveY(yDist);
+                entity.setSpeedY(0);
             } else {
-                player.setSpeedX(0);
+                entity.setSpeedX(0);
             }
         }
     }

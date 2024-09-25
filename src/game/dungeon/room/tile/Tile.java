@@ -41,7 +41,7 @@ public class Tile {
         return image;
     }
 
-    public CollisionBox getHitnox() {
+    public CollisionBox getHitbox() {
         return hitbox;
     }
 
