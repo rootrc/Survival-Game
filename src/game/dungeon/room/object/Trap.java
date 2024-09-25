@@ -378,9 +378,9 @@ class Teleportation extends Trap {
         while (true) {
             r = RNGUtilities.getInt(tileGrid.getN());
             c = RNGUtilities.getInt(tileGrid.getM());
-            if ((r < player.getMinRow() - tileGrid.getN() / 4 || player.getMaxRow() + tileGrid.getN() / 4 < r) &&
-                    (c < player.getMinCol() - tileGrid.getM() / 4 || player.getMaxCol() + tileGrid.getM() / 4 < c) &&
-                    tileGrid.getCollisionChecker().getCollisionArray()[r][c].getHitbox() == null) {
+            if ((r < player.getMinRow() - tileGrid.getN() / 5 || player.getMaxRow() + tileGrid.getN() / 5 < r) &&
+                    (c < player.getMinCol() - tileGrid.getM() / 5 || player.getMaxCol() + tileGrid.getM() / 5 < c) &&
+                    tileGrid.getPathFinder().isReachable(player.getMinRow(), player.getMinCol(), r, c)) {
                 break;
             }
         }

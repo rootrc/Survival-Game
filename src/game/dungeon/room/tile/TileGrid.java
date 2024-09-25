@@ -10,25 +10,44 @@ import java.awt.image.BufferedImage;
 import game.Game;
 import game.dungeon.Dungeon;
 import game.dungeon.mechanics.HeightHandler;
+import game.dungeon.mechanics.PathFinder;
 import game.dungeon.mechanics.collision.CollisionChecker;
 import game.dungeon.room.entity.Player;
 import game.game_components.GameComponent;
 
-public class TileGrid {
+public class TileGrid extends GameComponent {
     private int N, M;
     private TileGridFloor tileGridFloor;
     private TileGridCeiling tileGridCeiling;
     private CollisionChecker collisionChecker;
     private HeightHandler heightHandler;
+    private PathFinder pathFinder;
 
     public TileGrid(Tile[][][][] tileGridArray, Player player, CollisionChecker collisionChecker,
             HeightHandler heightHandler) {
+        super(Dungeon.TILESIZE * tileGridArray[0][0][0].length, Dungeon.TILESIZE * tileGridArray[0][0].length);
         N = tileGridArray[0][0].length;
         M = tileGridArray[0][0][0].length;
         this.collisionChecker = collisionChecker;
         this.heightHandler = heightHandler;
+        
         tileGridFloor = new TileGridFloor(tileGridArray[0]);
         tileGridCeiling = new TileGridCeiling(tileGridArray[1], player, heightHandler);
+        pathFinder = new PathFinder(collisionChecker.getCollisionArray());
+    }
+
+    public void update() {
+    }
+
+    public void drawComponent(Graphics2D g2d) {
+    }
+
+    public int getN() {
+        return N;
+    }
+
+    public int getM() {
+        return M;
     }
 
     public void setPlayer(Player player) {
@@ -51,20 +70,8 @@ public class TileGrid {
         return heightHandler;
     }
 
-    public int getN() {
-        return N;
-    }
-
-    public int getM() {
-        return M;
-    }
-
-    public int getWidth() {
-        return tileGridFloor.getWidth();
-    }
-
-    public int getHeight() {
-        return tileGridFloor.getHeight();
+    public PathFinder getPathFinder() {
+        return pathFinder;
     }
 
     private static class TileGridCeiling extends GameComponent {
