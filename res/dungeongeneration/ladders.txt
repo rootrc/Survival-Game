@@ -1,4 +1,4 @@
-55
+56
 01 1 2
 02 1 2
 03 1 2
@@ -7,6 +7,7 @@
 06 1 2
 07 1 2
 08 1 1
+09 1 1
 20 1 0
 21 1 2
 22 1 0
@@ -40,7 +41,7 @@
 62 1 1
 63 1 1
 70 1 0
-71 0 1
+71 1 0
 72 1 0
 73 1 0
 74 1 0
@@ -50,15 +51,14 @@
 78 1 0
 79 1 0
 80 1 0
-81 0 1
-82 0 1
+81 1 0
+82 1 0
 83 1 0
 84 1 0
 
 Numbers reflect number of reachable ladders, not actual number
 
-Forks - 12: 18
+Forks - 12: 19
 Forks - 13: 3
 Corriders: 12
-Dead Ends - down: 19
-Dead Ends - up: 3
+Dead Ends - down: 22

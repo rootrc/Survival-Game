@@ -126,10 +126,12 @@ class MovingSaw extends Trap {
         if (direction == 0) {
             int startingSawLocation = RNGUtilities.getInt(2, getHeight() - saw.getHeight() - 2);
             saw.setY(startingSawLocation);
+            moveY(Tile.SIZE - sawSpriteSheet.getHeight() / 2);
         } else if (direction == 1) {
             int startingSawLocation = RNGUtilities.getInt(2, getWidth() - saw.getWidth() - 2);
-            saw.setX(startingSawLocation);
-            moveY((getHeight() - sawSpriteSheet.getHeight()) / 2);
+            saw.setLocation(startingSawLocation, 0);
+            moveX(Tile.SIZE - sawSpriteSheet.getWidth() / 2);
+            moveY((getHeight() - Tile.SIZE) / 2);
         }
         if (RNGUtilities.getBoolean()) {
             movementDirection = speed;
@@ -178,7 +180,7 @@ class MovingSaw extends Trap {
             int x0 = (sawSpriteSheet.getWidth() - spriteSheet.getWidth()) / 2;
             int y0 = (sawSpriteSheet.getHeight() - spriteSheet.getHeight()) / 2;
             BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(
-                    length * spriteSheet.getWidth() + 2 * x0, sawSpriteSheet.getWidth(), Transparency.TRANSLUCENT);
+                    length * spriteSheet.getWidth() + 2 * x0, sawSpriteSheet.getHeight(), Transparency.TRANSLUCENT);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
             g2d.drawImage(spriteSheet.getImage(), x0, y0, null);
             spriteSheet.nextFrame();
@@ -293,7 +295,7 @@ class Spike extends Trap {
 
 class Explosive extends Trap {
     private static final int HITFRAME = 6;
-    
+
     private Player player;
     private Explosion explosion;
     private CollisionBox explosionHitbox;
@@ -321,7 +323,7 @@ class Explosive extends Trap {
                 setHitbox(null);
                 Room.setScreenShakeDuration(10);
                 Room.setScreenShakeStrength(10);
-            } else if (getSpriteSheet().getFrame() == HITFRAME + 3) {
+            } else if (getSpriteSheet().getFrame() == HITFRAME + 2) {
                 explosion.setHitbox(null);
                 setLightRadius(0);
             }
@@ -384,7 +386,7 @@ class Teleportation extends Trap {
                 break;
             }
         }
-        
+
         player.setLocation(c * Tile.SIZE - player.getHitbox().getX(),
                 r * Tile.SIZE - player.getHitbox().getY());
         Room.setScreenShakeDuration(10);

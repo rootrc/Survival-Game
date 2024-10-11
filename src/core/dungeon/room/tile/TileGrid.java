@@ -30,7 +30,7 @@ public class TileGrid extends GameComponent {
         M = tileGridArray[0][0][0].length;
         this.collisionChecker = collisionChecker;
         this.heightHandler = heightHandler;
-        
+
         tileGridFloor = new TileGridFloor(tileGridArray[0]);
         tileGridCeiling = new TileGridCeiling(tileGridArray[1], player, heightHandler);
         pathFinder = new PathFinder(collisionChecker.getCollisionArray());
@@ -110,7 +110,7 @@ public class TileGrid extends GameComponent {
 
         public void drawComponent(Graphics2D g2d) {
             if (Game.DEBUG) {
-                g2d.drawImage(image[0], 0, 0, null);
+                g2d.drawImage(image[Dungeon.LAYER], 0, 0, null);
                 return;
             }
             if (opacity != 1) {

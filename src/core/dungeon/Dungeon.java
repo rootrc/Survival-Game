@@ -28,8 +28,9 @@ import core.utilities.ActionUtilities;
 import core.utilities.Easing;
 
 public class Dungeon extends GamePanel {
-    public static final int SETNUM = 2;
-    private static final int STARTING_ROOM = 40;
+    public static final int LAYER = 0;
+    public static final int SETNUM = 0;
+    private static final int STARTING_ROOM = 1;
 
     private int depth = 0;
     private int depthMapCnt[] = new int[12];

@@ -3,7 +3,6 @@ package core.dungeon.room.object_utilities;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.util.Arrays;
-import java.util.Comparator;
 
 import core.dungeon.mechanics.HeightHandler;
 import core.dungeon.mechanics.collision.CollisionChecker;
@@ -30,30 +29,7 @@ public class RoomObjectManager extends GameComponent {
     public void drawComponent(Graphics2D g2d) {
         // Bandaid solution, but it works
         RoomObject[] temp = Arrays.copyOf(getComponents(), getComponentCount(), RoomObject[].class);
-        Arrays.sort(temp, new Comparator<RoomObject>() {
-            public int compare(RoomObject a, RoomObject b) {
-                if (a.isOnFloor() && !b.isOnFloor()) {
-                    return 1;
-                } else if (!a.isOnFloor() && b.isOnFloor()) {
-                    return -1;
-                }
-                double ay = a.getHeight() / 2;
-                double by = b.getHeight() / 2;
-                if (a.getHitbox() != null) {
-                    ay = a.getHitbox().getY();
-                }
-                if (b.getHitbox() != null) {
-                    by = b.getHitbox().getY();
-                }
-                if (a.getY() + ay < b.getY() + by) {
-                    return 1;
-                }
-                if (a.getY() + ay > b.getY() + by) {
-                    return -1;
-                }
-                return 0;
-            }
-        });
+        Arrays.sort(temp);
         removeAll();
         for (RoomObject roomObject : temp) {
             add(roomObject, -1);
@@ -75,7 +51,6 @@ public class RoomObjectManager extends GameComponent {
     }
 
     private void objectCollisions() {
-        collisionChecker.handleCollision(player);
         for (Component roomObject : getComponents()) {
             if (roomObject == player) {
                 continue;
@@ -98,6 +73,7 @@ public class RoomObjectManager extends GameComponent {
                 ((RoomObject) subRoomObject).moveY(-roomObject.getY());
             }
         }
+        collisionChecker.handleCollision(player);
     }
 
     private void objectInteractions() {

@@ -65,7 +65,7 @@ public class Player extends Entity {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
                 CollisionBox.getCollisionBox(0, 1.25, 2, 2),
-                3 * Tile.SIZE / 16, 3 * Tile.SIZE / 160.0, 3 * Tile.SIZE / 80.0);
+                3 * Tile.SIZE / 16, Tile.SIZE / 40.0, Tile.SIZE / 80.0);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;

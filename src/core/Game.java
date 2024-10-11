@@ -14,13 +14,13 @@ import core.game_panel.Menu;
 import core.game_panel.Options;
 
 public class Game extends JFrame implements Runnable {
-    public static final int SCREEN_WIDTH = 2*1024;
-    public static final int SCREEN_HEIGHT = 2*768;
+    public static final int SCREEN_WIDTH = 1024;
+    public static final int SCREEN_HEIGHT = 768;
 
     public static final int FPS = 60;
     public static final int UPS = 60;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static final boolean LIGHTING = true;
 
     private GamePanel gamePanel;

@@ -15,7 +15,7 @@ import core.dungeon.room.tile.Tile;
 import core.dungeon.room.tile.TileGrid;
 import core.game_components.GameComponent;
 
-public abstract class RoomObject extends GameComponent {
+public abstract class RoomObject extends GameComponent implements Comparable<RoomObject> {
     private SpriteSheet spriteSheet;
     private CollisionBox interactbox;
     private CollisionBox hitbox;
@@ -56,7 +56,7 @@ public abstract class RoomObject extends GameComponent {
         g2d.setColor(Color.red);
         if (hitbox != null) {
             g2d.drawRect((int) (hitbox.getX()), (int) (hitbox.getY()),
-            (int) hitbox.getWidth(), (int) hitbox.getHeight());
+                    (int) hitbox.getWidth(), (int) hitbox.getHeight());
         }
     }
 
@@ -87,9 +87,10 @@ public abstract class RoomObject extends GameComponent {
     }
 
     public final void replaceSpriteSheet(BufferedImage bufferedImage) {
-        replaceSpriteSheet(new SpriteSheet(bufferedImage, this.spriteSheet.getFrameCnt(), this.spriteSheet.getDirectionCnt(), this.spriteSheet.getFrameLength()));
+        replaceSpriteSheet(new SpriteSheet(bufferedImage, this.spriteSheet.getFrameCnt(),
+                this.spriteSheet.getDirectionCnt(), this.spriteSheet.getFrameLength()));
     }
-    
+
     public final void replaceSpriteSheet(SpriteSheet spriteSheet) {
         spriteSheet.setFrame(this.spriteSheet.getFrame());
         spriteSheet.setDirection(this.spriteSheet.getDirection());
@@ -114,21 +115,21 @@ public abstract class RoomObject extends GameComponent {
         }
         return (int) ((getY() + hitbox.getY()) / Tile.SIZE);
     }
-    
+
     public final int getMinCol() {
         if (hitbox == null) {
             return (int) (getX() / Tile.SIZE);
         }
         return (int) ((getX() + hitbox.getX()) / Tile.SIZE);
     }
-    
+
     public final int getMaxRow() {
         if (hitbox == null) {
             return (int) ((getY() - 1) / Tile.SIZE);
         }
         return (int) ((getY() + hitbox.getMaxY() - 1) / Tile.SIZE);
     }
-    
+
     public final int getMaxCol() {
         if (hitbox == null) {
             return (int) ((getX() - 1) / Tile.SIZE);
@@ -172,6 +173,30 @@ public abstract class RoomObject extends GameComponent {
                 * (getX() + getHitbox().getCenterX() - o.getX() - o.getHitbox().getCenterX())
                 + (getY() + getHitbox().getCenterY() - o.getY() - o.getHitbox().getCenterY())
                         * (getY() + getHitbox().getCenterY() - o.getY() - o.getHitbox().getCenterY()));
+    }
+
+    @Override
+    public int compareTo(RoomObject o) {
+        if (isOnFloor() && !o.isOnFloor()) {
+            return 1;
+        } else if (!isOnFloor() && o.isOnFloor()) {
+            return -1;
+        }
+        double ay = getHeight() / 2;
+        double by = o.getHeight() / 2;
+        if (getHitbox() != null) {
+            ay = getHitbox().getY();
+        }
+        if (o.getHitbox() != null) {
+            by = o.getHitbox().getY();
+        }
+        if (getY() + ay < o.getY() + by) {
+            return 1;
+        }
+        if (getY() + ay > o.getY() + by) {
+            return -1;
+        }
+        return 0;
     }
 
     public static RoomObject getRoomObject(RoomObjectData data, Player player, TileGrid tileGrid) {
