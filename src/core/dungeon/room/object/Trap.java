@@ -55,7 +55,7 @@ public abstract class Trap extends RoomObject {
                 trap = new Spike(new SpriteSheet(ImageUtilities.getImage("objects", "spike"), 12, 6),
                         data.r - 3, data.c - 3, CollisionBox.getCollisionBox(3, 3, 2, 2), player);
                 trap.setLightRadius(32);
-                trap.setLightVisibility(150);
+                trap.setLightVisibility(200);
                 return trap;
             case RoomObjectData.EXPLOSIVE:
                 trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
@@ -299,12 +299,15 @@ class Explosive extends Trap {
     private Player player;
     private Explosion explosion;
     private CollisionBox explosionHitbox;
+    private CollisionBox playerDetectionHitbox;
 
     Explosive(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox explosionHitbox,
             Player player, boolean isWorking) {
         super(spriteSheet, r, c, hitbox);
         this.explosionHitbox = explosionHitbox;
         this.player = player;
+        playerDetectionHitbox = CollisionBox.getCollisionBox(explosionHitbox.getX() / Tile.SIZE - 0.5, explosionHitbox.getY() / Tile.SIZE - 0.5,
+                explosionHitbox.getWidth() / Tile.SIZE + 1, explosionHitbox.getHeight() / Tile.SIZE + 1);
         if (isWorking) {
             explosion = new Explosion(getWidth(), getHeight());
             add(explosion);
@@ -335,7 +338,7 @@ class Explosive extends Trap {
 
     private boolean canHitPlayer() {
         return CollisionHandler.collides(player.getX(), player.getY(), player.getHitbox(), getX(), getY(),
-                explosionHitbox);
+                playerDetectionHitbox);
     }
 
     private static class Explosion extends Trap {

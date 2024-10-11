@@ -20,6 +20,9 @@ import core.dungeon.settings.KeyBinds;
 import core.utilities.ImageUtilities;
 
 public class Player extends Entity {
+    private static final int highMaxSpeed = 3 * Tile.SIZE / 16;
+    private static final int lowMaxSpeed = Tile.SIZE / 8;
+
     private boolean movingUp;
     private boolean movingLeft;
     private boolean movingDown;
@@ -42,30 +45,11 @@ public class Player extends Entity {
 
     private SpriteSheet lastSpriteSheet;
 
-    private final Action interact = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            if (interactables == null || interactionCooldown < 30) {
-                return;
-            }
-            interactionCooldown = 0;
-            for (int i = 0; i < interactables.size(); i++) {
-                if (interactables.size() == 0) {
-                    break;
-                }
-                RoomObject interactable = interactables.get(i);
-                interactable.interaction(Player.this);
-                if (interactable instanceof Ladder) {
-                    nextRoom.actionPerformed(e);
-                }
-            }
-        }
-    };
-
     public Player(Action nextRoom, Inventory inventory) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
                 CollisionBox.getCollisionBox(0, 1.25, 2, 2),
-                3 * Tile.SIZE / 16, Tile.SIZE / 40.0, Tile.SIZE / 80.0);
+                highMaxSpeed, Tile.SIZE / 40.0, Tile.SIZE / 80.0);
         this.nextRoom = nextRoom;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;
@@ -85,6 +69,8 @@ public class Player extends Entity {
     private void setKeyBinds() {
         getInputMap(2).put(KeyBinds.interact, "interact");
         getActionMap().put("interact", interact);
+        getInputMap(2).put(KeyBinds.slowDownToggle, "slowDownToggle");
+        getActionMap().put("slowDownToggle", slowDownToggle);
         getInputMap(2).put(KeyBinds.dash, "dash");
         getActionMap().put("dash", dash);
         getInputMap(2).put(KeyBinds.upPressed, "acc up");
@@ -210,8 +196,8 @@ public class Player extends Entity {
         setSpeedX(0);
         setSpeedY(0);
         Game.setFreezeFrame(6);
-        Room.setScreenShakeDuration(20);
-        Room.setScreenShakeStrength(20);
+        Room.setScreenShakeDuration(15);
+        Room.setScreenShakeStrength(15);
         if (dashCooldown < 10) {
             setMaxSpeed((int) (getMaxSpeed() / 3));
         }
@@ -254,6 +240,51 @@ public class Player extends Entity {
     public int getLightDetectionRadiusSquared() {
         return lightDetectionRadiusSquared;
     }
+
+    private final Action interact = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (interactables == null || interactionCooldown < 30) {
+                return;
+            }
+            interactionCooldown = 0;
+            for (int i = 0; i < interactables.size(); i++) {
+                if (interactables.size() == 0) {
+                    break;
+                }
+                RoomObject interactable = interactables.get(i);
+                interactable.interaction(Player.this);
+                if (interactable instanceof Ladder) {
+                    nextRoom.actionPerformed(e);
+                }
+            }
+        }
+    };
+
+    private final Action slowDownToggle = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (getMaxSpeed() == highMaxSpeed) {
+                setMaxSpeed(lowMaxSpeed);
+            } else if (getMaxSpeed() == lowMaxSpeed) {
+                setMaxSpeed(highMaxSpeed);
+            }
+        }   
+    };
+
+    private final Action dash = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            if (dashCooldown < 25) {
+                return;
+            }
+            if (movingUp && movingDown || movingLeft && movingRight) {
+                return;
+            }
+            dashCooldown = 0;
+            setMaxSpeed((int) (3 * getMaxSpeed()));
+            Game.setFreezeFrame(3);
+            Room.setScreenShakeDuration(2);
+            Room.setScreenShakeStrength(2);
+        }
+    };
 
     private final Action accelerateUp = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -300,22 +331,6 @@ public class Player extends Entity {
     private final Action decelerateRight = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             movingRight = false;
-        }
-    };
-
-    private final Action dash = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            if (dashCooldown < 25) {
-                return;
-            }
-            if (movingUp && movingDown || movingLeft && movingRight) {
-                return;
-            }
-            dashCooldown = 0;
-            setMaxSpeed((int) (3 * getMaxSpeed()));
-            Game.setFreezeFrame(3);
-            Room.setScreenShakeDuration(2);
-            Room.setScreenShakeStrength(2);
         }
     };
 

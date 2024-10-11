@@ -1,5 +1,6 @@
 package core.dungeon.settings;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
@@ -16,6 +17,7 @@ public class KeyBinds {
     public static KeyStroke rightPressed = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, false);
     public static KeyStroke rightReleased = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, true);
 
+    public static KeyStroke slowDownToggle = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK, false);
     public static KeyStroke dash = KeyStroke.getKeyStroke(KeyEvent.VK_J, defaultMask, false);
     public static KeyStroke interact = KeyStroke.getKeyStroke(KeyEvent.VK_E, defaultMask, false);
     public static KeyStroke[] useItem = new KeyStroke[10];
