@@ -9,20 +9,20 @@ public class SpriteSheet {
     private int width;
     private int height;
     private int frameCnt;
-    private int directionCnt;
+    private int typeCnt;
     private int frameLength;
 
     private int type;
     private int currentFrame;
 
-    public SpriteSheet(BufferedImage bufferedImage, int frameCnt, int directionCnt, int frameLength) {
+    public SpriteSheet(BufferedImage bufferedImage, int frameCnt, int typeCnt, int frameLength) {
         this.frameCnt = frameCnt;
-        this.directionCnt = directionCnt;
+        this.typeCnt = typeCnt;
         this.frameLength = frameLength;
         width = bufferedImage.getWidth() / frameCnt;
-        height = bufferedImage.getHeight() / directionCnt;
-        images = new BufferedImage[directionCnt][frameCnt];
-        for (int r = 0; r < directionCnt; r++) {
+        height = bufferedImage.getHeight() / typeCnt;
+        images = new BufferedImage[typeCnt][frameCnt];
+        for (int r = 0; r < typeCnt; r++) {
             for (int c = 0; c < frameCnt; c++) {
                 images[r][c] = ImageUtilities.getImage(bufferedImage, r, c, width, height);
             }
@@ -45,6 +45,12 @@ public class SpriteSheet {
         return images[type][currentFrame];
     }
 
+    public void set(SpriteSheet spriteSheet) {
+        spriteSheet.setFrame(currentFrame);
+        spriteSheet.setType(type);
+        spriteSheet.setCnt(cnt);
+    }
+
     public int getWidth() {
         return width;
     }
@@ -53,15 +59,15 @@ public class SpriteSheet {
         return height;
     }
 
-    public int getDirectionCnt() {
-        return directionCnt;
+    public int getTypeCnt() {
+        return typeCnt;
     }
     
     public void setType(int type) {
-        this.type = type;
+        this.type = (type + typeCnt) % typeCnt;
     }
 
-    public int setType() {
+    public int getType() {
         return type;
     }
 
@@ -74,7 +80,7 @@ public class SpriteSheet {
     }
 
     public void setFrame(int frame) {
-        currentFrame = frame;
+        currentFrame = (frame + frameCnt) % frameCnt;
         cnt = 0;
     }
 
@@ -108,8 +114,12 @@ public class SpriteSheet {
         }
     }
 
-    public boolean isStartofFrame() {
-        return cnt == 0;
+    public int getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(int cnt) {
+        this.cnt = cnt;
     }
     
     public void setFrameLength(int frameLength) {

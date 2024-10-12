@@ -2,7 +2,6 @@ package core.dungeon.mechanics.collision;
 
 import java.awt.Rectangle;
 
-import core.dungeon.Dungeon;
 import core.dungeon.room.entity.Entity;
 import core.dungeon.room.object_utilities.CollisionBox;
 import core.dungeon.room.object_utilities.DirectionUtilities;

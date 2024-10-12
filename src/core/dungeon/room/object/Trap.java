@@ -233,7 +233,7 @@ class Spike extends Trap {
         if (canHitPlayer() || getSpriteSheet().getFrame() != 0) {
             getSpriteSheet().next();
         }
-        if (getSpriteSheet().getFrame() == 0 || !getSpriteSheet().isStartofFrame()) {
+        if (getSpriteSheet().getFrame() == 0 || getSpriteSheet().getCnt() != 0) {
             return;
         }
         downBlade.setHitbox(CollisionBox.getCollisionBox(0, 0, downBlade.getHitbox().getWidth() / Tile.SIZE,
@@ -318,7 +318,7 @@ class Explosive extends Trap {
         if ((canHitPlayer() || getSpriteSheet().getFrame() != 0)
                 && getSpriteSheet().getFrame() != getSpriteSheet().getFrameCnt() - 1 && explosion != null) {
             getSpriteSheet().next();
-            if (getSpriteSheet().getFrame() == 0 || !getSpriteSheet().isStartofFrame()) {
+            if (getSpriteSheet().getFrame() == 0 || getSpriteSheet().getCnt() != 0) {
                 return;
             }
             if (getSpriteSheet().getFrame() == HITFRAME) {

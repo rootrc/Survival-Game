@@ -87,8 +87,8 @@ public class Dungeon extends GamePanel {
     private final Action playerDeath = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             removeAll();
+            add(deathScreen);
             add(UILayer);
-            UILayer.openPopupUI(deathScreen).actionPerformed(e);;
             deathScreen.buildImage(miniMap);
         }
     };
@@ -98,7 +98,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, playerDeath, inventory);
         miniMap = new MiniMap();
-        healthBar = new HealthBar(player);
+        healthBar = new HealthBar(player, DiffSettings.startingHealth);
         easing = new Easing(60);
         deathScreen = new DeathScreen(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -121,12 +121,17 @@ public class Dungeon extends GamePanel {
         snowParticles = new SnowParticles();
         debugScreen = new DebugScreen(UILayer, room);
 
-        add(room);
-        add(snowParticles);
-        add(timer);
-        add(miniMap);
-        add(healthBar);
-        add(inventory);
+        if (Game.DEBUG) {
+            add(room);
+            add(inventory);
+        } else {
+            add(room);
+            add(snowParticles);
+            add(timer);
+            add(miniMap);
+            add(healthBar);
+            add(inventory);
+        }
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 reset();
@@ -179,7 +184,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, playerDeath, inventory);
         miniMap = new MiniMap();
-        healthBar = new HealthBar(player);
+        healthBar = new HealthBar(player, DiffSettings.startingHealth);
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         miniMap.setStartingRoom(room);
