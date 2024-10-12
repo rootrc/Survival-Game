@@ -39,7 +39,7 @@ public class Player extends Entity {
     private int interactionCooldown;
     private int dashCooldown;
 
-    private int health;
+    private double health;
     private int hitDirection;
     private int hitCnt;
 
@@ -56,7 +56,7 @@ public class Player extends Entity {
         lightRadiusFactor = DiffSettings.playerLightRadiusFactor;
         lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
         lightDetectionRadiusSquared = DiffSettings.playerLightDetectionRadiusSquared;
-        health = 5;
+        health = DiffSettings.startingHealth;
         setKeyBinds();
         interactionCooldown = 1000;
         dashCooldown = 1000;
@@ -185,12 +185,16 @@ public class Player extends Entity {
         interactables.add(object);
     }
 
+    public double getHealth() {
+        return health;
+    }
+
     public void takeDamage() {
         if (hitCnt > 0) {
             return;
         }
         health--;
-        if (health == 1) {
+        if ((int)health == 1) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
         }
         setSpeedX(0);

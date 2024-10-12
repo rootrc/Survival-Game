@@ -10,6 +10,7 @@ import javax.swing.Action;
 
 import core.Game;
 import core.dungeon.debug.DebugScreen;
+import core.dungeon.dungeon_ui.HealthBar;
 import core.dungeon.dungeon_ui.MiniMap;
 import core.dungeon.dungeon_ui.Timer;
 import core.dungeon.inventory.Inventory;
@@ -47,6 +48,7 @@ public class Dungeon extends GamePanel {
     private SnowParticles snowParticles;
     private Timer timer;
     private MiniMap miniMap;
+    private HealthBar healthBar;
 
     private Room removalRoom;
     private Easing easing;
@@ -84,6 +86,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
         miniMap = new MiniMap();
+        healthBar = new HealthBar(player);
         easing = new Easing(60);
 
         roomFactory = new RoomFactory(player, UILayer, miniMap);
@@ -100,6 +103,7 @@ public class Dungeon extends GamePanel {
         add(snowParticles);
         add(timer);
         add(miniMap);
+        add(healthBar);
         add(inventory);
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -157,6 +161,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, inventory);
         miniMap = new MiniMap();
+        healthBar = new HealthBar(player);
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         miniMap.setStartingRoom(room);

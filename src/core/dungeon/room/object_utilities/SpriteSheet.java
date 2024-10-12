@@ -78,6 +78,11 @@ public class SpriteSheet {
         cnt = 0;
     }
 
+    public void previousFrame() {
+        currentFrame = (currentFrame - 1 + frameCnt) % frameCnt;
+    }
+
+
     public void nextFrame() {
         currentFrame = (currentFrame + 1) % frameCnt;
     }
@@ -92,6 +97,14 @@ public class SpriteSheet {
         if (cnt == frameLength) {
             cnt = 0;
             nextFrame();
+        }
+    }
+
+    public void prev() {
+        cnt++;
+        if (cnt == frameLength) {
+            cnt = 0;
+            previousFrame();
         }
     }
 
