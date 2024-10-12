@@ -165,7 +165,7 @@ class MovingSaw extends Trap {
             int y0 = (sawSpriteSheet.getHeight() - spriteSheet.getHeight()) / 2;
             BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(sawSpriteSheet.getWidth(),
                     length * spriteSheet.getHeight() + 2 * y0, Transparency.TRANSLUCENT);
-            Graphics2D g2d = (Graphics2D) image.getGraphics();
+            Graphics2D g2d = image.createGraphics();
             g2d.drawImage(spriteSheet.getImage(), x0, y0, null);
             spriteSheet.nextFrame();
             for (int i = 1; i < length - 1; i++) {
@@ -181,7 +181,7 @@ class MovingSaw extends Trap {
             int y0 = (sawSpriteSheet.getHeight() - spriteSheet.getHeight()) / 2;
             BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(
                     length * spriteSheet.getWidth() + 2 * x0, sawSpriteSheet.getHeight(), Transparency.TRANSLUCENT);
-            Graphics2D g2d = (Graphics2D) image.getGraphics();
+            Graphics2D g2d = image.createGraphics();
             g2d.drawImage(spriteSheet.getImage(), x0, y0, null);
             spriteSheet.nextFrame();
             for (int i = 1; i < length - 1; i++) {

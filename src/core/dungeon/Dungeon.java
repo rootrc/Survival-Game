@@ -10,15 +10,16 @@ import javax.swing.Action;
 
 import core.Game;
 import core.dungeon.debug.DebugScreen;
+import core.dungeon.dungeon_ui.DeathScreen;
 import core.dungeon.dungeon_ui.HealthBar;
 import core.dungeon.dungeon_ui.MiniMap;
+import core.dungeon.dungeon_ui.PauseMenu;
 import core.dungeon.dungeon_ui.Timer;
 import core.dungeon.inventory.Inventory;
 import core.dungeon.mechanics.SkillTree;
 import core.dungeon.mechanics.particles.SnowParticles;
 import core.dungeon.room.Room;
 import core.dungeon.room.entity.Player;
-import core.dungeon.room.room_UI.PauseMenu;
 import core.dungeon.room.tile.Tile;
 import core.dungeon.room_factory.RoomFactory;
 import core.dungeon.settings.DiffSettings;
@@ -52,7 +53,9 @@ public class Dungeon extends GamePanel {
 
     private Room removalRoom;
     private Easing easing;
-    private int cnt;
+    private int roomTransitionCnt;
+
+    private DeathScreen deathScreen;
 
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -81,13 +84,32 @@ public class Dungeon extends GamePanel {
         }
     };
 
+    private final Action playerDeath = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            removeAll();
+            add(UILayer);
+            UILayer.openPopupUI(deathScreen).actionPerformed(e);;
+            deathScreen.buildImage(miniMap);
+        }
+    };
+
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
-        player = new Player(nextRoom, inventory);
+        player = new Player(nextRoom, playerDeath, inventory);
         miniMap = new MiniMap();
         healthBar = new HealthBar(player);
         easing = new Easing(60);
+        deathScreen = new DeathScreen(UILayer, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                reset();
+                fadeIn();
+            }
+        }, ActionUtilities.combineActions(game.changePanel("mainMenu"), new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                reset();
+            }
+        }), game.changePanel("title"));
 
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(STARTING_ROOM);
@@ -139,27 +161,23 @@ public class Dungeon extends GamePanel {
     @Override
     public void updateComponent() {
         if (removalRoom != null) {
-            cnt++;
-            removalRoom.setLocation(easing.easeInOutQuad(cnt));
+            roomTransitionCnt++;
+            removalRoom.setLocation(easing.easeInOutQuad(roomTransitionCnt));
             if (easing.getP1().equals(removalRoom.getLocation())) {
                 remove(removalRoom);
                 removalRoom.setFreeze(false);
                 removalRoom = null;
-                cnt = 0;
+                roomTransitionCnt = 0;
             }
         }
         super.updateComponent();
     }
 
     public void reset() {
-        remove(room);
-        remove(snowParticles);
-        remove(timer);
-        remove(miniMap);
-        remove(inventory);
+        removeAll();
 
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
-        player = new Player(nextRoom, inventory);
+        player = new Player(nextRoom, playerDeath, inventory);
         miniMap = new MiniMap();
         healthBar = new HealthBar(player);
         roomFactory = new RoomFactory(player, UILayer, miniMap);
@@ -174,6 +192,7 @@ public class Dungeon extends GamePanel {
         add(snowParticles);
         add(timer);
         add(miniMap);
+        add(healthBar);
         add(inventory);
         UILayer.removeAll();
         add(UILayer);

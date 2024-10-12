@@ -49,7 +49,7 @@ public class HealthBar extends GameComponent {
     private BufferedImage getImage() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(), Transparency.BITMASK);
-        Graphics2D g2d = (Graphics2D) image.getGraphics();
+        Graphics2D g2d = image.createGraphics();
         for (int i = 0; i < lanternCnt; i++) {
             g2d.drawImage(lanterns[i].getImage(), 48 * i, 0, null);
         }

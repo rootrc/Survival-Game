@@ -93,7 +93,7 @@ public abstract class RoomObject extends GameComponent implements Comparable<Roo
 
     public final void replaceSpriteSheet(SpriteSheet spriteSheet) {
         spriteSheet.setFrame(this.spriteSheet.getFrame());
-        spriteSheet.setDirection(this.spriteSheet.getDirection());
+        spriteSheet.setType(this.spriteSheet.setType());
         this.spriteSheet = spriteSheet;
     }
 

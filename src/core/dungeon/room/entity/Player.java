@@ -30,6 +30,7 @@ public class Player extends Entity {
     private Inventory inventory;
     private ArrayList<RoomObject> interactables = new ArrayList<>();
     private Action nextRoom;
+    private Action death;
 
     private double lightAmount;
     private int lightRadiusFactor;
@@ -45,12 +46,13 @@ public class Player extends Entity {
 
     private SpriteSheet lastSpriteSheet;
 
-    public Player(Action nextRoom, Inventory inventory) {
+    public Player(Action nextRoom, Action death, Inventory inventory) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
                 CollisionBox.getCollisionBox(0, 1.25, 2, 2),
                 highMaxSpeed, Tile.SIZE / 40.0, Tile.SIZE / 80.0);
         this.nextRoom = nextRoom;
+        this.death = death;
         this.inventory = inventory;
         lightAmount = DiffSettings.playerLightStartAmount;
         lightRadiusFactor = DiffSettings.playerLightRadiusFactor;
@@ -196,6 +198,8 @@ public class Player extends Entity {
         health--;
         if ((int)health == 1) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
+        } else if (health <= 0) {
+            death.actionPerformed(null);
         }
         setSpeedX(0);
         setSpeedY(0);

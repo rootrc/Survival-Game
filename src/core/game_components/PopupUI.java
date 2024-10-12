@@ -15,7 +15,8 @@ import core.utilities.ImageUtilities;
 // A UI panel that appears and disappears
 public abstract class PopupUI extends GameComponent {
     private UILayer UILayer;
-    private BufferedImage backgroundImage;
+    private BufferedImage image;
+
     private int framesToEnter;
     private boolean moving;
     private int timer;
@@ -39,7 +40,8 @@ public abstract class PopupUI extends GameComponent {
             return;
         }
         if (getX() < (Game.SCREEN_WIDTH - getWidth()) / 2) {
-            setX(-getWidth() + (Game.SCREEN_WIDTH + getWidth()) / 2 * Easing.easeInOutQuad((double) timer / framesToEnter));
+            setX(-getWidth()
+                    + (Game.SCREEN_WIDTH + getWidth()) / 2 * Easing.easeInOutQuad((double) timer / framesToEnter));
             timer++;
         } else {
             setX((Game.SCREEN_WIDTH - getWidth()) / 2
@@ -55,12 +57,16 @@ public abstract class PopupUI extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(backgroundImage, 0, 0, null);
+        g2d.drawImage(image, 0, 0, null);
     }
 
     private void buildImage(String tileSet) {
-        backgroundImage = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(),
+        image = ImageUtilities.getImageFrom3x3Tileset("UI", new StringBuilder(tileSet).append("Tileset").toString(),
                 getWidth(), getHeight());
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 
     public void enterPanel() {

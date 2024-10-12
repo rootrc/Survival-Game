@@ -224,6 +224,19 @@ public class MiniMap extends GameComponent {
         return b;
     }
 
+    
+    public int getExploredRoomCnt() {
+        return internalMiniMapDisplay.getComponentCount();
+    }
+
+    public int getMaxDepth() {
+        int maxDepth = -1;
+        for (int i = 0; i < 100; i++) {
+            maxDepth = Math.max(maxDepth, nodes[i].depth);
+        }
+        return maxDepth;
+    }
+
     private class InternalMiniMapDisplay extends GameComponent {
         public InternalMiniMapDisplay() {
             super(1000, 1000);

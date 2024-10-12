@@ -1,4 +1,4 @@
-package core.dungeon.room.room_UI;
+package core.dungeon.dungeon_ui;
 
 import java.awt.Rectangle;
 import javax.swing.Action;

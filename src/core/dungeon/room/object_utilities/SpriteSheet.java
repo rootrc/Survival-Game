@@ -12,7 +12,7 @@ public class SpriteSheet {
     private int directionCnt;
     private int frameLength;
 
-    private int currentDirection;
+    private int type;
     private int currentFrame;
 
     public SpriteSheet(BufferedImage bufferedImage, int frameCnt, int directionCnt, int frameLength) {
@@ -42,7 +42,7 @@ public class SpriteSheet {
     }
 
     public BufferedImage getImage() {
-        return images[currentDirection][currentFrame];
+        return images[type][currentFrame];
     }
 
     public int getWidth() {
@@ -57,12 +57,12 @@ public class SpriteSheet {
         return directionCnt;
     }
     
-    public void setDirection(int direction) {
-        currentDirection = direction;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public int getDirection() {
-        return currentDirection;
+    public int setType() {
+        return type;
     }
 
     public int getFrame() {

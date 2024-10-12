@@ -9,6 +9,7 @@ import javax.swing.Action;
 
 import core.dungeon.items.Item;
 import core.dungeon.settings.KeyBinds;
+import core.game_components.GameButton;
 import core.game_components.PopupUI;
 import core.game_components.UILayer;
 import core.utilities.ActionUtilities;
@@ -19,12 +20,13 @@ public class ChestUI extends PopupUI {
 
 	public ChestUI(UILayer UILayer, Item item, Action flash) {
 		super(UILayer, 320, 256, 8, "ChestFloor");
-		GetItemButton getItemButton = new GetItemButton(this, ActionUtilities.combineActions(flash, new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				getInputMap(2).put(KeyBinds.takeAllItems, "close");
-			}
-		}), item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
-		add(getItemButton);	
+		GetItemButton getItemButton = new GetItemButton(this,
+				ActionUtilities.combineActions(flash, new AbstractAction() {
+					public void actionPerformed(ActionEvent e) {
+						getInputMap(2).put(KeyBinds.takeAllItems, "close");
+					}
+				}), item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
+		add(getItemButton);
 		getInputMap(2).put(KeyBinds.takeAllItems, "getAll");
 		getActionMap().put("getAll", getItemButton.getAction());
 		check = UILayer.createAndOpenConfirmUI((Action) (new AbstractAction() {
@@ -43,11 +45,25 @@ public class ChestUI extends PopupUI {
 	// TODO
 	// @Override
 	// public void exitPanel() {
-		// if (getComponentCount() == 0) {
-			// super.exitPanel();
-		// } else {
-		// 	check.actionPerformed(null);
-		// }
+	// if (getComponentCount() == 0) {
+	// super.exitPanel();
+	// } else {
+	// check.actionPerformed(null);
+	// }
 	// }
 
+	private static class GetItemButton extends GameButton {
+		public GetItemButton(PopupUI popupUI, Action flash, Item item, Rectangle rect) {
+			super(null, rect);
+			setAction(ActionUtilities.combineActions(item.getAquireItem(), new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					setIcon(null);
+				}
+			}, flash));
+			setIcon(ImageUtilities.resize(item.getImageIcon(), 64, 64));
+			setRolloverIcon(ImageUtilities.resize(item.getRolloverIcon(), 64, 64));
+			setToolTipText(item.getToolTip());
+		}
+
+	}
 }

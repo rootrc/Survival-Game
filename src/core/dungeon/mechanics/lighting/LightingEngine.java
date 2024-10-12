@@ -67,7 +67,7 @@ public class LightingEngine extends GameComponent {
                 Transparency.TRANSLUCENT);
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
-        Graphics2D gl = (Graphics2D) fogOfWar.getGraphics();
+        Graphics2D gl = fogOfWar.createGraphics();
         gl.setColor(Color.black);
         gl.fillRect(0, 0, getWidth(), getHeight());
         isPlayerPresent = true;
@@ -96,7 +96,7 @@ public class LightingEngine extends GameComponent {
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
         if (!isPlayerPresent) {
-            Graphics2D gl = (Graphics2D) image.getGraphics();
+            Graphics2D gl = image.createGraphics();
             gl.drawImage(fogOfWar, 0, 0, null);
             gl.setComposite(AlphaComposite.DstIn);
 
@@ -132,13 +132,13 @@ public class LightingEngine extends GameComponent {
             if (!fogOfWarPoints.contains(10000 * player.getX() + player.getY())) {
                 fogOfWarPoints.add(10000 * player.getX() + player.getY());
                 int lightRadius = getEffectiveLightRadius(player) / 2;
-                Graphics2D gl = (Graphics2D) fogOfWar.getGraphics();
+                Graphics2D gl = fogOfWar.createGraphics();
                 gl.setComposite(AlphaComposite.DstIn);
                 gl.drawImage(getDarknessFilter2(lightRadius), player.getX() + player.getWidth() / 2 - lightRadius,
                         player.getY() + player.getHeight() / 2 - lightRadius, null);
                 gl.dispose();
             }
-            Graphics2D gl = (Graphics2D) image.getGraphics();
+            Graphics2D gl = image.createGraphics();
             gl.drawImage(fogOfWar, 0, 0, null);
             gl.setComposite(AlphaComposite.DstIn);
             for (RoomObject roomObject : lights.keySet()) {
@@ -219,7 +219,7 @@ public class LightingEngine extends GameComponent {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(2 * radius,
                 2 * radius, Transparency.TRANSLUCENT);
-        Graphics2D g2d = (Graphics2D) image.getGraphics();
+        Graphics2D g2d = image.createGraphics();
         RadialGradientPaint gPaint = new RadialGradientPaint(radius, radius, radius, fraction, color);
         g2d.setPaint(gPaint);
         g2d.fillRect(0, 0, 2 * radius, 2 * radius);
@@ -238,7 +238,7 @@ public class LightingEngine extends GameComponent {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(2 * radius,
                 2 * radius, Transparency.TRANSLUCENT);
-        Graphics2D g2d = (Graphics2D) image.getGraphics();
+        Graphics2D g2d = image.createGraphics();
         RadialGradientPaint gPaint = new RadialGradientPaint(radius, radius, radius, fraction, color2);
         g2d.setPaint(gPaint);
         g2d.fillRect(0, 0, 2 * radius, 2 * radius);
