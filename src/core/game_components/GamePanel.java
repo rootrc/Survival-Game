@@ -25,11 +25,7 @@ public abstract class GamePanel extends JPanel {
         setDoubleBuffered(true);
         setFocusable(true);
         fadingEffect = new FadingEffect();
-        add(fadingEffect);
-    }
-
-    public void fadeIn() {
-        fadingEffect.fadeIn();
+        add(fadingEffect, 0);
     }
 
     public void updateComponent() {
@@ -45,21 +41,45 @@ public abstract class GamePanel extends JPanel {
     }
 
     // Utility method as gamecomponents are usually added to the back
-    public final void add(GameComponent gameComponent) {
-        add(gameComponent, 0);
+    public void add(GameComponent gameComponent) {
+        add(gameComponent, 1);
     }
 
-    // Fading effect
+    public void fadeIn() {
+        fadingEffect.fadeIn(FadingEffect.DEFAULT_SPEED);
+    }
+
+    public void fadeOut() {
+        fadingEffect.fadeOut(FadingEffect.DEFAULT_SPEED);
+    }
+
+    public void fadeIn(int speed) {
+        fadingEffect.fadeIn(speed);
+    }
+
+    public void fadeOut(int speed) {
+        fadingEffect.fadeOut(speed);
+    }
+
     private static class FadingEffect extends GameComponent {
+        private static final int DEFAULT_SPEED = 10;
+
         private int alpha;
-        private static int speed = 10;
+        private int speed;
+        private boolean fadeIn;
 
         public FadingEffect() {
             super(Game.SCREEN_WIDTH, Game.SCREEN_WIDTH);
+            fadeIn = true;
+            speed = DEFAULT_SPEED;
         }
 
         public void update() {
-            alpha = Math.max(alpha - speed, 0);
+            if (fadeIn) {
+                alpha = Math.max(alpha - speed, 0);
+            } else {
+                alpha = Math.min(alpha + speed, 255);
+            }
         }
 
         public void drawComponent(Graphics2D g2d) {
@@ -67,8 +87,17 @@ public abstract class GamePanel extends JPanel {
             g2d.fillRect(0, 0, Game.SCREEN_WIDTH, Game.SCREEN_WIDTH);
         }
 
-        public void fadeIn() {
+        public void fadeIn(int speed) {
+            this.speed = speed;
             alpha = 255;
+            fadeIn = true;
         }
+
+        public void fadeOut(int speed) {
+            this.speed = speed;
+            alpha = 0;
+            fadeIn = false;
+        }
+
     }
 }

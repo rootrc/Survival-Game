@@ -46,9 +46,9 @@ public class SpriteSheet {
     }
 
     public void set(SpriteSheet spriteSheet) {
-        spriteSheet.setFrame(currentFrame);
-        spriteSheet.setType(type);
-        spriteSheet.setCnt(cnt);
+        setFrame(spriteSheet.getFrame());
+        setType(spriteSheet.getType());
+        setCnt(spriteSheet.getCnt());
     }
 
     public int getWidth() {

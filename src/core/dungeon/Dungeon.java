@@ -56,6 +56,7 @@ public class Dungeon extends GamePanel {
     private int roomTransitionCnt;
 
     private DeathScreen deathScreen;
+    private int deathCnt;
 
     private final Action nextRoom = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -86,10 +87,11 @@ public class Dungeon extends GamePanel {
 
     private final Action playerDeath = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            removeAll();
-            add(deathScreen);
-            add(UILayer);
-            deathScreen.buildImage(miniMap);
+            deathCnt = 1;
+            fadeOut(3);
+            player.resetKeyboardActions();
+            room.setFreeze(true);
+            Game.setFreezeFrame(20);
         }
     };
 
@@ -125,12 +127,7 @@ public class Dungeon extends GamePanel {
             add(room);
             add(inventory);
         } else {
-            add(room);
-            add(snowParticles);
-            add(timer);
-            add(miniMap);
-            add(healthBar);
-            add(inventory);
+            add();
         }
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -151,6 +148,9 @@ public class Dungeon extends GamePanel {
         getActionMap().put("skills", UILayer.openPopupUI(skillTree));
         getInputMap(2).put(KeyBinds.debug, "debug");
         getActionMap().put("debug", UILayer.openPopupUI(debugScreen));
+
+        Room.setScreenShakeDuration(10);
+        Room.setScreenShakeStrength(10);
 
         if (Game.DEBUG) {
             addMouseListener(new MouseAdapter() {
@@ -175,12 +175,21 @@ public class Dungeon extends GamePanel {
                 roomTransitionCnt = 0;
             }
         }
+        if (deathCnt != 0) {
+            deathCnt++;
+            if (deathCnt == 5.0 / 2 * Game.UPS) {
+                remove();
+                add(deathScreen, -1);
+                deathScreen.buildImage(miniMap);
+                fadeIn(4);
+                deathCnt = 0;
+            }
+        }
         super.updateComponent();
     }
 
     public void reset() {
-        removeAll();
-
+        remove();
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, playerDeath, inventory);
         miniMap = new MiniMap();
@@ -192,15 +201,28 @@ public class Dungeon extends GamePanel {
         timer.setTime(599);
         snowParticles = new SnowParticles();
         debugScreen = new DebugScreen(UILayer, room);
+        add();
+    }
 
+    private void add() {
         add(room);
         add(snowParticles);
         add(timer);
         add(miniMap);
         add(healthBar);
         add(inventory);
-        UILayer.removeAll();
         add(UILayer);
     }
 
+    private void remove() {
+        remove(room);
+        remove(snowParticles);
+        remove(timer);
+        remove(miniMap);
+        remove(healthBar);
+        remove(inventory);
+
+        remove(deathScreen);
+        UILayer.removeAll();
+    }
 }

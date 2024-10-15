@@ -100,7 +100,7 @@ public class Player extends Entity {
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
         if (isMoving()) {
-            if (hitCnt <= 60) {
+            if (hitCnt <= Game.UPS) {
                 getSpriteSheet().next();
             }
         } else {
@@ -118,11 +118,11 @@ public class Player extends Entity {
         }
 
         if (hitCnt > 0) {
-            if (hitCnt == 60) {
+            if (hitCnt == Game.UPS) {
                 replaceSpriteSheet(lastSpriteSheet);
             }
             hitCnt--;
-            if (hitCnt > 55) {
+            if (hitCnt > 11.0 / 12 * Game.UPS) {
                 moveX(3 * getMaxSpeed() * DirectionUtilities.getXMovement(hitDirection));
                 moveY(3 * getMaxSpeed() * DirectionUtilities.getYMovement(hitDirection));
             } else {
@@ -140,7 +140,7 @@ public class Player extends Entity {
 
     @Override
     public void move() {
-        if (dashCooldown < 4 | hitCnt >= 55) {
+        if (dashCooldown < 4 | hitCnt >= 11.0 / 12 * Game.UPS) {
             return;
         }
         double ax = 0;
@@ -196,20 +196,23 @@ public class Player extends Entity {
             return;
         }
         health--;
-        if ((int)health == 1) {
+        if ((int) health == 1) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
-        } else if (health <= 0) {
-            death.actionPerformed(null);
         }
         setSpeedX(0);
         setSpeedY(0);
         Game.setFreezeFrame(6);
         Room.setScreenShakeDuration(15);
         Room.setScreenShakeStrength(15);
-        if (dashCooldown < 10) {
+        if (dashCooldown < 1.0 / 6 * Game.UPS) {
             setMaxSpeed((int) (getMaxSpeed() / 3));
         }
         dashCooldown = 1000;
+        if (health == 0) {
+            replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
+            death.actionPerformed(null);
+            return;
+        }
         hitCnt = 60;
         hitDirection = DirectionUtilities.reverseDirection(getDirection());
         lastSpriteSheet = getSpriteSheet();
@@ -275,12 +278,12 @@ public class Player extends Entity {
             } else if (getMaxSpeed() == lowMaxSpeed) {
                 setMaxSpeed(highMaxSpeed);
             }
-        }   
+        }
     };
 
     private final Action dash = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            if (dashCooldown < 25) {
+            if (dashCooldown < 5.0 / 12 * Game.UPS) {
                 return;
             }
             if (movingUp && movingDown || movingLeft && movingRight) {
