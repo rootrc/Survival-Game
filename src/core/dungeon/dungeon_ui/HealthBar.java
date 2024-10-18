@@ -15,6 +15,7 @@ public class HealthBar extends GameComponent {
     private static final int LANTERN_CNT = 8;
     private static final int LANTERN_DIST = 32;
 
+    private BufferedImage image;
     private Player player;
     private int obtainedLanterns;
     private SpriteSheet[] lanterns;
@@ -47,21 +48,21 @@ public class HealthBar extends GameComponent {
         for (int i = 0; i < LANTERN_CNT; i++) {
             lanterns[i].next();
         }
+        buildImage();
     }
 
     public void drawComponent(Graphics2D g2d) {
-        g2d.drawImage(getImage(), 0, 0, null);
+        g2d.drawImage(image, 0, 0, null);
     }
 
-    private BufferedImage getImage() {
+    private void buildImage() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+        image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.BITMASK);
         Graphics2D g2d = image.createGraphics();
         for (int i = 0; i < LANTERN_CNT; i++) {
             g2d.drawImage(lanterns[i].getImage(), LANTERN_DIST * i, 0, null);
         }
-        return image;
     }
 
     public void addLantern() {

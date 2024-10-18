@@ -118,8 +118,7 @@ public class Dungeon extends GamePanel {
         // room = roomFactory.createRandomRoom(21, 34);
 
         miniMap.setStartingRoom(room);
-        timer = new Timer();
-        timer.setTime(599);
+        timer = new Timer(599);
         snowParticles = new SnowParticles();
         debugScreen = new DebugScreen(UILayer, room);
 
@@ -197,8 +196,7 @@ public class Dungeon extends GamePanel {
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         miniMap.setStartingRoom(room);
-        timer = new Timer();
-        timer.setTime(599);
+        timer = new Timer(599);
         snowParticles = new SnowParticles();
         debugScreen = new DebugScreen(UILayer, room);
         add();
