@@ -12,32 +12,30 @@ import core.game_components.GameComponent;
 import core.utilities.ImageUtilities;
 
 public class HealthBar extends GameComponent {
-    private static final int LANTERN_CNT = 8;
+    public static final int LANTERN_CNT = 8;
     private static final int LANTERN_DIST = 32;
 
     private BufferedImage image;
     private Player player;
-    private int obtainedLanterns;
     private SpriteSheet[] lanterns;
     private int cnt;
 
-    public HealthBar(Player player, int obtainedLanterns) {
+    public HealthBar(Player player) {
         super(LANTERN_DIST * LANTERN_CNT, 52);
         this.player = player;
-        this.obtainedLanterns = obtainedLanterns;
         setLocation(32, 24);
         lanterns = new SpriteSheet[LANTERN_CNT];
         for (int i = 0; i < LANTERN_CNT; i++) {
             lanterns[i] = new SpriteSheet(ImageUtilities.getImage("UI", "lanternHealth"), 4, 7, 60);
         }
-        for (int i = 0; i < obtainedLanterns; i++) {
+        for (int i = 0; i < player.getHealthPoints(); i++) {
             lanterns[i].setType(1);
         }
     }
 
     public void update() {
         cnt++;
-        for (int i = 0; i < obtainedLanterns; i++) {
+        for (int i = 0; i < player.getHealthPoints(); i++) {
             int nextType = (int) (5 * Math.min(Math.max(player.getHealth() - i, 0), 1)) + 1;
             int curType = lanterns[i].getType();
             if (curType != nextType && cnt >= 4) {
@@ -45,6 +43,7 @@ public class HealthBar extends GameComponent {
                 cnt = 0;
             }
         }
+        lanterns[player.getHealthPoints()].setType(0);
         for (int i = 0; i < LANTERN_CNT; i++) {
             lanterns[i].next();
         }
@@ -66,10 +65,10 @@ public class HealthBar extends GameComponent {
     }
 
     public void addLantern() {
-        if (obtainedLanterns == LANTERN_CNT) {
-            return;
-        }
-        obtainedLanterns++;
-        lanterns[obtainedLanterns - 1].setType(1);
+        lanterns[player.getHealthPoints() - 1].setType(1);
+    }
+
+    public void removeLantern() {
+        lanterns[player.getHealthPoints() - 1].setType(0);
     }
 }

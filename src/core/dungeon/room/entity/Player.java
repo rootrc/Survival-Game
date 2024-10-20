@@ -41,6 +41,8 @@ public class Player extends Entity {
     private int dashCooldown;
 
     private double health;
+    private int healthPoints;
+
     private int hitDirection;
     private int hitCnt;
 
@@ -59,6 +61,7 @@ public class Player extends Entity {
         lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
         lightDetectionRadiusSquared = DiffSettings.playerLightDetectionRadiusSquared;
         health = DiffSettings.startingHealth;
+        healthPoints = DiffSettings.startingHealth;
         setKeyBinds();
         interactionCooldown = 1000;
         dashCooldown = 1000;
@@ -95,6 +98,9 @@ public class Player extends Entity {
 
     @Override
     public void update() {
+        if (Math.random() < 0.01) {
+            addHealthPoints(-1);
+        }
         interactionCooldown++;
         dashCooldown++;
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
@@ -189,6 +195,19 @@ public class Player extends Entity {
 
     public double getHealth() {
         return health;
+    }
+
+    public void addHealth(int delta) {
+        health += delta;
+    }
+
+    public int getHealthPoints() {
+        return healthPoints;
+    }
+
+    public void addHealthPoints(int delta) {
+        healthPoints += delta;
+        health = Math.min(health, healthPoints);
     }
 
     public void takeDamage() {

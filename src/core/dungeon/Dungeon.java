@@ -100,7 +100,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, playerDeath, inventory);
         miniMap = new MiniMap();
-        healthBar = new HealthBar(player, DiffSettings.startingHealth);
+        healthBar = new HealthBar(player);
         easing = new Easing(60);
         deathScreen = new DeathScreen(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -192,7 +192,7 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, playerDeath, inventory);
         miniMap = new MiniMap();
-        healthBar = new HealthBar(player, DiffSettings.startingHealth);
+        healthBar = new HealthBar(player);
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         miniMap.setStartingRoom(room);
