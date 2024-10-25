@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import core.dungeon.inventory.Inventory;
 import core.dungeon.items.Item;
 import core.dungeon.settings.KeyBinds;
 import core.game_components.GameButton;
@@ -18,22 +19,27 @@ import core.utilities.ImageUtilities;
 public class ChestUI extends PopupUI {
 	private Action check;
 
-	public ChestUI(UILayer UILayer, Item item, Action flash) {
-		super(UILayer, 320, 256, 8, "ChestFloor");
-		GetItemButton getItemButton = new GetItemButton(this,
-				ActionUtilities.combineActions(flash, new AbstractAction() {
+	public ChestUI(UILayer UILayer, Inventory inventory, Item item, Action flash) {
+		super(UILayer, 320, 256, 30, "ChestFloor");
+		GetItemButton getItemButton = new GetItemButton(
+				ActionUtilities.combineActions(new AbstractAction() {
 					public void actionPerformed(ActionEvent e) {
-						getInputMap(2).put(KeyBinds.takeAllItems, "close");
+						if (!inventory.addItem(item)) {
+							// TODO
+							System.out.println("Inventory full oops");
+						}
 					}
-				}), item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
+					
+				},flash, close), item, new Rectangle(getWidth() / 2 - 32, getHeight() / 2 - 32, 64, 64));
 		add(getItemButton);
-		getInputMap(2).put(KeyBinds.takeAllItems, "getAll");
+		getInputMap(2).put(KeyBinds.ONE, "getAll");
 		getActionMap().put("getAll", getItemButton.getAction());
-		check = UILayer.createAndOpenConfirmUI((Action) (new AbstractAction() {
+		check = UILayer.createAndOpenConfirmUI((new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				ChestUI.super.exitPanel();
 			}
 		}));
+		getActionMap().put("close", check);
 	}
 
 	@Override
@@ -42,26 +48,16 @@ public class ChestUI extends PopupUI {
 		g2d.drawImage(ImageUtilities.getImage("UI", "ChestSlot"), getWidth() / 2 - 46, getHeight() / 2 - 46, null);
 	}
 
-	// TODO
-	// @Override
-	// public void exitPanel() {
-	// if (getComponentCount() == 0) {
-	// super.exitPanel();
-	// } else {
-	// check.actionPerformed(null);
-	// }
-	// }
-
 	private static class GetItemButton extends GameButton {
-		public GetItemButton(PopupUI popupUI, Action flash, Item item, Rectangle rect) {
+		public GetItemButton(Action flash, Item item, Rectangle rect) {
 			super(null, rect);
-			setAction(ActionUtilities.combineActions(item.getAquireItem(), new AbstractAction() {
+			setAction(ActionUtilities.combineActions(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					setIcon(null);
 				}
 			}, flash));
 			setIcon(ImageUtilities.resize(item.getImageIcon(), 64, 64));
-			setRolloverIcon(ImageUtilities.resize(item.getRolloverIcon(), 64, 64));
+			setRolloverIcon(ImageUtilities.resize(item.getImageIcon(), 64, 64));
 			setToolTipText(item.getToolTip());
 		}
 

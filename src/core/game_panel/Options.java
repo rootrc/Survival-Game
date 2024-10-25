@@ -10,7 +10,7 @@ public class Options extends GamePanel {
 
     public Options(Game game, UILayer UILayer) {
         super(game, UILayer);
-        getInputMap(2).put(KeyBinds.escape, "pause");
+        getInputMap(2).put(KeyBinds.ESC, "pause");
         getActionMap().put("pause", UILayer.createAndOpenConfirmUI(game.changePanel("mainMenu")));
         add(new GameSlider());
     }

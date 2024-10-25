@@ -17,7 +17,6 @@ import core.dungeon.dungeon_ui.MiniMap;
 import core.dungeon.dungeon_ui.PauseMenu;
 import core.dungeon.dungeon_ui.Timer;
 import core.dungeon.inventory.Inventory;
-import core.dungeon.mechanics.SkillTree;
 import core.dungeon.mechanics.particles.SnowParticles;
 import core.dungeon.room.Room;
 import core.dungeon.room.entity.Player;
@@ -44,7 +43,6 @@ public class Dungeon extends GamePanel {
     private RoomFactory roomFactory;
 
     private PauseMenu pauseMenu;
-    private SkillTree skillTree;
     private DebugScreen debugScreen;
 
     private SnowParticles snowParticles;
@@ -135,14 +133,11 @@ public class Dungeon extends GamePanel {
                 reset();
             }
         }), game.changePanel("title"));
-        skillTree = new SkillTree(UILayer);
         debugScreen = new DebugScreen(UILayer, room);
 
-        getInputMap(2).put(KeyBinds.escape, "pause");
+        getInputMap(2).put(KeyBinds.ESC, "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
-        getInputMap(2).put(KeyBinds.openSkillTree, "skills");
-        getActionMap().put("skills", UILayer.openPopupUI(skillTree));
-        getInputMap(2).put(KeyBinds.debug, "debug");
+        getInputMap(2).put(KeyBinds.DEBUG, "debug");
         getActionMap().put("debug", UILayer.openPopupUI(debugScreen));
 
         Room.setScreenShakeDuration(10);

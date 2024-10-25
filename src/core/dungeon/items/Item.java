@@ -1,62 +1,32 @@
 package core.dungeon.items;
 
-import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
-import core.dungeon.inventory.Inventory;
-import core.utilities.ImageUtilities;
-
 public class Item {
     private ImageIcon imageIcon;
-    private ImageIcon rolloverIcon;
-    private Action acquireItem;
+    // private ImageIcon rolloverIcon;
+    private Action action;
     private String name;
     private String description;
-    private Action useItem;
+    private ArrayList<Integer> incompatible;
 
-    public Item(Inventory inventory, int r, int c, String name, String description) {
-        imageIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet", r, c, 32, 32));
-        rolloverIcon = new ImageIcon(ImageUtilities.getImage("item_images", "itemTileSet1", r, c, 32, 32));
+    public Item(BufferedImage image, String name, String description, ArrayList<Integer> incompatible) {
+        this.imageIcon = new ImageIcon(image);
         this.name = name;
         this.description = description;
-        acquireItem = new AbstractAction() {
-            private boolean added = false;
-
-            public void actionPerformed(ActionEvent e) {
-                if (added) {
-                    return;
-                }
-                inventory.addItem(Item.this);
-                added = true;
-            }
-        };
-    }
-        
-    public void enable(int idx) {
-        // TODO
+        this.incompatible = incompatible;
     }
 
     public ImageIcon getImageIcon() {
         return imageIcon;
     }
-
-    public ImageIcon getRolloverIcon() {
-        return rolloverIcon;
-    }
-
-    public Action getAquireItem() {
-        return acquireItem;
-    }
-
-    protected void setUseItem(Action action) {
-        useItem = action;
-    }
-
-    public Action getUseItem() {
-        return useItem;
+        
+    public Action getAction() {
+        return action;
     }
 
     public String getName() {
@@ -65,6 +35,10 @@ public class Item {
 
     public String getDescription() {
         return description;
+    }
+    
+    public ArrayList<Integer> getIncompatible() {
+        return incompatible;
     }
 
     public String getToolTip() {

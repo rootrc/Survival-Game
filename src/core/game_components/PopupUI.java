@@ -27,7 +27,7 @@ public abstract class PopupUI extends GameComponent {
         this.framesToEnter = framesToEnter;
         setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, (Game.SCREEN_HEIGHT - getHeight()) / 2);
         buildImage(tileSet);
-        getInputMap(2).put(KeyBinds.escape, "close");
+        getInputMap(2).put(KeyBinds.ESC, "close");
         getActionMap().put("close", close);
     }
 

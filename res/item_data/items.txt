@@ -1,0 +1,13 @@
+1
+Health_Regen
+Regens_Health
+0 0
+0
+
+
+
+
+title
+desription
+location in image
+incompabitle skills cnt, incompabitle skills

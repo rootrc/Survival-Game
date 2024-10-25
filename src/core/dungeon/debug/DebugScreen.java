@@ -14,7 +14,7 @@ public class DebugScreen extends PopupUI {
     public DebugScreen(UILayer UILayer, Room room) {
         super(UILayer, 640, 640, 4);
         this.room = room;
-        getInputMap(2).put(KeyBinds.debug, "close");
+        getInputMap(2).put(KeyBinds.DEBUG, "close");
     }
 
     public void updateRoom(Room room) {

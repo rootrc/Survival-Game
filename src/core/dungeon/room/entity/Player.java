@@ -72,20 +72,20 @@ public class Player extends Entity {
     }
 
     private void setKeyBinds() {
-        getInputMap(2).put(KeyBinds.interact, "interact");
+        getInputMap(2).put(KeyBinds.INTERACT, "interact");
         getActionMap().put("interact", interact);
-        getInputMap(2).put(KeyBinds.slowDownToggle, "slowDownToggle");
+        getInputMap(2).put(KeyBinds.SLOW_DOWN_TOGGLE, "slowDownToggle");
         getActionMap().put("slowDownToggle", slowDownToggle);
-        getInputMap(2).put(KeyBinds.dash, "dash");
+        getInputMap(2).put(KeyBinds.DASH, "dash");
         getActionMap().put("dash", dash);
-        getInputMap(2).put(KeyBinds.upPressed, "acc up");
-        getInputMap(2).put(KeyBinds.upReleased, "decel up");
-        getInputMap(2).put(KeyBinds.leftPressed, "acc left");
-        getInputMap(2).put(KeyBinds.leftReleased, "decel left");
-        getInputMap(2).put(KeyBinds.downPressed, "acc down");
-        getInputMap(2).put(KeyBinds.downReleased, "decel down");
-        getInputMap(2).put(KeyBinds.rightPressed, "acc right");
-        getInputMap(2).put(KeyBinds.rightReleased, "decel right");
+        getInputMap(2).put(KeyBinds.UP_PRESSED, "acc up");
+        getInputMap(2).put(KeyBinds.UP_RELEASED, "decel up");
+        getInputMap(2).put(KeyBinds.LEFT_PRESSED, "acc left");
+        getInputMap(2).put(KeyBinds.LEFT_RELEASED, "decel left");
+        getInputMap(2).put(KeyBinds.DOWN_PRESSED, "acc down");
+        getInputMap(2).put(KeyBinds.DOWN_RELEASED, "decel down");
+        getInputMap(2).put(KeyBinds.RIGHT_PRESSED, "acc right");
+        getInputMap(2).put(KeyBinds.RIGHT_RELEASED, "decel right");
         getActionMap().put("acc up", accelerateUp);
         getActionMap().put("decel up", decelerateUp);
         getActionMap().put("acc left", accelerateLeft);
@@ -98,9 +98,6 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if (Math.random() < 0.01) {
-            addHealthPoints(-1);
-        }
         interactionCooldown++;
         dashCooldown++;
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));

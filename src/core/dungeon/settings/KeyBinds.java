@@ -8,32 +8,34 @@ import javax.swing.KeyStroke;
 public class KeyBinds {
     private static final int defaultMask = 0;
 
-    public static KeyStroke upPressed = KeyStroke.getKeyStroke(KeyEvent.VK_W, defaultMask, false);
-    public static KeyStroke upReleased = KeyStroke.getKeyStroke(KeyEvent.VK_W, defaultMask, true);
-    public static KeyStroke leftPressed = KeyStroke.getKeyStroke(KeyEvent.VK_A, defaultMask, false);
-    public static KeyStroke leftReleased = KeyStroke.getKeyStroke(KeyEvent.VK_A, defaultMask, true);
-    public static KeyStroke downPressed = KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultMask, false);
-    public static KeyStroke downReleased = KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultMask, true);
-    public static KeyStroke rightPressed = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, false);
-    public static KeyStroke rightReleased = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, true);
+    public static final KeyStroke UP_PRESSED = KeyStroke.getKeyStroke(KeyEvent.VK_W, defaultMask, false);
+    public static final KeyStroke UP_RELEASED = KeyStroke.getKeyStroke(KeyEvent.VK_W, defaultMask, true);
+    public static final KeyStroke LEFT_PRESSED = KeyStroke.getKeyStroke(KeyEvent.VK_A, defaultMask, false);
+    public static final KeyStroke LEFT_RELEASED = KeyStroke.getKeyStroke(KeyEvent.VK_A, defaultMask, true);
+    public static final KeyStroke DOWN_PRESSED = KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultMask, false);
+    public static final KeyStroke DOWN_RELEASED = KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultMask, true);
+    public static final KeyStroke RIGHT_PRESSED = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, false);
+    public static final KeyStroke RIGHT_RELEASED = KeyStroke.getKeyStroke(KeyEvent.VK_D, defaultMask, true);
 
-    public static KeyStroke slowDownToggle = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK, false);
-    public static KeyStroke dash = KeyStroke.getKeyStroke(KeyEvent.VK_J, defaultMask, false);
-    public static KeyStroke interact = KeyStroke.getKeyStroke(KeyEvent.VK_E, defaultMask, false);
-    public static KeyStroke[] useItem = new KeyStroke[10];
+    public static final KeyStroke SLOW_DOWN_TOGGLE = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK, false);
+    public static final KeyStroke DASH = KeyStroke.getKeyStroke(KeyEvent.VK_J, defaultMask, false);
+    public static final KeyStroke INTERACT = KeyStroke.getKeyStroke(KeyEvent.VK_E, defaultMask, false);
+    public static final KeyStroke[] USE_ITEM = new KeyStroke[10];
     static {
         for (int i = 0; i < 10; i++) {
-            useItem[i] = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, defaultMask, false);
+            USE_ITEM[i] = KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, defaultMask, false);
         }
     }
 
-    public static KeyStroke openUI = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, defaultMask, false);
-    public static KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, defaultMask, false);
-    
-    public static KeyStroke takeAllItems = KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultMask, false);
-    public static KeyStroke openSkillTree = KeyStroke.getKeyStroke(KeyEvent.VK_T, defaultMask, false);
+    public static final KeyStroke OPEN_UI = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, defaultMask, false);
+    public static final KeyStroke ESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, defaultMask, false);
 
-    public static KeyStroke debug = KeyStroke.getKeyStroke(KeyEvent.VK_F3, defaultMask, false);
+    public static final KeyStroke ONE = KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultMask, false);
+    public static final KeyStroke TWO = KeyStroke.getKeyStroke(KeyEvent.VK_2, defaultMask, false);
+    public static final KeyStroke THREE = KeyStroke.getKeyStroke(KeyEvent.VK_3, defaultMask, false);
+    
+    public static final KeyStroke DEBUG = KeyStroke.getKeyStroke(KeyEvent.VK_F3, defaultMask, false);
+    
 
     private KeyBinds() {
 

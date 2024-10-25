@@ -46,7 +46,7 @@ public class Inventory extends GameComponent {
                 MIDDLE.getHeight() + TAB.getHeight());
         this.UILayer = UILayer;
         this.size = size;
-        itemFactory = new ItemFactory(this);
+        itemFactory = new ItemFactory();
         setLocation(Game.SCREEN_WIDTH / 2 - getWidth() / 2, Game.SCREEN_HEIGHT - TAB.getHeight());
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
@@ -56,7 +56,7 @@ public class Inventory extends GameComponent {
             add(inventorySlots[i]);
         }
         occupiedSlots = 1;
-        getInputMap(2).put(KeyBinds.openUI, "toggle moveUp");
+        getInputMap(2).put(KeyBinds.OPEN_UI, "toggle moveUp");
         getActionMap().put("toggle moveUp", moveUp);
         buildImage();
     }
@@ -103,22 +103,23 @@ public class Inventory extends GameComponent {
         g2d.dispose();
     }
 
-    public void addItem(Item item) {
+    public boolean addItem(Item item) {
         if (occupiedSlots > size) {
-            return;
+            return false;
         }
         inventorySlots[occupiedSlots].setItem(item);
         occupiedSlots++;
         newItem = true;
+        return true;
     }
 
-    public Item getItem(int idx) {
-        return inventorySlots[idx].getItem();
-    }
+    // public Item getItem(int idx) {
+    //     return inventorySlots[idx].getItem();
+    // }
 
-    public Item getItem() {
-        return getItem(occupiedSlots - 1);
-    }
+    // public Item getItem() {
+    //     return getItem(occupiedSlots - 1);
+    // }
 
     public boolean hasNewItem() {
         if (newItem) {
@@ -135,7 +136,9 @@ public class Inventory extends GameComponent {
     };
 
     public void openChest(TreasureChest treasureChest) {
-        ChestUI chestUI = new ChestUI(UILayer, itemFactory.getItem(), flash);
+        // Temp
+        Item item = itemFactory.getItem(0);
+        ChestUI chestUI = new ChestUI(UILayer, this, item, flash);
         chestUI.enterPanel();
     }
 }
