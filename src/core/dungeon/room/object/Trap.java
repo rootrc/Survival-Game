@@ -71,7 +71,7 @@ public abstract class Trap extends RoomObject {
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
                         player, false);
                 trap.setLightRadius(24);
-                trap.setLightVisibility(150);
+                trap.setLightVisibility(180);
                 return trap;
             case RoomObjectData.TELEPORTATION:
                 trap = new Teleportation(new SpriteSheet(ImageUtilities.getImage("objects", "teleportation"), 5, 9),

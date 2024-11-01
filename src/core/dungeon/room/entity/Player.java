@@ -28,9 +28,11 @@ public class Player extends Entity {
     private boolean movingDown;
     private boolean movingRight;
     private Inventory inventory;
+    private PassiveItemStats passiveItemStats;
     private ArrayList<RoomObject> interactables = new ArrayList<>();
     private Action nextRoom;
     private Action death;
+    private int updateCnt;
 
     private double lightAmount;
     private int lightRadiusFactor;
@@ -56,6 +58,7 @@ public class Player extends Entity {
         this.nextRoom = nextRoom;
         this.death = death;
         this.inventory = inventory;
+        passiveItemStats = new PassiveItemStats();
         lightAmount = DiffSettings.playerLightStartAmount;
         lightRadiusFactor = DiffSettings.playerLightRadiusFactor;
         lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
@@ -98,10 +101,15 @@ public class Player extends Entity {
 
     @Override
     public void update() {
+        updateCnt++;
         interactionCooldown++;
         dashCooldown++;
         setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
+        if (updateCnt % 60 == 0) {
+            updateCnt = 0;
+            health += passiveItemStats.healthRegenPerSecond;
+        }
         if (isMoving()) {
             if (hitCnt <= Game.UPS) {
                 getSpriteSheet().next();
@@ -161,10 +169,18 @@ public class Player extends Entity {
             ax += getAccSpeed();
         }
         if (ax == 0) {
-            setSpeedX(Math.min(getSpeedX() - (int) Math.signum(getSpeedX()) * getDeaccSpeed(), 0));
+            if (getSpeedX() > 0) {
+                setSpeedX(Math.max(getSpeedX() - getDeaccSpeed(), 0));
+            } else if (getSpeedX() < 0) {
+                setSpeedX(Math.min(getSpeedX() + getDeaccSpeed(), 0));
+            }
         }
         if (ay == 0) {
-            setSpeedY(Math.min(getSpeedY() - (int) Math.signum(getSpeedY()) * getDeaccSpeed(), 0));
+            if (getSpeedY() > 0) {
+                setSpeedY(Math.max(getSpeedY() - getDeaccSpeed(), 0));
+            } else if (getSpeedY() < 0) {
+                setSpeedY(Math.min(getSpeedY() + getDeaccSpeed(), 0));
+            }
         }
         if (ax != 0 && ay == 0) {
             setSpeedX(Math.max(Math.min(getSpeedX() + ax, getMaxSpeed()), -getMaxSpeed()));
@@ -195,7 +211,7 @@ public class Player extends Entity {
     }
 
     public void addHealth(int delta) {
-        health += delta;
+        health = Math.min(health + delta, healthPoints);
     }
 
     public int getHealthPoints() {
@@ -211,7 +227,7 @@ public class Player extends Entity {
         if (hitCnt > 0) {
             return;
         }
-        health--;
+        health -= passiveItemStats.damageMulti;
         if ((int) health == 1) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
         }
@@ -254,6 +270,10 @@ public class Player extends Entity {
             return 0;
         }
         return getLadder().getDirection();
+    }
+
+    public PassiveItemStats getPassiveItemStats() {
+        return passiveItemStats;
     }
 
     public Inventory getInventory() {
@@ -361,4 +381,21 @@ public class Player extends Entity {
         }
     };
 
+    public static class PassiveItemStats {
+        private double healthRegenPerSecond;
+        private double damageMulti;
+
+        private PassiveItemStats() {
+            healthRegenPerSecond = 0;
+            damageMulti = 1;
+        }
+
+        public void setHealthRegenPerSecond(double healthRegenPerSecond) {
+            this.healthRegenPerSecond = healthRegenPerSecond;
+        }
+
+        public void setDamageMulti(double damageMulti) {
+            this.damageMulti = damageMulti;
+        }
+    }
 }

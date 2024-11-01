@@ -16,6 +16,7 @@ import core.dungeon.items.Item;
 import core.dungeon.items.ItemFactory;
 import core.dungeon.room.object.TreasureChest;
 import core.dungeon.room.room_UI.ChestUI;
+import core.dungeon.settings.DiffSettings;
 import core.dungeon.settings.KeyBinds;
 import core.game_components.GameComponent;
 import core.game_components.UILayer;
@@ -36,22 +37,22 @@ public class Inventory extends GameComponent {
     private int occupiedSlots;
     private ItemSlot[] inventorySlots;
 
-    private boolean newItem;
+    // private boolean newItem;
 
     private boolean move;
     private int timer;
 
-    public Inventory(UILayer UILayer, int size) {
-        super(LEFT.getWidth() + MIDDLE.getWidth() * (size - 2) + RIGHT.getWidth(),
+    public Inventory(UILayer UILayer) {
+        super(LEFT.getWidth() + MIDDLE.getWidth() * (DiffSettings.startingInventorySize - 2) + RIGHT.getWidth(),
                 MIDDLE.getHeight() + TAB.getHeight());
         this.UILayer = UILayer;
-        this.size = size;
-        itemFactory = new ItemFactory();
+        size = DiffSettings.startingInventorySize;
         setLocation(Game.SCREEN_WIDTH / 2 - getWidth() / 2, Game.SCREEN_HEIGHT - TAB.getHeight());
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
             inventorySlots[i] = new ItemSlot(i,
-                    new Rectangle(MIDDLE.getWidth() * i - MIDDLE.getWidth() + ITEM_MARGIN, ITEM_MARGIN + TAB.getHeight(),
+                    new Rectangle(MIDDLE.getWidth() * i - MIDDLE.getWidth() + ITEM_MARGIN,
+                            ITEM_MARGIN + TAB.getHeight(),
                             MIDDLE.getHeight() - 2 * ITEM_MARGIN, MIDDLE.getHeight() - 2 * ITEM_MARGIN));
             add(inventorySlots[i]);
         }
@@ -76,15 +77,6 @@ public class Inventory extends GameComponent {
         }
     }
 
-    private final Action flash = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            if (!move) {
-                move = true;
-                timer = FLASHTIME;
-            }
-        }
-    };
-
     public void drawComponent(Graphics2D g2d) {
         g2d.drawImage(image, 0, 0, null);
     }
@@ -103,31 +95,37 @@ public class Inventory extends GameComponent {
         g2d.dispose();
     }
 
+    public void setItemFactory(ItemFactory itemFactory) {
+        this.itemFactory = itemFactory;
+    }
+
     public boolean addItem(Item item) {
         if (occupiedSlots > size) {
             return false;
         }
         inventorySlots[occupiedSlots].setItem(item);
         occupiedSlots++;
-        newItem = true;
+        item.getItemEffect().doEffect();
+        itemFactory.removeItem(item);
+        // newItem = true;
         return true;
     }
 
     // public Item getItem(int idx) {
-    //     return inventorySlots[idx].getItem();
+    // return inventorySlots[idx].getItem();
     // }
 
     // public Item getItem() {
-    //     return getItem(occupiedSlots - 1);
+    // return getItem(occupiedSlots - 1);
     // }
 
-    public boolean hasNewItem() {
-        if (newItem) {
-            newItem = false;
-            return true;
-        }
-        return false;
-    }
+    // public boolean hasNewItem() {
+    // if (newItem) {
+    // newItem = false;
+    // return true;
+    // }
+    // return false;
+    // }
 
     private final Action moveUp = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -137,8 +135,15 @@ public class Inventory extends GameComponent {
 
     public void openChest(TreasureChest treasureChest) {
         // Temp
-        Item item = itemFactory.getItem(0);
-        ChestUI chestUI = new ChestUI(UILayer, this, item, flash);
+        // Item item = itemFactory.getItem(5);
+        ChestUI chestUI = new ChestUI(UILayer, this, itemFactory.getThreeItems(), new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if (!move) {
+                    move = true;
+                    timer = FLASHTIME;
+                }
+            }
+        });
         chestUI.enterPanel();
     }
 }

@@ -77,6 +77,14 @@ public abstract class Entity extends RoomObject {
         return deaccSpeed;
     }
 
+    public final void multiplyAcc(double multiplier) {
+        accSpeed *= multiplier;
+    }
+
+    public final void multiplyDeacc(double multiplier) {
+        deaccSpeed *= multiplier;
+    }
+
     public final int getDirection() {
         return direction;
     }

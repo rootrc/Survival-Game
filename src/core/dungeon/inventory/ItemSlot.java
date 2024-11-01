@@ -14,7 +14,7 @@ public class ItemSlot extends GameButton {
     public ItemSlot(int idx, Rectangle rect) {
         super(null, rect);
         this.idx = idx;
-        getInputMap(2).put(KeyBinds.USE_ITEM[idx], idx);
+        getInputMap(2).put(KeyBinds.NUMBER[idx], idx);
     }
 
     public void setItem(Item item) {

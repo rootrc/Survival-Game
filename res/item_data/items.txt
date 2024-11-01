@@ -1,13 +1,39 @@
-1
-Health_Regen
-Regens_Health
+6
+Essence_of_Heart
+Slowly_regenerates_health
+2
 0 0
+0
+Fortification
+Halves_damage
+2
+0 1
+0
+Holy_Health
+Gain_multiple_health
+1
+0 2
+0
+Illumitating_Lantern
+Gain_a_health_point
+2
+0 7
+0
+Reckless_Speed
+Increase_speed_at_the_cost_of_control
+2
+1 0
+0
+Friction_Feet
+Drasticlly_improve_accleration_and_deceleration
+2
+1 1
 0
 
 
 
-
 title
-desription
+description
+rarity
 location in image
 incompabitle skills cnt, incompabitle skills
