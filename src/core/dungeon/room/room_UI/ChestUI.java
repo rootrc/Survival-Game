@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import core.dungeon.inventory.Inventory;
+import core.dungeon.items.Inventory;
 import core.dungeon.items.Item;
 import core.dungeon.settings.KeyBinds;
 import core.game_components.GameButton;

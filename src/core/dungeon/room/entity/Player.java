@@ -7,7 +7,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import core.Game;
-import core.dungeon.inventory.Inventory;
+import core.dungeon.items.Inventory;
 import core.dungeon.room.Room;
 import core.dungeon.room.object.Ladder;
 import core.dungeon.room.object_utilities.CollisionBox;
@@ -240,7 +240,7 @@ public class Player extends Entity {
             setMaxSpeed((int) (getMaxSpeed() / 3));
         }
         dashCooldown = 1000;
-        if (health == 0) {
+        if (health <= 0) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
             death.actionPerformed(null);
             return;

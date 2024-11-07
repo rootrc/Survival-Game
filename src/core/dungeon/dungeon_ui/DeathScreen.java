@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.Action;
 
 import core.Game;
+import core.dungeon.Dungeon;
 import core.game_components.GameComponent;
 import core.game_components.UIButton;
 import core.game_components.UILayer;
@@ -31,7 +32,11 @@ public class DeathScreen extends GameComponent {
                 ImageUtilities.getImage("UI", "TitleScreenButton")));
     }
 
-    public void buildImage(MiniMap miniMap) {
+    public void build(Dungeon dungeon, MiniMap miniMap) {
+        buildImage(dungeon, miniMap);
+    }
+
+    private void buildImage(Dungeon dungeon, MiniMap miniMap) {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);

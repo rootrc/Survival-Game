@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import core.dungeon.dungeon_ui.Timer;
-import core.dungeon.items.Item.ItemEffect;
+import core.dungeon.items.Item.ItemAction;
 import core.dungeon.room.entity.Player;
 import core.dungeon.room_factory.RoomFactory;
 import core.game_components.Factory;
@@ -28,7 +28,7 @@ public class ItemFactory extends Factory<Item> {
         items = new Item[data.N];
         itemListUsingRarities = new ArrayList<>();
         for (int i = 0; i < data.N; i++) {
-            items[i] = new Item(i, data.image[i], getItemEffect(i), data.name[i], data.description[i],
+            items[i] = new Item(i, data.image[i], getItemAction(i), data.name[i], data.description[i],
                     data.incompatible[i]);
             for (int j = 0; j < data.rarity[i]; j++) {
                 itemListUsingRarities.add(items[i]);
@@ -36,10 +36,15 @@ public class ItemFactory extends Factory<Item> {
         }
     }
 
-    public ItemEffect getItemEffect(int idx) {
+    public ItemAction getItemAction(int idx) {
         switch (idx) {
             case 0:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() + 2 <= player.getHealthPoints();
+                    }
+
                     public void doEffect() {
                         player.getStats().setHealthRegenPerSecond(1.0 / 60);
                     }
@@ -49,7 +54,12 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 1:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() + 2 <= player.getHealthPoints();
+                    }
+
                     public void doEffect() {
                         player.getStats().setDamageMulti(0.5);
                     }
@@ -59,7 +69,12 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 2:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() + 2 <= player.getHealthPoints();
+                    }
+
                     public void doEffect() {
                         player.addHealth(3);
                     }
@@ -69,7 +84,12 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 3:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() + 2 >= player.getHealthPoints() && player.getHealth() >= 2;
+                    }
+
                     public void doEffect() {
                         player.addHealthPoints(1);
                     }
@@ -79,7 +99,12 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 4:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() >= 1;
+                    }
+
                     public void doEffect() {
                         player.setMaxSpeed(player.getMaxSpeed() + 1);
                     }
@@ -89,7 +114,12 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 5:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() >= 1;
+                    }
+
                     public void doEffect() {
                         player.multiplyAcc(4);
                         player.multiplyDeacc(4);
@@ -101,7 +131,12 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 6:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() + 2 <= player.getHealthPoints() || player.getHealth() <= 2;
+                    }
+
                     public void doEffect() {
                         player.getStats().addRevive(1);
                     }
@@ -111,7 +146,12 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 7:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() >= 1;
+                    }
+
                     public void doEffect() {
                         player.getStats().multiLightRadius(1.4);
                     }
@@ -121,23 +161,26 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 8:
-                return new ItemEffect() {
+                return new ItemAction() {
                     public void doEffect() {
                         player.getStats().multiDetectionRadius(2);
                         player.getStats().multiVision(2);
                         player.getStats().setDamageMulti(1.5);
-                        ;
                     }
 
                     public void doReversedEffect() {
                         player.getStats().multiDetectionRadius(0.5);
                         player.getStats().multiVision(0.5);
                         player.getStats().setDamageMulti(1.0 / 1.5);
-                        ;
                     }
                 };
             case 9:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return player.getHealth() >= 1;
+                    }
+
                     public void doEffect() {
                         player.getStats().multiDetectionRadius(0.5);
                         player.getStats().multiVision(0.6);
@@ -151,7 +194,7 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 10:
-                return new ItemEffect() {
+                return new ItemAction() {
                     public void doEffect() {
                         player.getStats().multiFogOfWarMulti(1.75);
                     }
@@ -161,7 +204,7 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 11:
-                return new ItemEffect() {
+                return new ItemAction() {
                     public void doEffect() {
                         player.getStats().setSeeAbove(true);
                     }
@@ -171,11 +214,16 @@ public class ItemFactory extends Factory<Item> {
                     }
                 };
             case 12:
-                return new ItemEffect() {
+                return new ItemAction() {
+                    @Override
+                    public boolean canBeFoundInChest() {
+                        return timer.getTime() < 300 && player.getHealth() >= 1;
+                    }
+
                     public void doEffect() {
                         timer.addStartTime(300);
                     }
-                    
+
                     public void doReversedEffect() {
                         timer.addStartTime(-300);
                     }
@@ -197,7 +245,7 @@ public class ItemFactory extends Factory<Item> {
                 Item item = itemListUsingRarities.get(RNGUtilities.getInt(0, itemListUsingRarities.size()));
                 boolean flag = true;
                 for (int j = 0; j < i; j++) {
-                    if (res[j] == item || res[j].isIncompatible(item) || item.isIncompatible(res[j])) {
+                    if (!item.getItemAction().canBeFoundInChest() && (res[j] == item || res[j].isIncompatible(item) || item.isIncompatible(res[j]))) {
                         flag = false;
                         break;
                     }

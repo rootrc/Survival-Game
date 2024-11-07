@@ -16,7 +16,7 @@ import core.dungeon.dungeon_ui.HealthBar;
 import core.dungeon.dungeon_ui.MiniMap;
 import core.dungeon.dungeon_ui.PauseMenu;
 import core.dungeon.dungeon_ui.Timer;
-import core.dungeon.inventory.Inventory;
+import core.dungeon.items.Inventory;
 import core.dungeon.items.ItemFactory;
 import core.dungeon.mechanics.particles.SnowParticles;
 import core.dungeon.room.Room;
@@ -172,7 +172,7 @@ public class Dungeon extends GamePanel {
             if (deathCnt == 5.0 / 2 * Game.UPS) {
                 remove();
                 add(deathScreen, -1);
-                deathScreen.buildImage(dungeonUI.getMiniMap());
+                deathScreen.build(this, dungeonUI.getMiniMap());
                 fadeIn(4);
                 deathCnt = 0;
             }

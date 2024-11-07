@@ -32,7 +32,7 @@ Drastically_improve_accleration_and_deceleration
 Revive
 Survive_a_hit_with_minimum_health
 2
-0 5
+0 4
 0
 The_Sun
 Increase_light_radius_of_your_lantern
@@ -43,14 +43,14 @@ See_Evil
 Increase_trap_detection_but_take_50%_more_damage
 4
 3 0
-1
-9
+2
+9 10
 See_No_Evil
 Decrease_trap_detection_for_a_lantern
 4
 3 1
-1
-8
+2
+8 11
 Remember_All
 Larger_light_trail
 3

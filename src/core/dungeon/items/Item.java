@@ -3,23 +3,21 @@ package core.dungeon.items;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.swing.Action;
 import javax.swing.ImageIcon;
 
 public class Item implements Comparable<Item> {
     private int id;
     private ImageIcon imageIcon;
     // private ImageIcon rolloverIcon;
-    private Action action;
     private String name;
     private String description;
     private ArrayList<Integer> incompatible;
-    private ItemEffect itemEffect;
+    private ItemAction itemAction;
 
-    public Item(int id, BufferedImage image, ItemEffect itemEffect, String name, String description,
+    public Item(int id, BufferedImage image, ItemAction itemAction, String name, String description,
             ArrayList<Integer> incompatible) {
         this.id = id;
-        this.itemEffect = itemEffect;
+        this.itemAction = itemAction;
         this.imageIcon = new ImageIcon(image);
         this.name = name;
         this.description = description;
@@ -38,12 +36,8 @@ public class Item implements Comparable<Item> {
         return imageIcon;
     }
 
-    public Action getAction() {
-        return action;
-    }
-
-    public ItemEffect getItemEffect() {
-        return itemEffect;
+    public ItemAction getItemAction() {
+        return itemAction;
     }
 
     public String getName() {
@@ -52,6 +46,10 @@ public class Item implements Comparable<Item> {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean canBeFoundInChest() {
+        return itemAction.canBeFoundInChest();
     }
 
     public ArrayList<Integer> getIncompatible() {
@@ -66,13 +64,15 @@ public class Item implements Comparable<Item> {
         return new StringBuilder("<html>").append(name).append("<br>").append(description).append("</html>").toString();
     }
 
-    public static abstract class ItemEffect implements PassiveEffect {
+    public static abstract class ItemAction extends AbstractItemActions {
 
     }
 
-    private interface PassiveEffect {
-        public void doEffect();
-
-        public void doReversedEffect();
+    private static abstract class AbstractItemActions {
+        public boolean canBeFoundInChest() {
+            return true;
+        }
+        public abstract void doEffect();
+        public abstract void doReversedEffect();
     }
 }

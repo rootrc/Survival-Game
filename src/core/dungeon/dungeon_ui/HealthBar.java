@@ -6,6 +6,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
+import core.Game;
 import core.dungeon.room.entity.Player;
 import core.dungeon.room.object_utilities.SpriteSheet;
 import core.game_components.GameComponent;
@@ -19,6 +20,7 @@ public class HealthBar extends GameComponent {
     private Player player;
     private SpriteSheet[] lanterns;
     private int cnt;
+    private int cnt2;
 
     public HealthBar(Player player) {
         super(LANTERN_DIST * LANTERN_CNT, 52);
@@ -35,12 +37,24 @@ public class HealthBar extends GameComponent {
 
     public void update() {
         cnt++;
-        for (int i = 0; i < player.getHealthPoints(); i++) {
-            int nextType = (int) (5 * Math.min(Math.max(player.getHealth() - i, 0), 1)) + 1;
-            int curType = lanterns[i].getType();
-            if (curType != nextType && cnt >= 4) {
-                lanterns[i].setType(lanterns[i].getType() + (int) Math.signum(nextType - curType));
-                cnt = 0;
+        cnt2++;
+        if (cnt2 < 4 * Game.UPS) {
+            for (int i = 0; i < player.getHealthPoints(); i++) {
+                int nextType = (int) (5 * Math.min(Math.max(player.getHealth() - i, 0), 1)) + 1;
+                int curType = lanterns[i].getType();
+                if (curType != nextType && cnt >= 4) {
+                    lanterns[i].setType(lanterns[i].getType() + (int) Math.signum(nextType - curType));
+                    cnt = 0;
+                }
+            }
+        } else {
+            for (int i = player.getHealthPoints() - 1; i >= 0; i--) {
+                int nextType = (int) (5 * Math.min(Math.max(player.getHealth() - i, 0), 1)) + 1;
+                int curType = lanterns[i].getType();
+                if (curType != nextType && cnt >= 4) {
+                    lanterns[i].setType(lanterns[i].getType() + (int) Math.signum(nextType - curType));
+                    cnt = 0;
+                }
             }
         }
         lanterns[player.getHealthPoints()].setType(0);

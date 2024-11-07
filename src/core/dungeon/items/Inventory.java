@@ -1,4 +1,4 @@
-package core.dungeon.inventory;
+package core.dungeon.items;
 
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
@@ -12,12 +12,11 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import core.Game;
-import core.dungeon.items.Item;
-import core.dungeon.items.ItemFactory;
 import core.dungeon.room.object.TreasureChest;
 import core.dungeon.room.room_UI.ChestUI;
 import core.dungeon.settings.DiffSettings;
 import core.dungeon.settings.KeyBinds;
+import core.game_components.GameButton;
 import core.game_components.GameComponent;
 import core.game_components.UILayer;
 import core.utilities.ImageUtilities;
@@ -42,6 +41,12 @@ public class Inventory extends GameComponent {
     private boolean move;
     private int timer;
 
+    private final Action moveUp = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            move = !move;
+        }
+    };
+
     public Inventory(UILayer UILayer) {
         super(LEFT.getWidth() + MIDDLE.getWidth() * (DiffSettings.startingInventorySize - 2) + RIGHT.getWidth(),
                 MIDDLE.getHeight() + TAB.getHeight());
@@ -51,8 +56,7 @@ public class Inventory extends GameComponent {
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
             inventorySlots[i] = new ItemSlot(i,
-                    new Rectangle(MIDDLE.getWidth() * i - MIDDLE.getWidth() + ITEM_MARGIN,
-                            ITEM_MARGIN + TAB.getHeight(),
+                    new Rectangle(MIDDLE.getWidth() * (i - 1) + ITEM_MARGIN, ITEM_MARGIN + TAB.getHeight(),
                             MIDDLE.getHeight() - 2 * ITEM_MARGIN, MIDDLE.getHeight() - 2 * ITEM_MARGIN));
             add(inventorySlots[i]);
         }
@@ -105,37 +109,19 @@ public class Inventory extends GameComponent {
         }
         inventorySlots[occupiedSlots].setItem(item);
         occupiedSlots++;
-        item.getItemEffect().doEffect();
         itemFactory.removeItem(item);
-        // newItem = true;
         return true;
     }
 
-    // public Item getItem(int idx) {
-    // return inventorySlots[idx].getItem();
-    // }
-
-    // public Item getItem() {
-    // return getItem(occupiedSlots - 1);
-    // }
-
-    // public boolean hasNewItem() {
-    // if (newItem) {
-    // newItem = false;
-    // return true;
-    // }
-    // return false;
-    // }
-
-    private final Action moveUp = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            move = !move;
+    public void removeItem(int idx) {
+        inventorySlots[idx].moveByIndex(occupiedSlots - idx - 1);
+        for (int i = idx + 1; i < occupiedSlots; i++) {
+            inventorySlots[i].moveByIndex(-1);
         }
-    };
+        occupiedSlots--;
+    }
 
     public void openChest(TreasureChest treasureChest) {
-        // Temp
-        // Item item = itemFactory.getItem(5);
         ChestUI chestUI = new ChestUI(UILayer, this, itemFactory.getThreeItems(), new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 if (!move) {
@@ -145,5 +131,52 @@ public class Inventory extends GameComponent {
             }
         });
         chestUI.enterPanel();
+    }
+
+    public int getOccupiedSlots() {
+        return occupiedSlots;
+    }
+
+    private class ItemSlot extends GameButton {
+        private int idx;
+        private Item item;
+
+        private final Action removeItem = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                UILayer.createAndOpenConfirmUI(new AbstractAction() {
+                    public void actionPerformed(ActionEvent e) {
+                        removeItem();
+                    }
+                }).actionPerformed(e);
+            }
+        };
+
+        public ItemSlot(int idx, Rectangle rect) {
+            super(null, rect);
+            this.idx = idx;
+        }
+
+        public void setItem(Item item) {
+            this.item = item;
+            item.getItemAction().doEffect();
+            setAction(removeItem);
+            setIcon(ImageUtilities.resize(item.getImageIcon(), 32, 32));
+            setRolloverIcon(ImageUtilities.resize(item.getImageIcon(), 32, 32));
+            setToolTipText(item.getToolTip());
+        }
+
+        public void removeItem() {
+            item.getItemAction().doReversedEffect();
+            item = null;
+            setAction(null);
+            setIcon(null);
+            setRolloverIcon(null);
+            Inventory.this.removeItem(idx);
+        }
+
+        public void moveByIndex(int x) {
+            setLocation(getX() + x * MIDDLE.getWidth(), getY());
+            idx += x;
+        }
     }
 }

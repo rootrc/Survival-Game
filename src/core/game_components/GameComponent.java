@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.IllegalComponentStateException;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -61,13 +62,21 @@ public abstract class GameComponent extends JComponent {
     protected final boolean isMouseWithinComponent(int widthAllowance, int heightAllowance) {
         Point mousePos = MouseInfo.getPointerInfo().getLocation();
         Rectangle bounds = getBounds();
-        bounds.setLocation(getLocationOnScreen());
+        try {
+            bounds.setLocation(getLocationOnScreen());
+        } catch (IllegalComponentStateException e) {
+            return false;
+        }
         bounds.grow(widthAllowance, heightAllowance);
         return bounds.contains(mousePos);
     }
 
     protected final boolean isMouseWithinComponent() {
-        return isMouseWithinComponent(0, 0);
+        try {
+            return isMouseWithinComponent(0, 0);
+        } catch (IllegalComponentStateException e) {
+            return false;
+        }
     }
 
     // Utility methods
