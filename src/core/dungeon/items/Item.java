@@ -58,6 +58,10 @@ public class Item implements Comparable<Item> {
         return incompatible;
     }
 
+    public boolean isIncompatible(Item item) {
+        return incompatible.contains(item.getId());
+    }
+
     public String getToolTip() {
         return new StringBuilder("<html>").append(name).append("<br>").append(description).append("</html>").toString();
     }

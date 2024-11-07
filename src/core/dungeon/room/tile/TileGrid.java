@@ -93,7 +93,7 @@ public class TileGrid extends GameComponent {
         }
 
         public void setOpacity(Player player) {
-            if (heightHandler.getLayer(player) == HeightHandler.BOTTOM) {
+            if (heightHandler.getLayer(player) == HeightHandler.BOTTOM && !player.getStats().canSeeAbove()) {
                 opacity = 1;
             } else {
                 opacity = 0;
@@ -101,7 +101,7 @@ public class TileGrid extends GameComponent {
         }
 
         public void update() {
-            if (heightHandler.getLayer(player) == HeightHandler.BOTTOM) {
+            if (heightHandler.getLayer(player) == HeightHandler.BOTTOM && !player.getStats().canSeeAbove()) {
                 opacity = Math.min(1, opacity + 0.1f);
             } else {
                 opacity = Math.max(0, opacity - 0.1f);

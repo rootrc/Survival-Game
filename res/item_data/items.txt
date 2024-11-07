@@ -1,39 +1,74 @@
-6
+13
 Essence_of_Heart
 Slowly_regenerates_health
-2
+3
 0 0
 0
 Fortification
-Halves_damage
-2
+Halves_all_damage_taken
+3
 0 1
 0
 Holy_Health
-Gain_multiple_health
-1
+Gain_three_health
+7
 0 2
 0
 Illumitating_Lantern
-Gain_a_health_point
-2
+Gain_another_health_point_(if_possible)
+5
 0 7
 0
 Reckless_Speed
 Increase_speed_at_the_cost_of_control
-2
+4
 1 0
 0
 Friction_Feet
-Drasticlly_improve_accleration_and_deceleration
-2
+Drastically_improve_accleration_and_deceleration
+3
 1 1
 0
-
-
+Revive
+Survive_a_hit_with_minimum_health
+2
+0 5
+0
+The_Sun
+Increase_light_radius_of_your_lantern
+6
+2 0
+0
+See_Evil
+Increase_trap_detection_but_take_50%_more_damage
+4
+3 0
+1
+9
+See_No_Evil
+Decrease_trap_detection_for_a_lantern
+4
+3 1
+1
+8
+Remember_All
+Larger_light_trail
+3
+3 2
+0
+See_Above
+See_higher_elevations_from_down_below
+2
+3 4
+0
+God_Given_Time
+Add_some__time_to_your_timer
+10
+5 0
+0
 
 title
 description
-rarity
+rarity (larger more common)
 location in image
 incompabitle skills cnt, incompabitle skills

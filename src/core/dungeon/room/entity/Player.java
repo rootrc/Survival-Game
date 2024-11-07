@@ -28,16 +28,14 @@ public class Player extends Entity {
     private boolean movingDown;
     private boolean movingRight;
     private Inventory inventory;
-    private PassiveItemStats passiveItemStats;
+    private Stats passiveItemStats;
     private ArrayList<RoomObject> interactables = new ArrayList<>();
     private Action nextRoom;
     private Action death;
     private int updateCnt;
 
     private double lightAmount;
-    private int lightRadiusFactor;
     private int lightDecreaseFactor;
-    private int lightDetectionRadiusSquared;
 
     private int interactionCooldown;
     private int dashCooldown;
@@ -58,11 +56,9 @@ public class Player extends Entity {
         this.nextRoom = nextRoom;
         this.death = death;
         this.inventory = inventory;
-        passiveItemStats = new PassiveItemStats();
+        passiveItemStats = new Stats();
         lightAmount = DiffSettings.playerLightStartAmount;
-        lightRadiusFactor = DiffSettings.playerLightRadiusFactor;
         lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
-        lightDetectionRadiusSquared = DiffSettings.playerLightDetectionRadiusSquared;
         health = DiffSettings.startingHealth;
         healthPoints = DiffSettings.startingHealth;
         setKeyBinds();
@@ -104,7 +100,7 @@ public class Player extends Entity {
         updateCnt++;
         interactionCooldown++;
         dashCooldown++;
-        setLightRadius(lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
+        setLightRadius(passiveItemStats.lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
         if (updateCnt % 60 == 0) {
             updateCnt = 0;
@@ -228,7 +224,11 @@ public class Player extends Entity {
             return;
         }
         health -= passiveItemStats.damageMulti;
-        if ((int) health == 1) {
+        if (health < 0 && passiveItemStats.reviveCnt > 0) {
+            passiveItemStats.reviveCnt--;
+            health = 1.0/6;
+        }
+        if (health <= 1) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
         }
         setSpeedX(0);
@@ -272,7 +272,7 @@ public class Player extends Entity {
         return getLadder().getDirection();
     }
 
-    public PassiveItemStats getPassiveItemStats() {
+    public Stats getStats() {
         return passiveItemStats;
     }
 
@@ -282,10 +282,6 @@ public class Player extends Entity {
 
     public void addLightAmount(int delta) {
         lightAmount += delta;
-    }
-
-    public int getLightDetectionRadiusSquared() {
-        return lightDetectionRadiusSquared;
     }
 
     private final Action interact = new AbstractAction() {
@@ -381,13 +377,26 @@ public class Player extends Entity {
         }
     };
 
-    public static class PassiveItemStats {
+    public static class Stats {
         private double healthRegenPerSecond;
         private double damageMulti;
+        private int reviveCnt;
 
-        private PassiveItemStats() {
+        private double lightRadiusFactor;
+        private double detectionRadiusSquared;
+        private double vision;
+
+        private double fogOfWarMulti;
+
+        private boolean canSeeAbove;
+
+        private Stats() {
             healthRegenPerSecond = 0;
             damageMulti = 1;
+            lightRadiusFactor = DiffSettings.playerLightRadiusFactor;
+            detectionRadiusSquared = DiffSettings.playerDetectionRadiusSquared;
+            vision = 0.8;
+            fogOfWarMulti = 1;
         }
 
         public void setHealthRegenPerSecond(double healthRegenPerSecond) {
@@ -397,5 +406,46 @@ public class Player extends Entity {
         public void setDamageMulti(double damageMulti) {
             this.damageMulti = damageMulti;
         }
+        
+        public void addRevive(int delta) {
+            this.reviveCnt += delta;
+        }
+
+        public void multiLightRadius(double multi) {
+            lightRadiusFactor *= multi;
+        }
+
+        public double getDetectionRadiusSquared() {
+            return detectionRadiusSquared;
+        }
+
+        public void multiDetectionRadius(double multi) {
+            detectionRadiusSquared *= multi * multi;
+        }
+
+        public double getVision() {
+            return vision;
+        }
+
+        public void multiVision(double multi) {
+            vision *= multi;
+        }
+
+        public double getFogOfWarMulti() {
+            return fogOfWarMulti;
+        }
+
+        public void multiFogOfWarMulti(double multi) {
+            fogOfWarMulti *= multi;
+        }
+
+        public boolean canSeeAbove() {
+            return canSeeAbove;
+        }
+
+        public void setSeeAbove(boolean canSeeAbove) {
+            this.canSeeAbove = canSeeAbove;
+        }
+        
     }
 }

@@ -185,11 +185,11 @@ public class Dungeon extends GamePanel {
         inventory = new Inventory(UILayer);
         player = new Player(nextRoom, playerDeath, inventory);
         MiniMap miniMap = new MiniMap();
+        dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599), miniMap);
         roomFactory = new RoomFactory(player, UILayer, miniMap);
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer(), roomFactory));
         miniMap.setStartingRoom(room);
-        dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599), miniMap);
         snowParticles = new SnowParticles();
         debugScreen = new DebugScreen(UILayer, room);
         add();

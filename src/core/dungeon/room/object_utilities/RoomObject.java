@@ -29,7 +29,7 @@ public abstract class RoomObject extends GameComponent implements Comparable<Roo
         setLocation(c * Tile.SIZE, r * Tile.SIZE);
         this.hitbox = hitbox;
         this.interactbox = interactbox;
-        setLightVisibility(10000);
+        setLightVisibility(100);
     }
 
     protected RoomObject(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox) {

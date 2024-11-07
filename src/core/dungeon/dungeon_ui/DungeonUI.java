@@ -13,7 +13,7 @@ public class DungeonUI extends GameComponent {
     public DungeonUI(HealthBar healthBar, Timer timer, MiniMap miniMap) {
         super(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
         // this.healthBar = healthBar;
-        // this.timer = timer;
+        this.timer = timer;
         this.miniMap = miniMap;
         add(healthBar);
         add(timer);

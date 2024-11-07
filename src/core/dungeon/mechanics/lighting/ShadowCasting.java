@@ -58,9 +58,9 @@ public class ShadowCasting {
             while (!stack.isEmpty()) {
                 Row row = stack.pop();
                 int min_col = Math.max((int) Math.floor(row.depth * row.startSlope + 0.5),
-                        -(int) Math.sqrt(player.getLightDetectionRadiusSquared() - row.depth * row.depth) + 1);
+                        -(int) Math.sqrt(player.getStats().getDetectionRadiusSquared() - row.depth * row.depth) + 1);
                 int max_col = Math.min((int) Math.ceil(row.depth * row.endSlope - 0.5),
-                        (int) Math.sqrt(player.getLightDetectionRadiusSquared() - row.depth * row.depth) - 1);
+                        (int) Math.sqrt(player.getStats().getDetectionRadiusSquared() - row.depth * row.depth) - 1);
                 Point prevPoint = null;
                 for (int col = min_col; col <= max_col; col++) {
                     Point point = quadrant.transform(new Point(row.depth, col));

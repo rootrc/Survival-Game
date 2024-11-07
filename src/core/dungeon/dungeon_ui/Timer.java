@@ -134,6 +134,10 @@ public class Timer extends GameComponent {
         return image;
     }
 
+    public void addStartTime(int delta) {
+        startTime += delta;
+    }
+
     public boolean isFinished() {
         return timeInSeconds == 0;
     }

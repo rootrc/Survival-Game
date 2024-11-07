@@ -134,8 +134,9 @@ public class LightingEngine extends GameComponent {
                 int lightRadius = getEffectiveLightRadius(player) / 2;
                 Graphics2D gl = fogOfWar.createGraphics();
                 gl.setComposite(AlphaComposite.DstIn);
-                gl.drawImage(getDarknessFilter2(lightRadius), player.getX() + player.getWidth() / 2 - lightRadius,
-                        player.getY() + player.getHeight() / 2 - lightRadius, null);
+                int size = (int) (lightRadius * 0.75 * player.getStats().getFogOfWarMulti());
+                gl.drawImage(getDarknessFilter2(size), player.getX() + player.getWidth() / 2 - size,
+                        player.getY() + player.getHeight() / 2 - size, null);
                 gl.dispose();
             }
             Graphics2D gl = image.createGraphics();
@@ -189,7 +190,7 @@ public class LightingEngine extends GameComponent {
             roomObject.moveY(-roomObject.getParent().getY());
         } else {
             if ((shadowCasting.isVisible(roomObject)
-                    && player.getDistanceFromRoomObject(roomObject) < roomObject.getLightVisibility())
+                    && player.getDistanceFromRoomObject(roomObject) < roomObject.getLightVisibility() * player.getLightRadius()  * player.getStats().getVision())
                     || (player.getDistanceFromRoomObject(roomObject) < getEffectiveLightRadius(player))) {
                 lights.get(roomObject).increaseVisibilityValue();
             } else {

@@ -37,13 +37,13 @@ public abstract class Trap extends RoomObject {
                 trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
                         data.r, data.c, CollisionBox.getCollisionBox(0.375, 0.3125, 1.25, 1));
                 trap.setLightRadius(20);
-                trap.setLightVisibility(150);
+                trap.setLightVisibility(1.5);
                 return trap;
             case RoomObjectData.SAW_1:
                 trap = new Saw(new SpriteSheet(ImageUtilities.getImage("objects", "saw1"), 8, 3),
                         data.r, data.c, CollisionBox.getCollisionBox(0.625, 0.3125, 2.75, 2.5));
                 trap.setLightRadius(40);
-                trap.setLightVisibility(200);
+                trap.setLightVisibility(2);
                 return trap;
             case RoomObjectData.VERTICAL_SAW:
                 return new MovingSaw(new SpriteSheet(ImageUtilities.getImage("objects", "saw0"), 8, 3),
@@ -55,7 +55,7 @@ public abstract class Trap extends RoomObject {
                 trap = new Spike(new SpriteSheet(ImageUtilities.getImage("objects", "spike"), 12, 6),
                         data.r - 3, data.c - 3, CollisionBox.getCollisionBox(3, 3, 2, 2), player);
                 trap.setLightRadius(32);
-                trap.setLightVisibility(200);
+                trap.setLightVisibility(2);
                 return trap;
             case RoomObjectData.EXPLOSIVE:
                 trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
@@ -63,7 +63,7 @@ public abstract class Trap extends RoomObject {
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
                         player, true);
                 trap.setLightRadius(24);
-                trap.setLightVisibility(150);
+                trap.setLightVisibility(1.8);
                 return trap;
             case RoomObjectData.EXPLOSIVE_DUD:
                 trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
@@ -71,13 +71,13 @@ public abstract class Trap extends RoomObject {
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
                         player, false);
                 trap.setLightRadius(24);
-                trap.setLightVisibility(180);
+                trap.setLightVisibility(1.8);
                 return trap;
             case RoomObjectData.TELEPORTATION:
                 trap = new Teleportation(new SpriteSheet(ImageUtilities.getImage("objects", "teleportation"), 5, 9),
                         data.r, data.c, CollisionBox.getCollisionBox(0.375, 0.375, 1.25, 1.25), tileGrid);
                 trap.setLightRadius(24);
-                trap.setLightVisibility(150);
+                trap.setLightVisibility(1);
                 return trap;
             default:
                 return null;
@@ -121,7 +121,7 @@ class MovingSaw extends Trap {
         saw = new Saw(sawSpriteSheet, 0, 0, hitbox);
         saw.moveY((sawSpriteSheet.getHeight() - getHeight()) / 2);
         saw.setLightRadius(20);
-        saw.setLightVisibility(200);
+        saw.setLightVisibility(2);
         add(saw);
         if (direction == 0) {
             int startingSawLocation = RNGUtilities.getInt(2, getHeight() - saw.getHeight() - 2);

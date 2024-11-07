@@ -8,7 +8,6 @@ import core.dungeon.dungeon_ui.Timer;
 import core.dungeon.items.Item.ItemEffect;
 import core.dungeon.room.entity.Player;
 import core.dungeon.room_factory.RoomFactory;
-import core.dungeon.settings.DiffSettings;
 import core.game_components.Factory;
 import core.utilities.FileOpener;
 import core.utilities.ImageUtilities;
@@ -42,63 +41,143 @@ public class ItemFactory extends Factory<Item> {
             case 0:
                 return new ItemEffect() {
                     public void doEffect() {
-                        player.getPassiveItemStats().setHealthRegenPerSecond(DiffSettings.itemHealthRegen);
+                        player.getStats().setHealthRegenPerSecond(1.0 / 60);
                     }
 
                     public void doReversedEffect() {
-                        player.getPassiveItemStats().setHealthRegenPerSecond(0);
+                        player.getStats().setHealthRegenPerSecond(0);
                     }
                 };
             case 1:
                 return new ItemEffect() {
                     public void doEffect() {
-                        player.getPassiveItemStats().setDamageMulti(DiffSettings.itemDamageMulti);
+                        player.getStats().setDamageMulti(0.5);
                     }
 
                     public void doReversedEffect() {
-                        player.getPassiveItemStats().setDamageMulti(0);
+                        player.getStats().setDamageMulti(0);
                     }
                 };
             case 2:
                 return new ItemEffect() {
                     public void doEffect() {
-                        player.addHealth(DiffSettings.itemHealthIncrease);
+                        player.addHealth(3);
                     }
 
                     public void doReversedEffect() {
-                        player.addHealth(-DiffSettings.itemHealthIncrease);
+                        player.addHealth(-3);
                     }
                 };
             case 3:
                 return new ItemEffect() {
                     public void doEffect() {
-                        player.addHealthPoints(DiffSettings.itemHealthPointIncrease);
+                        player.addHealthPoints(1);
                     }
 
                     public void doReversedEffect() {
-                        player.addHealthPoints(-DiffSettings.itemHealthPointIncrease);
+                        player.addHealthPoints(-1);
                     }
                 };
             case 4:
                 return new ItemEffect() {
                     public void doEffect() {
-                        player.setMaxSpeed(player.getMaxSpeed() + DiffSettings.itemSpeedIncrease);
+                        player.setMaxSpeed(player.getMaxSpeed() + 1);
                     }
 
                     public void doReversedEffect() {
-                        player.setMaxSpeed(player.getMaxSpeed() - DiffSettings.itemSpeedIncrease);
+                        player.setMaxSpeed(player.getMaxSpeed() - 1);
                     }
                 };
             case 5:
                 return new ItemEffect() {
                     public void doEffect() {
-                        player.multiplyAcc(DiffSettings.itemAccDecrease);
-                        player.multiplyDeacc(DiffSettings.itemAccDecrease);
+                        player.multiplyAcc(4);
+                        player.multiplyDeacc(4);
                     }
 
                     public void doReversedEffect() {
-                        player.multiplyAcc(1.0 / DiffSettings.itemAccDecrease);
-                        player.multiplyDeacc(1.0 / DiffSettings.itemAccDecrease);
+                        player.multiplyAcc(1.0 / 4);
+                        player.multiplyDeacc(1.0 / 4);
+                    }
+                };
+            case 6:
+                return new ItemEffect() {
+                    public void doEffect() {
+                        player.getStats().addRevive(1);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().addRevive(-1);
+                    }
+                };
+            case 7:
+                return new ItemEffect() {
+                    public void doEffect() {
+                        player.getStats().multiLightRadius(1.4);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().multiLightRadius(1.0 / 1.4);
+                    }
+                };
+            case 8:
+                return new ItemEffect() {
+                    public void doEffect() {
+                        player.getStats().multiDetectionRadius(2);
+                        player.getStats().multiVision(2);
+                        player.getStats().setDamageMulti(1.5);
+                        ;
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().multiDetectionRadius(0.5);
+                        player.getStats().multiVision(0.5);
+                        player.getStats().setDamageMulti(1.0 / 1.5);
+                        ;
+                    }
+                };
+            case 9:
+                return new ItemEffect() {
+                    public void doEffect() {
+                        player.getStats().multiDetectionRadius(0.5);
+                        player.getStats().multiVision(0.6);
+                        player.addHealthPoints(1);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().multiDetectionRadius(2);
+                        player.getStats().multiVision(1.0 / 0.6);
+                        player.addHealthPoints(-1);
+                    }
+                };
+            case 10:
+                return new ItemEffect() {
+                    public void doEffect() {
+                        player.getStats().multiFogOfWarMulti(1.75);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().multiFogOfWarMulti(1.0 / 1.75);
+                    }
+                };
+            case 11:
+                return new ItemEffect() {
+                    public void doEffect() {
+                        player.getStats().setSeeAbove(true);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().setSeeAbove(false);
+                    }
+                };
+            case 12:
+                return new ItemEffect() {
+                    public void doEffect() {
+                        timer.addStartTime(300);
+                    }
+                    
+                    public void doReversedEffect() {
+                        timer.addStartTime(-300);
                     }
                 };
             default:
@@ -118,7 +197,7 @@ public class ItemFactory extends Factory<Item> {
                 Item item = itemListUsingRarities.get(RNGUtilities.getInt(0, itemListUsingRarities.size()));
                 boolean flag = true;
                 for (int j = 0; j < i; j++) {
-                    if (res[j] == item) {
+                    if (res[j] == item || res[j].isIncompatible(item) || item.isIncompatible(res[j])) {
                         flag = false;
                         break;
                     }
@@ -133,6 +212,19 @@ public class ItemFactory extends Factory<Item> {
     }
 
     public void removeItem(Item item) {
+        int idx = Collections.binarySearch(itemListUsingRarities, item);
+        while (idx != 0 && itemListUsingRarities.get(idx - 1) == item) {
+            idx--;
+        }
+        while (idx != itemListUsingRarities.size() && itemListUsingRarities.get(idx) == item) {
+            itemListUsingRarities.remove(item);
+        }
+        for (int i : item.getIncompatible()) {
+            removeItem2(items[i]);
+        }
+    }
+
+    public void removeItem2(Item item) {
         int idx = Collections.binarySearch(itemListUsingRarities, item);
         while (idx != 0 && itemListUsingRarities.get(idx - 1) == item) {
             idx--;
