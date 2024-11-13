@@ -25,5 +25,4 @@ public class CollisionBox extends Rectangle {
         super((int) (x * Tile.SIZE), (int) (y * Tile.SIZE),
                 (int) (width * Tile.SIZE), (int) (height * Tile.SIZE));
     }
-
 }

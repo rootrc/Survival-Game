@@ -332,9 +332,9 @@ public class ItemFactory extends Factory<Item> {
                 for (int j = 0; j < K; j++) {
                     incompatible[i].add(nextInt());
                 }
+                Collections.sort(incompatible[i]);
             }
             closeFile();
         }
     }
-
 }

@@ -14,5 +14,4 @@ public class Options extends GamePanel {
         getActionMap().put("pause", UILayer.createAndOpenConfirmUI(game.changePanel("mainMenu")));
         add(new GameSlider());
     }
-
 }

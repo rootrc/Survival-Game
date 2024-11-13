@@ -83,9 +83,7 @@ public abstract class Trap extends RoomObject {
                 return null;
         }
     }
-
 }
-
 class Saw extends Trap {
     Saw(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox) {
         super(spriteSheet, r, c, hitbox);
@@ -105,7 +103,6 @@ class Saw extends Trap {
         player.takeDamage();
     }
 }
-
 class MovingSaw extends Trap {
     private Saw saw;
     private int direction;
@@ -195,7 +192,6 @@ class MovingSaw extends Trap {
         return null;
     }
 }
-
 class Spike extends Trap {
     private static final int[] UPBLADE_LENGTHS = { 0, 0, 2, 0, 2, 2, 2, 38, 8, 6, 2, 0 };
     private static final int[] DOWNBLADE_LENGTHS = { 0, 0, 2, 0, 2, 2, 2, 36, 6, 4, 2, 0 };
@@ -292,7 +288,6 @@ class Spike extends Trap {
         }
     }
 }
-
 class Explosive extends Trap {
     private static final int HITFRAME = 6;
 
@@ -354,9 +349,7 @@ class Explosive extends Trap {
             player.takeDamage();
         }
     }
-
 }
-
 class Teleportation extends Trap {
     private TileGrid tileGrid;
 

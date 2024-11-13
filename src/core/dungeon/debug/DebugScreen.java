@@ -30,5 +30,4 @@ public class DebugScreen extends PopupUI {
         g2d.drawString(new StringBuilder("Player Location: ").append(room.getPlayer().getX()).append(", ")
                 .append(room.getPlayer().getY()).toString(), 64, 64 + 3 * 32);
     }
-
 }

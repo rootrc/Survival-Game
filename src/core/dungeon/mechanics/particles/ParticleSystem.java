@@ -101,5 +101,4 @@ public abstract class ParticleSystem extends GameComponent {
                     (float) Math.max(0, Math.min(1, opacity)));
         }
     }
-
 }

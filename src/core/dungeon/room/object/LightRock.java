@@ -59,5 +59,4 @@ public class LightRock extends RoomObject {
                 return null;
         }
     }
-
 }

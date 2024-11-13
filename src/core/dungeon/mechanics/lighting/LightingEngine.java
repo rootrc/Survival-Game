@@ -296,5 +296,4 @@ public class LightingEngine extends GameComponent {
             lights.get(player).visibilityFactor = 1;
         }
     }
-
 }

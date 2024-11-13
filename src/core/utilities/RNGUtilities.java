@@ -32,5 +32,4 @@ public class RNGUtilities {
     public static boolean getBoolean() {
         return random.nextBoolean();
     }
-
 }

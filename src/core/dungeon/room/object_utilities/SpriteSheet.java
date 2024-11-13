@@ -125,5 +125,4 @@ public class SpriteSheet {
     public void setFrameLength(int frameLength) {
         this.frameLength = frameLength;
     }
-
 }

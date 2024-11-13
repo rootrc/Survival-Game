@@ -2,6 +2,7 @@ package core.dungeon.items;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.ImageIcon;
 
@@ -57,7 +58,7 @@ public class Item implements Comparable<Item> {
     }
 
     public boolean isIncompatible(Item item) {
-        return incompatible.contains(item.getId());
+        return Collections.binarySearch(incompatible, item.getId()) >= 0;
     }
 
     public String getToolTip() {

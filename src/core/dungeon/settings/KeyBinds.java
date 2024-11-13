@@ -36,5 +36,4 @@ public class KeyBinds {
     private KeyBinds() {
 
     }
-
 }

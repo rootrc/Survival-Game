@@ -74,5 +74,4 @@ public class UIButton extends GameButton {
         }
         return image;
     }
-
 }

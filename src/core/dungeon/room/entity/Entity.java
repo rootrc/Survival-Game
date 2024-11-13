@@ -96,5 +96,4 @@ public abstract class Entity extends RoomObject {
         this.direction = direction;
         getSpriteSheet().setType(direction);
     }
-
 }

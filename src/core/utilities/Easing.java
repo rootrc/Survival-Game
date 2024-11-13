@@ -55,5 +55,4 @@ public class Easing {
         return new Point((int) (p0.getX() + (p1.getX() - p0.getX()) * multi),
                 (int) (p0.getY() + (p1.getY() - p0.getY()) * multi));
     }
-
 }

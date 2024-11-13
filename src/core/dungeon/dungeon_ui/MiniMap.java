@@ -272,8 +272,8 @@ public class MiniMap extends GameComponent {
 
         public void updateCurrentNode() {
             cnt = 0;
-            easing.set(getLocation(), new Point((int) (MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getX(),
-                    (int) (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getY()));
+            easing.set(getLocation(), new Point((int) (MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getEasing().getP1().x,
+                    (int) (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getEasing().getP1().y));
         }
     }
 
@@ -361,5 +361,4 @@ public class MiniMap extends GameComponent {
             return easing;
         }
     }
-
 }

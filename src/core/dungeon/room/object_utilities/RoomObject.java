@@ -267,5 +267,4 @@ public abstract class RoomObject extends GameComponent implements Comparable<Roo
         }
 
     }
-
 }

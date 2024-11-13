@@ -18,5 +18,4 @@ public abstract class GameButton extends JButton {
         setLayout(null);
         setMargin(new Insets(0, 0, 0, 0));
     }
-
 }

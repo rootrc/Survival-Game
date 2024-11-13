@@ -234,5 +234,4 @@ public class Tile {
         return new Tile(ImageUtilities.getImage("tiles", tileSetName, c, r, Tile.SIZE, Tile.SIZE), collisionSet.get(hash),
                 heightSet.get(hash));
     }
-
 }
