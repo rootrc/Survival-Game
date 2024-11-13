@@ -5,8 +5,9 @@
     import javax.swing.AbstractAction;
     import javax.swing.Action;
     import javax.swing.JFrame;
+import javax.swing.ToolTipManager;
 
-    import core.dungeon.Dungeon;
+import core.dungeon.Dungeon;
     import core.dungeon.settings.DiffSettings;
     import core.game_components.GamePanel;
     import core.game_components.UILayer;
@@ -42,6 +43,7 @@
             setLocationRelativeTo(null);
             setVisible(true);
             startGameThread();
+            ToolTipManager.sharedInstance().setInitialDelay(0);
         }
 
         private void initPanel() {

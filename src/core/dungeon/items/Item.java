@@ -40,13 +40,13 @@ public class Item implements Comparable<Item> {
         return itemAction;
     }
 
-    public String getName() {
-        return name;
-    }
+    // public String getName() {
+    //     return name;
+    // }
 
-    public String getDescription() {
-        return description;
-    }
+    // public String getDescription() {
+    //     return description;
+    // }
 
     public boolean canBeFoundInChest() {
         return itemAction.canBeFoundInChest();
@@ -61,7 +61,7 @@ public class Item implements Comparable<Item> {
     }
 
     public String getToolTip() {
-        return new StringBuilder("<html>").append(name).append("<br>").append(description).append("</html>").toString();
+        return new StringBuilder("<html><h4>").append(name).append("</h4>").append(description).append("</html>").toString();
     }
 
     public static abstract class ItemAction extends AbstractItemActions {

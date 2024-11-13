@@ -46,6 +46,7 @@ public class DeathScreen extends GameComponent {
         g2d.setColor(Color.white);
         g2d.drawString("Rooms Explored:" + miniMap.getExploredRoomCnt(), 100, 100);
         g2d.drawString("Max Depth:" + miniMap.getMaxDepth(), 100, 120);
+        g2d.drawString("Points:" + dungeon.getPoints(), 100, 140);
     }
 
     @Override

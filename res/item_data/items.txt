@@ -1,71 +1,91 @@
-13
-Essence_of_Heart
-Slowly_regenerates_health
-3
+15
+0 Life_Blood
+Slowly_regenerate_health_one_per_minute
+4
 0 0
-0
-Fortification
-Halves_all_damage_taken
-3
+1
+1
+1 Castling
+Halves_all_damage_taken_from_all_sources
+4
 0 1
+1
 0
-Holy_Health
-Gain_three_health
+2 Sinless_Beings
+Gain_up_to_three_health_to_your_health_bar
 7
 0 2
 0
-Illumitating_Lantern
-Gain_another_health_point_(if_possible)
+3 Lantern_Festival
+Gain_another_health_point_to_your_health_(a_maximum_of_eight)
 5
 0 7
 0
-Reckless_Speed
-Increase_speed_at_the_cost_of_control
+4 Mino's_Calves
+Increase_speed_at_the_cost_of_lowered_control_of_your_character
 4
 1 0
 0
-Friction_Feet
-Drastically_improve_accleration_and_deceleration
+5 Rubber_Souls
+Drastically_improve_accleration_and_deceleration_of_your_character
 3
 1 1
 0
-Revive
-Survive_a_hit_with_minimum_health
+6 Ashes_of_a_Phoenix
+Survive_a_extra_hit_with_minimum_health
 2
 0 4
 0
-The_Sun
-Increase_light_radius_of_your_lantern
+7 The_Sun
+Increase_your_character's_light_radius_by_40%
 6
 2 0
 0
-See_Evil
-Increase_trap_detection_but_take_50%_more_damage
+8 See_Evil
+Increase_your_character's_trap_detection_but_take_50%_more_damage
 4
 3 0
 2
 9 10
-See_No_Evil
-Decrease_trap_detection_for_a_lantern
+9 See_No_Evil
+Decrease_your_character's_trap_detection_for_another_health_point
 4
 3 1
 2
 8 11
-Remember_All
-Larger_light_trail
+10 Forgive_but_Never_Forget
+Leave_behind_a_much_larger_light_trail_from_your_character
 3
 3 2
-0
-See_Above
+2
+8 11
+11 The_Gods_are_Above
 See_higher_elevations_from_down_below
 2
 3 4
-0
-God_Given_Time
-Add_some__time_to_your_timer
-10
+2
+9 10
+12 God_Given_Time
+Add_5_extra_minutes_to_your_timer
+6
 5 0
-0
+2
+13
+14
+13 Laurus_Nobilis
+Increase_your_final_points_by_25%
+5
+8 0
+2
+12
+14
+14 Happy_Happy_Pills
+Quadruple_final_points_by_300%,_unlock_all_item_slots,_but_take_double_damage_and_subtract_time_from_timer
+6
+8 1
+2
+12
+13
 
 title
 description

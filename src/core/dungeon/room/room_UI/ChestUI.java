@@ -21,7 +21,7 @@ public class ChestUI extends PopupUI {
 	private static final int numItems = 3;
 	private static final BufferedImage chestSlot = ImageUtilities.getImage("UI", "ChestSlot");
 	private static final int distanceBetweenChestSlots = 32;
-	
+
 	private Action check;
 
 	public ChestUI(UILayer UILayer, Inventory inventory, Item[] items, Action flash) {
@@ -30,30 +30,44 @@ public class ChestUI extends PopupUI {
 		for (int i = 0; i < numItems; i++) {
 			Item item = items[i];
 			getItemButtons[i] = new GetItemButton(
-					ActionUtilities.combineActions(new AbstractAction() {
+					new AbstractAction() {
 						public void actionPerformed(ActionEvent e) {
-							if (!inventory.addItem(item)) {
-								// TODO
-								System.out.println("Inventory full oops");
+							if (!inventory.isFull()) {
+								ActionUtilities.combineActions(new AbstractAction() {
+									public void actionPerformed(ActionEvent e) {
+										inventory.addItem(item);
+										for (int j = 0; j < numItems; j++) {
+											getActionMap().put(new StringBuilder("get").append(j).toString(), null);
+										}
+									}
+								}, flash, close).actionPerformed(e);
 							} else {
-								for (int j = 0; j < numItems; j++) {
-									getActionMap().put(new StringBuilder("get").append(j).toString(), null);
-								}
+								flash.actionPerformed(e);
 							}
 						}
-
-					}, flash, close), items[i],
-					new Rectangle((getWidth() - GetItemButton.SIZE) / 2 + (chestSlot.getWidth() + distanceBetweenChestSlots) * (i - 1),
-							(getHeight() - GetItemButton.SIZE) / 2, GetItemButton.SIZE, GetItemButton.SIZE));
+					},
+					items[i],
+					new Rectangle(
+							(getWidth() - GetItemButton.SIZE) / 2
+									+ (chestSlot.getWidth() + distanceBetweenChestSlots) * (i - 1),
+							(getHeight() - GetItemButton.SIZE) / 2, GetItemButton.SIZE, GetItemButton.SIZE), !inventory.isFull());
 			add(getItemButtons[i]);
 			getInputMap(2).put(KeyBinds.NUMBER[i + 1], new StringBuilder("get").append(i).toString());
 			getActionMap().put(new StringBuilder("get").append(i).toString(), getItemButtons[i].getAction());
 		}
-		check = UILayer.createAndOpenConfirmUI((new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				ChestUI.super.exitPanel();
-			}
-		}));
+		if (!inventory.isFull()) {
+			check = UILayer.createAndOpenConfirmUI((new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					ChestUI.super.exitPanel();
+				}
+			}));
+		} else {
+			check = new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					ChestUI.super.exitPanel();
+				}
+			};
+		}
 		getActionMap().put("close", check);
 	}
 
@@ -62,23 +76,31 @@ public class ChestUI extends PopupUI {
 		super.drawComponent(g2d);
 		for (int i = 0; i < numItems; i++) {
 			g2d.drawImage(chestSlot,
-					(getWidth() - chestSlot.getWidth()) / 2 + (i - numItems / 2) * (chestSlot.getWidth() + distanceBetweenChestSlots),
+					(getWidth() - chestSlot.getWidth()) / 2
+							+ (i - numItems / 2) * (chestSlot.getWidth() + distanceBetweenChestSlots),
 					(getHeight() - chestSlot.getHeight()) / 2, null);
 		}
 	}
 
 	private static class GetItemButton extends GameButton {
 		private static final int SIZE = 64;
-		public GetItemButton(Action flash, Item item, Rectangle rect) {
+
+		public GetItemButton(Action action, Item item, Rectangle rect, boolean setIconNull) {
 			super(null, rect);
+			setAction(action);
 			setAction(ActionUtilities.combineActions(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
-					setIcon(null);
+					if (setIconNull) {
+						setIcon(null);
+					}
 				}
-			}, flash));
+			}, action));
 			setIcon(ImageUtilities.resize(item.getImageIcon(), SIZE, SIZE));
 			setRolloverIcon(ImageUtilities.resize(item.getImageIcon(), SIZE, SIZE));
-			setToolTipText(item.getToolTip());
+			String ogToolTip = item.getToolTip();
+			setToolTipText(new StringBuilder(ogToolTip.substring(0, ogToolTip.length() - "</html>".length()))
+					.append("<br><br>Click or press the corresponding number to get this item!").append("</html>")
+					.toString());
 		}
 
 	}

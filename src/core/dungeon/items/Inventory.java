@@ -14,7 +14,6 @@ import javax.swing.Action;
 import core.Game;
 import core.dungeon.room.object.TreasureChest;
 import core.dungeon.room.room_UI.ChestUI;
-import core.dungeon.settings.DiffSettings;
 import core.dungeon.settings.KeyBinds;
 import core.game_components.GameButton;
 import core.game_components.GameComponent;
@@ -36,8 +35,6 @@ public class Inventory extends GameComponent {
     private int occupiedSlots;
     private ItemSlot[] inventorySlots;
 
-    // private boolean newItem;
-
     private boolean move;
     private int timer;
 
@@ -47,11 +44,11 @@ public class Inventory extends GameComponent {
         }
     };
 
-    public Inventory(UILayer UILayer) {
-        super(LEFT.getWidth() + MIDDLE.getWidth() * (DiffSettings.startingInventorySize - 2) + RIGHT.getWidth(),
+    public Inventory(UILayer UILayer, int size) {
+        super(LEFT.getWidth() + MIDDLE.getWidth() * (size - 2) + RIGHT.getWidth(),
                 MIDDLE.getHeight() + TAB.getHeight());
         this.UILayer = UILayer;
-        size = DiffSettings.startingInventorySize;
+        this.size = size;
         setLocation(Game.SCREEN_WIDTH / 2 - getWidth() / 2, Game.SCREEN_HEIGHT - TAB.getHeight());
         inventorySlots = new ItemSlot[size + 1];
         for (int i = 1; i <= size; i++) {
@@ -103,14 +100,17 @@ public class Inventory extends GameComponent {
         this.itemFactory = itemFactory;
     }
 
-    public boolean addItem(Item item) {
-        if (occupiedSlots > size) {
-            return false;
+    public boolean isFull() {
+        return occupiedSlots == size;
+    }
+
+    public void addItem(Item item) {
+        if (isFull()) {
+            return;
         }
         inventorySlots[occupiedSlots].setItem(item);
         occupiedSlots++;
         itemFactory.removeItem(item);
-        return true;
     }
 
     public void removeItem(int idx) {
@@ -148,6 +148,7 @@ public class Inventory extends GameComponent {
                         removeItem();
                     }
                 }).actionPerformed(e);
+                getInputMap(2).put(KeyBinds.NUMBER[idx], idx);
             }
         };
 
@@ -160,9 +161,11 @@ public class Inventory extends GameComponent {
             this.item = item;
             item.getItemAction().doEffect();
             setAction(removeItem);
+            getActionMap().put(idx, removeItem);
             setIcon(ImageUtilities.resize(item.getImageIcon(), 32, 32));
             setRolloverIcon(ImageUtilities.resize(item.getImageIcon(), 32, 32));
-            setToolTipText(item.getToolTip());
+            String ogToolTip = item.getToolTip();
+			setToolTipText(new StringBuilder(ogToolTip.substring(0, ogToolTip.length() - "</html>".length())).append("<br><br>Click or press the corresponding number to remove this item from your inventory!<br>You will take the corresponding penalty").append("</html>").toString());
         }
 
         public void removeItem() {

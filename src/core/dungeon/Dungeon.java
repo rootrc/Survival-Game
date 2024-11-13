@@ -23,6 +23,7 @@ import core.dungeon.room.Room;
 import core.dungeon.room.entity.Player;
 import core.dungeon.room.tile.Tile;
 import core.dungeon.room_factory.RoomFactory;
+import core.dungeon.settings.DiffSettings;
 import core.dungeon.settings.KeyBinds;
 import core.game_components.GamePanel;
 import core.game_components.UILayer;
@@ -94,7 +95,7 @@ public class Dungeon extends GamePanel {
 
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
-        inventory = new Inventory(UILayer);
+        inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, playerDeath, inventory);
         easing = new Easing(60);
         deathScreen = new DeathScreen(UILayer, new AbstractAction() {
@@ -182,7 +183,7 @@ public class Dungeon extends GamePanel {
 
     public void reset() {
         remove();
-        inventory = new Inventory(UILayer);
+        inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         player = new Player(nextRoom, playerDeath, inventory);
         MiniMap miniMap = new MiniMap();
         dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599), miniMap);
@@ -201,6 +202,21 @@ public class Dungeon extends GamePanel {
         add(dungeonUI);
         add(inventory);
         add(UILayer);
+    }
+
+    // TODO/EDIT
+    public int getPoints() {
+        int sum = 0;
+        sum += (dungeonUI.getTimer().getStartTime() - dungeonUI.getTimer().getTime());
+        sum += 20 * dungeonUI.getMiniMap().getExploredRoomCnt();
+        sum += 100 * dungeonUI.getMiniMap().getMaxDepth();
+        sum += 40 * inventory.getOccupiedSlots();
+        sum *= 10;
+        sum *= player.getStats().getPointMultiplier();
+        if (dungeonUI.getTimer().getTime() == 0) {
+            sum *= 1.5;
+        }
+        return sum;
     }
 
     private void remove() {

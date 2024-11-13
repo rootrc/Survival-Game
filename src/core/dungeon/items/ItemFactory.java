@@ -40,37 +40,34 @@ public class ItemFactory extends Factory<Item> {
         switch (idx) {
             case 0:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() + 2 <= player.getHealthPoints();
                     }
 
                     public void doEffect() {
-                        player.getStats().setHealthRegenPerSecond(1.0 / 60);
+                        player.getStats().addHealthRegenPerSecond(1.0 / 60);
                     }
 
                     public void doReversedEffect() {
-                        player.getStats().setHealthRegenPerSecond(0);
+                        player.getStats().addHealthRegenPerSecond(-1.0 / 60);
                     }
                 };
             case 1:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() + 2 <= player.getHealthPoints();
                     }
 
                     public void doEffect() {
-                        player.getStats().setDamageMulti(0.5);
+                        player.getStats().multiDamageMulti(0.5);
                     }
 
                     public void doReversedEffect() {
-                        player.getStats().setDamageMulti(0);
+                        player.getStats().multiDamageMulti(2);
                     }
                 };
             case 2:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() + 2 <= player.getHealthPoints();
                     }
@@ -85,7 +82,6 @@ public class ItemFactory extends Factory<Item> {
                 };
             case 3:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() + 2 >= player.getHealthPoints() && player.getHealth() >= 2;
                     }
@@ -100,7 +96,6 @@ public class ItemFactory extends Factory<Item> {
                 };
             case 4:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() >= 1;
                     }
@@ -115,7 +110,6 @@ public class ItemFactory extends Factory<Item> {
                 };
             case 5:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() >= 1;
                     }
@@ -132,7 +126,6 @@ public class ItemFactory extends Factory<Item> {
                 };
             case 6:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() + 2 <= player.getHealthPoints() || player.getHealth() <= 2;
                     }
@@ -147,7 +140,6 @@ public class ItemFactory extends Factory<Item> {
                 };
             case 7:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() >= 1;
                     }
@@ -165,18 +157,17 @@ public class ItemFactory extends Factory<Item> {
                     public void doEffect() {
                         player.getStats().multiDetectionRadius(2);
                         player.getStats().multiVision(2);
-                        player.getStats().setDamageMulti(1.5);
+                        player.getStats().multiDamageMulti(1.5);
                     }
 
                     public void doReversedEffect() {
                         player.getStats().multiDetectionRadius(0.5);
                         player.getStats().multiVision(0.5);
-                        player.getStats().setDamageMulti(1.0 / 1.5);
+                        player.getStats().multiDamageMulti(1.0 / 1.5);
                     }
                 };
             case 9:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return player.getHealth() >= 1;
                     }
@@ -215,7 +206,6 @@ public class ItemFactory extends Factory<Item> {
                 };
             case 12:
                 return new ItemAction() {
-                    @Override
                     public boolean canBeFoundInChest() {
                         return timer.getTime() < 300 && player.getHealth() >= 1;
                     }
@@ -228,14 +218,41 @@ public class ItemFactory extends Factory<Item> {
                         timer.addStartTime(-300);
                     }
                 };
+            case 13:
+                return new ItemAction() {
+                    public boolean canBeFoundInChest() {
+                        return timer.getTime() < 450;
+                    }
+
+                    public void doEffect() {
+                        player.getStats().multiPointMultiplier(1.25);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().multiPointMultiplier(1.0 / 1.25);
+                    }
+                };
+            case 14:
+                return new ItemAction() {
+                    public boolean canBeFoundInChest() {
+                        return timer.getTime() > 450 && player.getHealth() + 2 >= player.getHealthPoints();
+                    }
+
+                    public void doEffect() {
+                        player.getStats().multiPointMultiplier(4);
+                        player.getStats().multiDamageMulti(2);
+                        timer.addStartTime(-300);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().multiPointMultiplier(0.25);
+                        player.getStats().multiDamageMulti(0.5);
+                        timer.addStartTime(300);
+                    }
+                };
             default:
                 return null;
         }
-    }
-
-    // TEMP
-    public Item getItem(int idx) {
-        return items[idx];
     }
 
     public Item[] getThreeItems() {
@@ -243,9 +260,12 @@ public class ItemFactory extends Factory<Item> {
         for (int i = 0; i < 3; i++) {
             while (true) {
                 Item item = itemListUsingRarities.get(RNGUtilities.getInt(0, itemListUsingRarities.size()));
+                if (!item.getItemAction().canBeFoundInChest()) {
+                    continue;
+                }
                 boolean flag = true;
                 for (int j = 0; j < i; j++) {
-                    if (!item.getItemAction().canBeFoundInChest() && (res[j] == item || res[j].isIncompatible(item) || item.isIncompatible(res[j]))) {
+                    if (res[j] == item || res[j].isIncompatible(item) || item.isIncompatible(res[j])) {
                         flag = false;
                         break;
                     }
@@ -300,6 +320,7 @@ public class ItemFactory extends Factory<Item> {
             image = new BufferedImage[N];
             incompatible = new ArrayList[N];
             for (int i = 0; i < N; i++) {
+                nextInt();
                 name[i] = next();
                 description[i] = next();
                 rarity[i] = nextInt();

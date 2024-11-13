@@ -390,6 +390,8 @@ public class Player extends Entity {
 
         private boolean canSeeAbove;
 
+        private double pointMultiplier;
+
         private Stats() {
             healthRegenPerSecond = 0;
             damageMulti = 1;
@@ -397,14 +399,15 @@ public class Player extends Entity {
             detectionRadiusSquared = DiffSettings.playerDetectionRadiusSquared;
             vision = 0.8;
             fogOfWarMulti = 1;
+            pointMultiplier = 1;
         }
 
-        public void setHealthRegenPerSecond(double healthRegenPerSecond) {
-            this.healthRegenPerSecond = healthRegenPerSecond;
+        public void addHealthRegenPerSecond(double delta) {
+            healthRegenPerSecond += delta;
         }
 
-        public void setDamageMulti(double damageMulti) {
-            this.damageMulti = damageMulti;
+        public void multiDamageMulti(double multi) {
+            damageMulti *= multi;
         }
         
         public void addRevive(int delta) {
@@ -446,6 +449,13 @@ public class Player extends Entity {
         public void setSeeAbove(boolean canSeeAbove) {
             this.canSeeAbove = canSeeAbove;
         }
-        
+
+        public double getPointMultiplier() {
+            return pointMultiplier;
+        }
+
+        public void multiPointMultiplier(double multi) {
+            pointMultiplier *= multi;
+        }
     }
 }
