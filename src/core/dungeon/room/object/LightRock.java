@@ -6,18 +6,20 @@ import core.dungeon.room.object_utilities.RoomObject;
 import core.dungeon.room.object_utilities.SpriteSheet;
 import core.dungeon.settings.DiffSettings;
 import core.utilities.ImageUtilities;
+import core.utilities.RNGUtilities;
 
 public class LightRock extends RoomObject {
     private int lightAmount;
 
-    public LightRock(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox, int lightAmount) {
+    public LightRock(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox,
+            int lightAmount) {
         super(spriteSheet, r, c, hitbox, interactbox);
         this.lightAmount = lightAmount;
     }
 
     public void update() {
     }
-   
+
     public void collides(Player player) {
     }
 
@@ -31,10 +33,13 @@ public class LightRock extends RoomObject {
         setLightRadius(0);
     }
 
-    public static LightRock getLightRock(RoomObjectData data) {
+    public static LightRock getLightRock(int depth, RoomObjectData data) {
         LightRock lightRock;
         switch (data.id) {
             case RoomObjectData.SMALL_LIGHTROCK:
+                if (depth > RNGUtilities.getInt(10)) {
+                    return null;
+                }
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock0"), 2),
                         data.r, data.c,
                         CollisionBox.getCollisionBox(0, 1.125, 1, 0.75),
@@ -42,6 +47,9 @@ public class LightRock extends RoomObject {
                 lightRock.setLightRadius(DiffSettings.lightRockLightRadius);
                 return lightRock;
             case RoomObjectData.MEDIUM_LIGHTROCK:
+                if (depth > RNGUtilities.getInt(40)) {
+                    return null;
+                }
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock1"), 2),
                         data.r, data.c,
                         CollisionBox.getCollisionBox(0.125, 0.5, 1.75, 1.375),

@@ -35,9 +35,6 @@ public class Dungeon extends GamePanel {
     public static final int SETNUM = 0;
     private static final int STARTING_ROOM = 1;
 
-    private int depth = 0;
-    private int depthMapCnt[] = new int[12];
-
     private Room room;
     private Inventory inventory;
     private Player player;
@@ -73,11 +70,10 @@ public class Dungeon extends GamePanel {
                 }
             }
 
-            room = roomFactory.getNextRoom(room, depth, depthMapCnt);
-            depth += player.getDepthMovement();
-
+            room = roomFactory.getNextRoom(room);
             add(room, -1);
             debugScreen.updateRoom(room);
+            snowParticles.setDepth(room.getDepth());
             revalidate();
             Game.setFreezeFrame(10);
         }

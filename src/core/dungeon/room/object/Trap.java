@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
+import core.Game;
 import core.dungeon.mechanics.collision.CollisionHandler;
 import core.dungeon.room.Room;
 import core.dungeon.room.entity.Player;
@@ -30,7 +31,10 @@ public abstract class Trap extends RoomObject {
     public final void interaction(Player player) {
     }
 
-    public static Trap getTrap(RoomObjectData data, Player player, TileGrid tileGrid) {
+    public static Trap getTrap(int depth, RoomObjectData data, Player player, TileGrid tileGrid) {
+        if ((10 - depth) * (10 - depth) / 15.0 > 10 - RNGUtilities.getInt(10) && !Game.DEBUG) {
+            return null;
+        }
         Trap trap;
         switch (data.id) {
             case RoomObjectData.SAW_0:
@@ -84,6 +88,7 @@ public abstract class Trap extends RoomObject {
         }
     }
 }
+
 class Saw extends Trap {
     Saw(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox) {
         super(spriteSheet, r, c, hitbox);
@@ -103,6 +108,7 @@ class Saw extends Trap {
         player.takeDamage();
     }
 }
+
 class MovingSaw extends Trap {
     private Saw saw;
     private int direction;
@@ -192,6 +198,7 @@ class MovingSaw extends Trap {
         return null;
     }
 }
+
 class Spike extends Trap {
     private static final int[] UPBLADE_LENGTHS = { 0, 0, 2, 0, 2, 2, 2, 38, 8, 6, 2, 0 };
     private static final int[] DOWNBLADE_LENGTHS = { 0, 0, 2, 0, 2, 2, 2, 36, 6, 4, 2, 0 };
@@ -288,6 +295,7 @@ class Spike extends Trap {
         }
     }
 }
+
 class Explosive extends Trap {
     private static final int HITFRAME = 6;
 
@@ -301,8 +309,15 @@ class Explosive extends Trap {
         super(spriteSheet, r, c, hitbox);
         this.explosionHitbox = explosionHitbox;
         this.player = player;
-        playerDetectionHitbox = CollisionBox.getCollisionBox(explosionHitbox.getX() / Tile.SIZE - 0.5, explosionHitbox.getY() / Tile.SIZE - 0.5,
-                explosionHitbox.getWidth() / Tile.SIZE + 1, explosionHitbox.getHeight() / Tile.SIZE + 1);
+        if (RNGUtilities.getBoolean()) {
+            playerDetectionHitbox = CollisionBox.getCollisionBox(explosionHitbox.getX() / Tile.SIZE - 0.5,
+                    explosionHitbox.getY() / Tile.SIZE - 0.5,
+                    explosionHitbox.getWidth() / Tile.SIZE - 0.25, explosionHitbox.getHeight() / Tile.SIZE - 0.25);
+        } else {
+            playerDetectionHitbox = CollisionBox.getCollisionBox(explosionHitbox.getX() / Tile.SIZE - 0.5,
+                    explosionHitbox.getY() / Tile.SIZE - 0.5,
+                    explosionHitbox.getWidth() / Tile.SIZE + 1, explosionHitbox.getHeight() / Tile.SIZE + 1);
+        }
         if (isWorking) {
             explosion = new Explosion(getWidth(), getHeight());
             add(explosion);
@@ -350,6 +365,7 @@ class Explosive extends Trap {
         }
     }
 }
+
 class Teleportation extends Trap {
     private TileGrid tileGrid;
 

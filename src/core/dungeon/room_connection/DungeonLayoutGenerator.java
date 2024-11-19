@@ -9,6 +9,7 @@ import core.utilities.RNGUtilities;
 
 public class DungeonLayoutGenerator extends FileOpener {
     private int[][] hashes;
+    private int depthMapCnt[] = new int[12];
     private HashMap<Integer, ArrayList<Integer>> maps;
     private HashMap<Integer, Integer> idToHash;
 
@@ -42,19 +43,19 @@ public class DungeonLayoutGenerator extends FileOpener {
         }
     }
 
-    public int getGeneratedId(Ladder ladder, int depth, int[] depthMapCnt) {
+    public int getGeneratedId(int ladderDirection, int depth) {
         int hash = hashes[depth][depthMapCnt[depth]];
         if (hash != 0) {
-            return getMapId(ladder, hash / 10, hash % 10, depth, depthMapCnt);
-        } else if (ladder.getDirection() == Ladder.UP_DIRECTION) {
-            return getMapId(ladder, 0, 1, depth, depthMapCnt);
-        } else if (ladder.getDirection() == Ladder.DOWN_DIRECTION) {
-            return getMapId(ladder, 1, 0, depth, depthMapCnt);
+            return getMapId(hash / 10, hash % 10, depth);
+        } else if (ladderDirection == Ladder.UP_DIRECTION) {
+            return getMapId(0, 1, depth);
+        } else if (ladderDirection == Ladder.DOWN_DIRECTION) {
+            return getMapId(1, 0, depth);
         }
         return 0;
     }
 
-    public int getMapId(Ladder ladder, int a, int b, int depth, int[] depthMapCnt) {
+    public int getMapId(int a, int b, int depth) {
         int hash = 10 * a + b;
         ArrayList<Integer> list = maps.get(hash);
         depthMapCnt[depth]++;

@@ -40,11 +40,11 @@ public class RoomFactory extends Factory<Room> {
 
     public Room getStartingRoom(int id) {
         player.set(312, 100);
-        RoomFileData file = new RoomFileData(id);
+        RoomFileData file = new RoomFileData(id, 0);
         TileGrid tileGrid = TileGridFactory.createTileGrid(file, player);
         RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
-        Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
+        Room room = new Room(id, 0, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
         if (!Game.DEBUG) {
             room.setLocation(Game.SCREEN_WIDTH / 2 - player.getX(), Game.SCREEN_HEIGHT / 2 - player.getY());
         }
@@ -52,11 +52,10 @@ public class RoomFactory extends Factory<Room> {
         return rooms.get(id);
     }
 
-    public Room getNextRoom(Room previousRoom, int depth, int[] depthMapCnt) {
+    public Room getNextRoom(Room previousRoom) {
         if (previousRoom.getConnectedRoomId(player.getLadder()) == -1) {
             previousRoom.addLadderConnection(player.getLadder(),
-                    dungeonGenerator.getGeneratedId(player.getLadder(), depth + player.getDepthMovement(),
-                            depthMapCnt));
+                    dungeonGenerator.getGeneratedId(player.getLadder().getDirection(), previousRoom.getDepth() + player.getDepthMovement()));
         }
         int id = previousRoom.getConnectedRoomId(player.getLadder());
         Room nextRoom;
@@ -66,7 +65,7 @@ public class RoomFactory extends Factory<Room> {
                 createLadderConnection(player.getLadder(), previousRoom, nextRoom);
             }
         } else {
-            nextRoom = createRoom(new RoomFileData(id), id, previousRoom);
+            nextRoom = createRoom(new RoomFileData(id, previousRoom.getDepth()), id, previousRoom);
             putRoom(id, nextRoom);
             createLadderConnection(player.getLadder(), previousRoom, nextRoom);
             miniMap.updateNodeConnections(nextRoom, player.getLadder().getX());
@@ -95,7 +94,7 @@ public class RoomFactory extends Factory<Room> {
         TileGrid tileGrid = TileGridFactory.createTileGrid(file, player);
         RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
-        Room room = new Room(id, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
+        Room room = new Room(id, previousRoom.getDepth() + player.getDepthMovement(), player, lightingEngine, tileGrid, roomObjectManager, UILayer);
         return room;
     }
 

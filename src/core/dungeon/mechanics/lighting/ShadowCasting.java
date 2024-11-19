@@ -137,8 +137,9 @@ public class ShadowCasting {
                     return new Point(origin.r + point.c, origin.c + point.r);
                 case WEST:
                     return new Point(origin.r + point.c, origin.c - point.r);
+                default:
+                    return null;
             }
-            return null;
         }
     }
 

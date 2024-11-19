@@ -9,18 +9,20 @@ import core.utilities.FileOpener;
 import core.utilities.RNGUtilities;
 
 class RoomFileData extends FileOpener {
+    public static final int NO_MODIFIER = 0;
+    public static final int REFLECTION_MODIFIER = 1;
+
     private int N, M;
     private int arr[][];
     private ArrayList<RoomObjectData> roomObjects;
     private int modifier;
+    private int depth;
 
-    public static final int NO_MODIFIER = 0;
-    public static final int REFLECTION_MODIFIER = 1;
-
-    RoomFileData(int id) {
+    RoomFileData(int id, int depth) {
         super(new StringBuilder("dungeongeneration/tileGrids/map")
                 .append(String.format("%02d", id)).toString());
         modifier = RNGUtilities.getInt(2);
+        this.depth = depth;
         if (Game.DEBUG) {
             modifier = NO_MODIFIER;
         }
@@ -62,13 +64,15 @@ class RoomFileData extends FileOpener {
             K = nextInt();
             for (int j = 0; j < K; j++) {
                 int id = 10 * i + nextInt();
+                RoomObjectData roomObjectData;
                 if (RoomObjectData.fiveSet.contains(id)) {
-                    roomObjects.add(new RoomObjectData(id, nextInt(), nextInt(), nextInt(), nextInt()));
+                    roomObjectData = new RoomObjectData(id, nextInt(), nextInt(), nextInt(), nextInt());
                 } else if (RoomObjectData.fourSet.contains(id)) {
-                    roomObjects.add(new RoomObjectData(id, nextInt(), nextInt(), nextInt()));
+                    roomObjectData = new RoomObjectData(id, nextInt(), nextInt(), nextInt());
                 } else {
-                    roomObjects.add(new RoomObjectData(id, nextInt(), nextInt()));
+                    roomObjectData = new RoomObjectData(id, nextInt(), nextInt());
                 }
+                roomObjects.add(roomObjectData);
             }
         }
     }
@@ -91,5 +95,9 @@ class RoomFileData extends FileOpener {
 
     public int getModifier() {
         return modifier;
+    }
+
+    public int getDepth() {
+        return depth;
     }
 }

@@ -198,15 +198,15 @@ public abstract class RoomObject extends GameComponent implements Comparable<Roo
         return 0;
     }
 
-    public static RoomObject getRoomObject(RoomObjectData data, Player player, TileGrid tileGrid) {
+    public static RoomObject getRoomObject(int depth, RoomObjectData data, Player player, TileGrid tileGrid) {
         if (data.id <= RoomObjectData.LADDER_DOWN) {
             return Ladder.getLadder(data);
         } else if (RoomObjectData.TREASURE_CHEST_0 <= data.id && data.id <= RoomObjectData.TREASURE_CHEST_4) {
-            return TreasureChest.getTreasureChest(data);
+            return TreasureChest.getTreasureChest(depth, data);
         } else if (RoomObjectData.SMALL_LIGHTROCK <= data.id && data.id <= RoomObjectData.LARGE_LIGHTROCK) {
-            return LightRock.getLightRock(data);
+            return LightRock.getLightRock(depth, data);
         } else if (RoomObjectData.SAW_0 <= data.id) {
-            return Trap.getTrap(data, player, tileGrid);
+            return Trap.getTrap(depth, data, player, tileGrid);
         }
         return null;
     }

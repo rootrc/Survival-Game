@@ -21,8 +21,11 @@ public abstract class ParticleSystem extends GameComponent {
     }
     
     public void update() {
-        for (Particle particle : particles) {
-            particle.update();
+        for (int i = 0; i < particles.size(); i++) {
+            particles.get(i).update();
+            if (particles.get(i).isInvalid()) {
+                particles.remove(particles.get(i));
+            }
         }
     }
 
@@ -31,12 +34,14 @@ public abstract class ParticleSystem extends GameComponent {
             return;
         }
         for (int i = 0; i < particles.size(); i++) {
-            if (particles.get(i).isInvalid()) {
-                particles.remove(particles.get(i));
-            } else if (particles.get(i).shouldDraw()) {
+            if (particles.get(i).shouldDraw()) {
                 particles.get(i).draw(g2d);
             }
         }
+    }
+
+    public final ArrayList<Particle> getParticles() {
+        return particles;
     }
 
     public final int getParticleCount() {
@@ -53,8 +58,8 @@ public abstract class ParticleSystem extends GameComponent {
         private AlphaComposite opacity;
         protected double x;
         protected double y;
-        private double xSpeed;
-        private double ySpeed;
+        protected double xSpeed;
+        protected double ySpeed;
         private double xAcc;
         private double yAcc;
         protected int time;
@@ -87,7 +92,7 @@ public abstract class ParticleSystem extends GameComponent {
         }
 
         public void draw(Graphics2D g2d) {
-            g2d.setColor(color);
+            g2d.setColor(color);    
             g2d.setComposite(opacity);
             g2d.fillRect((int) (x) - size / 2, (int) (y) - size / 2, size, size);
         }

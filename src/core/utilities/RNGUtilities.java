@@ -18,6 +18,9 @@ public class RNGUtilities {
     }
 
     public static double getDouble(double r) {
+        if (r == 0) {
+            return 0;
+        }
         return random.nextDouble(r);
     }
 

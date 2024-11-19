@@ -17,6 +17,7 @@ import core.utilities.RNGUtilities;
 
 public class Room extends GameComponent {
     private int id;
+    private int depth;
     private Player player;
     private LightingEngine lightingEngine;
     private TileGrid tileGrid;
@@ -27,11 +28,12 @@ public class Room extends GameComponent {
 
     private boolean isFrozen;
 
-    public Room(int id, Player player, LightingEngine lightingEngine, TileGrid tileGrid,
+    public Room(int id, int depth, Player player, LightingEngine lightingEngine, TileGrid tileGrid,
             RoomObjectManager roomObjectManager,
             UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
+        this.depth = depth;
         this.player = player;
         this.lightingEngine = lightingEngine;
         this.tileGrid = tileGrid;
@@ -101,6 +103,10 @@ public class Room extends GameComponent {
 
     public int getId() {
         return id;
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     public RoomObject getRoomObject(int idx) {
