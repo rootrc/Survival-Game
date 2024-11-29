@@ -14,6 +14,7 @@ import core.dungeon.mechanics.PathFinder;
 import core.dungeon.mechanics.collision.CollisionChecker;
 import core.dungeon.room.entity.Player;
 import core.game_components.GameComponent;
+import core.utilities.ImageUtilities;
 
 public class TileGrid extends GameComponent {
     private int N, M;
@@ -181,6 +182,8 @@ public class TileGrid extends GameComponent {
                     }
                 }
             }
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.12f));
+            g2d.drawImage(ImageUtilities.getSimplexNoiseFilter(getWidth(), getHeight()), 0, 0, null);
             g2d.dispose();
         }
     }

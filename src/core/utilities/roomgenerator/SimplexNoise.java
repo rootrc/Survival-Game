@@ -4,18 +4,14 @@ import java.util.Random;
 
 public class SimplexNoise {
 
-    SimplexNoise_octave[] octaves;
-    double[] frequencys;
-    double[] amplitudes;
+    private SimplexNoise_octave[] octaves;
+    private double[] frequencys;
+    private double[] amplitudes;
 
-    int largestFeature;
-    double persistence;
-    int seed;
+    private double persistence;
 
-    SimplexNoise(int largestFeature, double persistence, int seed) {
-        this.largestFeature = largestFeature;
+    public SimplexNoise(int largestFeature, double persistence, int seed) {
         this.persistence = persistence;
-        this.seed = seed;
 
         // recieves a number (eg 128) and calculates what power of 2 it is (eg 2^7)
         int numberOfOctaves = (int) Math.ceil(Math.log10(largestFeature) / Math.log10(2));

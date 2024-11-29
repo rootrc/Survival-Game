@@ -53,6 +53,9 @@ public class RoomFactory extends Factory<Room> {
     }
 
     public Room getNextRoom(Room previousRoom) {
+        if (player.getLadder() == null) {
+            return previousRoom;
+        }
         if (previousRoom.getConnectedRoomId(player.getLadder()) == -1) {
             previousRoom.addLadderConnection(player.getLadder(),
                     dungeonGenerator.getGeneratedId(player.getLadder().getDirection(), previousRoom.getDepth() + player.getDepthMovement()));

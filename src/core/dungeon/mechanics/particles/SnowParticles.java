@@ -31,7 +31,7 @@ public class SnowParticles extends ParticleSystem {
             }
         }
     }
-
+    
     public void setDepth(int depth) {
         N = (int) Math.round(N * Math.pow(1.5, (depth - this.depth)));
         for (Particle particle : getParticles()) {
@@ -43,7 +43,7 @@ public class SnowParticles extends ParticleSystem {
     private class SnowParticle extends Particle {
         SnowParticle() {
             super(3, Color.white, depth / 10.0 + RNGUtilities.getDouble(0.1), RNGUtilities.getInt(getWidth()), 0,
-                    RNGUtilities.getDouble(depth / 10.0), SPEED + RNGUtilities.getDouble(1), 0, 0.05);
+                    RNGUtilities.getDouble(depth / 10.0), SPEED + RNGUtilities.getDouble(1), 0, 0);
         }
 
         protected boolean isInvalid() {

@@ -6,12 +6,15 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+
+import core.utilities.roomgenerator.SimplexNoise;
 
 // Opens, edits, and processes images
 public class ImageUtilities {
@@ -89,5 +92,24 @@ public class ImageUtilities {
 
     public static ImageIcon resize(ImageIcon imageIcon, int newW, int newH) {
         return new ImageIcon(resize((BufferedImage) imageIcon.getImage(), newW, newH));
+    }
+
+    public static BufferedImage getSimplexNoiseFilter(int width, int height) {
+        width = Math.max(width, height);
+        height = Math.max(width, height);
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(width, height, Transparency.OPAQUE);
+        SimplexNoise simplexNoise = new SimplexNoise(150, 0.67, (int) (System.nanoTime() % 1000000007));
+        int[] pix = ((DataBufferInt) (image.getRaster().getDataBuffer())).getData();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                double temp = simplexNoise.getNoise(i, j);
+                int r = (int) (255 * temp);
+                int g = (int) (255 * temp);
+                int b = (int) (245 * temp + 5);
+                pix[i * height + j] = -16777216 + (r << 16) + (g << 8) + b;
+            }
+        }
+        return image;
     }
 }

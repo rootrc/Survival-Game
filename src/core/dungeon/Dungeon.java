@@ -115,11 +115,11 @@ public class Dungeon extends GamePanel {
         snowParticles = new SnowParticles();
         debugScreen = new DebugScreen(UILayer, room);
 
-        if (Game.DEBUG) {
+        if (!Game.DEBUG) {
+            add();
+        } else {
             add(room);
             add(inventory);
-        } else {
-            add();
         }
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -151,7 +151,7 @@ public class Dungeon extends GamePanel {
             });
         }
     }
-
+    
     @Override
     public void updateComponent() {
         if (removalRoom != null) {
@@ -176,7 +176,7 @@ public class Dungeon extends GamePanel {
         }
         super.updateComponent();
     }
-
+    
     public void reset() {
         remove();
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);

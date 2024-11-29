@@ -389,12 +389,22 @@ class Teleportation extends Trap {
             return;
         }
         int r, c;
+        int tries = 0;
         while (true) {
+            tries++;
             r = RNGUtilities.getInt(tileGrid.getN());
             c = RNGUtilities.getInt(tileGrid.getM());
             if ((r < player.getMinRow() - tileGrid.getN() / 5 || player.getMaxRow() + tileGrid.getN() / 5 < r) &&
                     (c < player.getMinCol() - tileGrid.getM() / 5 || player.getMaxCol() + tileGrid.getM() / 5 < c) &&
                     tileGrid.getPathFinder().isReachable(player.getMinRow(), player.getMinCol(), r, c)) {
+                break;
+            }
+            if (tries > 100) {
+                if (tileGrid.getPathFinder().isReachable(player.getMinRow(), player.getMinCol(), r, c)) {
+                    break;
+                }
+            }
+            if (tries > 200) {
                 break;
             }
         }
