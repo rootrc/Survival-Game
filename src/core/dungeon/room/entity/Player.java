@@ -100,7 +100,8 @@ public class Player extends Entity {
         updateCnt++;
         interactionCooldown++;
         dashCooldown++;
-        setLightRadius(passiveItemStats.lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
+        setLightRadius(
+                passiveItemStats.lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
         lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
         if (updateCnt % 60 == 0) {
             updateCnt = 0;
@@ -226,7 +227,7 @@ public class Player extends Entity {
         health -= passiveItemStats.damageMulti;
         if (health < 0 && passiveItemStats.reviveCnt > 0) {
             passiveItemStats.reviveCnt--;
-            health = 1.0/6;
+            health = 1.0 / 6;
         }
         if (health <= 1) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
@@ -389,6 +390,13 @@ public class Player extends Entity {
         private double fogOfWarMulti;
 
         private boolean canSeeAbove;
+        private double snowVisibilityMulti;
+
+        private double trapAppearPercent;
+        private boolean explosivesExplode;
+        private boolean teleportationWorks;
+        private boolean teleportationDisappears;
+        private boolean spikeCanDetect;
 
         private double pointMultiplier;
 
@@ -399,6 +407,12 @@ public class Player extends Entity {
             detectionRadiusSquared = DiffSettings.playerDetectionRadiusSquared;
             vision = 0.8;
             fogOfWarMulti = 1;
+            snowVisibilityMulti = 1;
+            trapAppearPercent = 1;
+            explosivesExplode = true;
+            teleportationWorks = true;
+            teleportationDisappears = true;
+            spikeCanDetect = true;
             pointMultiplier = 1;
         }
 
@@ -409,7 +423,7 @@ public class Player extends Entity {
         public void multiDamageMulti(double multi) {
             damageMulti *= multi;
         }
-        
+
         public void addRevive(int delta) {
             this.reviveCnt += delta;
         }
@@ -448,6 +462,54 @@ public class Player extends Entity {
 
         public void setSeeAbove(boolean canSeeAbove) {
             this.canSeeAbove = canSeeAbove;
+        }
+
+        public double getSnowVisibilityMulti() {
+            return snowVisibilityMulti;
+        }
+
+        public void setSnowVisibilityMulti(double snowVisibilityMulti) {
+            this.snowVisibilityMulti = snowVisibilityMulti;
+        }
+
+        public double getTrapAppear() {
+            return trapAppearPercent;
+        }
+
+        public void multiTrapAppear(double multi) {
+            trapAppearPercent *= multi;
+        }
+
+        public boolean doExplosivesExplode() {
+            return explosivesExplode;
+        }
+
+        public void setExplosivesExplode(boolean explosivesExplode) {
+            this.explosivesExplode = explosivesExplode;
+        }
+
+        public boolean doesTeleportationWorks() {
+            return teleportationWorks;
+        }
+
+        public void setTeleportationWorks(boolean teleportationWorks) {
+            this.teleportationWorks = teleportationWorks;
+        }
+
+        public boolean doTeleportationDisappears() {
+            return teleportationDisappears;
+        }
+
+        public void setTeleportationDisappears(boolean teleportationDisappears) {
+            this.teleportationDisappears = teleportationDisappears;
+        }
+
+        public boolean spikeCanDetect() {
+            return spikeCanDetect;
+        }
+
+        public void setSpikeCanDetect(boolean spikeCanDetect) {
+            this.spikeCanDetect = spikeCanDetect;
         }
 
         public double getPointMultiplier() {

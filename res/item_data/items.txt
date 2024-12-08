@@ -1,4 +1,4 @@
-15
+22
 0 Life_Blood
 Slowly_regenerate_health_one_per_minute
 4
@@ -70,8 +70,7 @@ Add_5_extra_minutes_to_your_timer
 6
 5 0
 2
-13
-14
+13 14
 13 Laurus_Nobilis
 Increase_your_final_points_by_25%
 5
@@ -83,9 +82,47 @@ Increase_your_final_points_by_25%
 Quadruple_final_points_by_300%,_unlock_all_item_slots,_but_take_double_damage_and_subtract_time_from_timer
 6
 8 1
+3
+12 13 16
+15 What_Is_Snow
+See_through_snowfall_much_more_easily
+4
+3 6
+1
+11
+16 Cancel
+30%_less_traps_will_appear_in_newly_discovered_rooms
+4
+6 0
+1
+14
+17 I_See_I_Saw
+Temp_description
+0
+6 1
+0
+18 No_More_Boom_Boom
+Explosive_Barrels_will_no_longer_explode_at_all
+3
+6 2
+0
+19 Unlimited_Teleportion
+Teleportation_traps_will_not_disappear_after_use
 2
-12
-13
+6 4
+1
+20
+20 Portal_Bad
+Teleportation_traps_will_be_disabled_and_will_not_work
+2
+6 5
+1
+19
+21 Undetectable
+Spike_traps_will_be_unable_to_detect_you
+300
+6 6
+0
 
 title
 description

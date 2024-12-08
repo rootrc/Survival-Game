@@ -35,6 +35,9 @@ public abstract class Trap extends RoomObject {
         if ((10 - depth) * (10 - depth) / 15.0 > 10 - RNGUtilities.getInt(10) && !Game.DEBUG) {
             return null;
         }
+        if (!RNGUtilities.getBoolean(player.getStats().getTrapAppear())) {
+            return null;
+        }
         Trap trap;
         switch (data.id) {
             case RoomObjectData.SAW_0:
@@ -62,7 +65,7 @@ public abstract class Trap extends RoomObject {
                 trap.setLightVisibility(2);
                 return trap;
             case RoomObjectData.EXPLOSIVE:
-                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
+                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 8),
                         data.r - 2, data.c - 2, CollisionBox.getCollisionBox(2.5, 2.75, 1, 1),
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
                         player, true);
@@ -258,6 +261,9 @@ class Spike extends Trap {
     }
 
     private boolean canHitPlayer() {
+        if (!player.getStats().spikeCanDetect()) {
+            return false;
+        }
         int futurePlayerX = (int) (player.getX()
                 + (HITFRAME + 0.5) * getSpriteSheet().getFrameLength() * player.getSpeedX());
         int futurePlayerY = (int) (player.getY()
@@ -278,7 +284,6 @@ class Spike extends Trap {
                 getY() + rightBlade.getY(), new Rectangle(0, 0, SIDEBLADE_LENGTHS[HITFRAME], rightBlade.getHeight()))) {
             return true;
         }
-
         return false;
     }
 
@@ -347,6 +352,9 @@ class Explosive extends Trap {
     }
 
     private boolean canHitPlayer() {
+        if (!player.getStats().doExplosivesExplode()) {
+            return false;
+        }
         return CollisionHandler.collides(player.getX(), player.getY(), player.getHitbox(), getX(), getY(),
                 playerDetectionHitbox);
     }
@@ -385,7 +393,9 @@ class Teleportation extends Trap {
     }
 
     public void collides(Player player) {
-        if (getSpriteSheet().getFrame() == getSpriteSheet().getFrameCnt() - 1) {
+        System.out.println(player.getStats().doesTeleportationWorks());
+        if (!player.getStats().doesTeleportationWorks()
+                || getSpriteSheet().getFrame() == getSpriteSheet().getFrameCnt() - 1) {
             return;
         }
         int r, c;
@@ -413,8 +423,10 @@ class Teleportation extends Trap {
                 r * Tile.SIZE - player.getHitbox().getY());
         Room.setScreenShakeDuration(10);
         Room.setScreenShakeStrength(10);
-        setHitbox(null);
-        setLightRadius(0);
-        getSpriteSheet().setFrame(getSpriteSheet().getFrameCnt() - 1);
+        if (player.getStats().doTeleportationDisappears()) {
+            setHitbox(null);
+            setLightRadius(0);
+            getSpriteSheet().setFrame(getSpriteSheet().getFrameCnt() - 1);
+        }
     }
 }

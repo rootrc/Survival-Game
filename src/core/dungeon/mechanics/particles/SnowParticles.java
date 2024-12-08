@@ -2,16 +2,19 @@ package core.dungeon.mechanics.particles;
 
 import java.awt.Color;
 
+import core.dungeon.room.entity.Player;
 import core.dungeon.room.tile.Tile;
 import core.utilities.RNGUtilities;
 
 public class SnowParticles extends ParticleSystem {
     private static final double SPEED = 1.5;
+    private Player player;
     private int N;
     private double depth;
 
-    public SnowParticles() {
+    public SnowParticles(Player player) {
         super();
+        this.player = player;
         N = (int) ((double) getHeight() / SPEED / 10.0);
         for (int i = 0; i < getHeight(); i++) {
             if (RNGUtilities.getBoolean()) {
@@ -31,7 +34,7 @@ public class SnowParticles extends ParticleSystem {
             }
         }
     }
-    
+
     public void setDepth(int depth) {
         N = (int) Math.round(N * Math.pow(1.5, (depth - this.depth)));
         for (Particle particle : getParticles()) {
@@ -42,7 +45,7 @@ public class SnowParticles extends ParticleSystem {
 
     private class SnowParticle extends Particle {
         SnowParticle() {
-            super(3, Color.white, depth / 10.0 + RNGUtilities.getDouble(0.1), RNGUtilities.getInt(getWidth()), 0,
+            super(3, Color.white, (depth / 10.0 + RNGUtilities.getDouble(0.1)) * player.getStats().getSnowVisibilityMulti(), RNGUtilities.getInt(getWidth()), 0,
                     RNGUtilities.getDouble(depth / 10.0), SPEED + RNGUtilities.getDouble(1), 0, 0);
         }
 

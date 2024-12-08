@@ -250,6 +250,78 @@ public class ItemFactory extends Factory<Item> {
                         timer.addStartTime(300);
                     }
                 };
+            case 15:
+                return new ItemAction() {
+                    public boolean canBeFoundInChest() {
+                        return timer.getTime() < 450;
+                    }
+
+                    public void doEffect() {
+                        player.getStats().setSnowVisibilityMulti(0.5);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().setSnowVisibilityMulti(1);
+                    }
+                };
+            case 16:
+                return new ItemAction() {
+                    public void doEffect() {
+                        player.getStats().multiTrapAppear(0.3);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().multiTrapAppear(1 / 0.3);
+                    }
+                };
+            case 17:
+                return new ItemAction() {
+                    public void doEffect() {
+                    }
+
+                    public void doReversedEffect() {
+                    }
+                };
+            case 18:
+                return new ItemAction() {
+                    public void doEffect() {
+                        player.getStats().setExplosivesExplode(false);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().setExplosivesExplode(true);
+                    }
+                };
+            case 19:
+                return new ItemAction() {
+                    public void doEffect() {
+                        player.getStats().setTeleportationDisappears(false);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().setTeleportationDisappears(true);
+                    }
+                };
+            case 20:
+                return new ItemAction() {
+                    public void doEffect() {
+                        player.getStats().setTeleportationWorks(false);
+                    }
+
+                    public void doReversedEffect() {
+                        player.getStats().setTeleportationWorks(true);
+                    }
+                };
+            case 21:
+                return new ItemAction() {
+                    public void doEffect() {
+                        player.getStats().setSpikeCanDetect(false);
+                    }
+                    
+                    public void doReversedEffect() {
+                        player.getStats().setSpikeCanDetect(true);
+                    }
+                };
             default:
                 return null;
         }
