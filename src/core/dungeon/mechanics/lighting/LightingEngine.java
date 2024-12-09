@@ -68,7 +68,7 @@ public class LightingEngine extends GameComponent {
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
         Graphics2D gl = fogOfWar.createGraphics();
-        gl.setColor(Color.black);
+        gl.setColor(Color.BLACK);
         gl.fillRect(0, 0, getWidth(), getHeight());
         isPlayerPresent = true;
     }

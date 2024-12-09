@@ -30,7 +30,7 @@ public class WalkingParticles extends ParticleSystem {
         private int lifespan;
 
         WalkParticle() {
-            super(1, Color.gray, 1,
+            super(1, Color.GRAY, 1,
                     entity.getX() + entity.getHitbox().getX() + RNGUtilities.getDouble(entity.getHitbox().getWidth()),
                     entity.getY() + entity.getHitbox().getY() + RNGUtilities.getDouble(entity.getHitbox().getHeight()),
                     -2 * DirectionUtilities.getXMovement(entity.getDirection()), -2 * DirectionUtilities.getYMovement(entity.getDirection()),

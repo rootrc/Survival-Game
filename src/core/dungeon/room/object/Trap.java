@@ -65,7 +65,7 @@ public abstract class Trap extends RoomObject {
                 trap.setLightVisibility(2);
                 return trap;
             case RoomObjectData.EXPLOSIVE:
-                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 8),
+                trap = new Explosive(new SpriteSheet(ImageUtilities.getImage("objects", "explosive"), 14, 6),
                         data.r - 2, data.c - 2, CollisionBox.getCollisionBox(2.5, 2.75, 1, 1),
                         CollisionBox.getCollisionBox(1, 1, 4, 4),
                         player, true);
@@ -393,7 +393,6 @@ class Teleportation extends Trap {
     }
 
     public void collides(Player player) {
-        System.out.println(player.getStats().doesTeleportationWorks());
         if (!player.getStats().doesTeleportationWorks()
                 || getSpriteSheet().getFrame() == getSpriteSheet().getFrameCnt() - 1) {
             return;

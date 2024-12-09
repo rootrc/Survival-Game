@@ -30,7 +30,7 @@ public class Tile {
         g2d.drawImage(image, Tile.SIZE * c, Tile.SIZE * r, null);
         if (Game.DEBUG) {
             if (hitbox != null) {
-                g2d.setColor(Color.red);
+                g2d.setColor(Color.RED);
                 g2d.drawRect(Tile.SIZE * c + (int) hitbox.getX(), Tile.SIZE * r
                         + (int) hitbox.getY(),
                         (int) hitbox.getWidth(), (int) hitbox.getHeight());

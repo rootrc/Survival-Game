@@ -41,9 +41,9 @@ public class DeathScreen extends GameComponent {
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
         Graphics2D g2d = image.createGraphics();
-        g2d.setColor(Color.black);
+        g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        g2d.setColor(Color.white);
+        g2d.setColor(Color.WHITE);
         g2d.drawString("Rooms Explored:" + miniMap.getExploredRoomCnt(), 100, 100);
         g2d.drawString("Max Depth:" + miniMap.getMaxDepth(), 100, 120);
         g2d.drawString("Points:" + dungeon.getPoints(), 100, 140);

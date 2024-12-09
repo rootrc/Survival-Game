@@ -19,7 +19,7 @@ public abstract class GamePanel extends JPanel {
         this.UILayer = UILayer;
         setPreferredSize(new Dimension(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT));
         if (!Game.DEBUG) {
-            setBackground(Color.black);
+            setBackground(Color.BLACK);
         }
         setLayout(null);
         setDoubleBuffered(true);
@@ -45,12 +45,20 @@ public abstract class GamePanel extends JPanel {
         add(gameComponent, 1);
     }
 
+    public void setFadingEffectColor(Color color) {
+        fadingEffect.setColor(color);
+    }
+
+    public void setFadingEffectAlpha(int alpha) {
+        fadingEffect.setAlpha(alpha);
+    }
+
     public void fadeIn() {
-        fadingEffect.fadeIn(FadingEffect.DEFAULT_SPEED);
+        fadingEffect.fadeIn();
     }
 
     public void fadeOut() {
-        fadingEffect.fadeOut(FadingEffect.DEFAULT_SPEED);
+        fadingEffect.fadeOut();
     }
 
     public void fadeIn(int speed) {
@@ -62,14 +70,16 @@ public abstract class GamePanel extends JPanel {
     }
 
     private static class FadingEffect extends GameComponent {
-        private static final int DEFAULT_SPEED = 10;
+        private static final int DEFAULT_SPEED = 8;
 
+        private Color color;
         private int alpha;
         private int speed;
         private boolean fadeIn;
 
         public FadingEffect() {
             super(Game.SCREEN_WIDTH, Game.SCREEN_WIDTH);
+            color = Color.BLACK;
             fadeIn = true;
             speed = DEFAULT_SPEED;
         }
@@ -83,21 +93,41 @@ public abstract class GamePanel extends JPanel {
         }
 
         public void drawComponent(Graphics2D g2d) {
-            g2d.setColor(new Color(0, 0, 0, alpha));
+            if (alpha == 0) {
+                return;
+            }
+            g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
             g2d.fillRect(0, 0, Game.SCREEN_WIDTH, Game.SCREEN_WIDTH);
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
+        public void setAlpha(int alpha) {
+            this.alpha = alpha;
+        }
+
+        public void fadeIn() {
+            fadeIn(DEFAULT_SPEED);
         }
 
         public void fadeIn(int speed) {
             this.speed = speed;
+            color = Color.BLACK;
             alpha = 255;
             fadeIn = true;
         }
 
+        public void fadeOut() {
+            fadeOut(DEFAULT_SPEED);
+        }
+
         public void fadeOut(int speed) {
             this.speed = speed;
+            color = Color.BLACK;
             alpha = 0;
             fadeIn = false;
         }
-
     }
 }

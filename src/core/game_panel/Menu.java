@@ -18,11 +18,11 @@ public class Menu extends GamePanel {
                 ImageUtilities.getImage("UI", "StartButton")));
         add(new UIButton(game.changePanel("options"), new Rectangle(Game.SCREEN_WIDTH / 2 - 192, 500, 384, 96),
                 ImageUtilities.getImage("UI", "OptionsButton")));
-        add(new UIButton(new AbstractAction() {
+        add(new UIButton(UILayer.createAndOpenConfirmUI(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
-        }, new Rectangle(Game.SCREEN_WIDTH / 2 - 192, 620, 384, 96),
+        }), new Rectangle(Game.SCREEN_WIDTH / 2 - 192, 620, 384, 96),
                 ImageUtilities.getImage("UI", "ExitButton")));
     }
 }

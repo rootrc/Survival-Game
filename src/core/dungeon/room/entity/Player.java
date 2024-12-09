@@ -1,5 +1,6 @@
 package core.dungeon.room.entity;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
@@ -17,11 +18,14 @@ import core.dungeon.room.object_utilities.SpriteSheet;
 import core.dungeon.room.tile.Tile;
 import core.dungeon.settings.DiffSettings;
 import core.dungeon.settings.KeyBinds;
+import core.game_components.GamePanel;
 import core.utilities.ImageUtilities;
 
 public class Player extends Entity {
     private static final int highMaxSpeed = 3 * Tile.SIZE / 16;
     private static final int lowMaxSpeed = Tile.SIZE / 8;
+
+    private GamePanel gamePanel;
 
     private boolean movingUp;
     private boolean movingLeft;
@@ -48,11 +52,12 @@ public class Player extends Entity {
 
     private SpriteSheet lastSpriteSheet;
 
-    public Player(Action nextRoom, Action death, Inventory inventory) {
+    public Player(GamePanel gamePanel, Action nextRoom, Action death, Inventory inventory) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
                 CollisionBox.getCollisionBox(0, 1.25, 2, 2),
                 highMaxSpeed, Tile.SIZE / 40.0, Tile.SIZE / 80.0);
+        this.gamePanel = gamePanel;
         this.nextRoom = nextRoom;
         this.death = death;
         this.inventory = inventory;
@@ -234,6 +239,9 @@ public class Player extends Entity {
         }
         setSpeedX(0);
         setSpeedY(0);
+        gamePanel.fadeIn();
+        gamePanel.setFadingEffectAlpha(60);
+        gamePanel.setFadingEffectColor(Color.RED);
         Game.setFreezeFrame(6);
         Room.setScreenShakeDuration(15);
         Room.setScreenShakeStrength(15);

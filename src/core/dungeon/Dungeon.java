@@ -1,5 +1,6 @@
 package core.dungeon;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -84,6 +85,8 @@ public class Dungeon extends GamePanel {
             deathCnt = 1;
             fadeOut(3);
             player.resetKeyboardActions();
+            setFadingEffectAlpha(60);
+            setFadingEffectColor(Color.RED);
             room.setFreeze(true);
             Game.setFreezeFrame(20);
         }
@@ -92,7 +95,7 @@ public class Dungeon extends GamePanel {
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
-        player = new Player(nextRoom, playerDeath, inventory);
+        player = new Player(this, nextRoom, playerDeath, inventory);
         easing = new Easing(60);
         deathScreen = new DeathScreen(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -151,7 +154,7 @@ public class Dungeon extends GamePanel {
             });
         }
     }
-    
+
     @Override
     public void updateComponent() {
         if (removalRoom != null) {
@@ -176,11 +179,11 @@ public class Dungeon extends GamePanel {
         }
         super.updateComponent();
     }
-    
+
     public void reset() {
         remove();
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
-        player = new Player(nextRoom, playerDeath, inventory);
+        player = new Player(this, nextRoom, playerDeath, inventory);
         MiniMap miniMap = new MiniMap();
         dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599), miniMap);
         roomFactory = new RoomFactory(player, UILayer, miniMap);

@@ -66,10 +66,10 @@ public class Timer extends GameComponent {
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(), Transparency.BITMASK);
         Graphics2D g2d = image.createGraphics();
         BufferedImage number = buildNumber(g2d.getFontMetrics(font));
-        g2d.setColor(Color.black);
+        g2d.setColor(Color.BLACK);
         g2d.fillRect(2, 2, number.getWidth() + 8, number.getHeight() + 8);
         g2d.drawImage(number, number.getWidth() - number.getWidth() + 5, 5, null);
-        g2d.setColor(Color.white);
+        g2d.setColor(Color.WHITE);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawRect(1, 1, number.getWidth() + 10, number.getHeight() + 10);
     }
@@ -81,9 +81,9 @@ public class Timer extends GameComponent {
         Graphics2D g2d = image.createGraphics();
         g2d.setFont(font);
         if (timeInSeconds <= 60 && timeInSeconds % 2 == 0) {
-            g2d.setColor(Color.red);
+            g2d.setColor(Color.RED);
         } else {
-            g2d.setColor(Color.white);
+            g2d.setColor(Color.WHITE);
         }
         int y0 = fontMetrics.getHeight();
         if (displayTime.equals(prevDisplayTime) && cnt == -1) {

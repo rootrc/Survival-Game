@@ -280,8 +280,8 @@ public class MiniMap extends GameComponent {
     private static class Node extends GameComponent {
         private static final int SIZE = 16;
         private static final int MIN_DISTANCE = 2 * SIZE;
-        private static final Color COLOR0 = Color.lightGray;
-        private static final Color COLOR1 = Color.yellow;
+        private static final Color COLOR0 = Color.LIGHT_GRAY;
+        private static final Color COLOR1 = Color.YELLOW;
 
         private Node ansector;
         private int connectingLadderXPos;

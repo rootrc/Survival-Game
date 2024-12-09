@@ -49,11 +49,11 @@ public abstract class RoomObject extends GameComponent implements Comparable<Roo
             return;
         }
         if (interactbox != null) {
-            g2d.setColor(Color.blue);
+            g2d.setColor(Color.BLUE);
             g2d.drawRect((int) (interactbox.getX()), (int) (interactbox.getY()),
                     (int) interactbox.getWidth(), (int) interactbox.getHeight());
         }
-        g2d.setColor(Color.red);
+        g2d.setColor(Color.RED);
         if (hitbox != null) {
             g2d.drawRect((int) (hitbox.getX()), (int) (hitbox.getY()),
                     (int) hitbox.getWidth(), (int) hitbox.getHeight());

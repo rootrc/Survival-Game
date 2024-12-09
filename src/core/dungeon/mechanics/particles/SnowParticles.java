@@ -45,7 +45,7 @@ public class SnowParticles extends ParticleSystem {
 
     private class SnowParticle extends Particle {
         SnowParticle() {
-            super(3, Color.white, (depth / 10.0 + RNGUtilities.getDouble(0.1)) * player.getStats().getSnowVisibilityMulti(), RNGUtilities.getInt(getWidth()), 0,
+            super(3, Color.WHITE, (depth / 10.0 + RNGUtilities.getDouble(0.1)) * player.getStats().getSnowVisibilityMulti(), RNGUtilities.getInt(getWidth()), 0,
                     RNGUtilities.getDouble(depth / 10.0), SPEED + RNGUtilities.getDouble(1), 0, 0);
         }
 
