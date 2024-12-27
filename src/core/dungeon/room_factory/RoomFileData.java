@@ -11,7 +11,7 @@ import core.utilities.RNGUtilities;
 class RoomFileData extends FileOpener {
     public static final int NO_MODIFIER = 0;
     public static final int REFLECTION_MODIFIER = 1;
-
+    
     private int N, M;
     private int arr[][];
     private ArrayList<RoomObjectData> roomObjects;

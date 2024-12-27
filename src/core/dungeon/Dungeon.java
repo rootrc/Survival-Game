@@ -17,6 +17,7 @@ import core.dungeon.dungeon_ui.HealthBar;
 import core.dungeon.dungeon_ui.MiniMap;
 import core.dungeon.dungeon_ui.PauseMenu;
 import core.dungeon.dungeon_ui.Timer;
+import core.dungeon.dungeon_ui.WarningDisplay;
 import core.dungeon.items.Inventory;
 import core.dungeon.items.ItemFactory;
 import core.dungeon.mechanics.particles.SnowParticles;
@@ -28,7 +29,6 @@ import core.dungeon.settings.DiffSettings;
 import core.dungeon.settings.KeyBinds;
 import core.game_components.GamePanel;
 import core.game_components.UILayer;
-import core.utilities.ActionUtilities;
 import core.utilities.Easing;
 
 public class Dungeon extends GamePanel {
@@ -83,8 +83,9 @@ public class Dungeon extends GamePanel {
     private final Action playerDeath = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             deathCnt = 1;
-            fadeOut(3);
+            fadeOut(2);
             player.resetKeyboardActions();
+            dungeonUI.getWarningDisplay().death();
             setFadingEffectAlpha(60);
             setFadingEffectColor(Color.RED);
             room.setFreeze(true);
@@ -95,26 +96,22 @@ public class Dungeon extends GamePanel {
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
-        player = new Player(this, nextRoom, playerDeath, inventory);
+        WarningDisplay warningDisplay = new WarningDisplay();
+        warningDisplay.starting();
+        player = new Player(this, nextRoom, playerDeath, inventory, warningDisplay);
         easing = new Easing(60);
         deathScreen = new DeathScreen(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                reset();
                 fadeIn();
             }
-        }, ActionUtilities.combineActions(game.changePanel("mainMenu"), new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                reset();
-            }
-        }), game.changePanel("title"));
+        }, game.changePanel("mainMenu"), game.changePanel("title"));
 
-        MiniMap miniMap = new MiniMap();
-        dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599), miniMap);
-        roomFactory = new RoomFactory(player, UILayer, miniMap);
+        dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599, warningDisplay), new MiniMap(), warningDisplay);
+        roomFactory = new RoomFactory(player, UILayer, dungeonUI.getMiniMap());
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer(), roomFactory));
         // room = roomFactory.createRandomRoom(21, 34);
-        miniMap.setStartingRoom(room);
+        dungeonUI.getMiniMap().setStartingRoom(room);
         snowParticles = new SnowParticles(player);
         debugScreen = new DebugScreen(UILayer, room);
 
@@ -129,11 +126,7 @@ public class Dungeon extends GamePanel {
                 reset();
                 fadeIn();
             }
-        }, ActionUtilities.combineActions(game.changePanel("mainMenu"), new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                reset();
-            }
-        }), game.changePanel("title"));
+        }, game.changePanel("mainMenu"), game.changePanel("title"));
         debugScreen = new DebugScreen(UILayer, room);
 
         getInputMap(2).put(KeyBinds.ESC, "pause");
@@ -183,13 +176,13 @@ public class Dungeon extends GamePanel {
     public void reset() {
         remove();
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
-        player = new Player(this, nextRoom, playerDeath, inventory);
-        MiniMap miniMap = new MiniMap();
-        dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599), miniMap);
-        roomFactory = new RoomFactory(player, UILayer, miniMap);
+        WarningDisplay warningDisplay = new WarningDisplay();
+        player = new Player(this, nextRoom, playerDeath, inventory, warningDisplay);
+        dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599, warningDisplay), new MiniMap(), warningDisplay);
+        roomFactory = new RoomFactory(player, UILayer, dungeonUI.getMiniMap());
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer(), roomFactory));
-        miniMap.setStartingRoom(room);
+        dungeonUI.getMiniMap().setStartingRoom(room);
         snowParticles = new SnowParticles(player);
         debugScreen = new DebugScreen(UILayer, room);
         add();

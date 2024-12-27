@@ -26,10 +26,10 @@ public class DeathScreen extends GameComponent {
                 ImageUtilities.getImage("UI", "RestartButton")));
         add(new UIButton(UILayer.createAndOpenConfirmUI(mainMenu),
                 new Rectangle(getWidth() / 2 - 224, 568, 448, 64),
-                ImageUtilities.getImage("UI", "MainMenuButton")));
+                ImageUtilities.getImage("UI", "MenuButton")));
         add(new UIButton(UILayer.createAndOpenConfirmUI(title),
                 new Rectangle(getWidth() / 2 - 224, 648, 448, 64),
-                ImageUtilities.getImage("UI", "TitleScreenButton")));
+                ImageUtilities.getImage("UI", "TitleButton")));
     }
 
     public void build(Dungeon dungeon, MiniMap miniMap) {

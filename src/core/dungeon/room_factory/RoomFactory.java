@@ -58,7 +58,8 @@ public class RoomFactory extends Factory<Room> {
         }
         if (previousRoom.getConnectedRoomId(player.getLadder()) == -1) {
             previousRoom.addLadderConnection(player.getLadder(),
-                    dungeonGenerator.getGeneratedId(player.getLadder().getDirection(), previousRoom.getDepth() + player.getDepthMovement()));
+                    dungeonGenerator.getGeneratedId(player.getLadder().getDirection(),
+                            previousRoom.getDepth() + player.getDepthMovement()));
         }
         int id = previousRoom.getConnectedRoomId(player.getLadder());
         Room nextRoom;
@@ -90,14 +91,16 @@ public class RoomFactory extends Factory<Room> {
         }
         previousRoom.setFreeze(true);
         nextRoom.setLocation(Game.SCREEN_WIDTH / 2 - previousRoom.getConnectedLadder(player.getLadder()).getX(),
-        Game.SCREEN_HEIGHT / 2 - previousRoom.getConnectedLadder(player.getLadder()).getY() + 2048 * player.getDepthMovement());
+                Game.SCREEN_HEIGHT / 2 - previousRoom.getConnectedLadder(player.getLadder()).getY()
+                        + 2048 * player.getDepthMovement());
     }
 
     private Room createRoom(RoomFileData file, int id, Room previousRoom) {
         TileGrid tileGrid = TileGridFactory.createTileGrid(file, player);
         RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
-        Room room = new Room(id, previousRoom.getDepth() + player.getDepthMovement(), player, lightingEngine, tileGrid, roomObjectManager, UILayer);
+        Room room = new Room(id, previousRoom.getDepth() + player.getDepthMovement(), player, lightingEngine, tileGrid,
+                roomObjectManager, UILayer);
         return room;
     }
 

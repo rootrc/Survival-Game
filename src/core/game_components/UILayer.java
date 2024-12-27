@@ -1,5 +1,6 @@
 package core.game_components;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -36,6 +37,7 @@ public class UILayer extends GameComponent {
     public Action openPopupUI(PopupUI popupUI) {
         return new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+                popupUI.setLocation((Game.SCREEN_WIDTH - popupUI.getWidth()) / 2, (Game.SCREEN_HEIGHT - popupUI.getHeight()) / 2);
                 popupUI.enterPanel();
             }
         };
@@ -46,6 +48,7 @@ public class UILayer extends GameComponent {
             private ConfirmUI confirmUI = new ConfirmUI(UILayer.this, action);
 
             public void actionPerformed(ActionEvent e) {
+                confirmUI.setLocation((Game.SCREEN_WIDTH - confirmUI.getWidth()) / 2, (Game.SCREEN_HEIGHT - confirmUI.getHeight()) / 2);
                 if (getComponentCount() == 0) {
                     confirmUI.enterPanel();
                     return;
@@ -65,13 +68,21 @@ public class UILayer extends GameComponent {
     private static class ConfirmUI extends PopupUI {
         public ConfirmUI(UILayer UIlayer, Action action) {
             super(UIlayer, 480, 256, 4);
-            add(new UIButton(ActionUtilities.combineActions(action, close),
+            add(new UIButton(ActionUtilities.combineActions(action, close, new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    for (Component c: UIlayer.getComponents()) {
+                        if (c instanceof PopupUI) {
+                            ((PopupUI)c).exitPanel();
+                        }
+                    }
+                }
+            }),
                     new Rectangle(getWidth() / 2 - 164, 152, 160, 64),
                     ImageUtilities.getImage("UI", "YesButton")));
             add(new UIButton(close, new Rectangle(getWidth() / 2 + 4, 152, 160, 64),
                     ImageUtilities.getImage("UI", "NoButton")));
         }
-    
+
         @Override
         public void drawComponent(Graphics2D g2d) {
             super.drawComponent(g2d);

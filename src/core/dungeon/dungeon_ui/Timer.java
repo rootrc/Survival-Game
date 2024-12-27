@@ -30,14 +30,21 @@ public class Timer extends GameComponent {
     private String prevDisplayTime;
     private String displayTime;
 
-    private int cnt;
+    private int analogCnt;
+    private int blinkingCnt;
+    private WarningDisplay warningDisplay;
 
-    public Timer(int startTime) {
+    // TODO time still runs in menu
+    public Timer(int startTime, WarningDisplay warningDisplay) {
         super(148, 66);
         setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, 32);
         this.startTime = startTime;
+        this.warningDisplay = warningDisplay;
         startNanoTime = (int) (System.nanoTime() / 1000000000);
         displayTime = String.format("%02d:%02d", ((startTime / 60) % 60), ((startTime) % 60));
+        if (font != null) {
+            return;
+        }
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/big_pixel.otf")).deriveFont(40.0f);
         } catch (IOException e) {
@@ -80,18 +87,33 @@ public class Timer extends GameComponent {
                 fontMetrics.getHeight(), Transparency.BITMASK);
         Graphics2D g2d = image.createGraphics();
         g2d.setFont(font);
-        if (timeInSeconds <= 60 && timeInSeconds % 2 == 0) {
+        if (timeInSeconds <= 3 || (timeInSeconds <= 60 && timeInSeconds % 2 == 0)) {
             g2d.setColor(Color.RED);
+        } else if (blinkingCnt != 0) {
+            blinkingCnt--;
+            if (blinkingCnt < 32 || (blinkingCnt / 16) % 2 == 0) {
+                g2d.setColor(Color.RED);
+                if (blinkingCnt == 8) {
+                    blinkingCnt = 0;
+                }
+            } else {
+                g2d.setColor(Color.WHITE);
+            }
         } else {
             g2d.setColor(Color.WHITE);
         }
         int y0 = fontMetrics.getHeight();
-        if (displayTime.equals(prevDisplayTime) && cnt == -1) {
+        if (displayTime.equals(prevDisplayTime) && analogCnt == -1) {
             g2d.drawString(displayTime, 0, y0);
             return image;
         }
         if (!displayTime.equals(prevDisplayTime)) {
-            cnt = framesToSwitchTime;
+            if (timeInSeconds == 60) {
+                warningDisplay.oneMinuteWarning();
+            } else if (timeInSeconds % 60 == 59 && timeInSeconds != 59) {
+                blinkingCnt = 144;
+            }
+            analogCnt = framesToSwitchTime;
         }
         String displayTimePlusASecond = String.format("%02d:%02d", (((timeInSeconds + 1) / 60) % 60),
                 ((timeInSeconds + 1) % 60));
@@ -100,9 +122,9 @@ public class Timer extends GameComponent {
                 continue;
             }
             int displayTimeY = y0
-                    + (int) (Easing.easeInQuad(1 - (double) cnt / framesToSwitchTime) * fontMetrics.getHeight());
+                    + (int) (Easing.easeInQuad(1 - (double) analogCnt / framesToSwitchTime) * fontMetrics.getHeight());
             int displayTimePlusASecondY = y0
-                    - (int) (Easing.easeOutQuad((double) cnt / framesToSwitchTime) * fontMetrics.getHeight());
+                    - (int) (Easing.easeOutQuad((double) analogCnt / framesToSwitchTime) * fontMetrics.getHeight());
             if (i == 2 || i == 4) {
                 if (i == 2) {
                     i++;
@@ -130,7 +152,7 @@ public class Timer extends GameComponent {
             }
             break;
         }
-        cnt--;
+        analogCnt--;
         return image;
     }
 
@@ -149,5 +171,5 @@ public class Timer extends GameComponent {
     public void addStartTime(int delta) {
         startTime += delta;
     }
-    
+
 }

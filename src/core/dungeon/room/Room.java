@@ -29,8 +29,7 @@ public class Room extends GameComponent {
     private boolean isFrozen;
 
     public Room(int id, int depth, Player player, LightingEngine lightingEngine, TileGrid tileGrid,
-            RoomObjectManager roomObjectManager,
-            UILayer UIlayer) {
+            RoomObjectManager roomObjectManager, UILayer UIlayer) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.id = id;
         this.depth = depth;

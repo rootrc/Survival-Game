@@ -8,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import core.Game;
+import core.dungeon.dungeon_ui.WarningDisplay;
 import core.dungeon.items.Inventory;
 import core.dungeon.room.Room;
 import core.dungeon.room.object.Ladder;
@@ -51,8 +52,10 @@ public class Player extends Entity {
     private int hitCnt;
 
     private SpriteSheet lastSpriteSheet;
+    private WarningDisplay warningDisplay;
 
-    public Player(GamePanel gamePanel, Action nextRoom, Action death, Inventory inventory) {
+    public Player(GamePanel gamePanel, Action nextRoom, Action death, Inventory inventory,
+            WarningDisplay warningDisplay) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
                 CollisionBox.getCollisionBox(0, 1.25, 2, 2),
@@ -61,6 +64,7 @@ public class Player extends Entity {
         this.nextRoom = nextRoom;
         this.death = death;
         this.inventory = inventory;
+        this.warningDisplay = warningDisplay;
         passiveItemStats = new Stats();
         lightAmount = DiffSettings.playerLightStartAmount;
         lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
@@ -234,8 +238,9 @@ public class Player extends Entity {
             passiveItemStats.reviveCnt--;
             health = 1.0 / 6;
         }
-        if (health <= 1) {
+        if (1.0 / 6 < health && health <= 1 + 1.0 / 6) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
+            warningDisplay.oneHealthWarning();
         }
         setSpeedX(0);
         setSpeedY(0);
@@ -249,7 +254,7 @@ public class Player extends Entity {
             setMaxSpeed((int) (getMaxSpeed() / 3));
         }
         dashCooldown = 1000;
-        if (health <= 0) {
+        if (health <= 1.0 / 6) {
             replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
             death.actionPerformed(null);
             return;

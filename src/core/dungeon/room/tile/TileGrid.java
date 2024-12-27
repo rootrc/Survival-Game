@@ -183,24 +183,17 @@ public class TileGrid extends GameComponent {
                 }
             }
             g2d.dispose();
-            new Thread(new AddNoiseOverlay(image)).start();
-        }
-    }
+            new Thread(new Runnable() {
+                public void run() {
+                    BufferedImage noiseOverlay = ImageUtilities.getSimplexNoiseFilter(image.getWidth(),
+                            image.getHeight());
+                    Graphics2D g2d = image.createGraphics();
+                    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.12f));
+                    g2d.drawImage(noiseOverlay, 0, 0, null);
+                    g2d.dispose();
+                }
 
-    private static class AddNoiseOverlay implements Runnable {
-        private BufferedImage image;
-
-        public AddNoiseOverlay(BufferedImage image) {
-            this.image = image;
-        }
-
-        @Override
-        public void run() {
-            BufferedImage noiseOverlay = ImageUtilities.getSimplexNoiseFilter(image.getWidth(), image.getHeight());
-            Graphics2D g2d = image.createGraphics();
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.12f));
-            g2d.drawImage(noiseOverlay, 0, 0, null);
-            g2d.dispose();
+            }).start();
         }
     }
 }

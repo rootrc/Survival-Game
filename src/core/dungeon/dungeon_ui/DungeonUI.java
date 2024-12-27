@@ -9,15 +9,18 @@ public class DungeonUI extends GameComponent {
     // private HealthBar healthBar;
     private Timer timer;
     private MiniMap miniMap;
+    private WarningDisplay warningDisplay;
 
-    public DungeonUI(HealthBar healthBar, Timer timer, MiniMap miniMap) {
+    public DungeonUI(HealthBar healthBar, Timer timer, MiniMap miniMap, WarningDisplay warningDisplay) {
         super(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
         // this.healthBar = healthBar;
         this.timer = timer;
         this.miniMap = miniMap;
+        this.warningDisplay = warningDisplay;
         add(healthBar);
         add(timer);
         add(miniMap);
+        add(warningDisplay);
     }
 
     public Timer getTimer() {
@@ -26,6 +29,10 @@ public class DungeonUI extends GameComponent {
 
     public MiniMap getMiniMap() {
         return miniMap;
+    }
+
+    public WarningDisplay getWarningDisplay() {
+        return warningDisplay;
     }
 
     public void update() {
