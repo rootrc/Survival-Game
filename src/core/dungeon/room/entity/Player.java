@@ -23,8 +23,8 @@ import core.game_components.GamePanel;
 import core.utilities.ImageUtilities;
 
 public class Player extends Entity {
-    private static final int highMaxSpeed = 3 * Tile.SIZE / 16;
-    private static final int lowMaxSpeed = Tile.SIZE / 8;
+    private static final int HIGH_MAX_SPEED = 3 * Tile.SIZE / 16;
+    private static final int LOW_MAX_SPEED = Tile.SIZE / 8;
 
     private GamePanel gamePanel;
 
@@ -59,7 +59,7 @@ public class Player extends Entity {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
                 CollisionBox.getCollisionBox(0, 1.25, 2, 2),
-                highMaxSpeed, Tile.SIZE / 40.0, Tile.SIZE / 80.0);
+                HIGH_MAX_SPEED, Tile.SIZE / 40.0, Tile.SIZE / 80.0);
         this.gamePanel = gamePanel;
         this.nextRoom = nextRoom;
         this.death = death;
@@ -73,10 +73,6 @@ public class Player extends Entity {
         setKeyBinds();
         interactionCooldown = 1000;
         dashCooldown = 1000;
-    }
-
-    public void set(double x, double y) {
-        setLocation(x, y);
     }
 
     private void setKeyBinds() {
@@ -204,7 +200,7 @@ public class Player extends Entity {
     public void interaction(Player player) {
     }
 
-    public void clearInteractable() {
+    public void clearInteractables() {
         interactables.clear();
     }
 
@@ -319,10 +315,10 @@ public class Player extends Entity {
 
     private final Action slowDownToggle = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
-            if (getMaxSpeed() == highMaxSpeed) {
-                setMaxSpeed(lowMaxSpeed);
-            } else if (getMaxSpeed() == lowMaxSpeed) {
-                setMaxSpeed(highMaxSpeed);
+            if (getMaxSpeed() == HIGH_MAX_SPEED) {
+                setMaxSpeed(LOW_MAX_SPEED);
+            } else if (getMaxSpeed() == LOW_MAX_SPEED) {
+                setMaxSpeed(HIGH_MAX_SPEED);
             }
         }
     };

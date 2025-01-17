@@ -15,10 +15,10 @@ public class DiffSettings {
     }
 
     public static void setEasy() {
-        startingInventorySize = 8;
+        startingInventorySize = 2;
         startingHealth = 5;
         playerLightStartAmount = 1000;
-        playerLightRadiusFactor = 30;
+        playerLightRadiusFactor = 35;
         playerLightDecreaseFactor = 75;
         playerDetectionRadiusSquared = 200;
         lightRockValue = 20;

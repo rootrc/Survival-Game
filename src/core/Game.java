@@ -11,8 +11,10 @@ import core.dungeon.Dungeon;
 import core.dungeon.settings.DiffSettings;
 import core.game_components.GamePanel;
 import core.game_components.UILayer;
+import core.game_panel.Credits;
 import core.game_panel.Menu;
 import core.game_panel.Options;
+import core.game_panel.Rules;
 
 public class Game extends JFrame implements Runnable {
     public static final int SCREEN_WIDTH = 1024;
@@ -28,6 +30,8 @@ public class Game extends JFrame implements Runnable {
     private Dungeon dungeon;
     private Menu menu;
     private Options options;
+    private Rules rules;
+    private Credits credits;
 
     private UILayer UILayer;
 
@@ -38,19 +42,22 @@ public class Game extends JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setTitle("Survival Game");
-        initPanel();
+        initPanels();
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        startGameThread();
-        ToolTipManager.sharedInstance().setInitialDelay(0);
+        ToolTipManager.sharedInstance().setInitialDelay(250);
+        gameThread = new Thread(this);
+        gameThread.start();
     }
 
-    private void initPanel() {
+    private void initPanels() {
         UILayer = new UILayer();
         dungeon = new Dungeon(this, UILayer);
         menu = new Menu(this, UILayer);
         options = new Options(this, UILayer);
+        rules = new Rules(this, UILayer);
+        credits = new Credits(this, UILayer);
         gamePanel = menu;
         if (Game.DEBUG) {
             gamePanel = dungeon;
@@ -77,12 +84,14 @@ public class Game extends JFrame implements Runnable {
                             if (str.equals("dungeon")) {
                                 gamePanel = dungeon;
                                 dungeon.reset();
-                            } else if (str.equals("options")) {
-                                gamePanel = options;
                             } else if (str.equals("mainMenu")) {
                                 gamePanel = menu;
-                            } else if (str.equals("title")) {
-                                // TODO
+                            } else if (str.equals("options")) {
+                                gamePanel = options;
+                            } else if (str.equals("rules")) {
+                                gamePanel = rules;
+                            } else if (str.equals("credits")) {
+                                gamePanel = credits;
                             }
                             add(gamePanel);
                             gamePanel.fadeIn();
@@ -94,11 +103,6 @@ public class Game extends JFrame implements Runnable {
                 }).start();
             }
         };
-    }
-
-    private void startGameThread() {
-        gameThread = new Thread(this);
-        gameThread.start();
     }
 
     @Override

@@ -77,7 +77,7 @@ public class RoomObjectManager extends GameComponent {
     }
 
     private void objectInteractions() {
-        player.clearInteractable();
+        player.clearInteractables();
         for (Component roomObject : getComponents()) {
             if (roomObject == player) {
                 continue;

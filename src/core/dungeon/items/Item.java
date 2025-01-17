@@ -61,7 +61,7 @@ public class Item implements Comparable<Item> {
         return Collections.binarySearch(incompatible, item.getId()) >= 0;
     }
 
-    public String getToolTip() {
+    public String getToolTipText() {
         return new StringBuilder("<html><h4>").append(name).append("</h4>").append(description).append("</html>").toString();
     }
 

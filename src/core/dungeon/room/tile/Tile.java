@@ -10,6 +10,7 @@ import core.dungeon.room.object_utilities.CollisionBox;
 import core.utilities.ImageUtilities;
 
 public class Tile {
+    private static final String tileSetName = "dungeonTileSet";
     public static final int SIZE = 16;
 
     public static final int FLOOR = 0;
@@ -50,7 +51,6 @@ public class Tile {
         return height;
     }
 
-    private static final String tileSetName = "dungeonTileSet";
     private static final HashMap<Integer, CollisionBox> collisionSet = new HashMap<>() {
         {
             put(0, CollisionBox.getCollisionBox(0, 0, 1, 1));

@@ -37,8 +37,8 @@ public class SnowParticles extends ParticleSystem {
 
     public void setDepth(int depth) {
         N = (int) Math.round(N * Math.pow(1.5, (depth - this.depth)));
-        for (Particle particle : getParticles()) {
-            particle.ySpeed = (int) Math.round(particle.ySpeed * Math.pow(1.5, (depth - this.depth)));
+        for (int i = 0; i < getParticleCount(); i++) {
+            getParticles().get(i).ySpeed = (int) Math.round(getParticles().get(i).ySpeed * Math.pow(1.5, (depth - this.depth)));
         }
         this.depth = depth;
     }

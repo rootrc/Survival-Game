@@ -36,16 +36,17 @@ public class Dungeon extends GamePanel {
     public static final int SETNUM = 0;
     private static final int STARTING_ROOM = 1;
 
-    private Room room;
-    private Inventory inventory;
-    private Player player;
     private RoomFactory roomFactory;
+    private Room room;
+
+    private Player player;
+    private Inventory inventory;
 
     private PauseMenu pauseMenu;
     private DebugScreen debugScreen;
+    private DungeonUI dungeonUI;
 
     private SnowParticles snowParticles;
-    private DungeonUI dungeonUI;
 
     private Room removalRoom;
     private Easing easing;
@@ -95,39 +96,21 @@ public class Dungeon extends GamePanel {
 
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
-        inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
-        WarningDisplay warningDisplay = new WarningDisplay();
-        warningDisplay.starting();
-        player = new Player(this, nextRoom, playerDeath, inventory, warningDisplay);
         easing = new Easing(60);
         deathScreen = new DeathScreen(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 fadeIn();
             }
         }, game.changePanel("mainMenu"), game.changePanel("title"));
-
-        dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599, warningDisplay), new MiniMap(), warningDisplay);
-        roomFactory = new RoomFactory(player, UILayer, dungeonUI.getMiniMap());
-        room = roomFactory.getStartingRoom(STARTING_ROOM);
-        inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer(), roomFactory));
-        // room = roomFactory.createRandomRoom(21, 34);
-        dungeonUI.getMiniMap().setStartingRoom(room);
-        snowParticles = new SnowParticles(player);
-        debugScreen = new DebugScreen(UILayer, room);
-
-        if (!Game.DEBUG) {
-            add();
-        } else {
-            add(room);
-            add(inventory);
-        }
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 reset();
                 fadeIn();
             }
-        }, game.changePanel("mainMenu"), game.changePanel("title"));
+        }, game.changePanel("mainMenu"));
         debugScreen = new DebugScreen(UILayer, room);
+
+        reset();
 
         getInputMap(2).put(KeyBinds.ESC, "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
@@ -177,6 +160,7 @@ public class Dungeon extends GamePanel {
         remove();
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         WarningDisplay warningDisplay = new WarningDisplay();
+        warningDisplay.starting();
         player = new Player(this, nextRoom, playerDeath, inventory, warningDisplay);
         dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599, warningDisplay), new MiniMap(), warningDisplay);
         roomFactory = new RoomFactory(player, UILayer, dungeonUI.getMiniMap());
@@ -185,7 +169,12 @@ public class Dungeon extends GamePanel {
         dungeonUI.getMiniMap().setStartingRoom(room);
         snowParticles = new SnowParticles(player);
         debugScreen = new DebugScreen(UILayer, room);
-        add();
+        if (!Game.DEBUG) {
+            add();
+        } else {
+            add(room);
+            add(inventory);
+        }
     }
 
     private void add() {
@@ -194,6 +183,19 @@ public class Dungeon extends GamePanel {
         add(dungeonUI);
         add(inventory);
         add(UILayer);
+    }
+
+    private void remove() {
+        if (room == null) {
+            return;
+        }
+        remove(room);
+        remove(snowParticles);
+        remove(dungeonUI);
+        remove(inventory);
+
+        remove(deathScreen);
+        UILayer.removeAll();
     }
 
     // TODO/EDIT
@@ -209,15 +211,5 @@ public class Dungeon extends GamePanel {
             sum *= 1.5;
         }
         return sum;
-    }
-
-    private void remove() {
-        remove(room);
-        remove(snowParticles);
-        remove(dungeonUI);
-        remove(inventory);
-
-        remove(deathScreen);
-        UILayer.removeAll();
     }
 }

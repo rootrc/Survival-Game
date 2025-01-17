@@ -46,6 +46,21 @@ public class Room extends GameComponent {
         addRoomObject(player);
         add(tileGrid.getTileGridCeiling());
         add(lightingEngine);
+        // TODO: remove
+        // getInputMap(2).put(KeyBinds.TEMP, "outputImage");
+        // getActionMap().put("outputImage", new AbstractAction() {
+        //     public void actionPerformed(ActionEvent e) {
+        //         try {
+        //             System.out.println("hi");
+        //             BufferedImage image = new BufferedImage(getWidth(), getHeight(), Transparency.TRANSLUCENT);
+        //             Graphics2D g2d = image.createGraphics();
+        //             printAll(g2d);
+        //             ImageIO.write(image, "png", new File("hi.png"));
+        //         } catch (IOException ex) {
+        //             ex.printStackTrace();
+        //         }
+        //     }
+        // });
     }
 
     // TEMP
@@ -54,10 +69,6 @@ public class Room extends GameComponent {
         this.tileGrid = tileGrid;
         add(tileGrid.getTileGridFloor());
         add(tileGrid.getTileGridCeiling());
-    }
-
-    public void drawComponent(Graphics2D g2d) {
-
     }
 
     @Override
@@ -95,8 +106,12 @@ public class Room extends GameComponent {
         }
     }
 
+    public void drawComponent(Graphics2D g2d) {
+
+    }
+
     public void setPlayer(Ladder ladder) {
-        player.set(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY());
+        player.setLocation(ladder.getPlayerPlacementX(), ladder.getPlayerPlacementY());
         tileGrid.setPlayer(player);
     }
 

@@ -32,6 +32,8 @@ public class KeyBinds {
     public static final KeyStroke ESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, defaultMask, false);
 
     public static final KeyStroke DEBUG = KeyStroke.getKeyStroke(KeyEvent.VK_F3, defaultMask, false);
+    // TODO delete
+    public static final KeyStroke TEMP = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, defaultMask, false);
 
     private KeyBinds() {
 

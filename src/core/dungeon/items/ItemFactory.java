@@ -366,6 +366,9 @@ public class ItemFactory extends Factory<Item> {
 
     public void removeItem2(Item item) {
         int idx = Collections.binarySearch(itemListUsingRarities, item);
+        if (idx < 0) {
+            return;
+        }
         while (idx != 0 && itemListUsingRarities.get(idx - 1) == item) {
             idx--;
         }

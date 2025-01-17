@@ -59,7 +59,7 @@ public class MiniMap extends GameComponent {
                 (internalMiniMapDisplay.getHeight() - getHeight()) / 2);
         startingNode.getEasing().set(null, startingNode.getLocation());
     }
-    
+
     public void updateNodeConnections(Room nextRoom, int connectingLadderXPos) {
         currentNode.connectToNode(nodes[nextRoom.getId()], connectingLadderXPos);
         addNodeToDisplay(nodes[nextRoom.getId()]);
@@ -114,7 +114,7 @@ public class MiniMap extends GameComponent {
         resizeGraph();
     }
 
-    private void resizeGraph() {
+    private void resizeGraph(int cnt) {
         boolean flag = false;
         for (int i = 0; i < 100; i++) {
             for (int j = i + 1; j < 100; j++) {
@@ -131,7 +131,8 @@ public class MiniMap extends GameComponent {
                         && v.getEasing().getP1().getY() == u.getEasing().getP1().getY())) {
                     continue;
                 }
-                int moveDistance = (int) (Node.MIN_DISTANCE - Math.abs(v.getEasing().getP1().getX() - u.getEasing().getP1().getX())) / 2;
+                int moveDistance = (int) (Node.MIN_DISTANCE
+                        - Math.abs(v.getEasing().getP1().getX() - u.getEasing().getP1().getX())) / 2;
                 if (LCA.downConnections.size() == 2) {
                     Node a = LCA.downConnections.get(0);
                     Node b = LCA.downConnections.get(1);
@@ -171,9 +172,13 @@ public class MiniMap extends GameComponent {
                 flag = true;
             }
         }
-        if (flag) {
-            resizeGraph();
+        if (flag && cnt < 200) {
+            resizeGraph(cnt + 1);
         }
+    }
+
+    private void resizeGraph() {
+        resizeGraph(0);
     }
 
     private Node getLCA(Node a0, Node b0) {
@@ -224,7 +229,6 @@ public class MiniMap extends GameComponent {
         return b;
     }
 
-    
     public int getExploredRoomCnt() {
         return internalMiniMapDisplay.getComponentCount();
     }
@@ -272,8 +276,9 @@ public class MiniMap extends GameComponent {
 
         public void updateCurrentNode() {
             cnt = 0;
-            easing.set(getLocation(), new Point((int) (MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getEasing().getP1().x,
-                    (int) (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getEasing().getP1().y));
+            easing.set(getLocation(),
+                    new Point((int) (MiniMap.this.getWidth() - Node.SIZE) / 2 - currentNode.getEasing().getP1().x,
+                            (int) (MiniMap.this.getHeight() - Node.SIZE) / 2 - currentNode.getEasing().getP1().y));
         }
     }
 

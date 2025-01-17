@@ -76,6 +76,7 @@ public class HealthBar extends GameComponent {
         for (int i = 0; i < LANTERN_CNT; i++) {
             g2d.drawImage(lanterns[i].getImage(), LANTERN_DIST * i, 0, null);
         }
+
     }
 
     public void addLantern() {

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
@@ -18,22 +19,20 @@ import javax.swing.plaf.basic.BasicSliderUI;
 import core.utilities.ImageUtilities;
 
 public class GameSlider extends JSlider {
-    public GameSlider() {
-        super(0, 2);
-        setBounds(100, 100, 200, 100);
-        // snapToTicks = true;
+    public GameSlider(String[] labels, Rectangle rect) {
+        super(0, labels.length - 1);
+        setBounds(rect);
         setMajorTickSpacing(10);
         setMinorTickSpacing(1);
         setPaintTicks(true);
         Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-        labelTable.put(0, new JLabel("EASY"));
-        labelTable.put(1, new JLabel("MEDIUM"));
-        labelTable.put(2, new JLabel("HARD"));
-        // setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+        for (int i = 0; i < labels.length; i++) {
+            labelTable.put(i, new JLabel(labels[i]));
+            labelTable.get(i).setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+        }
         setLabelTable(labelTable);
         setPaintLabels(true);
         setBackground(Color.BLACK);
-        // setEnabled(false);
     }
 
     @Override
@@ -42,10 +41,9 @@ public class GameSlider extends JSlider {
     }
 
     private static class CustomSliderUI extends BasicSliderUI {
-
-        private static final int TRACK_HEIGHT = 8;
-        private static final int TRACK_WIDTH = 8;
-        private static final int TRACK_ARC = 5;
+        private static final int TRACK_HEIGHT = 8*2;
+        private static final int TRACK_WIDTH = 8*2;
+        private static final int TRACK_ARC = 5*2;
         private static final Dimension THUMB_SIZE = new Dimension(20, 20);
         private final RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float();
 
@@ -105,7 +103,7 @@ public class GameSlider extends JSlider {
             
             // Paint track background.
             g2d.setColor(new Color(200, 200, 200));
-            g2d.setClip(trackShape);
+            g2d.setClip(trackShape);    
             trackShape.y += 1;
             g2d.fill(trackShape);
             trackShape.y = trackRect.y;
@@ -140,7 +138,7 @@ public class GameSlider extends JSlider {
         @Override
         public void paintThumb(Graphics g) {
             g.setColor(new Color(246, 146, 36));
-            g.fillRect(thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height);
+            g.drawImage(ImageUtilities.getImage("UI", "SliderThumbtack"), thumbRect.x, thumbRect.y, null);
         }
 
         @Override

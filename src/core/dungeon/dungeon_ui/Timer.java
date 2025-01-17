@@ -34,7 +34,6 @@ public class Timer extends GameComponent {
     private int blinkingCnt;
     private WarningDisplay warningDisplay;
 
-    // TODO time still runs in menu
     public Timer(int startTime, WarningDisplay warningDisplay) {
         super(148, 66);
         setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, 32);

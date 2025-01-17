@@ -6,8 +6,10 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Transparency;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import core.Game;
@@ -22,14 +24,16 @@ public class DeathScreen extends GameComponent {
 
     public DeathScreen(UILayer UILayer, Action restart, Action mainMenu, Action title) {
         super(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
+        // TODO: doesn't work
         add(new UIButton(restart, new Rectangle(getWidth() / 2 - 224, 488, 448, 64),
                 ImageUtilities.getImage("UI", "RestartButton")));
-        add(new UIButton(UILayer.createAndOpenConfirmUI(mainMenu),
-                new Rectangle(getWidth() / 2 - 224, 568, 448, 64),
+        add(new UIButton(mainMenu, new Rectangle(getWidth() / 2 - 224, 568, 448, 64),
                 ImageUtilities.getImage("UI", "MenuButton")));
-        add(new UIButton(UILayer.createAndOpenConfirmUI(title),
-                new Rectangle(getWidth() / 2 - 224, 648, 448, 64),
-                ImageUtilities.getImage("UI", "TitleButton")));
+        add(new UIButton(UILayer.createAndOpenConfirmUI(new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        }), new Rectangle(getWidth() / 2 - 224, 648, 448, 64), ImageUtilities.getImage("UI", "QuitButton")));
     }
 
     public void build(Dungeon dungeon, MiniMap miniMap) {

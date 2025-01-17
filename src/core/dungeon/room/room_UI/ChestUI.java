@@ -26,31 +26,28 @@ public class ChestUI extends PopupUI {
 
 	public ChestUI(UILayer UILayer, Inventory inventory, Item[] items, Action flash) {
 		super(UILayer, 448, 256, 30, "ChestFloor");
-		GetItemButton[] getItemButtons = new GetItemButton[numItems];
+		ItemButton[] getItemButtons = new ItemButton[numItems];
 		for (int i = 0; i < numItems; i++) {
 			Item item = items[i];
-			getItemButtons[i] = new GetItemButton(
+			getItemButtons[i] = new ItemButton(
 					new AbstractAction() {
 						public void actionPerformed(ActionEvent e) {
-							if (!inventory.isFull()) {
-								ActionUtilities.combineActions(new AbstractAction() {
-									public void actionPerformed(ActionEvent e) {
-										inventory.addItem(item);
-										for (int j = 0; j < numItems; j++) {
-											getActionMap().put(new StringBuilder("get").append(j).toString(), null);
-										}
+							ActionUtilities.combineActions(new AbstractAction() {
+								public void actionPerformed(ActionEvent e) {
+									inventory.addItem(item);
+									for (int j = 0; j < numItems; j++) {
+										getActionMap().put(new StringBuilder("get").append(j).toString(), null);
 									}
-								}, flash, close).actionPerformed(e);
-							} else {
-								flash.actionPerformed(e);
-							}
+								}
+							}, flash, close).actionPerformed(e);
 						}
 					},
 					items[i],
 					new Rectangle(
-							(getWidth() - GetItemButton.SIZE) / 2
+							(getWidth() - ItemButton.SIZE) / 2
 									+ (chestSlot.getWidth() + distanceBetweenChestSlots) * (i - 1),
-							(getHeight() - GetItemButton.SIZE) / 2, GetItemButton.SIZE, GetItemButton.SIZE), !inventory.isFull());
+							(getHeight() - ItemButton.SIZE) / 2, ItemButton.SIZE, ItemButton.SIZE),
+					true);
 			add(getItemButtons[i]);
 			getInputMap(2).put(KeyBinds.NUMBER[i + 1], new StringBuilder("get").append(i).toString());
 			getActionMap().put(new StringBuilder("get").append(i).toString(), getItemButtons[i].getAction());
@@ -82,10 +79,10 @@ public class ChestUI extends PopupUI {
 		}
 	}
 
-	private static class GetItemButton extends GameButton {
+	private static class ItemButton extends GameButton {
 		private static final int SIZE = 64;
 
-		public GetItemButton(Action action, Item item, Rectangle rect, boolean setIconNull) {
+		public ItemButton(Action action, Item item, Rectangle rect, boolean setIconNull) {
 			super(null, rect);
 			setAction(action);
 			setAction(ActionUtilities.combineActions(new AbstractAction() {
@@ -97,7 +94,7 @@ public class ChestUI extends PopupUI {
 			}, action));
 			setIcon(ImageUtilities.resize(item.getImageIcon(), SIZE, SIZE));
 			setRolloverIcon(ImageUtilities.resize(item.getImageIcon(), SIZE, SIZE));
-			String ogToolTip = item.getToolTip();
+			String ogToolTip = item.getToolTipText();
 			setToolTipText(new StringBuilder(ogToolTip.substring(0, ogToolTip.length() - "</html>".length()))
 					.append("<br><br>Click or press the corresponding number to get this item!").append("</html>")
 					.toString());

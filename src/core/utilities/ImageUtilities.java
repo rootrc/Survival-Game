@@ -18,29 +18,29 @@ import core.utilities.roomgenerator.SimplexNoise;
 
 // Opens, edits, and processes images
 public class ImageUtilities {
-    private static final HashMap<String, BufferedImage> map = new HashMap<>();
+    private static final HashMap<String, BufferedImage> MAP = new HashMap<>();
     public static final int default3x3TilesetScale = 32;
 
     public static BufferedImage getImage(String folder, String name) {
-        if (map.containsKey(name)) {
-            return map.get(name);
+        if (MAP.containsKey(name)) {
+            return MAP.get(name);
         }
         try {
             BufferedImage image = ImageIO.read(new File(
                     new StringBuilder("res/").append(folder).append('/').append(name).append(".png").toString()));
-            map.put(name, image);
+            MAP.put(name, image);
             return image;
         } catch (IOException e) {
             System.err.println(new StringBuilder("Image \"").append(folder).append('\\').append(name)
                     .append("\" not found").toString());
-                e.printStackTrace();
+            e.printStackTrace();
             System.exit(-1);
         }
         return null;
     }
 
     public static BufferedImage getImage(BufferedImage image, int r, int c, int width, int height) {
-        return image.getSubimage(width * c, height * r, width   , height);
+        return image.getSubimage(width * c, height * r, width, height);
     }
 
     public static BufferedImage getImage(String folder, String name, int r, int c, int width, int height) {

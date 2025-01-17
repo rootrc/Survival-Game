@@ -50,8 +50,8 @@ public class Inventory extends GameComponent {
         this.UILayer = UILayer;
         this.size = size;
         setLocation(Game.SCREEN_WIDTH / 2 - getWidth() / 2, Game.SCREEN_HEIGHT - TAB.getHeight());
-        inventorySlots = new ItemSlot[size + 1];
-        for (int i = 1; i <= size; i++) {
+        inventorySlots = new ItemSlot[50];
+        for (int i = 1; i < 50; i++) {
             inventorySlots[i] = new ItemSlot(i,
                     new Rectangle(MIDDLE.getWidth() * (i - 1) + ITEM_MARGIN, ITEM_MARGIN + TAB.getHeight(),
                             MIDDLE.getHeight() - 2 * ITEM_MARGIN, MIDDLE.getHeight() - 2 * ITEM_MARGIN));
@@ -101,12 +101,14 @@ public class Inventory extends GameComponent {
     }
 
     public boolean isFull() {
-        return occupiedSlots == size;
+        return occupiedSlots == size + 1;
     }
 
     public void addItem(Item item) {
         if (isFull()) {
-            return;
+            size++;
+            setSize(getWidth() + MIDDLE.getWidth(), getHeight());
+            buildImage();
         }
         inventorySlots[occupiedSlots].setItem(item);
         occupiedSlots++;
@@ -164,7 +166,7 @@ public class Inventory extends GameComponent {
             getActionMap().put(idx, removeItem);
             setIcon(ImageUtilities.resize(item.getImageIcon(), 32, 32));
             setRolloverIcon(ImageUtilities.resize(item.getImageIcon(), 32, 32));
-            String ogToolTip = item.getToolTip();
+            String ogToolTip = item.getToolTipText();
 			setToolTipText(new StringBuilder(ogToolTip.substring(0, ogToolTip.length() - "</html>".length())).append("<br><br>Click or press the corresponding number to remove this item from your inventory!<br>You will take the corresponding penalty").append("</html>").toString());
         }
 

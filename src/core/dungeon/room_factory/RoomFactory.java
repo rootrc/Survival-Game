@@ -39,7 +39,7 @@ public class RoomFactory extends Factory<Room> {
     }
 
     public Room getStartingRoom(int id) {
-        player.set(312, 100);
+        player.setLocation(312, 100);
         RoomFileData file = new RoomFileData(id, 0);
         TileGrid tileGrid = TileGridFactory.createTileGrid(file, player);
         RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);

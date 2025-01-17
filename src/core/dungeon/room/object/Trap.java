@@ -209,25 +209,25 @@ class Spike extends Trap {
     private static final int HITFRAME = 7;
 
     private Player player;
-    private SawBlade upBlade;
-    private SawBlade downBlade;
-    private SawBlade leftBlade;
-    private SawBlade rightBlade;
+    private SpikeBlade upBlade;
+    private SpikeBlade downBlade;
+    private SpikeBlade leftBlade;
+    private SpikeBlade rightBlade;
 
     Spike(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, Player player) {
         super(spriteSheet, r, c, hitbox);
         this.player = player;
-        upBlade = new SawBlade(24, UPBLADE_LENGTHS[HITFRAME], 0, 3,
+        upBlade = new SpikeBlade(24, UPBLADE_LENGTHS[HITFRAME], 0, 3,
                 CollisionBox.getCollisionBox(0, (double) UPBLADE_LENGTHS[HITFRAME] / Tile.SIZE, 1.5, 0));
         upBlade.moveX(4);
         upBlade.moveY(12);
-        downBlade = new SawBlade(24, DOWNBLADE_LENGTHS[HITFRAME], 5, 3, CollisionBox.getCollisionBox(0, 0, 1.5, 0));
+        downBlade = new SpikeBlade(24, DOWNBLADE_LENGTHS[HITFRAME], 5, 3, CollisionBox.getCollisionBox(0, 0, 1.5, 0));
         downBlade.moveX(4);
-        leftBlade = new SawBlade(SIDEBLADE_LENGTHS[HITFRAME], 18, 3, 0,
+        leftBlade = new SpikeBlade(SIDEBLADE_LENGTHS[HITFRAME], 18, 3, 0,
                 CollisionBox.getCollisionBox((double) SIDEBLADE_LENGTHS[HITFRAME] / Tile.SIZE, 0, 0, 1.125));
         leftBlade.moveX(4);
         leftBlade.moveY(6);
-        rightBlade = new SawBlade(SIDEBLADE_LENGTHS[HITFRAME], 18, 3, 5, CollisionBox.getCollisionBox(0, 0, 0, 1.125));
+        rightBlade = new SpikeBlade(SIDEBLADE_LENGTHS[HITFRAME], 18, 3, 5, CollisionBox.getCollisionBox(0, 0, 0, 1.125));
         rightBlade.moveY(6);
         add(upBlade);
         add(downBlade);
@@ -287,8 +287,8 @@ class Spike extends Trap {
         return false;
     }
 
-    private static class SawBlade extends Trap {
-        public SawBlade(int width, int height, int r, int c, CollisionBox hitbox) {
+    private static class SpikeBlade extends Trap {
+        public SpikeBlade(int width, int height, int r, int c, CollisionBox hitbox) {
             super(width, height, r, c, hitbox);
         }
 
