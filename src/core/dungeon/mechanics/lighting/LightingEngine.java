@@ -22,7 +22,7 @@ import core.utilities.Easing;
 import core.utilities.RNGUtilities;
 
 public class LightingEngine extends GameComponent {
-    private static final Color color[] = new Color[] {
+    private static final Color COLORS[] = new Color[] {
             new Color(0, 0, 0, 0.10f), new Color(0, 0, 0, 0.42f),
             new Color(0, 0, 0, 0.52f), new Color(0, 0, 0, 0.57f),
             new Color(0, 0, 0, 0.61f), new Color(0, 0, 0, 0.66f),
@@ -31,7 +31,7 @@ public class LightingEngine extends GameComponent {
             new Color(0, 0, 0, 0.91f), new Color(0, 0, 0, 0.94f),
             new Color(0, 0, 0, 0.96f), new Color(0, 0, 0, 0.98f),
             new Color(0, 0, 0, 1.00f) };
-    private static final Color color2[] = new Color[] {
+    private static final Color COLOR2[] = new Color[] {
             new Color(0, 0, 0, (float) Math.pow(0.10, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.42, 0.01)),
             new Color(0, 0, 0, (float) Math.pow(0.52, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.57, 0.01)),
             new Color(0, 0, 0, (float) Math.pow(0.61, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.66, 0.01)),
@@ -40,10 +40,10 @@ public class LightingEngine extends GameComponent {
             new Color(0, 0, 0, (float) Math.pow(0.91, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.94, 0.01)),
             new Color(0, 0, 0, (float) Math.pow(0.96, 0.01)), new Color(0, 0, 0, (float) Math.pow(0.98, 0.01)),
             new Color(0, 0, 0, (float) Math.pow(1.00, 0.01)) };
-    private static final float fraction[] = new float[] { 0f, 0.3f, 0.4f, 0.45f, 0.5f, 0.55f, 0.6f, 0.65f, 0.7f, 0.75f,
+    private static final float FRACTIONS[] = new float[] { 0f, 0.3f, 0.4f, 0.45f, 0.5f, 0.55f, 0.6f, 0.65f, 0.7f, 0.75f,
             0.8f, 0.85f, 0.9f, 0.95f, 1f };
-    private static final HashMap<Integer, BufferedImage> darknessFilter = new HashMap<>();
-    private static final HashMap<Integer, BufferedImage> darknessFilter2 = new HashMap<>();
+    private static final HashMap<Integer, BufferedImage> DARKNESS_FILTER = new HashMap<>();
+    private static final HashMap<Integer, BufferedImage> DARKNESS_FILTER2 = new HashMap<>();
 
     private BufferedImage fogOfWar;
     private BufferedImage image;
@@ -214,18 +214,18 @@ public class LightingEngine extends GameComponent {
         if (radius == 0) {
             return null;
         }
-        if (darknessFilter.get(radius) != null) {
-            return darknessFilter.get(radius);
+        if (DARKNESS_FILTER.get(radius) != null) {
+            return DARKNESS_FILTER.get(radius);
         }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(2 * radius,
                 2 * radius, Transparency.TRANSLUCENT);
         Graphics2D g2d = image.createGraphics();
-        RadialGradientPaint gPaint = new RadialGradientPaint(radius, radius, radius, fraction, color);
+        RadialGradientPaint gPaint = new RadialGradientPaint(radius, radius, radius, FRACTIONS, COLORS);
         g2d.setPaint(gPaint);
         g2d.fillRect(0, 0, 2 * radius, 2 * radius);
         g2d.dispose();
-        darknessFilter.put(radius, image);
+        DARKNESS_FILTER.put(radius, image);
         return image;
     }
 
@@ -233,18 +233,18 @@ public class LightingEngine extends GameComponent {
         if (radius == 0) {
             return null;
         }
-        if (darknessFilter2.get(radius) != null) {
-            return darknessFilter2.get(radius);
+        if (DARKNESS_FILTER2.get(radius) != null) {
+            return DARKNESS_FILTER2.get(radius);
         }
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(2 * radius,
                 2 * radius, Transparency.TRANSLUCENT);
         Graphics2D g2d = image.createGraphics();
-        RadialGradientPaint gPaint = new RadialGradientPaint(radius, radius, radius, fraction, color2);
+        RadialGradientPaint gPaint = new RadialGradientPaint(radius, radius, radius, FRACTIONS, COLOR2);
         g2d.setPaint(gPaint);
         g2d.fillRect(0, 0, 2 * radius, 2 * radius);
         g2d.dispose();
-        darknessFilter2.put(radius, image);
+        DARKNESS_FILTER2.put(radius, image);
         return image;
     }
 

@@ -47,7 +47,7 @@ public class Room extends GameComponent {
         add(tileGrid.getTileGridCeiling());
         add(lightingEngine);
         // TODO: remove
-        // getInputMap(2).put(KeyBinds.TEMP, "outputImage");
+        // getInputMap(2).put(rs.TEMP, "outputImage");
         // getActionMap().put("outputImage", new AbstractAction() {
         //     public void actionPerformed(ActionEvent e) {
         //         try {

@@ -19,7 +19,7 @@ import core.utilities.Easing;
 
 public class Timer extends GameComponent {
     private static Font font;
-    private static final int framesToSwitchTime = Game.UPS / 4;
+    private static final int FRAMES_TO_SWITCH = Game.UPS / 4;
 
     private BufferedImage image;
 
@@ -112,7 +112,7 @@ public class Timer extends GameComponent {
             } else if (timeInSeconds % 60 == 59 && timeInSeconds != 59) {
                 blinkingCnt = 144;
             }
-            analogCnt = framesToSwitchTime;
+            analogCnt = FRAMES_TO_SWITCH;
         }
         String displayTimePlusASecond = String.format("%02d:%02d", (((timeInSeconds + 1) / 60) % 60),
                 ((timeInSeconds + 1) % 60));
@@ -121,9 +121,9 @@ public class Timer extends GameComponent {
                 continue;
             }
             int displayTimeY = y0
-                    + (int) (Easing.easeInQuad(1 - (double) analogCnt / framesToSwitchTime) * fontMetrics.getHeight());
+                    + (int) (Easing.easeInQuad(1 - (double) analogCnt / FRAMES_TO_SWITCH) * fontMetrics.getHeight());
             int displayTimePlusASecondY = y0
-                    - (int) (Easing.easeOutQuad((double) analogCnt / framesToSwitchTime) * fontMetrics.getHeight());
+                    - (int) (Easing.easeOutQuad((double) analogCnt / FRAMES_TO_SWITCH) * fontMetrics.getHeight());
             if (i == 2 || i == 4) {
                 if (i == 2) {
                     i++;

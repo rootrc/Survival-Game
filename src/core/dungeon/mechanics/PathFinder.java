@@ -7,7 +7,7 @@ import java.util.Queue;
 import core.dungeon.room.tile.Tile;
 
 public class PathFinder {
-    private static final int direct[][] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+    private static final int DIRECT[][] = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
 
     private int N, M;
     private Tile[][] collisionArray;
@@ -41,7 +41,7 @@ public class PathFinder {
                 map.put(hash(r0, c0, r1, c1), dist[p.r][p.c] - 1);
                 return dist[p.r][p.c] - 1;
             }
-            for (int[] d : direct) {
+            for (int[] d : DIRECT) {
                 Point nextP = new Point(p.r + d[0], p.c + d[1]);
                 if (canTravel(p.r, p.c, nextP.r, nextP.c, d) && dist[nextP.r][nextP.c] == 0) {
                     dist[nextP.r][nextP.c] = dist[p.r][p.c] + 1;
@@ -70,7 +70,7 @@ public class PathFinder {
                 queue.add(new Point(r0, c0));
                 while (!queue.isEmpty()) {
                     Point p = queue.poll();
-                    for (int[] d : direct) {
+                    for (int[] d : DIRECT) {
                         Point nextP = new Point(p.r + d[0], p.c + d[1]);
                         if (canTravel(p.r, p.c, nextP.r, nextP.c, d) && floodFill[nextP.r][nextP.c] == 0) {
                             floodFill[nextP.r][nextP.c] = floodFill[p.r][p.c];

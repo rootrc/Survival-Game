@@ -231,13 +231,13 @@ public abstract class RoomObject extends GameComponent implements Comparable<Roo
         public static final int EXPLOSIVE_DUD = 26;
         public static final int TELEPORTATION = 27;
 
-        public static final HashSet<Integer> fourSet = new HashSet<>() {
+        public static final HashSet<Integer> FOUR_SET = new HashSet<>() {
             {
 
             }
         };
 
-        public static final HashSet<Integer> fiveSet = new HashSet<>() {
+        public static final HashSet<Integer> FIVE_SET = new HashSet<>() {
             {
                 add(VERTICAL_SAW);
                 add(HORIZONTAL_SAW);

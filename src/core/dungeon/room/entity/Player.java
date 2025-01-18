@@ -25,6 +25,7 @@ import core.utilities.ImageUtilities;
 public class Player extends Entity {
     private static final int HIGH_MAX_SPEED = 3 * Tile.SIZE / 16;
     private static final int LOW_MAX_SPEED = Tile.SIZE / 8;
+    private static final double NORMALIZE_VECTOR = Math.sqrt(2) / 2;
 
     private GamePanel gamePanel;
 
@@ -38,9 +39,6 @@ public class Player extends Entity {
     private Action nextRoom;
     private Action death;
     private int updateCnt;
-
-    private double lightAmount;
-    private int lightDecreaseFactor;
 
     private int interactionCooldown;
     private int dashCooldown;
@@ -66,8 +64,6 @@ public class Player extends Entity {
         this.inventory = inventory;
         this.warningDisplay = warningDisplay;
         passiveItemStats = new Stats();
-        lightAmount = DiffSettings.playerLightStartAmount;
-        lightDecreaseFactor = DiffSettings.playerLightDecreaseFactor;
         health = DiffSettings.startingHealth;
         healthPoints = DiffSettings.startingHealth;
         setKeyBinds();
@@ -105,12 +101,10 @@ public class Player extends Entity {
         updateCnt++;
         interactionCooldown++;
         dashCooldown++;
-        setLightRadius(
-                passiveItemStats.lightRadiusFactor * Math.min(Math.pow(lightAmount, 0.2), Math.sqrt(lightAmount) / 6));
-        lightAmount -= Math.log(lightAmount) / lightDecreaseFactor;
+        setLightRadius(2 * passiveItemStats.lightRadiusFactor * Math.sqrt(health));
         if (updateCnt % 60 == 0) {
             updateCnt = 0;
-            health += passiveItemStats.healthRegenPerSecond;
+            addHealth(passiveItemStats.healthRegenPerSecond);
         }
         if (isMoving()) {
             if (hitCnt <= Game.UPS) {
@@ -121,8 +115,8 @@ public class Player extends Entity {
         }
 
         if (dashCooldown < 10) {
-            setSpeedX(A * getMaxSpeed() * DirectionUtilities.getXMovement(Player.this.getDirection()));
-            setSpeedY(A * getMaxSpeed() * DirectionUtilities.getYMovement(Player.this.getDirection()));
+            setSpeedX(NORMALIZE_VECTOR * getMaxSpeed() * DirectionUtilities.getXMovement(Player.this.getDirection()));
+            setSpeedY(NORMALIZE_VECTOR * getMaxSpeed() * DirectionUtilities.getYMovement(Player.this.getDirection()));
         } else {
             setDirection(DirectionUtilities.getMovingDirection(movingUp, movingLeft, movingDown, movingRight));
         }
@@ -148,8 +142,6 @@ public class Player extends Entity {
         }
         super.update();
     }
-
-    private static final double A = Math.sqrt(2) / 2;
 
     @Override
     public void move() {
@@ -189,8 +181,8 @@ public class Player extends Entity {
         } else if (ax == 0 && ay != 0) {
             setSpeedY(Math.max(Math.min(getSpeedY() + ay, getMaxSpeed()), -getMaxSpeed()));
         } else if (ax != 0 && ay != 0) {
-            setSpeedX(Math.max(Math.min(getSpeedX() + A * ax, A * getMaxSpeed()), -A * getMaxSpeed()));
-            setSpeedY(Math.max(Math.min(getSpeedY() + A * ay, A * getMaxSpeed()), -A * getMaxSpeed()));
+            setSpeedX(Math.max(Math.min(getSpeedX() + NORMALIZE_VECTOR * ax, NORMALIZE_VECTOR * getMaxSpeed()), -NORMALIZE_VECTOR * getMaxSpeed()));
+            setSpeedY(Math.max(Math.min(getSpeedY() + NORMALIZE_VECTOR * ay, NORMALIZE_VECTOR * getMaxSpeed()), -NORMALIZE_VECTOR * getMaxSpeed()));
         }
     }
 
@@ -212,7 +204,7 @@ public class Player extends Entity {
         return health;
     }
 
-    public void addHealth(int delta) {
+    public void addHealth(double delta) {
         health = Math.min(health + delta, healthPoints);
     }
 
@@ -288,10 +280,6 @@ public class Player extends Entity {
 
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public void addLightAmount(int delta) {
-        lightAmount += delta;
     }
 
     private final Action interact = new AbstractAction() {

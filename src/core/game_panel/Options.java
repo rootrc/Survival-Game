@@ -17,7 +17,7 @@ public class Options extends GamePanel {
         getInputMap(2).put(KeyBinds.ESC, "exit");
         getActionMap().put("exit", UILayer.createAndOpenConfirmUI(game.changePanel("mainMenu")));
         add(new GameSlider(new String[]{"EASY", "MEDIUM", "HARD"}, new Rectangle(100, 100, 300, 50)));
-        add(new UIButton(null, new Rectangle(704, 672, 288, 64),
+        add(new UIButton(game.changePanel("credits"), new Rectangle(704, 672, 288, 64),
 				ImageUtilities.getImage("UI", "CreditsButton")));
     }
 }

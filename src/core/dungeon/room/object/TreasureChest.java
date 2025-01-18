@@ -27,7 +27,6 @@ public class TreasureChest extends RoomObject {
     }
 
     public static TreasureChest getTreasureChest(int depth, RoomObjectData data) {
-        // TODO: include depth caculation
         switch (data.id) {
             case RoomObjectData.TREASURE_CHEST_0:
                 return new TreasureChest(new SpriteSheet(ImageUtilities.getImage("objects", "chest0"), 2), data.r,

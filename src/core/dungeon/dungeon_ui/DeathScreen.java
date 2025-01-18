@@ -22,9 +22,8 @@ import core.utilities.ImageUtilities;
 public class DeathScreen extends GameComponent {
     private BufferedImage image;
 
-    public DeathScreen(UILayer UILayer, Action restart, Action mainMenu, Action title) {
+    public DeathScreen(UILayer UILayer, Action restart, Action mainMenu) {
         super(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
-        // TODO: doesn't work
         add(new UIButton(restart, new Rectangle(getWidth() / 2 - 224, 488, 448, 64),
                 ImageUtilities.getImage("UI", "RestartButton")));
         add(new UIButton(mainMenu, new Rectangle(getWidth() / 2 - 224, 568, 448, 64),

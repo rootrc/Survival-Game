@@ -13,13 +13,13 @@ import core.utilities.ImageUtilities;
 
 public class PauseMenu extends PopupUI {
 
-	public PauseMenu(UILayer UILayer, Action restart, Action mainMenu) {
+	public PauseMenu(UILayer UILayer, Action restart, Action menu) {
 		super(UILayer, 576, 480, 8);
 		add(new UIButton(close, new Rectangle(getWidth() / 2 - 192, 88, 384, 64),
 				ImageUtilities.getImage("UI", "ResumeButton")));
 		add(new UIButton(UILayer.createAndOpenConfirmUI(restart), new Rectangle(getWidth() / 2 - 192, 168, 384, 64),
 				ImageUtilities.getImage("UI", "RestartButton")));
-		add(new UIButton(UILayer.createAndOpenConfirmUI(mainMenu), new Rectangle(getWidth() / 2 - 192, 248, 384, 64),
+		add(new UIButton(UILayer.createAndOpenConfirmUI(menu), new Rectangle(getWidth() / 2 - 192, 248, 384, 64),
 				ImageUtilities.getImage("UI", "ExitButton")));
 		add(new UIButton(UILayer.createAndOpenConfirmUI(new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {

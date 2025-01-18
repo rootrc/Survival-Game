@@ -1,5 +1,6 @@
 package core.dungeon.room.object;
 
+import core.Game;
 import core.dungeon.room.entity.Player;
 import core.dungeon.room.object_utilities.CollisionBox;
 import core.dungeon.room.object_utilities.RoomObject;
@@ -9,10 +10,10 @@ import core.utilities.ImageUtilities;
 import core.utilities.RNGUtilities;
 
 public class LightRock extends RoomObject {
-    private int lightAmount;
+    private double lightAmount;
 
     public LightRock(SpriteSheet spriteSheet, int r, int c, CollisionBox hitbox, CollisionBox interactbox,
-            int lightAmount) {
+            double lightAmount) {
         super(spriteSheet, r, c, hitbox, interactbox);
         this.lightAmount = lightAmount;
     }
@@ -27,7 +28,8 @@ public class LightRock extends RoomObject {
         if (getSpriteSheet().getFrame() == 1) {
             return;
         }
-        player.addLightAmount(lightAmount);
+        // 
+        player.addHealth(lightAmount);
         getSpriteSheet().nextFrame();
         getSpriteSheet().getImage();
         setLightRadius(0);
@@ -37,7 +39,7 @@ public class LightRock extends RoomObject {
         LightRock lightRock;
         switch (data.id) {
             case RoomObjectData.SMALL_LIGHTROCK:
-                if (depth > RNGUtilities.getInt(10)) {
+                if (-(10 - depth) * (10 - depth) / 40.0 + 7.5 > RNGUtilities.getInt(10) && !Game.DEBUG) {
                     return null;
                 }
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock0"), 2),
@@ -47,7 +49,7 @@ public class LightRock extends RoomObject {
                 lightRock.setLightRadius(DiffSettings.lightRockLightRadius);
                 return lightRock;
             case RoomObjectData.MEDIUM_LIGHTROCK:
-                if (depth > RNGUtilities.getInt(40)) {
+                if (depth > RNGUtilities.getInt(40) && !Game.DEBUG) {
                     return null;
                 }
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock1"), 2),

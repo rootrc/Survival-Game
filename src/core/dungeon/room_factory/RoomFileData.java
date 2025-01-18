@@ -65,9 +65,9 @@ class RoomFileData extends FileOpener {
             for (int j = 0; j < K; j++) {
                 int id = 10 * i + nextInt();
                 RoomObjectData roomObjectData;
-                if (RoomObjectData.fiveSet.contains(id)) {
+                if (RoomObjectData.FIVE_SET.contains(id)) {
                     roomObjectData = new RoomObjectData(id, nextInt(), nextInt(), nextInt(), nextInt());
-                } else if (RoomObjectData.fourSet.contains(id)) {
+                } else if (RoomObjectData.FOUR_SET.contains(id)) {
                     roomObjectData = new RoomObjectData(id, nextInt(), nextInt(), nextInt());
                 } else {
                     roomObjectData = new RoomObjectData(id, nextInt(), nextInt());

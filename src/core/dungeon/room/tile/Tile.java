@@ -10,7 +10,7 @@ import core.dungeon.room.object_utilities.CollisionBox;
 import core.utilities.ImageUtilities;
 
 public class Tile {
-    private static final String tileSetName = "dungeonTileSet";
+    private static final String TIMESET_NAME = "dungeonTileSet";
     public static final int SIZE = 16;
 
     public static final int FLOOR = 0;
@@ -228,10 +228,10 @@ public class Tile {
     public static Tile getTile(int r, int c) {
         int hash = 18 * c + r;
         if (!heightSet.containsKey(hash)) {
-            return new Tile(ImageUtilities.getImage("tiles", tileSetName, c, r, Tile.SIZE, Tile.SIZE), collisionSet.get(hash),
+            return new Tile(ImageUtilities.getImage("tiles", TIMESET_NAME, c, r, Tile.SIZE, Tile.SIZE), collisionSet.get(hash),
                 Tile.FLOOR);
         }
-        return new Tile(ImageUtilities.getImage("tiles", tileSetName, c, r, Tile.SIZE, Tile.SIZE), collisionSet.get(hash),
+        return new Tile(ImageUtilities.getImage("tiles", TIMESET_NAME, c, r, Tile.SIZE, Tile.SIZE), collisionSet.get(hash),
                 heightSet.get(hash));
     }
 }

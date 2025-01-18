@@ -4,11 +4,9 @@ package core.dungeon.settings;
 public class DiffSettings {
     public static int startingInventorySize;
     public static int startingHealth;
-    public static int playerLightStartAmount;
     public static int playerLightRadiusFactor;
-    public static int playerLightDecreaseFactor;
     public static int playerDetectionRadiusSquared;
-    public static int lightRockValue;
+    public static double lightRockValue;
     public static int lightRockLightRadius;
 
     private DiffSettings() {
@@ -17,11 +15,9 @@ public class DiffSettings {
     public static void setEasy() {
         startingInventorySize = 2;
         startingHealth = 5;
-        playerLightStartAmount = 1000;
-        playerLightRadiusFactor = 35;
-        playerLightDecreaseFactor = 75;
+        playerLightRadiusFactor = 25;
         playerDetectionRadiusSquared = 200;
-        lightRockValue = 20;
-        lightRockLightRadius = 25;
+        lightRockValue = 0.04;
+        lightRockLightRadius = 40;
     }
 }

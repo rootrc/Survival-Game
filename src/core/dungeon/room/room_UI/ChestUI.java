@@ -18,16 +18,16 @@ import core.utilities.ActionUtilities;
 import core.utilities.ImageUtilities;
 
 public class ChestUI extends PopupUI {
-	private static final int numItems = 3;
-	private static final BufferedImage chestSlot = ImageUtilities.getImage("UI", "ChestSlot");
-	private static final int distanceBetweenChestSlots = 32;
+	private static final int ITEMCNT = 3;
+	private static final BufferedImage CHEST_SLOT = ImageUtilities.getImage("UI", "ChestSlot");
+	private static final int DISTANCE_BETWEEN_CHEST_SLOTS = 32;
 
 	private Action check;
 
 	public ChestUI(UILayer UILayer, Inventory inventory, Item[] items, Action flash) {
 		super(UILayer, 448, 256, 30, "ChestFloor");
-		ItemButton[] getItemButtons = new ItemButton[numItems];
-		for (int i = 0; i < numItems; i++) {
+		ItemButton[] getItemButtons = new ItemButton[ITEMCNT];
+		for (int i = 0; i < ITEMCNT; i++) {
 			Item item = items[i];
 			getItemButtons[i] = new ItemButton(
 					new AbstractAction() {
@@ -35,7 +35,7 @@ public class ChestUI extends PopupUI {
 							ActionUtilities.combineActions(new AbstractAction() {
 								public void actionPerformed(ActionEvent e) {
 									inventory.addItem(item);
-									for (int j = 0; j < numItems; j++) {
+									for (int j = 0; j < ITEMCNT; j++) {
 										getActionMap().put(new StringBuilder("get").append(j).toString(), null);
 									}
 								}
@@ -45,7 +45,7 @@ public class ChestUI extends PopupUI {
 					items[i],
 					new Rectangle(
 							(getWidth() - ItemButton.SIZE) / 2
-									+ (chestSlot.getWidth() + distanceBetweenChestSlots) * (i - 1),
+									+ (CHEST_SLOT.getWidth() + DISTANCE_BETWEEN_CHEST_SLOTS) * (i - 1),
 							(getHeight() - ItemButton.SIZE) / 2, ItemButton.SIZE, ItemButton.SIZE),
 					true);
 			add(getItemButtons[i]);
@@ -71,11 +71,11 @@ public class ChestUI extends PopupUI {
 	@Override
 	public void drawComponent(Graphics2D g2d) {
 		super.drawComponent(g2d);
-		for (int i = 0; i < numItems; i++) {
-			g2d.drawImage(chestSlot,
-					(getWidth() - chestSlot.getWidth()) / 2
-							+ (i - numItems / 2) * (chestSlot.getWidth() + distanceBetweenChestSlots),
-					(getHeight() - chestSlot.getHeight()) / 2, null);
+		for (int i = 0; i < ITEMCNT; i++) {
+			g2d.drawImage(CHEST_SLOT,
+					(getWidth() - CHEST_SLOT.getWidth()) / 2
+							+ (i - ITEMCNT / 2) * (CHEST_SLOT.getWidth() + DISTANCE_BETWEEN_CHEST_SLOTS),
+					(getHeight() - CHEST_SLOT.getHeight()) / 2, null);
 		}
 	}
 

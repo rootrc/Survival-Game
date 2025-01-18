@@ -42,7 +42,7 @@ public class Rules extends GamePanel {
 
         private final Action next = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                cnt = 60;
+                cnt = 40;
                 int oldImageIdx = imageIdx;
                 imageIdx++;
                 if (imageIdx == TOTAL_IMAGES) {
@@ -53,7 +53,7 @@ public class Rules extends GamePanel {
         };
 
         public RulesImage() {
-            super(1000, 700);
+            super(1000, 640);
             if (image == null) {
                 GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
                 image = gd.getDefaultConfiguration().createCompatibleImage(getWidth() * TOTAL_IMAGES, getHeight());
@@ -64,7 +64,7 @@ public class Rules extends GamePanel {
                 g2d.dispose();
             }
             setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, 0);
-            easing = new Easing(60);
+            easing = new Easing(40);
         }
 
         public void update() {
@@ -74,7 +74,7 @@ public class Rules extends GamePanel {
         }
 
         public void drawComponent(Graphics2D g2d) {
-            g2d.drawImage(image, (int) easing.easeInOutQuad(60 - cnt).getX(), 0, null);
+            g2d.drawImage(image, (int) easing.easeInOutQuad(40 - cnt).getX(), 0, null);
         }
     }
 }

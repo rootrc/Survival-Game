@@ -99,9 +99,10 @@ public class Dungeon extends GamePanel {
         easing = new Easing(60);
         deathScreen = new DeathScreen(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+                reset();
                 fadeIn();
             }
-        }, game.changePanel("mainMenu"), game.changePanel("title"));
+        }, game.changePanel("mainMenu"));
         pauseMenu = new PauseMenu(UILayer, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 reset();
