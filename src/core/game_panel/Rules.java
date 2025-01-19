@@ -59,7 +59,7 @@ public class Rules extends GamePanel {
                 image = gd.getDefaultConfiguration().createCompatibleImage(getWidth() * TOTAL_IMAGES, getHeight());
                 Graphics2D g2d = image.createGraphics();
                 for (int i = 0; i < TOTAL_IMAGES; i++) {
-                    g2d.drawImage(ImageUtilities.getImage("rules&credits", "rules" + i), getWidth() * i, 0, null);
+                    g2d.drawImage(ImageUtilities.getImage("menu_images", "rules" + i), getWidth() * i, 0, null);
                 }
                 g2d.dispose();
             }

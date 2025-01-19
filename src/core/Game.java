@@ -23,6 +23,16 @@ import core.game_panel.Rules;
 // Add options
 // Finish “What happens when the timer hits 0”
 
+// try {
+//     AudioInputStream sound = AudioSystem.getAudioInputStream(new File ("bgm.wav"));
+//     Clip background = AudioSystem.getClip();
+//     background.open(sound);
+//     background.setFramePosition (0);
+//     background.loop(Clip.LOOP_CONTINUOUSLY);
+// } catch (Exception e) {
+
+// }
+
 public class Game extends JFrame implements Runnable {
     public static final int SCREEN_WIDTH = 1024;
     public static final int SCREEN_HEIGHT = 768;

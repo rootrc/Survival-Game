@@ -46,21 +46,6 @@ public class Room extends GameComponent {
         addRoomObject(player);
         add(tileGrid.getTileGridCeiling());
         add(lightingEngine);
-        // TODO: remove
-        // getInputMap(2).put(rs.TEMP, "outputImage");
-        // getActionMap().put("outputImage", new AbstractAction() {
-        //     public void actionPerformed(ActionEvent e) {
-        //         try {
-        //             System.out.println("hi");
-        //             BufferedImage image = new BufferedImage(getWidth(), getHeight(), Transparency.TRANSLUCENT);
-        //             Graphics2D g2d = image.createGraphics();
-        //             printAll(g2d);
-        //             ImageIO.write(image, "png", new File("hi.png"));
-        //         } catch (IOException ex) {
-        //             ex.printStackTrace();
-        //         }
-        //     }
-        // });
     }
 
     // TEMP
