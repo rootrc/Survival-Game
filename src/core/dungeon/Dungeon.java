@@ -3,8 +3,6 @@ package core.dungeon;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -23,7 +21,6 @@ import core.dungeon.items.ItemFactory;
 import core.dungeon.mechanics.particles.SnowParticles;
 import core.dungeon.room.Room;
 import core.dungeon.room.entity.Player;
-import core.dungeon.room.tile.Tile;
 import core.dungeon.room_factory.RoomFactory;
 import core.dungeon.settings.DiffSettings;
 import core.dungeon.settings.KeyBinds;
@@ -43,7 +40,7 @@ public class Dungeon extends GamePanel {
     private Inventory inventory;
 
     private PauseMenu pauseMenu;
-    private DebugScreen debugScreen;
+    private final DebugScreen debugScreen = new DebugScreen(UILayer);
     private DungeonUI dungeonUI;
 
     private SnowParticles snowParticles;
@@ -109,7 +106,6 @@ public class Dungeon extends GamePanel {
                 fadeIn();
             }
         }, game.changePanel("mainMenu"));
-        debugScreen = new DebugScreen(UILayer, room);
 
         reset();
 
@@ -120,16 +116,6 @@ public class Dungeon extends GamePanel {
 
         Room.setScreenShakeDuration(10);
         Room.setScreenShakeStrength(10);
-
-        if (Game.DEBUG) {
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    super.mousePressed(e);
-                    System.out.println(5 + " " + e.getY() / Tile.SIZE + " " + e.getX() / Tile.SIZE);
-                }
-            });
-        }
     }
 
     @Override
@@ -169,7 +155,7 @@ public class Dungeon extends GamePanel {
         inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer(), roomFactory));
         dungeonUI.getMiniMap().setStartingRoom(room);
         snowParticles = new SnowParticles(player);
-        debugScreen = new DebugScreen(UILayer, room);
+        debugScreen.updateRoom(room);
         if (!Game.DEBUG) {
             add();
         } else {

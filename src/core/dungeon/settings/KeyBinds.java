@@ -32,6 +32,10 @@ public class KeyBinds {
     public static final KeyStroke ESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, defaultMask, false);
 
     public static final KeyStroke DEBUG = KeyStroke.getKeyStroke(KeyEvent.VK_F3, defaultMask, false);
+    public static final KeyStroke LIGHTING = KeyStroke.getKeyStroke(KeyEvent.VK_L, defaultMask, false);
+    public static final KeyStroke HITBOXES = KeyStroke.getKeyStroke(KeyEvent.VK_H, defaultMask, false);
+    public static final KeyStroke GOD_MODE = KeyStroke.getKeyStroke(KeyEvent.VK_G, defaultMask, false);
+    public static final KeyStroke TIMER = KeyStroke.getKeyStroke(KeyEvent.VK_T, defaultMask, false);
     // TODO delete
     public static final KeyStroke TEMP = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, defaultMask, false);
 

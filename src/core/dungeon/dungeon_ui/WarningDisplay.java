@@ -71,7 +71,7 @@ public class WarningDisplay extends GameComponent {
     }
 
     public void starting() {
-        setMessage("explore the dungeon", "find the bottom");
+        setMessage("explore the cave", "find the bottom");
     }
 
     public void oneHealthWarning() {

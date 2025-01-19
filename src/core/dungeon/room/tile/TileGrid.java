@@ -77,6 +77,7 @@ public class TileGrid extends GameComponent {
 
     private static class TileGridCeiling extends GameComponent {
         private BufferedImage[] image;
+        private BufferedImage[] hitbox;
         private int N, M;
         private Tile[][][] tileGridArray;
         private Player player;
@@ -116,29 +117,45 @@ public class TileGrid extends GameComponent {
             }
             if (opacity != 1) {
                 g2d.drawImage(image[0], 0, 0, null);
+                if (Game.HITBOXES) {
+                    g2d.drawImage(hitbox[0], 0, 0, null);
+                }
             }
             if (opacity != 0) {
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
                 g2d.drawImage(image[1], 0, 0, null);
+                if (Game.HITBOXES) {
+                    g2d.drawImage(hitbox[1], 0, 0, null);
+                }
             }
         }
 
         private void buildImage() {
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             image = new BufferedImage[2];
+            hitbox = new BufferedImage[2];
             image[0] = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                     Transparency.BITMASK);
             image[1] = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                     Transparency.BITMASK);
+            hitbox = new BufferedImage[2];
+            hitbox[0] = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+                    Transparency.BITMASK);
+            hitbox[1] = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+                    Transparency.BITMASK);
             Graphics2D g2d = image[0].createGraphics();
             Graphics2D g2d2 = image[1].createGraphics();
+            Graphics2D g2d3 = hitbox[0].createGraphics();
+            Graphics2D g2d4 = hitbox[1].createGraphics();
             for (int r = 0; r < N; r++) {
                 for (int c = 0; c < M; c++) {
                     if (tileGridArray[0][r][c] != null) {
                         tileGridArray[0][r][c].draw(g2d, r, c);
+                        tileGridArray[0][r][c].drawHitBox(g2d3, r, c);
                     }
                     if (tileGridArray[1][r][c] != null) {
                         tileGridArray[1][r][c].draw(g2d2, r, c);
+                        tileGridArray[1][r][c].drawHitBox(g2d4, r, c);
                     }
                 }
             }
@@ -149,6 +166,7 @@ public class TileGrid extends GameComponent {
 
     private static class TileGridFloor extends GameComponent {
         private BufferedImage image;
+        private BufferedImage hitboxes;
         private int N, M, layers;
         private Tile[][][] tileGridArray;
 
@@ -166,12 +184,18 @@ public class TileGrid extends GameComponent {
 
         public void drawComponent(Graphics2D g2d) {
             g2d.drawImage(image, 0, 0, null);
+            if (Game.HITBOXES) {
+                g2d.drawImage(hitboxes, 0, 0, null);
+            }
         }
 
         private void buildImage() {
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(), Transparency.OPAQUE);
+            hitboxes = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
+                    Transparency.BITMASK);
             Graphics2D g2d = image.createGraphics();
+            Graphics2D g2d2 = hitboxes.createGraphics();
             for (int i = 0; i < layers; i++) {
                 for (int r = 0; r < N; r++) {
                     for (int c = 0; c < M; c++) {
@@ -179,6 +203,9 @@ public class TileGrid extends GameComponent {
                             continue;
                         }
                         tileGridArray[i][r][c].draw(g2d, r, c);
+                        if (i != 1 || tileGridArray[2][r][c] == null) {
+                            tileGridArray[i][r][c].drawHitBox(g2d2, r, c);
+                        }
                     }
                 }
             }

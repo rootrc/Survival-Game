@@ -45,7 +45,7 @@ public abstract class RoomObject extends GameComponent implements Comparable<Roo
         if (spriteSheet != null) {
             g2d.drawImage(spriteSheet.getImage(), 0, 0, null);
         }
-        if (!Game.DEBUG) {
+        if (!Game.HITBOXES) {
             return;
         }
         if (interactbox != null) {

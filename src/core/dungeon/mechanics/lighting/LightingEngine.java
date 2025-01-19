@@ -86,9 +86,6 @@ public class LightingEngine extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
-        if (Game.DEBUG) {
-            return;
-        }
         if (!Game.LIGHTING) {
             return;
         }

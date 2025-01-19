@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-import core.Game;
 import core.dungeon.room.object_utilities.CollisionBox;
 import core.utilities.ImageUtilities;
 
@@ -29,14 +28,17 @@ public class Tile {
 
     public void draw(Graphics2D g2d, int r, int c) {
         g2d.drawImage(image, Tile.SIZE * c, Tile.SIZE * r, null);
-        if (Game.DEBUG) {
-            if (hitbox != null) {
-                g2d.setColor(Color.RED);
-                g2d.drawRect(Tile.SIZE * c + (int) hitbox.getX(), Tile.SIZE * r
-                        + (int) hitbox.getY(),
-                        (int) hitbox.getWidth(), (int) hitbox.getHeight());
-            }
+    }
+    
+
+    public void drawHitBox(Graphics2D g2d, int r, int c) {
+        if (hitbox == null) {
+            return;
         }
+        g2d.setColor(Color.RED);
+        g2d.drawRect(Tile.SIZE * c + (int) hitbox.getX(), Tile.SIZE * r
+                + (int) hitbox.getY(),
+                (int) hitbox.getWidth(), (int) hitbox.getHeight());
     }
 
     public BufferedImage getImage() {
@@ -228,10 +230,12 @@ public class Tile {
     public static Tile getTile(int r, int c) {
         int hash = 18 * c + r;
         if (!heightSet.containsKey(hash)) {
-            return new Tile(ImageUtilities.getImage("tiles", TIMESET_NAME, c, r, Tile.SIZE, Tile.SIZE), collisionSet.get(hash),
-                Tile.FLOOR);
+            return new Tile(ImageUtilities.getImage("tiles", TIMESET_NAME, c, r, Tile.SIZE, Tile.SIZE),
+                    collisionSet.get(hash),
+                    Tile.FLOOR);
         }
-        return new Tile(ImageUtilities.getImage("tiles", TIMESET_NAME, c, r, Tile.SIZE, Tile.SIZE), collisionSet.get(hash),
+        return new Tile(ImageUtilities.getImage("tiles", TIMESET_NAME, c, r, Tile.SIZE, Tile.SIZE),
+                collisionSet.get(hash),
                 heightSet.get(hash));
     }
 }

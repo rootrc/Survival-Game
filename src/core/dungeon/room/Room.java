@@ -157,11 +157,12 @@ public class Room extends GameComponent {
     }
 
     // For Debug Screen
-    public int getEntityCount() {
-        return roomObjectManager.getComponentCount() + 1;
-    }
-
     public Player getPlayer() {
         return player;
     }
+
+    public int getEntityCnt() {
+        return roomObjectManager.getComponentCount() + 1;
+    }
+
 }
