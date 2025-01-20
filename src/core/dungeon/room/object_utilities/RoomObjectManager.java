@@ -103,11 +103,9 @@ public class RoomObjectManager extends GameComponent {
                 break;
             case HeightHandler.STAIR_LEFT:
                 player.moveX(Math.abs(player.getSpeedX()) / 2.0);
-                // player.moveY(player.getSpeedX() / 2.0);
                 break;
             case HeightHandler.STAIR_RIGHT:
                 player.moveX(-Math.abs(player.getSpeedX()) / 2.0);
-                // player.moveY(-player.getSpeedX() / 2.0);
                 break;
             case HeightHandler.SLIDE_WALL:
                 if (player.getSpeedY() >= 0) {

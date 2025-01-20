@@ -111,7 +111,7 @@ public class TileGrid extends GameComponent {
         }
 
         public void drawComponent(Graphics2D g2d) {
-            if (Game.DEBUG) {
+            if (Game.TEST) {
                 g2d.drawImage(image[Dungeon.LAYER], 0, 0, null);
                 return;
             }

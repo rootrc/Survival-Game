@@ -3,6 +3,7 @@ package core.dungeon.room_connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import core.dungeon.Dungeon;
 import core.dungeon.room.object.Ladder;
 import core.utilities.FileOpener;
 import core.utilities.RNGUtilities;
@@ -37,6 +38,9 @@ public class DungeonLayoutGenerator extends FileOpener {
             int id = nextInt();
             int up = nextInt();
             int down = nextInt();
+            if (id == Dungeon.STARTING_ROOM) {
+                continue;
+            }
             int hash = 10 * up + down;
             maps.get(hash).add(id);
             idToHash.put(id, hash);
@@ -60,10 +64,6 @@ public class DungeonLayoutGenerator extends FileOpener {
         ArrayList<Integer> list = maps.get(hash);
         depthMapCnt[depth]++;
         int mapId = list.get(RNGUtilities.getInt(list.size()));
-        // TEMP
-        while (mapId == 1) {
-            mapId = list.get(RNGUtilities.getInt(list.size()));
-        }
         list.remove((Integer) mapId);
         return mapId;
     }

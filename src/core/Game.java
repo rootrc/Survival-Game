@@ -40,7 +40,7 @@ public class Game extends JFrame implements Runnable {
     public static final int FPS = 60;
     public static final int UPS = 60;
 
-    public static final boolean DEBUG = false;
+    public static final boolean TEST = false;
     public static boolean LIGHTING = true;
     public static boolean HITBOXES = false;
 
@@ -77,7 +77,7 @@ public class Game extends JFrame implements Runnable {
         rules = new Rules(this, UILayer);
         credits = new Credits(this, UILayer);
         gamePanel = menu;
-        if (Game.DEBUG) {
+        if (Game.TEST) {
             gamePanel = dungeon;
         }
         add(gamePanel);

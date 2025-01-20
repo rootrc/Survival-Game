@@ -30,7 +30,7 @@ public abstract class ParticleSystem extends GameComponent {
     }
 
     public final void drawComponent(Graphics2D g2d) {
-        if (Game.DEBUG) {
+        if (Game.TEST) {
             return;
         }
         for (int i = 0; i < particles.size(); i++) {

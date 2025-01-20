@@ -32,7 +32,7 @@ public abstract class Trap extends RoomObject {
     }
 
     public static Trap getTrap(int depth, RoomObjectData data, Player player, TileGrid tileGrid) {
-        if ((10 - depth) * (10 - depth) / 20.0 > RNGUtilities.getInt(10) && !Game.DEBUG) {
+        if ((10 - depth) * (10 - depth) / 20.0 > RNGUtilities.getInt(10) && !Game.TEST) {
             return null;
         }
         if (!RNGUtilities.getBoolean(player.getStats().getTrapAppear())) {

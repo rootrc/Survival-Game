@@ -39,7 +39,7 @@ public class LightRock extends RoomObject {
         LightRock lightRock;
         switch (data.id) {
             case RoomObjectData.SMALL_LIGHTROCK:
-                if (-(10 - depth) * (10 - depth) / 40.0 + 7.5 > RNGUtilities.getInt(10) && !Game.DEBUG) {
+                if (-(10 - depth) * (10 - depth) / 40.0 + 7.5 > RNGUtilities.getInt(10) && !Game.TEST) {
                     return null;
                 }
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock0"), 2),
@@ -49,7 +49,7 @@ public class LightRock extends RoomObject {
                 lightRock.setLightRadius(DiffSettings.lightRockLightRadius);
                 return lightRock;
             case RoomObjectData.MEDIUM_LIGHTROCK:
-                if (depth > RNGUtilities.getInt(40) && !Game.DEBUG) {
+                if (depth > RNGUtilities.getInt(40) && !Game.TEST) {
                     return null;
                 }
                 lightRock = new LightRock(new SpriteSheet(ImageUtilities.getImage("objects", "lightRock1"), 2),

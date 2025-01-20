@@ -6,14 +6,12 @@ import core.Game;
 import core.game_components.GameComponent;
 
 public class DungeonUI extends GameComponent {
-    // private HealthBar healthBar;
     private Timer timer;
     private MiniMap miniMap;
     private WarningDisplay warningDisplay;
 
     public DungeonUI(HealthBar healthBar, Timer timer, MiniMap miniMap, WarningDisplay warningDisplay) {
         super(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
-        // this.healthBar = healthBar;
         this.timer = timer;
         this.miniMap = miniMap;
         this.warningDisplay = warningDisplay;

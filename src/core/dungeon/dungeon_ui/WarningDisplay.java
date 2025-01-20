@@ -81,8 +81,12 @@ public class WarningDisplay extends GameComponent {
     public void death() {
         setMessage("you died!");
     }
-
+    
     public void oneMinuteWarning() {
         setMessage("one minute left");
+    }
+    
+    public void timeOut() {
+        setMessage("time out!");
     }
 }

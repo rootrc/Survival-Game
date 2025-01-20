@@ -23,7 +23,7 @@ class RoomFileData extends FileOpener {
                 .append(String.format("%02d", id)).toString());
         modifier = RNGUtilities.getInt(2);
         this.depth = depth;
-        if (Game.DEBUG) {
+        if (Game.TEST) {
             modifier = NO_MODIFIER;
         }
         readRoomData();
@@ -49,7 +49,7 @@ class RoomFileData extends FileOpener {
         }
         int objectDataSetCnt = nextInt();
         int setNum = RNGUtilities.getInt(objectDataSetCnt);
-        if (Game.DEBUG) {
+        if (Game.TEST) {
             setNum = Dungeon.SETNUM;
         }
         int K;

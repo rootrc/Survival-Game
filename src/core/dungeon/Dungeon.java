@@ -31,7 +31,7 @@ import core.utilities.Easing;
 public class Dungeon extends GamePanel {
     public static final int LAYER = 0;
     public static final int SETNUM = 0;
-    private static final int STARTING_ROOM = 1;
+    public static final int STARTING_ROOM = 1;
 
     private RoomFactory roomFactory;
     private Room room;
@@ -49,6 +49,7 @@ public class Dungeon extends GamePanel {
     private Easing easing;
     private int roomTransitionCnt;
 
+    private boolean alive;
     private DeathScreen deathScreen;
     private int deathCnt;
 
@@ -57,8 +58,7 @@ public class Dungeon extends GamePanel {
             if (removalRoom != null) {
                 return;
             }
-
-            if (Game.DEBUG) {
+            if (Game.TEST) {
                 remove(room);
             } else {
                 removalRoom = room;
@@ -80,6 +80,10 @@ public class Dungeon extends GamePanel {
 
     private final Action playerDeath = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
+            if (!alive) {
+                return;
+            }
+            alive = false;
             deathCnt = 1;
             fadeOut(2);
             player.resetKeyboardActions();
@@ -120,6 +124,19 @@ public class Dungeon extends GamePanel {
 
     @Override
     public void updateComponent() {
+        if (dungeonUI.getTimer().getTime() == 0 && alive) {
+            if (!alive) {
+                return;
+            }
+            alive = false;
+            deathCnt = 1;
+            fadeOut(2);
+            player.resetKeyboardActions();
+            dungeonUI.getWarningDisplay().timeOut();
+            setFadingEffectAlpha(60);
+            setFadingEffectColor(Color.WHITE);
+            room.setFreeze(true);
+        }
         if (removalRoom != null) {
             roomTransitionCnt++;
             removalRoom.setLocation(easing.easeInOutQuad(roomTransitionCnt));
@@ -145,6 +162,7 @@ public class Dungeon extends GamePanel {
 
     public void reset() {
         remove();
+        alive = true;
         inventory = new Inventory(UILayer, DiffSettings.startingInventorySize);
         WarningDisplay warningDisplay = new WarningDisplay();
         warningDisplay.starting();
@@ -152,11 +170,12 @@ public class Dungeon extends GamePanel {
         dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599, warningDisplay), new MiniMap(), warningDisplay);
         roomFactory = new RoomFactory(player, UILayer, dungeonUI.getMiniMap());
         room = roomFactory.getStartingRoom(STARTING_ROOM);
-        inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer(), roomFactory));
+        inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer()));
         dungeonUI.getMiniMap().setStartingRoom(room);
         snowParticles = new SnowParticles(player);
         debugScreen.updateRoom(room);
-        if (!Game.DEBUG) {
+        debugScreen.setTimer(dungeonUI.getTimer());
+        if (!Game.TEST) {
             add();
         } else {
             add(room);

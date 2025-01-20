@@ -24,7 +24,7 @@ public class Menu extends GamePanel {
             image = ImageUtilities.getImage("menu_images", "menu");
         }
         add(new UIButton(game.changePanel("dungeon"), new Rectangle(156, 380, 384, 96),
-        ImageUtilities.getImage("UI", "StartButton")));
+                ImageUtilities.getImage("UI", "StartButton")));
         add(new UIButton(game.changePanel("options"), new Rectangle(156, 500, 384, 96),
                 ImageUtilities.getImage("UI", "OptionsButton")));
         add(new UIButton(game.changePanel("rules"), new Rectangle(156, 620, 384, 96),
@@ -35,21 +35,6 @@ public class Menu extends GamePanel {
                 System.exit(0);
             }
         }));
-        // getInputMap(2).put(KeyBinds.TEMP, "outputImage");
-        // getActionMap().put("outputImage", new AbstractAction() {
-        // public void actionPerformed(ActionEvent e) {
-        // try {
-        // System.out.println("hi");
-        // BufferedImage image = new BufferedImage(getWidth(), getHeight(),
-        // Transparency.TRANSLUCENT);
-        // Graphics2D g2d = image.createGraphics();
-        // printAll(g2d);
-        // ImageIO.write(image, "png", new File("hi.png"));
-        // } catch (IOException ex) {
-        // ex.printStackTrace();
-        // }
-        // }
-        // });
     }
 
     @Override

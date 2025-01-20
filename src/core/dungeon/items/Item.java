@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 public class Item implements Comparable<Item> {
     private int id;
     private ImageIcon imageIcon;
-    // private ImageIcon rolloverIcon;
     private String name;
     private String description;
     private ArrayList<Integer> incompatible;
@@ -40,14 +39,6 @@ public class Item implements Comparable<Item> {
     public ItemAction getItemAction() {
         return itemAction;
     }
-
-    // public String getName() {
-    //     return name;
-    // }
-
-    // public String getDescription() {
-    //     return description;
-    // }
 
     public boolean canBeFoundInChest() {
         return itemAction.canBeFoundInChest();

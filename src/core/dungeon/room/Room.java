@@ -48,14 +48,6 @@ public class Room extends GameComponent {
         add(lightingEngine);
     }
 
-    // TEMP
-    public Room(TileGrid tileGrid) {
-        super(tileGrid.getWidth(), tileGrid.getHeight());
-        this.tileGrid = tileGrid;
-        add(tileGrid.getTileGridFloor());
-        add(tileGrid.getTileGridCeiling());
-    }
-
     @Override
     public void updateComponent() {
         if (UILayer.getComponentCount() != 0 || isFrozen) {
@@ -65,7 +57,7 @@ public class Room extends GameComponent {
     }
 
     public void update() {
-        if (Game.DEBUG) {
+        if (Game.TEST) {
             return;
         }
         int tx = Game.SCREEN_WIDTH / 2 - (int) player.getX();

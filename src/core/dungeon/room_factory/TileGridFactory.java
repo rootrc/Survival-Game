@@ -10,7 +10,6 @@ import core.dungeon.room.tile.Tile;
 import core.dungeon.room.tile.TileGrid;
 import core.game_components.Factory;
 import core.utilities.RNGUtilities;
-import core.utilities.roomgenerator.MapGenerator;
 
 // When I wrote this only God and I knew how it was worked
 // Now only God knows
@@ -40,11 +39,6 @@ class TileGridFactory extends Factory<TileGrid> {
     }
 
     private TileGridFactory() {
-    }
-
-    static TileGrid createRandomGrid(int N, int M, Player player) {
-        Tile[][][][] tileGridArray = createTileGridArray(MapGenerator.getRandomMap(N, M));
-        return new TileGrid(tileGridArray, player, getCollisionChecker(tileGridArray), null);
     }
 
     static TileGrid createTileGrid(RoomFileData file, Player player) {

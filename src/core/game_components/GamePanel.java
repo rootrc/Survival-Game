@@ -18,7 +18,7 @@ public abstract class GamePanel extends JPanel {
     public GamePanel(Game game, UILayer UILayer) {
         this.UILayer = UILayer;
         setPreferredSize(new Dimension(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT));
-        if (!Game.DEBUG) {
+        if (!Game.TEST) {
             setBackground(Color.BLACK);
         }
         setLayout(null);

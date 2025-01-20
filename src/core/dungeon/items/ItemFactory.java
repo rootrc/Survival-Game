@@ -7,7 +7,6 @@ import java.util.Collections;
 import core.dungeon.dungeon_ui.Timer;
 import core.dungeon.items.Item.ItemAction;
 import core.dungeon.room.entity.Player;
-import core.dungeon.room_factory.RoomFactory;
 import core.game_components.Factory;
 import core.utilities.FileOpener;
 import core.utilities.ImageUtilities;
@@ -16,14 +15,12 @@ import core.utilities.RNGUtilities;
 public class ItemFactory extends Factory<Item> {
     private Player player;
     private Timer timer;
-    private RoomFactory roomFactory;
     private Item items[];
     private ArrayList<Item> itemListUsingRarities;
 
-    public ItemFactory(Player player, Timer timer, RoomFactory RoomFactory) {
+    public ItemFactory(Player player, Timer timer) {
         this.player = player;
         this.timer = timer;
-        roomFactory = RoomFactory;
         ItemFileData data = new ItemFileData();
         items = new Item[data.N];
         itemListUsingRarities = new ArrayList<>();

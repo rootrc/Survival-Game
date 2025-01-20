@@ -32,12 +32,6 @@ public class RoomFactory extends Factory<Room> {
         dungeonGenerator = new DungeonLayoutGenerator();
     }
 
-    // TEMP
-    public Room createRandomRoom(int N, int M) {
-        TileGrid tileGrid = TileGridFactory.createRandomGrid(N, M, player);
-        return new Room(tileGrid);
-    }
-
     public Room getStartingRoom(int id) {
         player.setLocation(312, 100);
         RoomFileData file = new RoomFileData(id, 0);
@@ -45,7 +39,7 @@ public class RoomFactory extends Factory<Room> {
         RoomObjectManager roomObjectManager = roomObjectManagerFactory.getRoomObjectManager(file, tileGrid);
         LightingEngine lightingEngine = new LightingEngine(player, tileGrid, roomObjectManager);
         Room room = new Room(id, 0, player, lightingEngine, tileGrid, roomObjectManager, UILayer);
-        if (!Game.DEBUG) {
+        if (!Game.TEST) {
             room.setLocation(Game.SCREEN_WIDTH / 2 - player.getX(), Game.SCREEN_HEIGHT / 2 - player.getY());
         }
         putRoom(id, room);
@@ -86,7 +80,7 @@ public class RoomFactory extends Factory<Room> {
     }
 
     private void setTransition(Room previousRoom, Room nextRoom) {
-        if (Game.DEBUG) {
+        if (Game.TEST) {
             return;
         }
         previousRoom.setFreeze(true);

@@ -37,10 +37,8 @@ public class Timer extends GameComponent {
     public Timer(int startTime, WarningDisplay warningDisplay) {
         super(148, 66);
         setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, 32);
-        this.startTime = startTime;
         this.warningDisplay = warningDisplay;
-        startNanoTime = (int) (System.nanoTime() / 1000000000);
-        displayTime = String.format("%02d:%02d", ((startTime / 60) % 60), ((startTime) % 60));
+        setStartTime(startTime);
         if (font != null) {
             return;
         }
@@ -159,12 +157,15 @@ public class Timer extends GameComponent {
         return timeInSeconds;
     }
 
-    public boolean isZero() {
-        return timeInSeconds == 0;
-    }
-
     public int getStartTime() {
         return startTime;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+        startNanoTime = (int) (System.nanoTime() / 1000000000);
+        displayTime = String.format("%02d:%02d", ((startTime / 60) % 60), ((startTime) % 60));
+        timeInSeconds = -1;
     }
 
     public void addStartTime(int delta) {

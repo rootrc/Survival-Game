@@ -88,9 +88,6 @@ public class PathFinder {
 
     private boolean canTravel(int r, int c) {
         return collisionArray[r][c].getHitbox() == null;
-        // return collisionArray[r][c].getHitbox() == null ||
-        // collisionArray[r][c].getHitbox().getWidth() <= Tile.SIZE / 4 ||
-        // collisionArray[r][c].getHitbox().getHeight() <= Tile.SIZE / 4;
     }
 
     private boolean canTravel(int r0, int c0, int r1, int c1, int[] d) {
