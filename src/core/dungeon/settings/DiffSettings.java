@@ -14,10 +14,28 @@ public class DiffSettings {
 
     public static void setEasy() {
         startingInventorySize = 2;
+        startingHealth = 6;
+        playerLightRadiusFactor = 35;
+        playerDetectionRadiusSquared = 250;
+        lightRockValue = 0.06;
+        lightRockLightRadius = 60;
+    }
+    
+    public static void setMedium() {
+        startingInventorySize = 2;
         startingHealth = 5;
         playerLightRadiusFactor = 25;
         playerDetectionRadiusSquared = 200;
         lightRockValue = 0.04;
         lightRockLightRadius = 40;
+    }
+
+    public static void setHard() {
+        startingInventorySize = 2;
+        startingHealth = 4;
+        playerLightRadiusFactor = 15;
+        playerDetectionRadiusSquared = 100;
+        lightRockValue = 0.02;
+        lightRockLightRadius = 20;
     }
 }

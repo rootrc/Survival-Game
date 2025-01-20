@@ -39,15 +39,14 @@ public class Timer extends GameComponent {
         setLocation((Game.SCREEN_WIDTH - getWidth()) / 2, 32);
         this.warningDisplay = warningDisplay;
         setStartTime(startTime);
-        if (font != null) {
-            return;
-        }
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/big_pixel.otf")).deriveFont(40.0f);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FontFormatException e) {
-            e.printStackTrace();
+        if (font == null) {
+            try {
+                font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/big_pixel.otf")).deriveFont(40.0f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (FontFormatException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package core.dungeon;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -204,18 +205,30 @@ public class Dungeon extends GamePanel {
         UILayer.removeAll();
     }
 
-    // TODO/EDIT
-    public int getPoints() {
+    public ArrayList<String> getDeathScreenDisplay() {
+        ArrayList<String> list = new ArrayList<>();
+        int time = (dungeonUI.getTimer().getStartTime() - dungeonUI.getTimer().getTime());
+        list.add("Time Survived: " + String.format("%02d:%02d", ((time / 60) % 60), (time % 60)));
+        list.add("Rooms Discovered: " + dungeonUI.getMiniMap().getExploredRoomCnt());
+        list.add("Depth Traversed: " + dungeonUI.getMiniMap().getMaxDepth() + 1);
+        list.add("Items acquired: " + inventory.getOccupiedSlots());
+        list.add("Player interactions: " + player.getInteractionCnt());
+        list.add("Point Multiplier: " + (int) (100 * player.getStats().getPointMultiplier()) + '%');
+        return list;
+    }
+
+    public int getScore() {
         int sum = 0;
         sum += (dungeonUI.getTimer().getStartTime() - dungeonUI.getTimer().getTime());
-        sum += 20 * dungeonUI.getMiniMap().getExploredRoomCnt();
+        sum += 30 * (dungeonUI.getMiniMap().getExploredRoomCnt() - 1);
         sum += 100 * dungeonUI.getMiniMap().getMaxDepth();
-        sum += 40 * inventory.getOccupiedSlots();
-        sum *= 10;
+        sum += 100 * inventory.getOccupiedSlots();
+        sum += 5 * player.getInteractionCnt();
         sum *= player.getStats().getPointMultiplier();
         if (dungeonUI.getTimer().getTime() == 0) {
             sum *= 1.5;
         }
+        sum *= 10;
         return sum;
     }
 }

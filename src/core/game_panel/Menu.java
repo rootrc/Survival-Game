@@ -23,11 +23,11 @@ public class Menu extends GamePanel {
         if (image == null) {
             image = ImageUtilities.getImage("menu_images", "menu");
         }
-        add(new UIButton(game.changePanel("dungeon"), new Rectangle(156, 380, 384, 96),
+        add(new UIButton(game.changePanel("dungeon"), new Rectangle(104, 380, 384, 96),
                 ImageUtilities.getImage("UI", "StartButton")));
-        add(new UIButton(game.changePanel("options"), new Rectangle(156, 500, 384, 96),
+        add(new UIButton(game.changePanel("options"), new Rectangle(104, 500, 384, 96),
                 ImageUtilities.getImage("UI", "OptionsButton")));
-        add(new UIButton(game.changePanel("rules"), new Rectangle(156, 620, 384, 96),
+        add(new UIButton(game.changePanel("rules"), new Rectangle(104, 620, 384, 96),
                 ImageUtilities.getImage("UI", "RulesButton")));
         getInputMap(2).put(KeyBinds.ESC, "exit");
         getActionMap().put("exit", UILayer.createAndOpenConfirmUI(new AbstractAction() {

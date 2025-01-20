@@ -52,6 +52,8 @@ public class Player extends Entity {
     private SpriteSheet lastSpriteSheet;
     private WarningDisplay warningDisplay;
 
+    private int interactionCnt;
+
     public Player(GamePanel gamePanel, Action nextRoom, Action death, Inventory inventory,
             WarningDisplay warningDisplay) {
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
@@ -282,6 +284,10 @@ public class Player extends Entity {
         return inventory;
     }
 
+    public int getInteractionCnt() {
+        return interactionCnt;
+    }
+
     private final Action interact = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             if (interactables == null || interactionCooldown < 30) {
@@ -294,6 +300,7 @@ public class Player extends Entity {
                 }
                 RoomObject interactable = interactables.get(i);
                 interactable.interaction(Player.this);
+                interactionCnt++;
                 if (interactable instanceof Ladder) {
                     nextRoom.actionPerformed(e);
                 }

@@ -1,6 +1,8 @@
 package core.dungeon.dungeon_ui;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -8,6 +10,9 @@ import java.awt.Rectangle;
 import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -20,6 +25,7 @@ import core.game_components.UILayer;
 import core.utilities.ImageUtilities;
 
 public class DeathScreen extends GameComponent {
+    private static Font font;
     private BufferedImage image;
 
     public DeathScreen(UILayer UILayer, Action restart, Action mainMenu) {
@@ -33,6 +39,15 @@ public class DeathScreen extends GameComponent {
                 System.exit(0);
             }
         }), new Rectangle(getWidth() / 2 - 224, 648, 448, 64), ImageUtilities.getImage("UI", "QuitButton")));
+        if (font == null) {
+            try {
+                font = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/big_pixel.otf")).deriveFont(32.0f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (FontFormatException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void build(Dungeon dungeon, MiniMap miniMap) {
@@ -44,12 +59,17 @@ public class DeathScreen extends GameComponent {
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
         Graphics2D g2d = image.createGraphics();
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
-        g2d.drawString("Rooms Explored:" + miniMap.getExploredRoomCnt(), 100, 100);
-        g2d.drawString("Max Depth:" + miniMap.getMaxDepth(), 100, 120);
-        g2d.drawString("Points:" + dungeon.getPoints(), 100, 140);
+        g2d.setFont(font);
+        ArrayList<String> list = dungeon.getDeathScreenDisplay();
+        for (int i = 0; i < list.size(); i++) {
+            g2d.drawString(list.get(i), 275, 80 + 40 * i);
+        }
+        g2d.setFont(font.deriveFont(60.0f));
+        g2d.drawString("Score:", 275, 170 + 40 * list.size());
+        g2d.setColor(Color.RED);
+        g2d.setFont(font.deriveFont(70.0f));
+        g2d.drawString(String.valueOf(dungeon.getScore()), 550, 170 + 40 * list.size());
     }
 
     @Override

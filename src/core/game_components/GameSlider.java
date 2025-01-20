@@ -29,6 +29,7 @@ public class GameSlider extends JSlider {
         for (int i = 0; i < labels.length; i++) {
             labelTable.put(i, new JLabel(labels[i]));
             labelTable.get(i).setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+            labelTable.get(i).setForeground(Color.WHITE);
         }
         setLabelTable(labelTable);
         setPaintLabels(true);

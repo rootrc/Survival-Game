@@ -1,14 +1,21 @@
 package core;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.ToolTipManager;
 
 import core.dungeon.Dungeon;
-import core.dungeon.settings.DiffSettings;
 import core.game_components.GamePanel;
 import core.game_components.UILayer;
 import core.game_panel.Credits;
@@ -18,20 +25,6 @@ import core.game_panel.Rules;
 
 // TODO
 // Comment 4 classes
-// Death screen (points)
-// Add music
-// Add options
-// Finish “What happens when the timer hits 0”
-
-// try {
-//     AudioInputStream sound = AudioSystem.getAudioInputStream(new File ("bgm.wav"));
-//     Clip background = AudioSystem.getClip();
-//     background.open(sound);
-//     background.setFramePosition (0);
-//     background.loop(Clip.LOOP_CONTINUOUSLY);
-// } catch (Exception e) {
-
-// }
 
 public class Game extends JFrame implements Runnable {
     public static final int SCREEN_WIDTH = 1024;
@@ -43,6 +36,10 @@ public class Game extends JFrame implements Runnable {
     public static final boolean TEST = false;
     public static boolean LIGHTING = true;
     public static boolean HITBOXES = false;
+
+    public static FloatControl audioVolume;
+    public static double screenShakeDurationMulti;
+    public static double screenShakeStrengthMulti;
 
     private GamePanel gamePanel;
     private Dungeon dungeon;
@@ -56,10 +53,10 @@ public class Game extends JFrame implements Runnable {
     private Thread gameThread;
 
     public Game() {
-        DiffSettings.setEasy();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setTitle("Survival Game");
+        initMusic();
         initPanels();
         pack();
         setLocationRelativeTo(null);
@@ -67,6 +64,23 @@ public class Game extends JFrame implements Runnable {
         ToolTipManager.sharedInstance().setInitialDelay(250);
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    private void initMusic() {
+        try {
+            AudioInputStream sound = AudioSystem.getAudioInputStream(new File("res/audio/bgm.wav"));
+            Clip background = AudioSystem.getClip();
+            background.open(sound);
+            audioVolume = (FloatControl) background.getControl(FloatControl.Type.MASTER_GAIN);
+            background.setFramePosition(0);
+            background.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initPanels() {

@@ -13,6 +13,7 @@ import core.game_components.GameComponent;
 
 public class WarningDisplay extends GameComponent {
     private static final int FONT_HEIGHT = 56;
+    public static int textSpeed = 1;
     private static Font font;
     private String message1;
     private String message2;
@@ -42,7 +43,7 @@ public class WarningDisplay extends GameComponent {
         int stringWidth = Math.max(getFontMetrics(font).stringWidth(message1), getFontMetrics(font).stringWidth(message2));
         if ((Game.SCREEN_WIDTH - stringWidth) / 2 <= getX() + stringWidth / 8
         && getX() - stringWidth / 8 <= (Game.SCREEN_WIDTH - stringWidth) / 2) {
-            speed = 1;
+            speed = textSpeed;
         } else {
             speed = 32;
         }
@@ -61,6 +62,9 @@ public class WarningDisplay extends GameComponent {
     }
 
     private void setMessage(String message1, String message2) {
+        if (textSpeed == 0) {
+            return;
+        }
         this.message1 = message1.toUpperCase();
         this.message2 = message2.toUpperCase();
         setX(-getFontMetrics(font).stringWidth(message1));
@@ -87,6 +91,6 @@ public class WarningDisplay extends GameComponent {
     }
     
     public void timeOut() {
-        setMessage("time out!");
+        setMessage("time's up!");
     }
 }

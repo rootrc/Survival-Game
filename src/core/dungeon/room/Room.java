@@ -141,11 +141,11 @@ public class Room extends GameComponent {
     private static int screenShakeStrength;
 
     public static void setScreenShakeDuration(int screenShakeDuration) {
-        screenShakeCnt = screenShakeDuration;
+        screenShakeCnt = (int) (screenShakeDuration * Game.screenShakeDurationMulti);
     }
 
     public static void setScreenShakeStrength(int screenShakeStrength) {
-        Room.screenShakeStrength = screenShakeStrength;
+        Room.screenShakeStrength = (int) (screenShakeStrength * Game.screenShakeStrengthMulti);
     }
 
     // For Debug Screen

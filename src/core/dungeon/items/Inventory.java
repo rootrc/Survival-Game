@@ -136,7 +136,7 @@ public class Inventory extends GameComponent {
     }
 
     public int getOccupiedSlots() {
-        return occupiedSlots;
+        return occupiedSlots - 1;
     }
 
     private class ItemSlot extends GameButton {
