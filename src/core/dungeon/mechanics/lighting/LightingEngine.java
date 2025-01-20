@@ -47,21 +47,28 @@ public class LightingEngine extends GameComponent {
 
     private BufferedImage fogOfWar;
     private BufferedImage image;
-    private HashSet<Integer> fogOfWarPoints = new HashSet<>();
+    private HashSet<Integer> fog = new HashSet<>();
     private Player player;
     private HashMap<RoomObject, Light> lights = new HashMap<>();
     private ShadowCasting shadowCasting;
     private boolean isPlayerPresent;
+    private int lastPlayerX;
+    private int lastPlayerY;
 
+    // Description: The constructor of the class
+    // Parameters: The player, tilegrid, and room object manager
+    // Return: Nothing
     public LightingEngine(Player player, TileGrid tileGrid, RoomObjectManager roomObjectManager) {
         super(tileGrid.getWidth(), tileGrid.getHeight());
         this.player = player;
         shadowCasting = new ShadowCasting(player, tileGrid);
+        // Adds lights based on the room objects in room object manager
         lights.put(player, new Light());
         lights.get(player).visibilityFactor = 1;
         for (RoomObject roomObject : roomObjectManager.getRoomObjects()) {
             updateLight(roomObject);
         }
+        // Sets buffered images (doing it this way is so much faster)
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         fogOfWar = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
@@ -73,11 +80,27 @@ public class LightingEngine extends GameComponent {
         isPlayerPresent = true;
     }
 
+    // Description: Sets if the player is present
+    // Parameters: A boolean
+    // Return: Nothing
+    public void setPlayerPresent(boolean isPlayerPresent) {
+        this.isPlayerPresent = isPlayerPresent;
+        lastPlayerX = player.getX();
+        lastPlayerY = player.getY();
+        if (isPlayerPresent) {
+            lights.get(player).visibilityFactor = 1;
+        }
+    }
+
+    // Description: Updates the lighting engine
+    // Parameters: Nothing
+    // Return: Nothing
     public void update() {
         for (Light light : lights.values()) {
-            light.update();
+            light.update(); // Update each light
         }
         for (RoomObject roomObject : lights.keySet()) {
+            // Update each light based on it's corrsponding room object
             if (roomObject.getLightRadius() <= 1) {
                 continue;
             }
@@ -85,6 +108,9 @@ public class LightingEngine extends GameComponent {
         }
     }
 
+    // Description: Draws the lighting engine
+    // Parameters: Graphics2D
+    // Return: Nothing
     public void drawComponent(Graphics2D g2d) {
         if (!Game.LIGHTING) {
             return;
@@ -92,26 +118,27 @@ public class LightingEngine extends GameComponent {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         image = gd.getDefaultConfiguration().createCompatibleImage(getWidth(), getHeight(),
                 Transparency.TRANSLUCENT);
-        if (!isPlayerPresent) {
+        if (!isPlayerPresent) { // If player is not present
             Graphics2D gl = image.createGraphics();
             gl.drawImage(fogOfWar, 0, 0, null);
             gl.setComposite(AlphaComposite.DstIn);
-
-            for (RoomObject roomObject : lights.keySet()) {
-                if (roomObject.getLightRadius() <= 1) {
-                    continue;
-                }
+            for (RoomObject roomObject : lights.keySet()) { // Draws each light
                 int lightRadius = getEffectiveLightRadius(roomObject);
-                if (lightRadius <= 1) {
+                // Checks if the light radius is too small to draw
+                // The room's light radius is the max light radius
+                // The light radius from geteffective light radius is current radius
+                // (increases/decreases based on player distance)
+                if (roomObject.getLightRadius() <= 1 || lightRadius <= 1) {
                     continue;
                 }
-                if (roomObject.getClass() == Player.class) {
+                if (roomObject.getClass() == Player.class) { // If the roomobject is the player
                     gl.drawImage(getDarknessFilter(lightRadius), lastPlayerX +
                             roomObject.getWidth() / 2 - lightRadius,
                             lastPlayerY + roomObject.getHeight() / 2 - lightRadius, null);
                     lights.get(player).decreaseVisibilityValue();
                     continue;
                 }
+                // If the roomObject's parent is also a roomObject, use data from that parent
                 if (roomObject.getParent() instanceof RoomObject) {
                     gl.drawImage(getDarknessFilter(lightRadius), roomObject.getParent().getX() + roomObject.getX() +
                             roomObject.getWidth() / 2 - lightRadius,
@@ -125,9 +152,10 @@ public class LightingEngine extends GameComponent {
                 }
             }
             gl.dispose();
-        } else {
-            if (!fogOfWarPoints.contains(10000 * player.getX() + player.getY())) {
-                fogOfWarPoints.add(10000 * player.getX() + player.getY());
+        } else { // If player is present
+            if (!fog.contains(10000 * player.getX() + player.getY())) { // If player's location is not in fog
+                // Add too fog
+                fog.add(10000 * player.getX() + player.getY());
                 int lightRadius = getEffectiveLightRadius(player) / 2;
                 Graphics2D gl = fogOfWar.createGraphics();
                 gl.setComposite(AlphaComposite.DstIn);
@@ -139,12 +167,9 @@ public class LightingEngine extends GameComponent {
             Graphics2D gl = image.createGraphics();
             gl.drawImage(fogOfWar, 0, 0, null);
             gl.setComposite(AlphaComposite.DstIn);
-            for (RoomObject roomObject : lights.keySet()) {
-                if (roomObject.getLightRadius() <= 1) {
-                    continue;
-                }
+            for (RoomObject roomObject : lights.keySet()) { // Similar to above
                 int lightRadius = getEffectiveLightRadius(roomObject);
-                if (lightRadius <= 1) {
+                if (roomObject.getLightRadius() <= 1 || lightRadius <= 1) {
                     continue;
                 }
                 if (roomObject.getParent() instanceof RoomObject) {
@@ -164,42 +189,51 @@ public class LightingEngine extends GameComponent {
         g2d.drawImage(image, 0, 0, null);
     }
 
+    // Description: Updates a room object's light
+    // Parameters: The room object
+    // Return: Nothing
     private void updateLight(RoomObject roomObject) {
+        // Recursively updates the lighting inside the room object
         for (Component component : roomObject.getComponents()) {
             if (component instanceof RoomObject) {
                 updateLight((RoomObject) component);
             }
         }
+        // If no light is already attached to roomobject, assign one
         if (!lights.keySet().contains(roomObject)) {
             attachLight(roomObject);
         }
-        if (roomObject.getParent() instanceof RoomObject) {
+
+        if (roomObject.getParent() instanceof RoomObject) { // If parent exists, move roomobject occording to adjust
             roomObject.moveX(roomObject.getParent().getX());
             roomObject.moveY(roomObject.getParent().getY());
-            if ((shadowCasting.isVisible(roomObject)
-            && player.getDistanceFromRoomObject(roomObject) < roomObject.getLightVisibility())
-            || (player.getDistanceFromRoomObject(roomObject) < getEffectiveLightRadius(player))) {
-                lights.get(roomObject).increaseVisibilityValue();
-            } else {
-                lights.get(roomObject).decreaseVisibilityValue();
-            }
+        }
+        // If light is "visible" (visible from shadowcasing & distance OR visible from
+        // light radius)
+        if ((shadowCasting.isVisible(roomObject)
+                && player.getDistanceFromRoomObject(roomObject) < roomObject.getLightVisibility()
+                        * player.getLightRadius() * player.getStats().getVision())
+                || (player.getDistanceFromRoomObject(roomObject) < getEffectiveLightRadius(player))) {
+            lights.get(roomObject).increaseVisibilityValue();
+        } else {
+            lights.get(roomObject).decreaseVisibilityValue();
+        }
+        if (roomObject.getParent() instanceof RoomObject) { // If parent exists, move roomobject occording to adjust
             roomObject.moveX(-roomObject.getParent().getX());
             roomObject.moveY(-roomObject.getParent().getY());
-        } else {
-            if ((shadowCasting.isVisible(roomObject)
-                    && player.getDistanceFromRoomObject(roomObject) < roomObject.getLightVisibility() * player.getLightRadius()  * player.getStats().getVision())
-                    || (player.getDistanceFromRoomObject(roomObject) < getEffectiveLightRadius(player))) {
-                lights.get(roomObject).increaseVisibilityValue();
-            } else {
-                lights.get(roomObject).decreaseVisibilityValue();
-            }
         }
     }
 
+    // Description: Get effective radius radius of room object
+    // Parameters: The room object
+    // Return: The light radius
     private int getEffectiveLightRadius(RoomObject roomObject) {
         return (int) (lights.get(roomObject).getFactor(roomObject));
     }
 
+    // Description: Attach light to room object
+    // Parameters: The room object
+    // Return: The light radius
     private void attachLight(RoomObject roomObject) {
         lights.put(roomObject, new Light());
         for (int i = 0; i < 35; i++) {
@@ -207,13 +241,19 @@ public class LightingEngine extends GameComponent {
         }
     }
 
+    // Description: Get darkness filter (light radius)
+    // Parameters: The radius
+    // Return: The darkness filter image
     public static BufferedImage getDarknessFilter(int radius) {
-        if (radius == 0) {
+        if (radius == 0) { // If too small return null
+            System.out.println("hi");
             return null;
         }
+        // If already cached, return cached image
         if (DARKNESS_FILTER.get(radius) != null) {
             return DARKNESS_FILTER.get(radius);
         }
+        // Creates
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         BufferedImage image = gd.getDefaultConfiguration().createCompatibleImage(2 * radius,
                 2 * radius, Transparency.TRANSLUCENT);
@@ -226,6 +266,8 @@ public class LightingEngine extends GameComponent {
         return image;
     }
 
+    // Exactly the same as getDarknessFilter() except with different light shading
+    // and cache, used for fog.
     private BufferedImage getDarknessFilter2(int radius) {
         if (radius == 0) {
             return null;
@@ -253,16 +295,22 @@ public class LightingEngine extends GameComponent {
         private double randomFactor;
         private double visibilityFactor;
 
+        // Description: Updates the light by randomly flicking it
+        // Parameters: Nothing
+        // Return: Nothing
         void update() {
             randomFactor += RNGUtilities.getDouble(2 * flickerDegree) - flickerDegree - randomFactor * flickerSize;
         }
-
+        
+        // Description: Gets the factor that affects effective light radius
+        // Parameters: The room object
+        // Return: Nothing
         double getFactor(RoomObject roomObject) {
             if (prevLightRadius == 0) {
                 prevLightRadius = roomObject.getLightRadius();
             }
             if (visibilityFactor == 0) {
-                return visibilityFactor;
+                return 0;
             }
             if (roomObject.getLightRadius() > prevLightRadius) {
                 visibilityFactor = 1
@@ -273,24 +321,14 @@ public class LightingEngine extends GameComponent {
             return roomObject.getLightRadius() * (Easing.easeOutQuad(visibilityFactor) + randomFactor);
         }
 
+        // Getters and setters
+
         void increaseVisibilityValue() {
             visibilityFactor = Math.min(visibilityFactor + lightRadiusChangeSpeed, 1);
         }
 
         void decreaseVisibilityValue() {
             visibilityFactor = Math.max(visibilityFactor - lightRadiusChangeSpeed, 0);
-        }
-    }
-
-    private int lastPlayerX;
-    private int lastPlayerY;
-
-    public void setPlayerPresent(boolean isPlayerPresent) {
-        this.isPlayerPresent = isPlayerPresent;
-        lastPlayerX = player.getX();
-        lastPlayerY = player.getY();
-        if (isPlayerPresent) {
-            lights.get(player).visibilityFactor = 1;
         }
     }
 }

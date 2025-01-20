@@ -55,6 +55,9 @@ public class Dungeon extends GamePanel {
     private int deathCnt;
 
     private final Action nextRoom = new AbstractAction() {
+        // Description: An action that transitions the player from one room to another
+        // Parameters: An ActionEvent
+        // Return: Nothing
         public void actionPerformed(ActionEvent e) {
             if (removalRoom != null) {
                 return;
@@ -62,6 +65,7 @@ public class Dungeon extends GamePanel {
             if (Game.TEST) {
                 remove(room);
             } else {
+                // Displays previous room as transitioning
                 removalRoom = room;
                 if (player.getDepthMovement() == 1) {
                     easing.set(room.getLocation(), new Point(room.getX(), -removalRoom.getHeight()));
@@ -70,6 +74,7 @@ public class Dungeon extends GamePanel {
                 }
             }
 
+            // Adding new room
             room = roomFactory.getNextRoom(room);
             add(room, -1);
             debugScreen.updateRoom(room);
@@ -80,6 +85,9 @@ public class Dungeon extends GamePanel {
     };
 
     private final Action playerDeath = new AbstractAction() {
+        // Description: An action that's run when the player dies and transitions to death screen
+        // Parameters: An ActionEvent
+        // Return: Nothing
         public void actionPerformed(ActionEvent e) {
             if (!alive) {
                 return;
@@ -96,6 +104,9 @@ public class Dungeon extends GamePanel {
         }
     };
 
+    // Description: The constructor of the class
+    // Parameters: A Game object and UILayer object
+    // Return: Nothing
     public Dungeon(Game game, UILayer UILayer) {
         super(game, UILayer);
         easing = new Easing(60);
@@ -113,7 +124,8 @@ public class Dungeon extends GamePanel {
         }, game.changePanel("mainMenu"));
 
         reset();
-
+        
+        // Sets keybinds
         getInputMap(2).put(KeyBinds.ESC, "pause");
         getActionMap().put("pause", UILayer.openPopupUI(pauseMenu));
         getInputMap(2).put(KeyBinds.DEBUG, "debug");
@@ -122,10 +134,13 @@ public class Dungeon extends GamePanel {
         Room.setScreenShakeDuration(10);
         Room.setScreenShakeStrength(10);
     }
-
+    
+    // Description: Updates the dungeon
+    // Parameters: Nothing
+    // Return: Nothing
     @Override
     public void updateComponent() {
-        if (dungeonUI.getTimer().getTime() == 0 && alive) {
+        if (dungeonUI.getTimer().getTime() == 0 && alive) { // If time has run out
             if (!alive) {
                 return;
             }
@@ -138,7 +153,7 @@ public class Dungeon extends GamePanel {
             setFadingEffectColor(Color.WHITE);
             room.setFreeze(true);
         }
-        if (removalRoom != null) {
+        if (removalRoom != null) { // If in the middle of a transition
             roomTransitionCnt++;
             removalRoom.setLocation(easing.easeInOutQuad(roomTransitionCnt));
             if (easing.getP1().equals(removalRoom.getLocation())) {
@@ -148,7 +163,7 @@ public class Dungeon extends GamePanel {
                 roomTransitionCnt = 0;
             }
         }
-        if (deathCnt != 0) {
+        if (deathCnt != 0) { // If transition to death screen is complete
             deathCnt++;
             if (deathCnt == 5.0 / 2 * Game.UPS) {
                 remove();
@@ -161,6 +176,9 @@ public class Dungeon extends GamePanel {
         super.updateComponent();
     }
 
+    // Description: Resets the dungeon
+    // Parameters: Nothing
+    // Return: Nothing
     public void reset() {
         remove();
         alive = true;
@@ -169,7 +187,7 @@ public class Dungeon extends GamePanel {
         warningDisplay.starting();
         player = new Player(this, nextRoom, playerDeath, inventory, warningDisplay);
         dungeonUI = new DungeonUI(new HealthBar(player), new Timer(599, warningDisplay), new MiniMap(), warningDisplay);
-        roomFactory = new RoomFactory(player, UILayer, dungeonUI.getMiniMap());
+        roomFactory = new RoomFactory(player, dungeonUI.getMiniMap());
         room = roomFactory.getStartingRoom(STARTING_ROOM);
         inventory.setItemFactory(new ItemFactory(player, dungeonUI.getTimer()));
         dungeonUI.getMiniMap().setStartingRoom(room);
@@ -184,6 +202,9 @@ public class Dungeon extends GamePanel {
         }
     }
 
+    // Description: Adds all the components to the dungeon
+    // Parameters: Nothing
+    // Return: Nothing
     private void add() {
         add(room);
         add(snowParticles);
@@ -192,6 +213,9 @@ public class Dungeon extends GamePanel {
         add(UILayer);
     }
 
+    // Description: Removes all the components to the dungeon
+    // Parameters: Nothing
+    // Return: Nothing
     private void remove() {
         if (room == null) {
             return;
@@ -205,18 +229,30 @@ public class Dungeon extends GamePanel {
         UILayer.removeAll();
     }
 
+    // Description: Generates and returns a list of strings to be displayed on death screen based on room data
+    // Parameters: Nothing
+    // Return: A list of all the strings
     public ArrayList<String> getDeathScreenDisplay() {
         ArrayList<String> list = new ArrayList<>();
         int time = (dungeonUI.getTimer().getStartTime() - dungeonUI.getTimer().getTime());
-        list.add("Time Survived: " + String.format("%02d:%02d", ((time / 60) % 60), (time % 60)));
+        list.add("Time Survived: " + String.format("%d:%02d", ((time / 60) % 60), (time % 60)));
         list.add("Rooms Discovered: " + dungeonUI.getMiniMap().getExploredRoomCnt());
-        list.add("Depth Traversed: " + dungeonUI.getMiniMap().getMaxDepth() + 1);
-        list.add("Items acquired: " + inventory.getOccupiedSlots());
-        list.add("Player interactions: " + player.getInteractionCnt());
-        list.add("Point Multiplier: " + (int) (100 * player.getStats().getPointMultiplier()) + '%');
+        list.add("Depth Traversed: " + (dungeonUI.getMiniMap().getMaxDepth() + 1));
+        list.add("Items Acquired: " + inventory.getOccupiedSlots());
+        list.add("Interactions: " + player.getInteractionCnt());
+        int pointMultiplier = (int) (100 * player.getStats().getPointMultiplier());
+        if (DiffSettings.difficulty == 0) {
+            pointMultiplier /= 2;
+        } else if (DiffSettings.difficulty == 2) {
+            pointMultiplier *= 2;
+        }
+        list.add("Point Multiplier: " + pointMultiplier + '%');
         return list;
     }
 
+    // Description: Caculates the score earned and returns it
+    // Parameters: Nothing
+    // Return: An int, the score
     public int getScore() {
         int sum = 0;
         sum += (dungeonUI.getTimer().getStartTime() - dungeonUI.getTimer().getTime());
@@ -229,6 +265,11 @@ public class Dungeon extends GamePanel {
             sum *= 1.5;
         }
         sum *= 10;
+        if (DiffSettings.difficulty == 0) {
+            sum /= 2;
+        } else if (DiffSettings.difficulty == 2) {
+            sum *= 2;
+        }
         return sum;
     }
 }

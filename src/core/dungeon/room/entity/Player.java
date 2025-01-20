@@ -54,8 +54,14 @@ public class Player extends Entity {
 
     private int interactionCnt;
 
+    // Description: The constructor of the class
+    // Parameters: The gamepanel the player belongs to, next room and death actions,
+    // inventory, and warning display
+    // Return: Nothing
     public Player(GamePanel gamePanel, Action nextRoom, Action death, Inventory inventory,
             WarningDisplay warningDisplay) {
+        // Sets spritesheet, hitbox, interactbox, max speed, accleration speed, and
+        // decleration speed
         super(new SpriteSheet(ImageUtilities.getImage("entities", "player"), 4, 8, 8),
                 CollisionBox.getCollisionBox(0.5, 1.75, 1, 1),
                 CollisionBox.getCollisionBox(0, 1.25, 2, 2),
@@ -73,6 +79,9 @@ public class Player extends Entity {
         dashCooldown = 1000;
     }
 
+    // Description: Sets all the keybinds
+    // Parameters: Nothing
+    // Return: Nothing
     private void setKeyBinds() {
         getInputMap(2).put(KeyBinds.INTERACT, "interact");
         getActionMap().put("interact", interact);
@@ -98,16 +107,21 @@ public class Player extends Entity {
         getActionMap().put("decel right", decelerateRight);
     }
 
+    // Description: Updates the player
+    // Parameters: Nothing
+    // Return: Nothing
     @Override
     public void update() {
         updateCnt++;
         interactionCooldown++;
         dashCooldown++;
         setLightRadius(2 * passiveItemStats.lightRadiusFactor * Math.sqrt(health));
-        if (updateCnt % 60 == 0) {
+        // Adds health every second
+        if (updateCnt % Game.UPS == 0) {
             updateCnt = 0;
             addHealth(passiveItemStats.healthRegenPerSecond);
         }
+        // Moves animation
         if (isMoving()) {
             if (hitCnt <= Game.UPS) {
                 getSpriteSheet().next();
@@ -116,6 +130,7 @@ public class Player extends Entity {
             getSpriteSheet().setFrame(getSpriteSheet().getFrame() / 2);
         }
 
+        // Moves player as a result of a dsah
         if (dashCooldown < 10) {
             setSpeedX(NORMALIZE_VECTOR * getMaxSpeed() * DirectionUtilities.getXMovement(Player.this.getDirection()));
             setSpeedY(NORMALIZE_VECTOR * getMaxSpeed() * DirectionUtilities.getYMovement(Player.this.getDirection()));
@@ -126,15 +141,18 @@ public class Player extends Entity {
             setMaxSpeed(getMaxSpeed() / 3);
         }
 
+        // Does various things based on how long ago the player was hit
         if (hitCnt > 0) {
             if (hitCnt == Game.UPS) {
                 replaceSpriteSheet(lastSpriteSheet);
             }
             hitCnt--;
+            // Knockback
             if (hitCnt > 11.0 / 12 * Game.UPS) {
                 moveX(3 * getMaxSpeed() * DirectionUtilities.getXMovement(hitDirection));
                 moveY(3 * getMaxSpeed() * DirectionUtilities.getYMovement(hitDirection));
             } else {
+                // Flashes white
                 if (hitCnt % 10 == 5) {
                     replaceSpriteSheet(ImageUtilities.getImage("entities", "playerWhiteFill"));
                 } else if (hitCnt % 10 == 0) {
@@ -145,13 +163,18 @@ public class Player extends Entity {
         super.update();
     }
 
+    // Description: Moves the player
+    // Parameters: Nothing
+    // Return: Nothing
     @Override
     public void move() {
+        // If just dashed or being knocked back, don't move
         if (dashCooldown < 4 | hitCnt >= 11.0 / 12 * Game.UPS) {
             return;
         }
         double ax = 0;
         double ay = 0;
+        // Get x and y accleration
         if (movingUp && Math.abs(getSpeedY()) <= getMaxSpeed()) {
             ay -= getAccSpeed();
         }
@@ -164,6 +187,7 @@ public class Player extends Entity {
         if (movingRight && Math.abs(getSpeedX()) <= getMaxSpeed()) {
             ax += getAccSpeed();
         }
+        // Sets x and y speed based on accleration
         if (ax == 0) {
             if (getSpeedX() > 0) {
                 setSpeedX(Math.max(getSpeedX() - getDeaccSpeed(), 0));
@@ -183,16 +207,73 @@ public class Player extends Entity {
         } else if (ax == 0 && ay != 0) {
             setSpeedY(Math.max(Math.min(getSpeedY() + ay, getMaxSpeed()), -getMaxSpeed()));
         } else if (ax != 0 && ay != 0) {
-            setSpeedX(Math.max(Math.min(getSpeedX() + NORMALIZE_VECTOR * ax, NORMALIZE_VECTOR * getMaxSpeed()), -NORMALIZE_VECTOR * getMaxSpeed()));
-            setSpeedY(Math.max(Math.min(getSpeedY() + NORMALIZE_VECTOR * ay, NORMALIZE_VECTOR * getMaxSpeed()), -NORMALIZE_VECTOR * getMaxSpeed()));
+            setSpeedX(Math.max(Math.min(getSpeedX() + NORMALIZE_VECTOR * ax, NORMALIZE_VECTOR * getMaxSpeed()),
+                    -NORMALIZE_VECTOR * getMaxSpeed()));
+            setSpeedY(Math.max(Math.min(getSpeedY() + NORMALIZE_VECTOR * ay, NORMALIZE_VECTOR * getMaxSpeed()),
+                    -NORMALIZE_VECTOR * getMaxSpeed()));
         }
     }
 
+    // Description: What happens when colliding with Player (Exists because Abstract
+    // method from RoomObject)
+    // Parameters: Player
+    // Return: Nothing
     public void collides(Player player) {
     }
 
+    // Description: What happens when interacting with Player (Exists because
+    // Abstract method from RoomObject)
+    // Parameters: Player
+    // Return: Nothing
     public void interaction(Player player) {
     }
+
+    // Description: Player taking damage
+    // Parameters: Nothing
+    // Return: Nothing
+    public void takeDamage() {
+        if (hitCnt > 0) { // If still in process of being hit, you have invincibility frames
+            return;
+        }
+        // Reduce health
+        health -= passiveItemStats.damageMulti;
+        if (health < 1.0 / 6 && passiveItemStats.reviveCnt > 0) { // Revive if you have revive
+            passiveItemStats.reviveCnt--;
+            health = 1.0 / 6;
+        }
+        // If health is between 0 and 1, change sprite sheet and display warning
+        if (1.0 / 6 < health && health <= 1 + 1.0 / 6) {
+            replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
+            warningDisplay.oneHealthWarning();
+        }
+        // Resets speed
+        setSpeedX(0);
+        setSpeedY(0);
+        // Sets red tint to screen
+        gamePanel.fadeIn();
+        gamePanel.setFadingEffectAlpha(60);
+        gamePanel.setFadingEffectColor(Color.RED);
+        // Freezes frames and screen shake
+        Game.setFreezeFrame(6);
+        Room.setScreenShakeDuration(15);
+        Room.setScreenShakeStrength(15);
+        if (dashCooldown < 1.0 / 6 * Game.UPS) {
+            setMaxSpeed((int) (getMaxSpeed() / 3));
+        }
+        dashCooldown = 1000;
+        // If dead, set spritesheet to red and do death action
+        if (health <= 1.0 / 6) {
+            replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
+            death.actionPerformed(null);
+            return;
+        }
+        hitCnt = 60;
+        hitDirection = DirectionUtilities.reverseDirection(getDirection());
+        lastSpriteSheet = getSpriteSheet();
+        replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
+    }
+
+    // The following are lots of setters and getters and simple code
 
     public void clearInteractables() {
         interactables.clear();
@@ -217,42 +298,6 @@ public class Player extends Entity {
     public void addHealthPoints(int delta) {
         healthPoints += delta;
         health = Math.min(health, healthPoints);
-    }
-
-    public void takeDamage() {
-        if (hitCnt > 0) {
-            return;
-        }
-        health -= passiveItemStats.damageMulti;
-        if (health < 0 && passiveItemStats.reviveCnt > 0) {
-            passiveItemStats.reviveCnt--;
-            health = 1.0 / 6;
-        }
-        if (1.0 / 6 < health && health <= 1 + 1.0 / 6) {
-            replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedOutline"));
-            warningDisplay.oneHealthWarning();
-        }
-        setSpeedX(0);
-        setSpeedY(0);
-        gamePanel.fadeIn();
-        gamePanel.setFadingEffectAlpha(60);
-        gamePanel.setFadingEffectColor(Color.RED);
-        Game.setFreezeFrame(6);
-        Room.setScreenShakeDuration(15);
-        Room.setScreenShakeStrength(15);
-        if (dashCooldown < 1.0 / 6 * Game.UPS) {
-            setMaxSpeed((int) (getMaxSpeed() / 3));
-        }
-        dashCooldown = 1000;
-        if (health <= 1.0 / 6) {
-            replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
-            death.actionPerformed(null);
-            return;
-        }
-        hitCnt = 60;
-        hitDirection = DirectionUtilities.reverseDirection(getDirection());
-        lastSpriteSheet = getSpriteSheet();
-        replaceSpriteSheet(ImageUtilities.getImage("entities", "playerRedFill"));
     }
 
     public Ladder getLadder() {
@@ -309,6 +354,9 @@ public class Player extends Entity {
     };
 
     private final Action slowDownToggle = new AbstractAction() {
+        // Description: Toggle player slowing down
+        // Parameters: ActionEvent
+        // Return: Nothing
         public void actionPerformed(ActionEvent e) {
             if (getMaxSpeed() == HIGH_MAX_SPEED) {
                 setMaxSpeed(LOW_MAX_SPEED);
@@ -319,6 +367,9 @@ public class Player extends Entity {
     };
 
     private final Action dash = new AbstractAction() {
+        // Description: Perform a dash
+        // Parameters: ActionEvent
+        // Return: Nothing
         public void actionPerformed(ActionEvent e) {
             if (dashCooldown < 5.0 / 12 * Game.UPS) {
                 return;
@@ -333,6 +384,8 @@ public class Player extends Entity {
             Room.setScreenShakeStrength(2);
         }
     };
+
+    // Following code is self explanatory
 
     private final Action accelerateUp = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -382,6 +435,7 @@ public class Player extends Entity {
         }
     };
 
+    // Also mostly self explanatory:
     public static class Stats {
         private double healthRegenPerSecond;
         private double damageMulti;

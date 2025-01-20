@@ -27,7 +27,7 @@ public class RoomObjectManager extends GameComponent {
     }
 
     public void drawComponent(Graphics2D g2d) {
-        // Bandaid solution, but it works
+        // Bandaid solution, but it works. Now it's permanent solution
         RoomObject[] temp = Arrays.copyOf(getComponents(), getComponentCount(), RoomObject[].class);
         Arrays.sort(temp);
         removeAll();

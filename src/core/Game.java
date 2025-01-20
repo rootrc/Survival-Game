@@ -23,9 +23,6 @@ import core.game_panel.Menu;
 import core.game_panel.Options;
 import core.game_panel.Rules;
 
-// TODO
-// Comment 4 classes
-
 public class Game extends JFrame implements Runnable {
     public static final int SCREEN_WIDTH = 1024;
     public static final int SCREEN_HEIGHT = 768;

@@ -2,6 +2,7 @@ package core.dungeon.settings;
 
 // This is kind of a hack and is unsafe but it works
 public class DiffSettings {
+    public static int difficulty;
     public static int startingInventorySize;
     public static int startingHealth;
     public static int playerLightRadiusFactor;
@@ -13,6 +14,7 @@ public class DiffSettings {
     }
 
     public static void setEasy() {
+        difficulty = 0;
         startingInventorySize = 2;
         startingHealth = 6;
         playerLightRadiusFactor = 35;
@@ -22,6 +24,7 @@ public class DiffSettings {
     }
     
     public static void setMedium() {
+        difficulty = 1;
         startingInventorySize = 2;
         startingHealth = 5;
         playerLightRadiusFactor = 25;
@@ -31,6 +34,7 @@ public class DiffSettings {
     }
 
     public static void setHard() {
+        difficulty = 2;
         startingInventorySize = 2;
         startingHealth = 4;
         playerLightRadiusFactor = 15;

@@ -98,11 +98,9 @@ public class GameSlider extends JSlider {
             boolean horizontal = isHorizontal();
             boolean inverted = slider.getInverted();
 
-            // Paint shadow.
             g2d.setColor(new Color(170, 170, 170));
             g2d.fill(trackShape);
             
-            // Paint track background.
             g2d.setColor(new Color(200, 200, 200));
             g2d.setClip(trackShape);    
             trackShape.y += 1;
@@ -111,7 +109,6 @@ public class GameSlider extends JSlider {
 
             g2d.setClip(clip);
 
-            // Paint selected track.
             if (horizontal) {
                 boolean ltr = slider.getComponentOrientation().isLeftToRight();
                 if (ltr)
